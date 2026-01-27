@@ -1,3 +1,19 @@
 {
-  "tasks": []
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Инициализация репозитория",
+      "status": "completed",
+      "file": "TASK-001-init-repository.md"
+    },
+    {
+      "id": "TASK-002",
+      "title": "Инициализация Backend проекта на Fastify",
+      "status": "backlog",
+      "file": "TASK-002-init-be-project.md",
+      "createdDate": "2026-01-27T10:00:00Z",
+      "completedDate": null,
+      "branch": null
+    }
+  ]
 }
