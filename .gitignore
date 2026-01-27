@@ -1,0 +1,58 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.npm
+.pnp.*
+*.tsbuildinfo
+
+# Переменные окружения и конфигурация
+.env
+.env.local
+.env.*.local
+
+# Результаты сборки
+dist/
+build/
+out/
+*.js.map
+*.d.ts.map
+
+# IDE - VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+*.code-workspace
+
+# IDE - Cursor
+.cursor/
+
+# IDE - WebStorm / JetBrains
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Операционная система
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Временные файлы
+*.log
+*.tmp
+*.temp
+*.swp
+*~
+
+# Тестирование
+coverage/
+.nyc_output/
+
+# Кеш
+.cache/
+.parcel-cache/
+.next/
