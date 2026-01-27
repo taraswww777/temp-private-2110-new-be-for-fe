@@ -9,10 +9,10 @@
     {
       "id": "TASK-002",
       "title": "Инициализация Backend проекта на Fastify",
-      "status": "in-progress",
+      "status": "completed",
       "file": "TASK-002-init-be-project.md",
       "createdDate": "2026-01-27T10:00:00Z",
-      "completedDate": null,
+      "completedDate": "2026-01-28T00:00:00Z",
       "branch": "feature/TASK-002-init-be-project"
     },
     {

@@ -1,0 +1,2633 @@
+{
+  "components": {
+    "schemas": {
+      "AccountMasks": {
+        "items": {
+          "maxLength": 255,
+          "type": "string"
+        },
+        "maxItems": 999,
+        "type": "array"
+      },
+      "AccountMasksObject": {
+        "additionalProperties": {
+          "$ref": "#/components/schemas/AccountMasks"
+        },
+        "description": "Объект, содержащий маски счетов",
+        "type": "object"
+      },
+      "BranchFiles": {
+        "additionalProperties": false,
+        "properties": {
+          "branchId": {
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "filesMetaInfo": {
+            "description": "Информация о файлах отчета",
+            "items": {
+              "$ref": "#/components/schemas/FilesMetaInfo"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "BranchFilesByBranchIdDTO": {
+        "additionalProperties": {
+          "$ref": "#/components/schemas/BranchFiles"
+        },
+        "description": "Список файлов по филиалам, где ключ — идентификатор филиала",
+        "type": "object"
+      },
+      "Check": {
+        "additionalProperties": false,
+        "properties": {
+          "check": {
+            "type": "boolean"
+          },
+          "link": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "typeCheck": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "CheckStatusFile": {
+        "additionalProperties": false,
+        "properties": {
+          "checks": {
+            "items": {
+              "$ref": "#/components/schemas/Check"
+            },
+            "maxItems": 1,
+            "type": "array"
+          },
+          "formType": {
+            "additionalProperties": false,
+            "properties": {
+              "description": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "type": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "CheckStatusFiles": {
+        "items": {
+          "$ref": "#/components/schemas/CheckStatusFile"
+        },
+        "maxItems": 1,
+        "type": "array"
+      },
+      "CompleteTaskRequest": {
+        "additionalProperties": false,
+        "description": "Завершить задание",
+        "properties": {
+          "comment": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "CreateTaskRequest": {
+        "additionalProperties": false,
+        "description": "Создать задание",
+        "properties": {
+          "comment": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "discrepancyDate": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "taskTypeId": {
+            "$ref": "#/components/schemas/UUID"
+          }
+        },
+        "type": "object"
+      },
+      "DepartmentDto": {
+        "additionalProperties": false,
+        "properties": {
+          "branch_id": {
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "DepartmentLinksFilesDto": {
+        "additionalProperties": {
+          "$ref": "#/components/schemas/XmlLinks"
+        },
+        "description": "Объект, где ключи — строковые представления чисел (например, \"1\", \"2\"), а значения — объекты типа XmlLinks.",
+        "example": {
+          "1": {
+            "name": "KROS_0002_6498_L20241231_C20251111_13.xlsx",
+            "type": "KROS"
+          }
+        },
+        "type": "object"
+      },
+      "DepartmentResponse": {
+        "additionalProperties": false,
+        "description": "Управление",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "name": {
+            "maxLength": 255,
+            "pattern": "Управление [A-Z]{1}|УКУОД",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "DeratmentReference": {
+        "additionalProperties": false,
+        "properties": {
+          "codeCB": {
+            "maxLength": 4,
+            "type": "string"
+          },
+          "id": {
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DivisionResponse": {
+        "additionalProperties": false,
+        "description": "Служба/отдел",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "name": {
+            "maxLength": 255,
+            "pattern": "Служба/отдел [A-Z]{1}|УКУОД",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "FilesMetaInfo": {
+        "additionalProperties": false,
+        "properties": {
+          "fileId": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/StatusFile"
+          }
+        },
+        "type": "object"
+      },
+      "Filters": {
+        "additionalProperties": false,
+        "properties": {
+          "account": {
+            "description": "список номеров счетов по 20 символов",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "coverFirst": {
+            "description": "маска счета 1 порядка из 3 символов",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "coverSecond": {
+            "description": "маска счета 2 порядка из 2 символов",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "currency": {
+            "description": "валюта - рубль или иностранная валюта",
+            "maxLength": 20,
+            "type": "string"
+          },
+          "source": {
+            "description": "код источника счета",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "GetActiveReportIdResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "items": {
+              "maxLength": 255,
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "GetGetCheckStatusIdResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "departmentCheckStatusFiles": {
+            "items": {
+              "$ref": "#/components/schemas/CheckStatusFiles"
+            },
+            "type": "array"
+          },
+          "departmentXmlLinks": {
+            "items": {
+              "$ref": "#/components/schemas/XmlLinks"
+            },
+            "type": "array"
+          },
+          "reportId": {
+            "$ref": "#/components/schemas/UUID"
+          }
+        },
+        "type": "object"
+      },
+      "GetGetDepartmentsIdResponseDTO": {
+        "items": {
+          "$ref": "#/components/schemas/DepartmentResponse"
+        },
+        "type": "array"
+      },
+      "GetGetDivisionsIdResponseDTO": {
+        "items": {
+          "$ref": "#/components/schemas/DivisionResponse"
+        },
+        "type": "array"
+      },
+      "GetGetInitiatorsIdResponseDTO": {
+        "items": {
+          "$ref": "#/components/schemas/TaskInitiatorResponse"
+        },
+        "type": "array"
+      },
+      "GetGetListFilesReportResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "departmentLinksFiles": {
+            "$ref": "#/components/schemas/DepartmentLinksFilesDto"
+          },
+          "reportId": {
+            "$ref": "#/components/schemas/UUID"
+          }
+        },
+        "type": "object"
+      },
+      "GetGetReferenceValuesResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "accountsMask": {
+            "$ref": "#/components/schemas/AccountMasksObject"
+          },
+          "departments": {
+            "items": {
+              "$ref": "#/components/schemas/DeratmentReference"
+            },
+            "type": "array"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceReference"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "GetGetReportFilesResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "branchFiles": {
+            "$ref": "#/components/schemas/BranchFilesByBranchIdDTO"
+          },
+          "formType": {
+            "properties": {
+              "description": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "form": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "reportId": {
+            "$ref": "#/components/schemas/UUID"
+          }
+        },
+        "type": "object"
+      },
+      "GetGetReportsIdDeQueryParamsDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "default": 10,
+            "description": "Количество объектов в выдаче на странице (по умолчанию 10)",
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "page": {
+            "description": "Количество пропущенных записей в порядке сортировки по страницам (>=0) Например 1 первая страница на фронте = 0, вторая =1 и т д.",
+            "maximum": 99999999,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "sort_order": {
+            "description": "Порядок сортировки (asc/desc)",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "page"
+        ],
+        "type": "object"
+      },
+      "GetGetReportsIdDeResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "reports": {
+            "items": {
+              "$ref": "#/components/schemas/ReportDTO"
+            },
+            "maxItems": 999999,
+            "type": "array"
+          },
+          "total_pages": {
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "total_subjects": {
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "GetGetReportsIdQueryParamsDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "default": 10,
+            "description": "Количество объектов в выдаче на странице (по умолчанию 10)",
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "page": {
+            "description": "Количество пропущенных записей в порядке сортировки по страницам (>=0) Например 1 первая страница на фронте = 0, вторая =1 и т д.",
+            "maximum": 99999999,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "report_type": {
+            "description": "Тип отчета. 1 - 3406у, 2 - КРОС, 3 - 6406у",
+            "items": {
+              "$ref": "#/components/schemas/ReportType"
+            },
+            "type": "array"
+          },
+          "sort_by": {
+            "description": "Значение, по которому производится сортировка. Сортировка возможна по: status_code, employee_id, create_date",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "Порядок сортировки (asc/desc)",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "unloading_option": {
+            "description": "Тип выгрузки:3462-у или КРОС.",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "page",
+          "report_type"
+        ],
+        "type": "object"
+      },
+      "GetGetReportsIdResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "reports": {
+            "items": {
+              "$ref": "#/components/schemas/ReportDTO"
+            },
+            "maxItems": 999999,
+            "type": "array"
+          },
+          "total_pages": {
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "total_subjects": {
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "GetGetStatusIdResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "is_end": {
+            "type": "boolean"
+          },
+          "report_id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "status_code": {
+            "$ref": "#/components/schemas/ReportStatus"
+          },
+          "status_name": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "GetGetStatusesIdResponseDTO": {
+        "items": {
+          "$ref": "#/components/schemas/TaskStatusResponse"
+        },
+        "type": "array"
+      },
+      "GetGetTaskHistoryIdResponseDTO": {
+        "items": {
+          "$ref": "#/components/schemas/TaskHistoryResponse"
+        },
+        "type": "array"
+      },
+      "GetGetTaskIdResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "comment": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "coordinator": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "creationDate": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "department": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "division": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "durationTimeLimit": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "executionTimeStandart": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "executor": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "fixDate": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "initiator": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "number": {
+            "format": "int64",
+            "maximum": 9007199254740991,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "status": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "tasktype": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "workDuration": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "GetGetTaskTypesIdResponseDTO": {
+        "items": {
+          "$ref": "#/components/schemas/TaskTypeResponse"
+        },
+        "type": "array"
+      },
+      "GetReportsDetailsResponseDTO": {
+        "$ref": "#/components/schemas/ReportDetails"
+      },
+      "PostCancelReportIdBodyRequestDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "employee_id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "report_id": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PostCompleteTaskIdResponseDTO": {
+        "maxLength": 255,
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "type": "string"
+      },
+      "PostCreateReportIdBodyRequestDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "department": {
+            "items": {
+              "maximum": 99999,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "maxItems": 999999,
+            "type": "array"
+          },
+          "extension": {
+            "description": "Расширение файла для конвертации",
+            "maxLength": 10,
+            "type": "string"
+          },
+          "filters": {
+            "items": {
+              "$ref": "#/components/schemas/Filters"
+            },
+            "type": "array"
+          },
+          "period_end": {
+            "maxLength": 10,
+            "type": "string"
+          },
+          "period_start": {
+            "maxLength": 10,
+            "type": "string"
+          },
+          "report_type": {
+            "$ref": "#/components/schemas/ReportType"
+          },
+          "unload_type": {
+            "items": {
+              "$ref": "#/components/schemas/XmlLinkFormType"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "PostCreateReportIdResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "create_date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "is_end": {
+            "type": "boolean"
+          },
+          "report_id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "status_code": {
+            "$ref": "#/components/schemas/ReportStatus"
+          },
+          "status_name": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PostCreateTaskIdResponseDTO": {
+        "maxLength": 255,
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "type": "string"
+      },
+      "PostGetTasksIdQueryParamsDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "direction": {
+            "description": "Порядок сортировки (по умолчанию DESC)",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "default": 10,
+            "description": "Количество объектов в выдаче на странице (по умолчанию 10)",
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "page": {
+            "default": 0,
+            "description": "Количество пропущенных записей в порядке сортировки по страницам (>=0) Например 1 первая страница на фронте = 0, вторая =1 и т д.",
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "sort": {
+            "description": "Сортировка по полю (по умолчанию creationDate)",
+            "enum": [
+              "creationDate",
+              "number"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "PostGetTasksIdResponseDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/TaskResponse"
+            },
+            "type": "array"
+          },
+          "totalPages": {
+            "maximum": 99999999,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "totalSubjects": {
+            "maximum": 99999999,
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "PostReassignTaskIdResponseDTO": {
+        "maxLength": 255,
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "type": "string"
+      },
+      "PostRejectTaskIdResponseDTO": {
+        "maxLength": 255,
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "type": "string"
+      },
+      "ReassignTaskRequest": {
+        "additionalProperties": false,
+        "description": "Переназначить задание",
+        "properties": {
+          "comment": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "taskTypeId": {
+            "$ref": "#/components/schemas/UUID"
+          }
+        },
+        "type": "object"
+      },
+      "RejectTaskRequest": {
+        "additionalProperties": false,
+        "description": "Вернуть задание",
+        "properties": {
+          "comment": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ReportDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "create_date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "employee": {
+            "additionalProperties": false,
+            "properties": {
+              "full_name": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "files_extension": {
+            "description": "Расширение файлов отчета",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "period_end": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "period_start": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "report_id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "report_type": {
+            "$ref": "#/components/schemas/ReportType"
+          },
+          "status_code": {
+            "$ref": "#/components/schemas/ReportStatus"
+          },
+          "status_name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "unload_type": {
+            "items": {
+              "$ref": "#/components/schemas/XmlLinkFormType"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ReportDetails": {
+        "additionalProperties": false,
+        "properties": {
+          "branch": {
+            "items": {
+              "$ref": "#/components/schemas/DepartmentDto"
+            },
+            "maxItems": 999999,
+            "type": "array"
+          },
+          "create_date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "files_extension": {
+            "description": "Расширение файлов отчета",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "employee": {
+            "additionalProperties": false,
+            "properties": {
+              "full_name": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "filtersList": {
+            "items": {
+              "$ref": "#/components/schemas/Filters"
+            },
+            "maxItems": 999,
+            "type": "array"
+          },
+          "period_end": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "period_start": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "report_id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "report_type": {
+            "$ref": "#/components/schemas/ReportType"
+          },
+          "status_code": {
+            "$ref": "#/components/schemas/ReportStatus"
+          },
+          "status_name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "unload_type": {
+            "$ref": "#/components/schemas/XmlLinkFormType"
+          }
+        },
+        "type": "object"
+      },
+      "ReportStatus": {
+        "enum": [
+          "completed",
+          "have_broken_files",
+          "failed_fc",
+          "file_success_not_exist",
+          "failed",
+          "upload_formed",
+          "upload_not_formed",
+          "killed_dapp",
+          "converting",
+          "in_queue"
+        ],
+        "type": "string"
+      },
+      "ReportType": {
+        "description": "Тип отчета",
+        "enum": [
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "x-enum-descriptions": [
+          "3462у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции\nN - Number - Номер\nD - Decree - Указ",
+          "КРОС: КРОС, Ведомость открытых счетов, Ведомость закрытых счетов",
+          "Расширенная версия - 3462\n6406у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции\nN - Number - Номер\nD - Decree - Указ"
+        ],
+        "x-enum-varnames": [
+          "N3462D",
+          "KROS",
+          "N6406D"
+        ]
+      },
+      "SourceReference": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "maxLength": 20,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 100,
+            "type": "string"
+          },
+          "ris": {
+            "maxLength": 20,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "StatusFile": {
+        "description": "Статус файла",
+        "enum": [
+          "in_queue",
+          "in_progress",
+          "failed",
+          "done"
+        ],
+        "type": "string"
+      },
+      "TaskFilterRequest": {
+        "additionalProperties": false,
+        "description": "Получить спискок задач",
+        "properties": {
+          "creationDateFrom": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "creationDateTo": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "departmentId": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "divisionId": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "executionTimeFrom": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "executionTimeTo": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "initiator": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "number": {
+            "format": "int64",
+            "maximum": 9007199254740991,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "statusId": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "taskTypeId": {
+            "$ref": "#/components/schemas/UUID"
+          }
+        },
+        "type": "object"
+      },
+      "TaskHistoryResponse": {
+        "additionalProperties": false,
+        "description": "История задач",
+        "properties": {
+          "comment": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "department": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "employee": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "eventDate": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "number": {
+            "format": "int64",
+            "maximum": 9007199254740991,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "status": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TaskInitiatorResponse": {
+        "additionalProperties": false,
+        "description": "Инициатор задачи",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "TaskResponse": {
+        "additionalProperties": false,
+        "description": "Данные по заданию",
+        "properties": {
+          "closeComment": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "comment": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "completer": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "creationDate": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "department": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "division": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "durationTimeLimit": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "executionTimeStandart": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "executor": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "fixDate": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "initiator": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "number": {
+            "format": "int64",
+            "maximum": 9007199254740991,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "status": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "tasktype": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "workDuration": {
+            "format": "date-time",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "TaskStatusResponse": {
+        "additionalProperties": false,
+        "description": "Статус задачи",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "TaskTypeResponse": {
+        "additionalProperties": false,
+        "description": "Типы задач",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "name": {
+            "maxLength": 255,
+            "pattern": "Тип задачи [A-Z]{1}",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "TykErrorResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "maxLength": 255,
+            "title": "Описание ошибки",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UUID": {
+        "maxLength": 255,
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "type": "string"
+      },
+      "XmlLink": {
+        "additionalProperties": false,
+        "properties": {
+          "departmentName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "link": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/XmlLinkFormType"
+          },
+          "typeDescription": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "XmlLinkFormType": {
+        "enum": [
+          "LSOZ",
+          "LSOS",
+          "LSOP",
+          "KROS_VOS",
+          "KROS_VZS",
+          "KROS"
+        ],
+        "type": "string"
+      },
+      "XmlLinks": {
+        "items": {
+          "$ref": "#/components/schemas/XmlLink"
+        },
+        "maxItems": 1,
+        "type": "array"
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "contact": {
+      "email": "vgusak@vtb.ru",
+      "name": "Гусак Валерия",
+      "url": "https://sfera.vtb.ru/documents/spaces/0/artifacts/30697/publications/278696"
+    },
+    "description": "API для взаимодействия frontend и backend СУБО 2110 через OIDC",
+    "title": "2110.uaod-reports_microfront-s-rest-v2",
+    "version": "2.4.18"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/listFiles/{reportId}": {
+      "get": {
+        "operationId": "getListFilesReport",
+        "parameters": [
+          {
+            "description": "ID отчета",
+            "in": "path",
+            "name": "reportId",
+            "required": true,
+            "schema": {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetListFilesReportResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка файлов отчета",
+        "tags": [
+          "getReports"
+        ]
+      }
+    },
+    "/oz/departments": {
+      "get": {
+        "operationId": "getDepartmentsId",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetDepartmentsIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка управлений",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/divisions/{departmentId}": {
+      "get": {
+        "operationId": "getDivisionsId",
+        "parameters": [
+          {
+            "description": "Id управления",
+            "in": "path",
+            "name": "departmentId",
+            "required": true,
+            "schema": {
+              "maxLength": 255,
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetDivisionsIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка отделов/служб в зависимости от id управления",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/statuses": {
+      "get": {
+        "operationId": "getStatusesId",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetStatusesIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка статусов задач",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/task-history/{number}": {
+      "get": {
+        "operationId": "getTaskHistoryId",
+        "parameters": [
+          {
+            "description": " Номер задачи в ОЗ",
+            "in": "path",
+            "name": "number",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetTaskHistoryIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка изменений по задаче",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/task-initiators": {
+      "get": {
+        "operationId": "getInitiatorsId",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetInitiatorsIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка инициаторов задач",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/task-types/{divisionId}": {
+      "get": {
+        "operationId": "getTaskTypesId",
+        "parameters": [
+          {
+            "description": "Id управления",
+            "in": "path",
+            "name": "divisionId",
+            "required": true,
+            "schema": {
+              "maxLength": 255,
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetTaskTypesIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка типов задач",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/task/create": {
+      "post": {
+        "operationId": "createTaskId",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskRequest"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostCreateTaskIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Создание задания",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/task/{number}": {
+      "get": {
+        "operationId": "getTaskId",
+        "parameters": [
+          {
+            "description": " Номер задачи в ОЗ",
+            "in": "path",
+            "name": "number",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetTaskIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение данных по заданию",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/task/{number}/complete": {
+      "post": {
+        "operationId": "completeTaskId",
+        "parameters": [
+          {
+            "description": " Номер задачи в ОЗ",
+            "in": "path",
+            "name": "number",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteTaskRequest"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostCompleteTaskIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Завершение задачи",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/task/{number}/reassign": {
+      "post": {
+        "operationId": "reassignTaskId",
+        "parameters": [
+          {
+            "description": " Номер задачи в ОЗ",
+            "in": "path",
+            "name": "number",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReassignTaskRequest"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostReassignTaskIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Переназначение задачи",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/task/{number}/reject": {
+      "post": {
+        "operationId": "rejectTaskId",
+        "parameters": [
+          {
+            "description": " Номер задачи в ОЗ",
+            "in": "path",
+            "name": "number",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectTaskRequest"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostRejectTaskIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Отмена задачи",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/oz/tasks": {
+      "post": {
+        "operationId": "getTasksId",
+        "parameters": [
+          {
+            "description": "Параметры запроса (объединены в схему)",
+            "in": "query",
+            "name": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PostGetTasksIdQueryParamsDTO"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskFilterRequest"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostGetTasksIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка задач",
+        "tags": [
+          "OZTask"
+        ]
+      }
+    },
+    "/reference": {
+      "get": {
+        "operationId": "getReferenceValues",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetReferenceValuesResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение справочников",
+        "tags": [
+          "createReport"
+        ]
+      }
+    },
+    "/report/cancel": {
+      "post": {
+        "operationId": "cancelReportId",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCancelReportIdBodyRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Отмена генерации отчета",
+        "tags": [
+          "cancelReport"
+        ]
+      }
+    },
+    "/report/details/{reportId}": {
+      "get": {
+        "operationId": "reportsDetails",
+        "parameters": [
+          {
+            "description": "ID отчета",
+            "in": "path",
+            "name": "reportId",
+            "required": true,
+            "schema": {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetReportsDetailsResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Запрос подробной информации об отчетах",
+        "tags": [
+          "reportsDetails"
+        ]
+      }
+    },
+    "/report/start": {
+      "post": {
+        "operationId": "createReportId",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCreateReportIdBodyRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostCreateReportIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Генерация отчета",
+        "tags": [
+          "createReport"
+        ]
+      }
+    },
+    "/reportFiles/{reportId}": {
+      "get": {
+        "operationId": "getReportFiles",
+        "parameters": [
+          {
+            "description": "ID отчета",
+            "in": "path",
+            "name": "reportId",
+            "required": true,
+            "schema": {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetReportFilesResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка файлов отчета",
+        "tags": [
+          "getReportFiles"
+        ]
+      }
+    },
+    "/reports/active": {
+      "get": {
+        "operationId": "activeReportId",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetActiveReportIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка активных отчетов",
+        "tags": [
+          "getReports"
+        ]
+      }
+    },
+    "/reports/checkStatus/{reportId}": {
+      "get": {
+        "operationId": "getCheckStatusId",
+        "parameters": [
+          {
+            "description": "ID отчета для карточки",
+            "in": "path",
+            "name": "reportId",
+            "required": true,
+            "schema": {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetCheckStatusIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение карточки отчета",
+        "tags": [
+          "getReports"
+        ]
+      }
+    },
+    "/reports/ondemand": {
+      "get": {
+        "operationId": "getReportsId",
+        "parameters": [
+          {
+            "description": "Параметры запроса (объединены в схему)",
+            "in": "query",
+            "name": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/GetGetReportsIdQueryParamsDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetReportsIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка отчетов по запросу",
+        "tags": [
+          "getReports"
+        ]
+      }
+    },
+    "/reports/regular": {
+      "get": {
+        "operationId": "getReportsIdDe",
+        "parameters": [
+          {
+            "description": "Параметры запроса (объединены в схему)",
+            "in": "query",
+            "name": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/GetGetReportsIdDeQueryParamsDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetReportsIdDeResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка отчетов по запросу",
+        "tags": [
+          "getReports"
+        ]
+      }
+    },
+    "/status": {
+      "get": {
+        "operationId": "getStatusId",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGetStatusIdResponseDTO"
+                }
+              }
+            },
+            "description": "Request accepted for processing",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Лимит вызовов. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Оставшееся количество вызовов в временном окне. Временное Окно лимита уточнить у поставщика API ключа X-TYK-ACCESS-KEY.",
+                "schema": {
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Время обнуления лимита вызовов в формате Unix Timestamp в миллисекундах.",
+                "schema": {
+                  "format": "int64",
+                  "maximum": 99999999,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Получение списка отчетов",
+        "tags": [
+          "getReports"
+        ]
+      }
+    }
+  },
+  "security": [],
+  "servers": [
+    {
+      "description": "DSO",
+      "url": "https://uaod-adapter-dk5-uaod01-uaod-devc.apps.dk5-uaod01.corp.dev.vtb/inside/public/web/frontapi/rb/uaod/reports-microfront/v2"
+    },
+    {
+      "description": "IFT",
+      "url": "https://uaod-adapter-ik5-uaod01-uaod-uaod-rift.test.vtb.ru/inside/public/web/frontapi/rb/uaod/reports-microfront/v2"
+    },
+    {
+      "description": "PREPROD",
+      "url": "https://uaod-adapter-rk5-uaod01-uaod-preprodc.test.vtb.ru/inside/public/web/frontapi/rb/uaod/reports-microfront/v2"
+    },
+    {
+      "description": "PROD",
+      "url": "https://uaod-adapter-pk2-uaod01-uaod-prodc.region.vtb.ru/inside/public/web/frontapi/rb/uaod/reports-microfront/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "getReports"
+    },
+    {
+      "name": "createReport"
+    },
+    {
+      "name": "cancelReport"
+    },
+    {
+      "name": "OZTask"
+    },
+    {
+      "name": "reportsDetails"
+    },
+    {
+      "name": "getReportFiles"
+    }
+  ]
+}
