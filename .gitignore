@@ -56,3 +56,6 @@ coverage/
 .cache/
 .parcel-cache/
 .next/
+
+# Backend - автогенерируемые файлы
+be/docs/swagger/swagger.json

@@ -9,9 +9,18 @@
     {
       "id": "TASK-002",
       "title": "Инициализация Backend проекта на Fastify",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-002-init-be-project.md",
       "createdDate": "2026-01-27T10:00:00Z",
+      "completedDate": "2026-01-28T00:00:00Z",
+      "branch": "feature/TASK-002-init-be-project"
+    },
+    {
+      "id": "TASK-003",
+      "title": "Реализация API для формы отчётности 6406",
+      "status": "backlog",
+      "file": "TASK-003-implement-6406-report-api.md",
+      "createdDate": "2026-01-28T00:00:00Z",
       "completedDate": null,
       "branch": null
     }

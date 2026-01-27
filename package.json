@@ -1,0 +1,45 @@
+{
+  "name": "temp-private-2110-new-be-for-fe",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "be"
+  ],
+  "scripts": {
+    "be:dev": "npm run start:dev -w be",
+    "be:start": "npm run start -w be",
+    "be:build": "npm run build -w be",
+    "be:lint": "npm run lint -w be",
+    "be:lint:fix": "npm run lint:fix -w be",
+    "be:db:generate": "npm run db:generate -w be",
+    "be:db:migrate": "npm run db:migrate -w be",
+    "be:db:push": "npm run db:push -w be",
+    "be:db:studio": "npm run db:studio -w be",
+    "docker:db:up": "cd be && docker-compose up postgres -d",
+    "docker:db:down": "cd be && docker-compose down",
+    "docker:up": "cd be && docker-compose up --build",
+    "docker:down": "cd be && docker-compose down",
+    "docker:logs": "cd be && docker-compose logs -f"
+  },
+  "description": "Monorepo with Backend project",
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@fastify/cors": "^11.2.0",
+    "@fastify/swagger": "^9.6.1",
+    "@fastify/swagger-ui": "^5.2.5",
+    "@types/node": "^22.10.5",
+    "dotenv": "^17.2.3",
+    "drizzle-kit": "^0.31.0",
+    "drizzle-orm": "^0.45.1",
+    "eslint": "^9.18.0",
+    "fastify": "^5.7.2",
+    "fastify-type-provider-zod": "^6.1.0",
+    "globals": "^15.14.0",
+    "pino-pretty": "^13.0.0",
+    "postgres": "^3.4.8",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.20.0",
+    "zod": "^4.3.6"
+  }
+}
