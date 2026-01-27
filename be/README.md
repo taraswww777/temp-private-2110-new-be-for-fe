@@ -22,36 +22,56 @@ npm install
 
 ## Запуск
 
-### Запуск через Docker (рекомендуется)
+> **Рекомендация:** Используйте команды из корневого `package.json` для удобства.
 
-Запуск приложения и PostgreSQL в Docker контейнерах:
+### Вариант 1: БД в Docker + Backend локально ⭐ (рекомендуется для разработки)
 
+Из корня проекта:
 ```bash
-npm run start
+# Запустить PostgreSQL
+npm run docker:db:up
+
+# Запустить Backend с hot-reload
+npm run be:dev
 ```
 
-Приложение будет доступно по адресу: http://localhost:3000
-
-Swagger документация: http://localhost:3000/docs
-
-Health check: http://localhost:3000/health
-
-### Запуск в режиме разработки (локально)
-
-1. Запустить только PostgreSQL:
+Или из папки `be/`:
 ```bash
+# Запустить PostgreSQL
 docker-compose up postgres -d
-```
 
-2. Применить миграции:
-```bash
-npm run db:push
-```
-
-3. Запустить приложение:
-```bash
+# Запустить Backend
 npm run start:dev
 ```
+
+**Преимущества:**
+- ✅ Быстрый hot-reload при изменении кода
+- ✅ Удобная отладка
+- ✅ Логи сразу в терминале
+
+### Вариант 2: Всё в Docker (production-like)
+
+Из корня проекта:
+```bash
+npm run docker:up
+```
+
+Или из папки `be/`:
+```bash
+npm run start  # или docker-compose up --build
+```
+
+**Преимущества:**
+- ✅ Полная изоляция
+- ✅ Ближе к production окружению
+- ✅ Не нужно устанавливать Node.js локально
+
+### После запуска
+
+Приложение будет доступно:
+- **API**: http://localhost:3000
+- **Swagger UI**: http://localhost:3000/docs
+- **Health Check**: http://localhost:3000/health
 
 ## Работа с базой данных
 

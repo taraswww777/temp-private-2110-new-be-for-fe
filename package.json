@@ -10,7 +10,16 @@
     "be:start": "npm run start -w be",
     "be:build": "npm run build -w be",
     "be:lint": "npm run lint -w be",
-    "be:lint:fix": "npm run lint:fix -w be"
+    "be:lint:fix": "npm run lint:fix -w be",
+    "be:db:generate": "npm run db:generate -w be",
+    "be:db:migrate": "npm run db:migrate -w be",
+    "be:db:push": "npm run db:push -w be",
+    "be:db:studio": "npm run db:studio -w be",
+    "docker:db:up": "cd be && docker-compose up postgres -d",
+    "docker:db:down": "cd be && docker-compose down",
+    "docker:up": "cd be && docker-compose up --build",
+    "docker:down": "cd be && docker-compose down",
+    "docker:logs": "cd be && docker-compose logs -f"
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {
