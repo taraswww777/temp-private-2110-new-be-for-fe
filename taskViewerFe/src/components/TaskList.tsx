@@ -13,6 +13,7 @@ import { tasksApi } from '@/api/tasks.api';
 import type { Task, TaskStatus } from '@/types/task.types';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { toast } from 'sonner';
 
 interface TaskListProps {
   tasks: Task[];
@@ -99,6 +100,19 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
     return <span className="ml-2">{sortOrder === 'asc' ? '↑' : '↓'}</span>;
   };
 
+  const handleCopyId = async (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    try {
+      await navigator.clipboard.writeText(id);
+      toast.success(`ID "${id}" скопирован в буфер обмена`);
+    } catch (err) {
+      console.error('Failed to copy ID:', err);
+      toast.error('Не удалось скопировать ID');
+    }
+  };
+
   return (
     <div>
       <TaskFilters
@@ -147,7 +161,13 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
           <tbody className="[&_tr:last-child]:border-0">
             {filteredAndSortedTasks.map((task) => (
               <tr key={task.id} className="border-b transition-colors hover:bg-muted/50">
-                <td className="p-4 align-middle font-mono">{task.id}</td>
+                <td 
+                  className="p-4 align-middle font-mono cursor-pointer hover:bg-accent/50 select-none transition-colors"
+                  onClick={(e) => handleCopyId(task.id, e)}
+                  title="Нажмите, чтобы скопировать ID"
+                >
+                  {task.id}
+                </td>
                 <td className="p-4 align-middle">{task.title}</td>
                 <td className="p-4 align-middle">
                   <Select
