@@ -2095,6 +2095,111 @@ git checkout main
 git merge feature/TASK-004-create-task-viewer
 ```
 
+### 8. Копирование ID в буфер обмена
+
+**Проблема**: Неудобно копировать ID задачи вручную для использования в других местах.
+
+**Решение**: Добавить возможность копирования ID при клике на ячейку в таблице.
+
+**Установка библиотеки для тостов**:
+```bash
+npm i sonner -E -w taskViewerFe
+```
+
+**TaskList.tsx** (добавление функции копирования):
+```typescript
+import { toast } from 'sonner';
+
+const handleCopyId = async (id: string, e: React.MouseEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  try {
+    await navigator.clipboard.writeText(id);
+    toast.success(`ID "${id}" скопирован в буфер обмена`);
+  } catch (err) {
+    console.error('Failed to copy ID:', err);
+    toast.error('Не удалось скопировать ID');
+  }
+};
+
+// В таблице:
+<td 
+  className="p-4 align-middle font-mono cursor-pointer hover:bg-accent/50 select-none transition-colors"
+  onClick={(e) => handleCopyId(task.id, e)}
+  title="Нажмите, чтобы скопировать ID"
+>
+  {task.id}
+</td>
+```
+
+**App.tsx** (добавление Toaster):
+```typescript
+import { Toaster } from 'sonner';
+
+export function App() {
+  return (
+    <BrowserRouter>
+      {/* ... остальной код ... */}
+      <Toaster position="bottom-right" richColors />
+    </BrowserRouter>
+  );
+}
+```
+
+**Особенности**:
+- **Кликабельная ячейка**: `cursor-pointer` показывает, что элемент интерактивный
+- **Hover эффект**: `hover:bg-accent/50` - подсветка при наведении
+- **Tooltip**: `title` атрибут объясняет действие
+- **Toast уведомления**: визуальная обратная связь об успехе/ошибке
+- **Предотвращение выделения**: `select-none` - текст не выделяется при двойном клике
+
+### 9. Исправление навигации по заголовкам с кириллицей
+
+**Проблема**: При клике на заголовки в боковой навигации (например "Статус", "Описание") не происходил скролл к соответствующей секции.
+
+**Причина**: Функция генерации ID `.replace(/[^\w-]/g, '')` удаляла все не-ASCII символы, включая кириллицу. ID становились пустыми.
+
+**Решение**: Создать функцию `generateId()` с поддержкой кириллических символов.
+
+**MarkdownViewer.tsx** (обновленная версия):
+```typescript
+// Функция для генерации ID из текста заголовка
+const generateId = (text: string): string => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')           // пробелы в дефисы
+    .replace(/[^\w\u0400-\u04FF-]/g, '') // оставляем буквы, цифры, кириллицу и дефисы
+    .replace(/--+/g, '-')           // множественные дефисы в один
+    .replace(/^-+|-+$/g, '');       // удаляем дефисы в начале и конце
+};
+
+// Использование в ReactMarkdown components:
+components={{
+  h1: ({ children, ...props }) => {
+    const id = generateId(String(children));
+    return <h1 id={id} {...props}>{children}</h1>;
+  },
+  h2: ({ children, ...props }) => {
+    const id = generateId(String(children));
+    return <h2 id={id} {...props}>{children}</h2>;
+  },
+  // ... h3, h4, h5, h6 аналогично
+}}
+```
+
+**Ключевые изменения**:
+- **Поддержка кириллицы**: `\u0400-\u04FF` - диапазон кириллических символов Unicode
+- **Улучшенная обработка**: trim, удаление множественных дефисов, очистка краев
+- **Единая функция**: используется как при извлечении заголовков, так и при рендере
+- **Добавлены h5 и h6**: были пропущены в изначальной реализации
+
+**Примеры**:
+- `## Статус` → `id="статус"` ✓
+- `## Описание задачи` → `id="описание-задачи"` ✓
+- `## API Endpoints` → `id="api-endpoints"` ✓
+
 ### Итоговый список коммитов в feature-ветке:
 
 1. `Инициализация Backend: создание структуры проекта taskViewerBe`
@@ -2115,3 +2220,5 @@ git merge feature/TASK-004-create-task-viewer
 16. `Обновление документации: добавлена информация о Vite proxy`
 17. `Добавлена сортировка по клику на заголовки колонок таблицы`
 18. `Упрощение сортировки: только клики по колонкам, по умолчанию desc по ID`
+19. `Добавлено копирование ID в буфер обмена при клике`
+20. `Исправлена навигация по заголовкам с кириллическими символами`
