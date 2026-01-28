@@ -64,25 +64,44 @@
 
 ## Быстрый старт
 
-### 1. Запуск Backend
+Проект использует **npm workspaces** для централизованного управления зависимостями.
+
+### 1. Установка зависимостей
 
 ```bash
-cd taskViewerBe
+# В корне проекта
 npm install
-npm run start:dev
 ```
 
-Backend будет доступен по адресу: http://localhost:3001
+Эта команда установит зависимости для всех workspaces (be, taskViewerBe, taskViewerFe).
 
-### 2. Запуск Frontend
+### 2. Запуск Task Viewer
 
 ```bash
-cd taskViewerFe
-npm install
-npm run dev
+# Одновременный запуск backend и frontend
+npm run viewer:dev
 ```
 
-Frontend будет доступен по адресу: http://localhost:5173
+После запуска:
+- Backend будет доступен по адресу: http://localhost:3001
+- Frontend будет доступен по адресу: http://localhost:5173
+
+### Доступные скрипты
+
+```bash
+# Backend отдельно
+npm run viewer:be:dev      # dev режим с hot-reload
+npm run viewer:be:build    # сборка
+npm run viewer:be:start    # запуск собранной версии
+
+# Frontend отдельно
+npm run viewer:fe:dev      # dev режим
+npm run viewer:fe:build    # сборка
+npm run viewer:fe:preview  # preview собранной версии
+
+# Оба приложения одновременно (рекомендуется)
+npm run viewer:dev         # одновременный запуск backend и frontend
+```
 
 ## Функциональность
 
