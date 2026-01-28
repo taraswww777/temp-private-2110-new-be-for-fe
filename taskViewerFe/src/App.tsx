@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { TasksListPage } from '@/pages/TasksListPage';
 import { TaskDetailPage } from '@/pages/TaskDetailPage';
+import { Toaster } from 'sonner';
 
 export function App() {
   return (
@@ -18,6 +19,7 @@ export function App() {
           </Routes>
         </main>
       </div>
+      <Toaster position="bottom-right" richColors />
     </BrowserRouter>
   );
 }

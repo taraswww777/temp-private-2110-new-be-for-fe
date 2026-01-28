@@ -1769,4 +1769,456 @@ npm run build
 24. Создать коммит: `TASK-004 Создание Task Viewer приложения`
 
 ## Уточнения в процессе выполнения
-_(здесь будут добавляться уточнения, выявленные в процессе работы)_
+
+### 1. Интеграция с npm workspaces (Монорепозиторий)
+
+**Проблема**: Проект использует монорепозиторий с несколькими приложениями.
+
+**Решение**: 
+- Добавить `taskViewerBe` и `taskViewerFe` в `workspaces` корневого `package.json`
+- Добавить скрипты для запуска через npm workspaces:
+
+```json
+{
+  "workspaces": [
+    "be",
+    "taskViewerBe",
+    "taskViewerFe"
+  ],
+  "scripts": {
+    "viewer:be:dev": "npm run start:dev -w taskViewerBe",
+    "viewer:fe:dev": "npm run dev -w taskViewerFe"
+  }
+}
+```
+
+**Команды запуска**:
+```bash
+# Из корня проекта
+npm run viewer:be:dev   # Запуск backend
+npm run viewer:fe:dev   # Запуск frontend
+```
+
+### 2. Проблема с CORS во время разработки
+
+**Проблема**: При разработке frontend и backend на разных портах возникают CORS-ошибки.
+
+**Решение**: Настроить Vite dev server для проксирования запросов на backend.
+
+**vite.config.ts** (обновленная версия):
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
+  },
+})
+```
+
+**src/api/tasks.api.ts** (обновленная версия):
+```typescript
+// Используем относительный путь - Vite dev server проксирует на http://localhost:3001
+const API_BASE_URL = '/api';
+```
+
+**Преимущества**:
+- Нет CORS ошибок в режиме разработки
+- Не нужно настраивать CORS на backend для каждого origin
+- Проще переход на production (можно использовать тот же относительный путь `/api`)
+
+### 3. Проблема с Tailwind CSS v4
+
+**Проблема**: При установке Tailwind CSS через `npm i -D tailwindcss postcss autoprefixer` может установиться v4, которая имеет breaking changes.
+
+**Ошибки**:
+```
+[postcss] It looks like you're trying to use tailwindcss directly as a PostCSS plugin
+[postcss] Cannot apply unknown utility class border-border
+```
+
+**Решение**: Использовать **Tailwind CSS v3.4.17** для стабильности.
+
+```bash
+npm i -D tailwindcss@3.4.17 postcss autoprefixer
+```
+
+**postcss.config.js** (для v3):
+```javascript
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+```
+
+**tailwind.config.js** (обновленная версия с цветами):
+```javascript
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: ["class"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+      },
+    }
+  },
+  plugins: [require('@tailwindcss/typography')],
+}
+```
+
+**Важно**: Обязательно добавить плагин для markdown:
+```bash
+npm i -D @tailwindcss/typography
+```
+
+### 4. Упрощение сортировки в таблице
+
+**Проблема**: Изначально в задании были выпадающие списки для выбора сортировки, что усложняло UI.
+
+**Решение**: Сортировка только по клику на заголовки колонок.
+
+**TaskFilters.tsx** (упрощенная версия):
+```typescript
+interface TaskFiltersProps {
+  search: string;
+  statusFilter: TaskStatus | 'all';
+  onSearchChange: (value: string) => void;
+  onStatusFilterChange: (value: TaskStatus | 'all') => void;
+}
+// Убраны пропсы: sortBy, sortOrder, onSortByChange, onSortOrderChange
+```
+
+**TaskList.tsx** (обновленная версия):
+```typescript
+export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all');
+  const [sortBy, setSortBy] = useState<'id' | 'createdDate' | 'status'>('id');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // По умолчанию в обратном порядке
+
+  // Функция для обработки клика по заголовку колонки
+  const handleColumnSort = (column: 'id' | 'createdDate' | 'status') => {
+    if (sortBy === column) {
+      // Меняем направление если кликнули на уже активную колонку
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Новая колонка - сортируем по возрастанию
+      setSortBy(column);
+      setSortOrder('asc');
+    }
+  };
+
+  // Компонент иконки сортировки
+  const SortIcon = ({ column }: { column: 'id' | 'createdDate' | 'status' }) => {
+    if (sortBy !== column) {
+      return <span className="ml-2 text-muted-foreground">⇅</span>; // Неактивная
+    }
+    return <span className="ml-2">{sortOrder === 'asc' ? '↑' : '↓'}</span>; // Активная
+  };
+
+  return (
+    <div>
+      <TaskFilters
+        search={search}
+        statusFilter={statusFilter}
+        onSearchChange={setSearch}
+        onStatusFilterChange={setStatusFilter}
+      />
+
+      <div className="overflow-x-auto">
+        <table className="w-full caption-bottom text-sm">
+          <thead className="border-b">
+            <tr className="border-b transition-colors hover:bg-muted/50">
+              <th 
+                className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30"
+                onClick={() => handleColumnSort('id')}
+              >
+                <div className="flex items-center">
+                  ID
+                  <SortIcon column="id" />
+                </div>
+              </th>
+              <th className="h-12 px-4 text-left align-middle font-medium">
+                Название
+              </th>
+              <th 
+                className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30"
+                onClick={() => handleColumnSort('status')}
+              >
+                <div className="flex items-center">
+                  Статус
+                  <SortIcon column="status" />
+                </div>
+              </th>
+              <th 
+                className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30"
+                onClick={() => handleColumnSort('createdDate')}
+              >
+                <div className="flex items-center">
+                  Дата создания
+                  <SortIcon column="createdDate" />
+                </div>
+              </th>
+              <th className="h-12 px-4 text-left align-middle font-medium">
+                Ветка
+              </th>
+              <th className="h-12 px-4 text-left align-middle font-medium">
+                Действия
+              </th>
+            </tr>
+          </thead>
+          {/* ... остальной код таблицы ... */}
+        </table>
+      </div>
+    </div>
+  );
+}
+```
+
+**Особенности**:
+- **По умолчанию**: сортировка по ID в обратном порядке (`desc`) - новые задачи сверху
+- **Кликабельные колонки**: ID, Статус, Дата создания
+- **Визуальные индикаторы**:
+  - `⇅` - колонка не активна (можно кликнуть для сортировки)
+  - `↑` - активная сортировка по возрастанию
+  - `↓` - активная сортировка по убыванию
+- **Hover эффект**: колонки меняют цвет при наведении (`hover:bg-muted/30`)
+- **Поведение**: первый клик сортирует по возрастанию, второй - по убыванию
+
+### 5. Несоответствие схемы данных
+
+**Проблема**: В `tasks-manifest.json` для старых задач отсутствовали поля `createdDate`, `completedDate`, `branch`.
+
+**Ошибка**:
+```
+FST_ERR_RESPONSE_SERIALIZATION: Response does not match the schema
+```
+
+**Решение**: Обновить все записи в `tasks-manifest.json`, добавив недостающие поля с `null`:
+
+```json
+{
+  "id": "TASK-001",
+  "title": "...",
+  "status": "completed",
+  "file": "...",
+  "createdDate": null,
+  "completedDate": null,
+  "branch": null
+}
+```
+
+### 6. Документация проекта
+
+**Создан файл**: `docs/TASK-VIEWER.md` с полной документацией приложения, включающей:
+- Архитектуру проекта
+- Технологический стек
+- Инструкции по установке и запуску
+- API эндпоинты
+- Функциональность frontend
+- Конфигурацию Vite proxy
+- Структуру файлов
+- Команды для работы через npm workspaces
+
+### 7. Git workflow
+
+**Важно**: Все работы проводятся в отдельной ветке `feature/TASK-004-create-task-viewer`.
+
+```bash
+# Создание ветки
+git checkout -b feature/TASK-004-create-task-viewer
+
+# Коммиты в процессе работы
+git add .
+git commit -m "Описание изменений"
+
+# После завершения - мерж в main
+git checkout main
+git merge feature/TASK-004-create-task-viewer
+```
+
+### 8. Копирование ID в буфер обмена
+
+**Проблема**: Неудобно копировать ID задачи вручную для использования в других местах.
+
+**Решение**: Добавить возможность копирования ID при клике на ячейку в таблице.
+
+**Установка библиотеки для тостов**:
+```bash
+npm i sonner -E -w taskViewerFe
+```
+
+**TaskList.tsx** (добавление функции копирования):
+```typescript
+import { toast } from 'sonner';
+
+const handleCopyId = async (id: string, e: React.MouseEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  try {
+    await navigator.clipboard.writeText(id);
+    toast.success(`ID "${id}" скопирован в буфер обмена`);
+  } catch (err) {
+    console.error('Failed to copy ID:', err);
+    toast.error('Не удалось скопировать ID');
+  }
+};
+
+// В таблице:
+<td 
+  className="p-4 align-middle font-mono cursor-pointer hover:bg-accent/50 select-none transition-colors"
+  onClick={(e) => handleCopyId(task.id, e)}
+  title="Нажмите, чтобы скопировать ID"
+>
+  {task.id}
+</td>
+```
+
+**App.tsx** (добавление Toaster):
+```typescript
+import { Toaster } from 'sonner';
+
+export function App() {
+  return (
+    <BrowserRouter>
+      {/* ... остальной код ... */}
+      <Toaster position="bottom-right" richColors />
+    </BrowserRouter>
+  );
+}
+```
+
+**Особенности**:
+- **Кликабельная ячейка**: `cursor-pointer` показывает, что элемент интерактивный
+- **Hover эффект**: `hover:bg-accent/50` - подсветка при наведении
+- **Tooltip**: `title` атрибут объясняет действие
+- **Toast уведомления**: визуальная обратная связь об успехе/ошибке
+- **Предотвращение выделения**: `select-none` - текст не выделяется при двойном клике
+
+### 9. Исправление навигации по заголовкам с кириллицей
+
+**Проблема**: При клике на заголовки в боковой навигации (например "Статус", "Описание") не происходил скролл к соответствующей секции.
+
+**Причина**: Функция генерации ID `.replace(/[^\w-]/g, '')` удаляла все не-ASCII символы, включая кириллицу. ID становились пустыми.
+
+**Решение**: Создать функцию `generateId()` с поддержкой кириллических символов.
+
+**MarkdownViewer.tsx** (обновленная версия):
+```typescript
+// Функция для генерации ID из текста заголовка
+const generateId = (text: string): string => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')           // пробелы в дефисы
+    .replace(/[^\w\u0400-\u04FF-]/g, '') // оставляем буквы, цифры, кириллицу и дефисы
+    .replace(/--+/g, '-')           // множественные дефисы в один
+    .replace(/^-+|-+$/g, '');       // удаляем дефисы в начале и конце
+};
+
+// Использование в ReactMarkdown components:
+components={{
+  h1: ({ children, ...props }) => {
+    const id = generateId(String(children));
+    return <h1 id={id} {...props}>{children}</h1>;
+  },
+  h2: ({ children, ...props }) => {
+    const id = generateId(String(children));
+    return <h2 id={id} {...props}>{children}</h2>;
+  },
+  // ... h3, h4, h5, h6 аналогично
+}}
+```
+
+**Ключевые изменения**:
+- **Поддержка кириллицы**: `\u0400-\u04FF` - диапазон кириллических символов Unicode
+- **Улучшенная обработка**: trim, удаление множественных дефисов, очистка краев
+- **Единая функция**: используется как при извлечении заголовков, так и при рендере
+- **Добавлены h5 и h6**: были пропущены в изначальной реализации
+
+**Примеры**:
+- `## Статус` → `id="статус"` ✓
+- `## Описание задачи` → `id="описание-задачи"` ✓
+- `## API Endpoints` → `id="api-endpoints"` ✓
+
+### Итоговый список коммитов в feature-ветке:
+
+1. `Инициализация Backend: создание структуры проекта taskViewerBe`
+2. `Backend: реализация API endpoints и сервисов для работы с задачами`
+3. `Инициализация Frontend: создание проекта taskViewerFe через Vite`
+4. `Frontend: настройка Tailwind CSS и структуры проекта`
+5. `Frontend: реализация API клиента и базовых компонентов`
+6. `Frontend: реализация компонентов списка и фильтрации задач`
+7. `Frontend: реализация просмотра задачи и markdown viewer`
+8. `Frontend: реализация редактирования метаданных задачи`
+9. `Frontend: настройка роутинга и страниц приложения`
+10. `Интеграция: добавление workspaces и скриптов запуска в корневой package.json`
+11. `Документация: создание TASK-VIEWER.md с полным описанием`
+12. `Fix: обновление tasks-manifest.json для совместимости со схемой`
+13. `Исправление Tailwind CSS: установка @tailwindcss/postcss`
+14. `Откат на Tailwind CSS v3 для стабильности и совместимости`
+15. `Настройка Vite proxy для избавления от CORS`
+16. `Обновление документации: добавлена информация о Vite proxy`
+17. `Добавлена сортировка по клику на заголовки колонок таблицы`
+18. `Упрощение сортировки: только клики по колонкам, по умолчанию desc по ID`
+19. `Добавлено копирование ID в буфер обмена при клике`
+20. `Исправлена навигация по заголовкам с кириллическими символами`

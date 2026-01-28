@@ -13,6 +13,7 @@ import { tasksApi } from '@/api/tasks.api';
 import type { Task, TaskStatus } from '@/types/task.types';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { toast } from 'sonner';
 
 interface TaskListProps {
   tasks: Task[];
@@ -23,7 +24,7 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all');
   const [sortBy, setSortBy] = useState<'id' | 'createdDate' | 'status'>('id');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // По умолчанию в обратном порядке
 
   const filteredAndSortedTasks = useMemo(() => {
     let result = [...tasks];
@@ -81,27 +82,78 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
     return format(new Date(dateString), 'dd.MM.yyyy', { locale: ru });
   };
 
+  const handleColumnSort = (column: 'id' | 'createdDate' | 'status') => {
+    if (sortBy === column) {
+      // Переключаем направление сортировки
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Новая колонка - начинаем с ascending
+      setSortBy(column);
+      setSortOrder('asc');
+    }
+  };
+
+  const SortIcon = ({ column }: { column: 'id' | 'createdDate' | 'status' }) => {
+    if (sortBy !== column) {
+      return <span className="ml-2 text-muted-foreground">⇅</span>;
+    }
+    return <span className="ml-2">{sortOrder === 'asc' ? '↑' : '↓'}</span>;
+  };
+
+  const handleCopyId = async (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    try {
+      await navigator.clipboard.writeText(id);
+      toast.success(`ID "${id}" скопирован в буфер обмена`);
+    } catch (err) {
+      console.error('Failed to copy ID:', err);
+      toast.error('Не удалось скопировать ID');
+    }
+  };
+
   return (
     <div>
       <TaskFilters
         search={search}
         statusFilter={statusFilter}
-        sortBy={sortBy}
-        sortOrder={sortOrder}
         onSearchChange={setSearch}
         onStatusFilterChange={setStatusFilter}
-        onSortByChange={setSortBy}
-        onSortOrderChange={setSortOrder}
       />
 
       <div className="overflow-x-auto">
         <table className="w-full caption-bottom text-sm">
           <thead className="[&_tr]:border-b">
             <tr className="border-b transition-colors hover:bg-muted/50">
-              <th className="h-12 px-4 text-left align-middle font-medium">ID</th>
+              <th 
+                className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30"
+                onClick={() => handleColumnSort('id')}
+              >
+                <div className="flex items-center">
+                  ID
+                  <SortIcon column="id" />
+                </div>
+              </th>
               <th className="h-12 px-4 text-left align-middle font-medium">Название</th>
-              <th className="h-12 px-4 text-left align-middle font-medium">Статус</th>
-              <th className="h-12 px-4 text-left align-middle font-medium">Дата создания</th>
+              <th 
+                className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30"
+                onClick={() => handleColumnSort('status')}
+              >
+                <div className="flex items-center">
+                  Статус
+                  <SortIcon column="status" />
+                </div>
+              </th>
+              <th 
+                className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30"
+                onClick={() => handleColumnSort('createdDate')}
+              >
+                <div className="flex items-center">
+                  Дата создания
+                  <SortIcon column="createdDate" />
+                </div>
+              </th>
               <th className="h-12 px-4 text-left align-middle font-medium">Ветка</th>
               <th className="h-12 px-4 text-left align-middle font-medium">Действия</th>
             </tr>
@@ -109,7 +161,13 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
           <tbody className="[&_tr:last-child]:border-0">
             {filteredAndSortedTasks.map((task) => (
               <tr key={task.id} className="border-b transition-colors hover:bg-muted/50">
-                <td className="p-4 align-middle font-mono">{task.id}</td>
+                <td 
+                  className="p-4 align-middle font-mono cursor-pointer hover:bg-accent/50 select-none transition-colors"
+                  onClick={(e) => handleCopyId(task.id, e)}
+                  title="Нажмите, чтобы скопировать ID"
+                >
+                  {task.id}
+                </td>
                 <td className="p-4 align-middle">{task.title}</td>
                 <td className="p-4 align-middle">
                   <Select
