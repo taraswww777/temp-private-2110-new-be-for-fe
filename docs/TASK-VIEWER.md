@@ -165,9 +165,25 @@ TASKS_DIR=../docs/tasks
 ```
 
 ### Frontend
-API endpoint настраивается в `src/api/tasks.api.ts`:
+
+В режиме разработки используется **Vite proxy** для избавления от CORS проблем.
+
+Конфигурация proxy в `vite.config.ts`:
 ```typescript
-const API_BASE_URL = 'http://localhost:3001/api';
+server: {
+  port: 5173,
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+    },
+  },
+}
+```
+
+API запросы используют относительный путь `/api`, который автоматически проксируется на backend:
+```typescript
+const API_BASE_URL = '/api';  // Проксируется на http://localhost:3001
 ```
 
 ## Production Build
