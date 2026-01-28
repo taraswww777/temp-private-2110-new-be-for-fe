@@ -19,7 +19,15 @@
     "docker:db:down": "cd be && docker-compose down",
     "docker:up": "cd be && docker-compose up --build",
     "docker:down": "cd be && docker-compose down",
-    "docker:logs": "cd be && docker-compose logs -f"
+    "docker:logs": "cd be && docker-compose logs -f",
+    "viewer:be:dev": "cd taskViewerBe && npm run start:dev",
+    "viewer:be:build": "cd taskViewerBe && npm run build",
+    "viewer:be:start": "cd taskViewerBe && npm start",
+    "viewer:fe:dev": "cd taskViewerFe && npm run dev",
+    "viewer:fe:build": "cd taskViewerFe && npm run build",
+    "viewer:fe:preview": "cd taskViewerFe && npm run preview",
+    "viewer:dev": "concurrently \"npm run viewer:be:dev\" \"npm run viewer:fe:dev\"",
+    "viewer:install": "cd taskViewerBe && npm install && cd ../taskViewerFe && npm install"
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {
@@ -28,6 +36,7 @@
     "@fastify/swagger": "^9.6.1",
     "@fastify/swagger-ui": "^5.2.5",
     "@types/node": "^22.10.5",
+    "concurrently": "^9.2.1",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.0",
     "drizzle-orm": "^0.45.1",
