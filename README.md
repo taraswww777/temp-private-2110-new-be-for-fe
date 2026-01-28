@@ -29,22 +29,36 @@ npm install
 
 ### 2. Запуск в режиме разработки (рекомендуется)
 
-**Вариант A: БД в Docker + Backend локально** ⭐ (лучше для разработки)
+**Вариант A: Все приложения одной командой** ⭐ (самый быстрый способ)
 
 ```bash
 # Запустить PostgreSQL в Docker
 npm run docker:db:up
 
-# Запустить Backend локально с hot-reload
-npm run be:dev
+# Запустить все приложения (BE + Task Viewer BE + Task Viewer FE)
+npm run dev
 ```
 
 **Преимущества:**
+- ✅ Одна команда запускает всё
+- ✅ Цветные логи для каждого приложения
 - ✅ Быстрый hot-reload при изменении кода
 - ✅ Удобная отладка
-- ✅ Логи сразу в терминале
 
-**Вариант B: Всё в Docker** (production-like)
+**Вариант B: БД в Docker + Backend локально** (классический подход)
+
+```bash
+# Запустить PostgreSQL в Docker
+npm run docker:db:up
+
+# Запустить только Backend
+npm run dev:be
+
+# Или запустить только Task Viewer (BE + FE)
+npm run dev:viewer
+```
+
+**Вариант C: Всё в Docker** (production-like)
 
 ```bash
 # Запустить PostgreSQL + Backend в Docker
@@ -58,13 +72,24 @@ npm run docker:up
 
 ### 3. Проверка работы
 
-После запуска приложение будет доступно:
+После запуска приложения будут доступны:
 
-- **API**: http://localhost:3000
-- **Swagger UI**: http://localhost:3000/docs
-- **Health Check**: http://localhost:3000/health
+- **Backend API**: http://localhost:3000
+- **Backend Swagger UI**: http://localhost:3000/docs
+- **Backend Health Check**: http://localhost:3000/health
+- **Task Viewer Backend**: http://localhost:3001
+- **Task Viewer Frontend**: http://localhost:5173
 
 ## Доступные команды
+
+### Основные команды
+
+```bash
+# Запуск в разработке
+npm run dev                 # Запустить ВСЕ приложения (BE + Viewer BE + Viewer FE)
+npm run dev:be              # Запустить только Backend
+npm run dev:viewer          # Запустить только Task Viewer (BE + FE)
+```
 
 ### Backend команды
 
@@ -77,9 +102,16 @@ npm run be:lint:fix         # Автоисправление ESLint
 
 # База данных
 npm run be:db:generate      # Создать миграцию
-npm run be:db:migrate       # Применить миграции
 npm run be:db:push          # Быстрое применение изменений (dev)
+npm run be:db:seed          # Заполнить справочники тестовыми данными
 npm run be:db:studio        # Открыть Drizzle Studio
+```
+
+### Task Viewer команды
+
+```bash
+npm run viewer:be:dev       # Запустить Task Viewer Backend
+npm run viewer:fe:dev       # Запустить Task Viewer Frontend
 ```
 
 ### Docker команды
@@ -88,11 +120,6 @@ npm run be:db:studio        # Открыть Drizzle Studio
 # PostgreSQL
 npm run docker:db:up        # Запустить только PostgreSQL
 npm run docker:db:down      # Остановить PostgreSQL
-
-# Полное приложение
-npm run docker:up           # Запустить PostgreSQL + Backend
-npm run docker:down         # Остановить всё
-npm run docker:logs         # Показать логи контейнеров
 ```
 
 ## Варианты запуска (подробно)
