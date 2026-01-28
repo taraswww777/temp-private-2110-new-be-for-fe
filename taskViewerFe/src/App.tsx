@@ -1,0 +1,23 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { TasksListPage } from '@/pages/TasksListPage';
+import { TaskDetailPage } from '@/pages/TaskDetailPage';
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen bg-background">
+        <header className="border-b">
+          <div className="container mx-auto px-4 py-4">
+            <h1 className="text-2xl font-bold">Task Viewer</h1>
+          </div>
+        </header>
+        <main className="container mx-auto px-4 py-8">
+          <Routes>
+            <Route path="/" element={<TasksListPage />} />
+            <Route path="/tasks/:id" element={<TaskDetailPage />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  );
+}

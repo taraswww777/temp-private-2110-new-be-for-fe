@@ -1,0 +1,28 @@
+import { useState, useEffect } from 'react';
+import { tasksApi } from '@/api/tasks.api';
+import type { Task } from '@/types/task.types';
+
+export function useTasks() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchTasks = async () => {
+    try {
+      setLoading(true);
+      const data = await tasksApi.getAllTasks();
+      setTasks(data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  return { tasks, loading, error, refetch: fetchTasks };
+}

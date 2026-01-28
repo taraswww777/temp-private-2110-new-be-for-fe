@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "be"
+    "be",
+    "taskViewerBe",
+    "taskViewerFe"
   ],
   "scripts": {
     "be:dev": "npm run start:dev -w be",
@@ -19,7 +21,9 @@
     "docker:db:down": "cd be && docker-compose down",
     "docker:up": "cd be && docker-compose up --build",
     "docker:down": "cd be && docker-compose down",
-    "docker:logs": "cd be && docker-compose logs -f"
+    "docker:logs": "cd be && docker-compose logs -f",
+    "viewer:be:dev": "npm run start:dev -w taskViewerBe",
+    "viewer:fe:dev": "npm run dev -w taskViewerFe"
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {
@@ -28,6 +32,7 @@
     "@fastify/swagger": "^9.6.1",
     "@fastify/swagger-ui": "^5.2.5",
     "@types/node": "^22.10.5",
+    "concurrently": "^9.2.1",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.0",
     "drizzle-orm": "^0.45.1",
