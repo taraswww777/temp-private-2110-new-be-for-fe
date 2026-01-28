@@ -23,7 +23,7 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all');
   const [sortBy, setSortBy] = useState<'id' | 'createdDate' | 'status'>('id');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // По умолчанию в обратном порядке
 
   const filteredAndSortedTasks = useMemo(() => {
     let result = [...tasks];
@@ -104,12 +104,8 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
       <TaskFilters
         search={search}
         statusFilter={statusFilter}
-        sortBy={sortBy}
-        sortOrder={sortOrder}
         onSearchChange={setSearch}
         onStatusFilterChange={setStatusFilter}
-        onSortByChange={setSortBy}
-        onSortOrderChange={setSortOrder}
       />
 
       <div className="overflow-x-auto">
