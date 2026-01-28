@@ -17,6 +17,17 @@ interface Heading {
 export function MarkdownViewer({ content }: MarkdownViewerProps) {
   const [activeHeading, setActiveHeading] = useState<string>('');
 
+  // Функция для генерации ID из текста заголовка
+  const generateId = (text: string): string => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')           // пробелы в дефисы
+      .replace(/[^\w\u0400-\u04FF-]/g, '') // оставляем буквы, цифры, кириллицу и дефисы
+      .replace(/--+/g, '-')           // множественные дефисы в один
+      .replace(/^-+|-+$/g, '');       // удаляем дефисы в начале и конце
+  };
+
   // Извлекаем заголовки из markdown для навигации
   const headings = useMemo(() => {
     const headingRegex = /^(#{1,6})\s+(.+)$/gm;
@@ -26,7 +37,7 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
     while ((match = headingRegex.exec(content)) !== null) {
       const level = match[1].length;
       const text = match[2];
-      const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+      const id = generateId(text);
       result.push({ id, text, level });
     }
 
@@ -95,20 +106,28 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
           remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ children, ...props }) => {
-              const id = String(children).toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+              const id = generateId(String(children));
               return <h1 id={id} {...props}>{children}</h1>;
             },
             h2: ({ children, ...props }) => {
-              const id = String(children).toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+              const id = generateId(String(children));
               return <h2 id={id} {...props}>{children}</h2>;
             },
             h3: ({ children, ...props }) => {
-              const id = String(children).toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+              const id = generateId(String(children));
               return <h3 id={id} {...props}>{children}</h3>;
             },
             h4: ({ children, ...props }) => {
-              const id = String(children).toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+              const id = generateId(String(children));
               return <h4 id={id} {...props}>{children}</h4>;
+            },
+            h5: ({ children, ...props }) => {
+              const id = generateId(String(children));
+              return <h5 id={id} {...props}>{children}</h5>;
+            },
+            h6: ({ children, ...props }) => {
+              const id = generateId(String(children));
+              return <h6 id={id} {...props}>{children}</h6>;
             },
           }}
         >
