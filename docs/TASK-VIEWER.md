@@ -78,8 +78,11 @@ npm install
 ### 2. Запуск Task Viewer
 
 ```bash
-# Одновременный запуск backend и frontend
-npm run viewer:dev
+# Запуск backend (в одном терминале)
+npm run viewer:be:dev
+
+# Запуск frontend (в другом терминале)
+npm run viewer:fe:dev
 ```
 
 После запуска:
@@ -89,18 +92,8 @@ npm run viewer:dev
 ### Доступные скрипты
 
 ```bash
-# Backend отдельно
-npm run viewer:be:dev      # dev режим с hot-reload
-npm run viewer:be:build    # сборка
-npm run viewer:be:start    # запуск собранной версии
-
-# Frontend отдельно
-npm run viewer:fe:dev      # dev режим
-npm run viewer:fe:build    # сборка
-npm run viewer:fe:preview  # preview собранной версии
-
-# Оба приложения одновременно (рекомендуется)
-npm run viewer:dev         # одновременный запуск backend и frontend
+npm run viewer:be:dev      # запуск backend в dev режиме с hot-reload
+npm run viewer:fe:dev      # запуск frontend в dev режиме
 ```
 
 ## Функциональность
