@@ -59,8 +59,7 @@ const userContextPlugin: FastifyPluginAsync = async (fastify) => {
     }
 
     // Устанавливаем контекст пользователя напрямую
-    // @ts-expect-error - добавляем свойство динамически
-    request.user = {
+    (request as any).user = {
       role: role as UserRole,
       name,
       id,
