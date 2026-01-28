@@ -81,6 +81,24 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
     return format(new Date(dateString), 'dd.MM.yyyy', { locale: ru });
   };
 
+  const handleColumnSort = (column: 'id' | 'createdDate' | 'status') => {
+    if (sortBy === column) {
+      // Переключаем направление сортировки
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Новая колонка - начинаем с ascending
+      setSortBy(column);
+      setSortOrder('asc');
+    }
+  };
+
+  const SortIcon = ({ column }: { column: 'id' | 'createdDate' | 'status' }) => {
+    if (sortBy !== column) {
+      return <span className="ml-2 text-muted-foreground">⇅</span>;
+    }
+    return <span className="ml-2">{sortOrder === 'asc' ? '↑' : '↓'}</span>;
+  };
+
   return (
     <div>
       <TaskFilters
@@ -98,10 +116,34 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
         <table className="w-full caption-bottom text-sm">
           <thead className="[&_tr]:border-b">
             <tr className="border-b transition-colors hover:bg-muted/50">
-              <th className="h-12 px-4 text-left align-middle font-medium">ID</th>
+              <th 
+                className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30"
+                onClick={() => handleColumnSort('id')}
+              >
+                <div className="flex items-center">
+                  ID
+                  <SortIcon column="id" />
+                </div>
+              </th>
               <th className="h-12 px-4 text-left align-middle font-medium">Название</th>
-              <th className="h-12 px-4 text-left align-middle font-medium">Статус</th>
-              <th className="h-12 px-4 text-left align-middle font-medium">Дата создания</th>
+              <th 
+                className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30"
+                onClick={() => handleColumnSort('status')}
+              >
+                <div className="flex items-center">
+                  Статус
+                  <SortIcon column="status" />
+                </div>
+              </th>
+              <th 
+                className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30"
+                onClick={() => handleColumnSort('createdDate')}
+              >
+                <div className="flex items-center">
+                  Дата создания
+                  <SortIcon column="createdDate" />
+                </div>
+              </th>
               <th className="h-12 px-4 text-left align-middle font-medium">Ветка</th>
               <th className="h-12 px-4 text-left align-middle font-medium">Действия</th>
             </tr>
