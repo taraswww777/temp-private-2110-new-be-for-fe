@@ -6,7 +6,9 @@ Backend сервис на стеке Fastify + TypeScript + PostgreSQL + Drizzle
 
 ```
 /
-├── be/                 # Backend приложение (Fastify + TypeScript)
+├── service2110/        # Service2110 (Fastify + TypeScript)
+├── taskViewerBe/       # Task Viewer Backend (вспомогательный инструмент)
+├── taskViewerFe/       # Task Viewer Frontend (вспомогательный инструмент)
 ├── docs/               # Документация и задачи
 │   └── tasks/         # Задачи в формате TASK-XXX
 ├── package.json       # Корневой package.json с workspace
@@ -141,7 +143,7 @@ npm run docker:db:down
 
 ### Создание и применение миграций
 
-1. Изменить схему в `be/src/db/schema/`
+1. Изменить схему в `service2110/src/db/schema/`
 2. Создать миграцию:
    ```bash
    npm run db:generate
@@ -171,7 +173,7 @@ npm run db:studio
 
 ## Переменные окружения
 
-Service2110 использует файл `be/.env`. Пример в `be/.env.example`:
+Service2110 использует файл `service2110/.env`. Пример в `service2110/.env.example`:
 
 ```env
 # Application
@@ -193,7 +195,7 @@ DB_NAME=app_db
 ## Структура Service2110
 
 ```
-be/
+service2110/
 ├── src/
 │   ├── config/         # Конфигурация (env валидация)
 │   ├── db/            # База данных
