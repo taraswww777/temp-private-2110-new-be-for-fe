@@ -12,6 +12,7 @@ import { join } from 'path';
 import { env } from './config/env.js';
 import { routes } from './routes/index.js';
 import { errorHandler } from './plugins/error-handler.js';
+import userContextPlugin from './plugins/user-context.js';
 
 export async function buildApp() {
   const app = Fastify({
@@ -82,6 +83,9 @@ export async function buildApp() {
   // Регистрация обработчика ошибок
   await app.register(errorHandler);
 
+  // Регистрация плагина для контекста пользователя
+  await app.register(userContextPlugin);
+
   // Swagger плагин
   await app.register(fastifySwagger, {
     openapi: {
@@ -101,6 +105,7 @@ export async function buildApp() {
         { name: 'Report 6406 - References', description: 'Справочники для формы отчётности 6406' },
         { name: 'Report 6406 - Tasks', description: 'Задания на построение отчётов для формы 6406' },
         { name: 'Report 6406 - Packages', description: 'Пакеты заданий для формы 6406' },
+        { name: 'Report 6406 - Storage', description: 'Мониторинг хранилища отчётов' },
       ],
     },
     transform: ({ schema, url }) => {

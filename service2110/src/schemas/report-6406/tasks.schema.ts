@@ -1,15 +1,37 @@
 import { z } from 'zod';
-import { paginationQuerySchema, sortOrderSchema, paginationResponseSchema } from '../common.schema';
+import { paginationQuerySchema, sortOrderSchema, paginationResponseSchema } from '../common.schema.js';
 
 /**
  * Enum схемы для валидации
+ * 
+ * 21 статус согласно новой статусной модели:
+ * - 10 DAPP статусов (Data Application Processing)
+ * - 11 FC статусов (File Conversion)
  */
 export const reportTaskStatusSchema = z.enum([
-  'PENDING',
-  'IN_PROGRESS',
-  'COMPLETED',
-  'FAILED',
-  'CANCELLED',
+  // DAPP статусы
+  'upload_generation',
+  'registered',
+  'failed',
+  'upload_not_formed',
+  'upload_formed',
+  'accepted_dapp',
+  'submitted_dapp',
+  'killed_dapp',
+  'new_dapp',
+  'saving_dapp',
+  // FC статусы
+  'created',
+  'deleted',
+  'started',
+  'start_failed',
+  'converting',
+  'completed',
+  'convert_stopped',
+  'in_queue',
+  'file_success_not_exist',
+  'failed_fc',
+  'have_broken_files',
 ]);
 
 export const currencySchema = z.enum(['RUB', 'FOREIGN']);
@@ -67,6 +89,7 @@ export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
 export const taskSchema = z.object({
   id: z.string().uuid(),
   createdAt: z.string().datetime(),
+  createdBy: z.string().nullable(),
   branchId: z.number().int(),
   branchName: z.string(),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -78,9 +101,16 @@ export const taskSchema = z.object({
   reportType: reportTypeSchema,
   source: z.string().nullable(),
   status: reportTaskStatusSchema,
+  canCancel: z.boolean(),
+  canDelete: z.boolean(),
+  canStart: z.boolean(),
   fileSize: z.number().nullable(),
+  filesCount: z.number().int(),
   fileUrl: z.string().nullable(),
   errorMessage: z.string().nullable(),
+  lastStatusChangedAt: z.string().datetime(),
+  startedAt: z.string().datetime().nullable(),
+  completedAt: z.string().datetime().nullable(),
   updatedAt: z.string().datetime(),
 });
 
@@ -201,3 +231,45 @@ export const cancelTaskResponseSchema = z.object({
 });
 
 export type CancelTaskResponse = z.infer<typeof cancelTaskResponseSchema>;
+
+/**
+ * Схема для запуска заданий (одного или нескольких)
+ */
+export const startTasksSchema = z.object({
+  taskIds: z.array(z.string().uuid()).min(1),
+});
+
+export type StartTasksInput = z.infer<typeof startTasksSchema>;
+
+/**
+ * Схема для успешного результата запуска задания
+ */
+export const startTaskResultSchema = z.object({
+  taskId: z.string().uuid(),
+  status: reportTaskStatusSchema,
+  startedAt: z.string().datetime(),
+});
+
+export type StartTaskResult = z.infer<typeof startTaskResultSchema>;
+
+/**
+ * Схема для ошибки запуска задания
+ */
+export const startTaskErrorSchema = z.object({
+  taskId: z.string().uuid(),
+  reason: z.string(),
+});
+
+export type StartTaskError = z.infer<typeof startTaskErrorSchema>;
+
+/**
+ * Схема для ответа при запуске заданий
+ */
+export const startTasksResponseSchema = z.object({
+  started: z.number().int().min(0),
+  failed: z.number().int().min(0),
+  results: z.array(startTaskResultSchema),
+  errors: z.array(startTaskErrorSchema),
+});
+
+export type StartTasksResponse = z.infer<typeof startTasksResponseSchema>;

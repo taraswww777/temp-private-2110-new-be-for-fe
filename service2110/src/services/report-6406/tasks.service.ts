@@ -3,10 +3,11 @@ import {
   report6406Tasks, 
   report6406PackageTasks, 
   report6406Packages,
+  report6406TaskStatusHistory,
   branches,
-  ReportTaskStatus,
+  TaskStatus,
 } from '../../db/schema/index.js';
-import { eq, and, inArray, gte, lte, sql, desc, asc } from 'drizzle-orm';
+import { eq, and, inArray, gte, lte, sql, desc, asc, ne } from 'drizzle-orm';
 import type {
   CreateTaskInput,
   TasksQuery,
@@ -18,13 +19,17 @@ import type {
   BulkCancelResponse,
   CancelTaskResponse,
   Task,
-} from '../../schemas/report-6406/tasks.schema';
+  StartTasksInput,
+  StartTasksResponse,
+} from '../../schemas/report-6406/tasks.schema.js';
+import { getStatusPermissions } from '../../types/status-model.js';
+import { storageService } from './storage.service.js';
 
 export class TasksService {
   /**
    * Создать новое задание
    */
-  async createTask(input: CreateTaskInput): Promise<Task> {
+  async createTask(input: CreateTaskInput, createdBy?: string): Promise<Task> {
     // Получить название филиала
     const [branch] = await db
       .select()
@@ -36,24 +41,39 @@ export class TasksService {
       throw new Error(`Branch with id ${input.branchId} not found`);
     }
 
-    const [task] = await db
-      .insert(report6406Tasks)
-      .values({
-        branchId: input.branchId,
-        branchName: branch.name,
-        periodStart: input.periodStart,
-        periodEnd: input.periodEnd,
-        accountMask: input.accountMask || null,
-        accountMaskSecondOrder: input.accountMaskSecondOrder || null,
-        currency: input.currency,
-        format: input.format,
-        reportType: input.reportType,
-        source: input.source || null,
-        status: ReportTaskStatus.PENDING,
-      })
-      .returning();
+    // Используем транзакцию для создания задания и записи в историю
+    return await db.transaction(async (trx) => {
+      const [task] = await trx
+        .insert(report6406Tasks)
+        .values({
+          branchId: input.branchId,
+          branchName: branch.name,
+          periodStart: input.periodStart,
+          periodEnd: input.periodEnd,
+          accountMask: input.accountMask || null,
+          accountMaskSecondOrder: input.accountMaskSecondOrder || null,
+          currency: input.currency,
+          format: input.format,
+          reportType: input.reportType,
+          source: input.source || null,
+          status: TaskStatus.CREATED,
+          createdBy: createdBy || null,
+          filesCount: 0,
+        })
+        .returning();
 
-    return this.formatTask(task);
+      // Добавить запись в историю статусов
+      await trx.insert(report6406TaskStatusHistory).values({
+        taskId: task.id,
+        status: TaskStatus.CREATED,
+        previousStatus: null,
+        changedAt: new Date(),
+        changedBy: createdBy || null,
+        comment: 'Task created',
+      });
+
+      return this.formatTask(task);
+    });
   }
 
   /**
@@ -208,7 +228,7 @@ export class TasksService {
   /**
    * Отменить задание
    */
-  async cancelTask(id: string): Promise<CancelTaskResponse> {
+  async cancelTask(id: string, cancelledBy?: string): Promise<CancelTaskResponse> {
     const [task] = await db
       .select()
       .from(report6406Tasks)
@@ -223,18 +243,34 @@ export class TasksService {
       throw new Error(`Cannot cancel task in ${task.status} status`);
     }
 
-    const [updatedTask] = await db
-      .update(report6406Tasks)
-      .set({
-        status: ReportTaskStatus.CANCELLED,
-        updatedAt: new Date(),
-      })
-      .where(eq(report6406Tasks.id, id))
-      .returning();
+    // Используем транзакцию для обновления статуса и добавления в историю
+    const updatedTask = await db.transaction(async (trx) => {
+      const [updated] = await trx
+        .update(report6406Tasks)
+        .set({
+          status: TaskStatus.KILLED_DAPP, // Используем статус killed_dapp для отмены
+          lastStatusChangedAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(report6406Tasks.id, id))
+        .returning();
+
+      // Добавляем запись в историю
+      await trx.insert(report6406TaskStatusHistory).values({
+        taskId: id,
+        status: TaskStatus.KILLED_DAPP,
+        previousStatus: task.status as TaskStatus,
+        changedAt: new Date(),
+        changedBy: cancelledBy || null,
+        comment: 'Task cancelled by user',
+      });
+
+      return updated;
+    });
 
     return {
       id: updatedTask.id,
-      status: updatedTask.status,
+      status: updatedTask.status as TaskStatus,
       updatedAt: updatedTask.updatedAt.toISOString(),
     };
   }
@@ -266,33 +302,141 @@ export class TasksService {
   }
 
   /**
+   * Запустить задания на выполнение
+   */
+  async startTasks(input: StartTasksInput, startedBy?: string): Promise<StartTasksResponse> {
+    let started = 0;
+    const results: StartTasksResponse['results'] = [];
+    const errors: StartTasksResponse['errors'] = [];
+
+    for (const taskId of input.taskIds) {
+      try {
+        // Получаем задание
+        const [task] = await db
+          .select()
+          .from(report6406Tasks)
+          .where(eq(report6406Tasks.id, taskId))
+          .limit(1);
+
+        if (!task) {
+          errors.push({
+            taskId,
+            reason: `Task with id '${taskId}' not found`,
+          });
+          continue;
+        }
+
+        // Проверяем права на запуск
+        const permissions = getStatusPermissions(task.status as TaskStatus);
+        if (!permissions.canStart) {
+          errors.push({
+            taskId,
+            reason: `Cannot start task in '${task.status}' status. Only tasks with status 'created' can be started`,
+          });
+          continue;
+        }
+
+        // Проверяем наличие свободного места (моковая проверка: 100MB на задание)
+        const estimatedSize = 104857600; // 100MB
+        const storageInfo = await storageService.getStorageVolume();
+        
+        if (storageInfo.freeBytes < estimatedSize) {
+          errors.push({
+            taskId,
+            reason: `Not enough storage space. Required: 100MB, Available: ${(storageInfo.freeBytes / 1024 / 1024).toFixed(2)}MB`,
+          });
+          continue;
+        }
+
+        // Запускаем задание в транзакции
+        const updatedTask = await db.transaction(async (trx) => {
+          const [updated] = await trx
+            .update(report6406Tasks)
+            .set({
+              status: TaskStatus.STARTED,
+              startedAt: new Date(),
+              lastStatusChangedAt: new Date(),
+              updatedAt: new Date(),
+            })
+            .where(eq(report6406Tasks.id, taskId))
+            .returning();
+
+          // Добавляем запись в историю
+          await trx.insert(report6406TaskStatusHistory).values({
+            taskId,
+            status: TaskStatus.STARTED,
+            previousStatus: task.status as TaskStatus,
+            changedAt: new Date(),
+            changedBy: startedBy || null,
+            comment: 'Task started by user',
+          });
+
+          return updated;
+        });
+
+        results.push({
+          taskId: updatedTask.id,
+          status: updatedTask.status as TaskStatus,
+          startedAt: updatedTask.startedAt!.toISOString(),
+        });
+        started++;
+      } catch (error) {
+        errors.push({
+          taskId,
+          reason: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    }
+
+    return {
+      started,
+      failed: errors.length,
+      results,
+      errors,
+    };
+  }
+
+  /**
    * Проверка возможности отмены задания
    */
   private canCancel(status: string): boolean {
-    return [ReportTaskStatus.PENDING, ReportTaskStatus.IN_PROGRESS].includes(status as ReportTaskStatus);
+    const permissions = getStatusPermissions(status as TaskStatus);
+    return permissions.canCancel;
   }
 
   /**
    * Проверка возможности удаления задания
    */
   private canDelete(status: string): boolean {
-    return status !== ReportTaskStatus.IN_PROGRESS;
+    const permissions = getStatusPermissions(status as TaskStatus);
+    return permissions.canDelete;
+  }
+
+  /**
+   * Проверка возможности запуска задания
+   */
+  private canStart(status: string): boolean {
+    const permissions = getStatusPermissions(status as TaskStatus);
+    return permissions.canStart;
   }
 
   /**
    * Проверка возможности добавления в пакет
    */
   canAddToPackage(status: string): boolean {
-    return status === ReportTaskStatus.COMPLETED;
+    return status === TaskStatus.COMPLETED;
   }
 
   /**
    * Форматирование задания для API
    */
   private formatTask(task: typeof report6406Tasks.$inferSelect): Task {
+    const permissions = getStatusPermissions(task.status as TaskStatus);
+    
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
+      createdBy: task.createdBy,
       branchId: task.branchId,
       branchName: task.branchName,
       periodStart: task.periodStart,
@@ -303,10 +447,17 @@ export class TasksService {
       format: task.format,
       reportType: task.reportType,
       source: task.source,
-      status: task.status,
+      status: task.status as TaskStatus,
+      canCancel: permissions.canCancel,
+      canDelete: permissions.canDelete,
+      canStart: permissions.canStart,
       fileSize: task.fileSize,
+      filesCount: task.filesCount,
       fileUrl: task.fileUrl,
       errorMessage: task.errorMessage,
+      lastStatusChangedAt: task.lastStatusChangedAt.toISOString(),
+      startedAt: task.startedAt?.toISOString() ?? null,
+      completedAt: task.completedAt?.toISOString() ?? null,
       updatedAt: task.updatedAt.toISOString(),
     };
   }

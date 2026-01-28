@@ -12,8 +12,10 @@ import {
   bulkCancelTasksSchema,
   bulkCancelResponseSchema,
   cancelTaskResponseSchema,
-} from '../../../../schemas/report-6406/tasks.schema';
-import { uuidParamSchema } from '../../../../schemas/common.schema';
+  startTasksSchema,
+  startTasksResponseSchema,
+} from '../../../../schemas/report-6406/tasks.schema.js';
+import { uuidParamSchema } from '../../../../schemas/common.schema.js';
 
 export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -33,7 +35,7 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (request, reply) => {
     try {
-      const task = await tasksService.createTask(request.body);
+      const task = await tasksService.createTask(request.body, request.user.name);
       return reply.status(201).send(task);
     } catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
@@ -169,7 +171,7 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (request, reply) => {
     try {
-      const result = await tasksService.cancelTask(request.params.id);
+      const result = await tasksService.cancelTask(request.params.id, request.user.name);
       return reply.status(200).send(result);
     } catch (error) {
       if (error instanceof Error) {
@@ -210,5 +212,46 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   }, async (request, reply) => {
     const result = await tasksService.bulkCancelTasks(request.body);
     return reply.status(200).send(result);
+  });
+
+  /**
+   * POST /api/v1/report-6406/tasks/start
+   * Запустить одно или несколько заданий на выполнение
+   */
+  app.post('/start', {
+    schema: {
+      tags: ['Report 6406 - Tasks'],
+      summary: 'Запустить задания на выполнение (переводит из статуса created в started)',
+      description: 'Запускает задания на генерацию отчётов. Проверяет наличие свободного места в хранилище. Поддерживает запуск одного или нескольких заданий.',
+      body: startTasksSchema,
+      response: {
+        200: startTasksResponseSchema,
+        507: {
+          type: 'object',
+          properties: {
+            type: { type: 'string' },
+            title: { type: 'string' },
+            status: { type: 'number' },
+            detail: { type: 'string' },
+          },
+          description: 'Недостаточно места в хранилище',
+        },
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const result = await tasksService.startTasks(request.body, request.user.name);
+      return reply.status(200).send(result);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('Not enough storage')) {
+        return reply.status(507).send({
+          type: 'https://tools.ietf.org/html/rfc7231#section-6.6.8',
+          title: 'Insufficient Storage',
+          status: 507,
+          detail: error.message,
+        });
+      }
+      throw error;
+    }
   });
 };
