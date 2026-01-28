@@ -130,9 +130,7 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Packages'],
       summary: 'Удалить пакет',
       params: uuidParamSchema,
-      response: {
-        204: { type: 'null', description: 'Пакет успешно удален' },
-      },
+      description: 'Удаляет пакет. Возвращает 204 No Content при успешном удалении.',
     },
   }, async (request, reply) => {
     try {
@@ -212,9 +210,7 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
         packageId: uuidParamSchema.shape.id,
         taskId: uuidParamSchema.shape.id,
       }).pick({ packageId: true, taskId: true }),
-      response: {
-        204: { type: 'null', description: 'Задание успешно удалено из пакета' },
-      },
+      description: 'Удаляет задание из пакета. Возвращает 204 No Content при успешном удалении.',
     },
   }, async (request, reply) => {
     try {
