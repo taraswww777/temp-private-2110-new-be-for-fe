@@ -21,11 +21,11 @@
     {
       "id": "TASK-003",
       "title": "Реализация API для формы отчётности 6406",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-003-implement-6406-report-api.md",
       "createdDate": "2026-01-28T00:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-01-28T15:00:00Z",
+      "branch": "feature/TASK-003-implement-6406-report-api"
     },
     {
       "id": "TASK-004",
