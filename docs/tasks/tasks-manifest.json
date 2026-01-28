@@ -4,7 +4,10 @@
       "id": "TASK-001",
       "title": "Инициализация репозитория",
       "status": "completed",
-      "file": "TASK-001-init-repository.md"
+      "file": "TASK-001-init-repository.md",
+      "createdDate": null,
+      "completedDate": null,
+      "branch": null
     },
     {
       "id": "TASK-002",
@@ -27,7 +30,7 @@
     {
       "id": "TASK-004",
       "title": "Создание Task Viewer приложения",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-004-create-task-viewer.md",
       "createdDate": "2026-01-28T12:00:00Z",
       "completedDate": null,

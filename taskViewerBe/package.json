@@ -1,0 +1,31 @@
+{
+  "name": "task-viewer-be",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Backend приложение для работы с задачами проекта через файловую систему",
+  "devDependencies": {
+    "@eslint/js": "9.39.2",
+    "@fastify/cors": "11.2.0",
+    "@types/node": "25.0.10",
+    "dotenv": "17.2.3",
+    "eslint": "9.39.2",
+    "fastify": "5.7.2",
+    "fastify-type-provider-zod": "6.1.0",
+    "globals": "17.2.0",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.54.0",
+    "zod": "4.3.6"
+  }
+}
