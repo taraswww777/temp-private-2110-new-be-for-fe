@@ -23,12 +23,7 @@
     "docker:down": "cd be && docker-compose down",
     "docker:logs": "cd be && docker-compose logs -f",
     "viewer:be:dev": "npm run start:dev -w taskViewerBe",
-    "viewer:be:build": "npm run build -w taskViewerBe",
-    "viewer:be:start": "npm run start -w taskViewerBe",
-    "viewer:fe:dev": "npm run dev -w taskViewerFe",
-    "viewer:fe:build": "npm run build -w taskViewerFe",
-    "viewer:fe:preview": "npm run preview -w taskViewerFe",
-    "viewer:dev": "concurrently \"npm run viewer:be:dev\" \"npm run viewer:fe:dev\""
+    "viewer:fe:dev": "npm run dev -w taskViewerFe"
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {
