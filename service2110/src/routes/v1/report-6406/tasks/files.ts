@@ -7,7 +7,7 @@ import {
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
 } from '../../../../schemas/report-6406/task-files.schema.js';
-import { uuidParamSchema } from '../../../../schemas/common.schema.js';
+import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.js';
 
 // Схема для параметров с двумя UUID
 const taskFileParamsSchema = z.object({
@@ -65,16 +65,7 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
       params: taskFileParamsSchema,
       response: {
         200: retryFileConversionResponseSchema,
-        501: {
-          type: 'object',
-          properties: {
-            type: { type: 'string' },
-            title: { type: 'string' },
-            status: { type: 'number' },
-            detail: { type: 'string' },
-          },
-          description: 'Функциональность ещё не реализована',
-        },
+        501: httpErrorSchema.describe('Функциональность ещё не реализована'),
       },
     },
   }, async (request, reply) => {

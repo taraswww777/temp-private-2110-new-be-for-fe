@@ -109,8 +109,100 @@ export async function buildApp() {
       ],
     },
     transform: ({ schema, url }) => {
-      // Преобразование Zod схем в JSON Schema для Swagger
-      return { schema, url };
+      if (!schema) {
+        return { schema, url };
+      }
+
+      const transformed: Record<string, any> = {};
+
+      // Проверяем, является ли объект Zod схемой (имеет метод toJSONSchema)
+      const isZodSchema = (obj: any): boolean => {
+        return obj && typeof obj === 'object' && typeof obj.toJSONSchema === 'function';
+      };
+
+      // Опции для toJSONSchema - удаляем несовместимые метаданные
+      const jsonSchemaOptions = { 
+        target: 'openApi3' as const, 
+        $refStrategy: 'none' as const,
+        removeIncompatibleMeta: true,
+      };
+
+      // Преобразуем body, если это Zod схема
+      if (isZodSchema(schema.body)) {
+        try {
+          transformed.body = schema.body.toJSONSchema(jsonSchemaOptions);
+        } catch (error) {
+          console.error('Error converting body schema:', error);
+          transformed.body = {};
+        }
+      } else if (schema.body) {
+        transformed.body = schema.body;
+      }
+
+      // Преобразуем querystring, если это Zod схема
+      if (isZodSchema(schema.querystring)) {
+        try {
+          transformed.querystring = schema.querystring.toJSONSchema(jsonSchemaOptions);
+        } catch (error) {
+          console.error('Error converting querystring schema:', error);
+          transformed.querystring = {};
+        }
+      } else if (schema.querystring) {
+        transformed.querystring = schema.querystring;
+      }
+
+      // Преобразуем params, если это Zod схема
+      if (isZodSchema(schema.params)) {
+        try {
+          transformed.params = schema.params.toJSONSchema(jsonSchemaOptions);
+        } catch (error) {
+          console.error('Error converting params schema:', error);
+          transformed.params = {};
+        }
+      } else if (schema.params) {
+        transformed.params = schema.params;
+      }
+
+      // Преобразуем headers, если это Zod схема
+      if (isZodSchema(schema.headers)) {
+        try {
+          transformed.headers = schema.headers.toJSONSchema(jsonSchemaOptions);
+        } catch (error) {
+          console.error('Error converting headers schema:', error);
+          transformed.headers = {};
+        }
+      } else if (schema.headers) {
+        transformed.headers = schema.headers;
+      }
+
+      // Преобразуем response
+      if (schema.response) {
+        transformed.response = {};
+        for (const [statusCode, responseSchema] of Object.entries(schema.response)) {
+          if (isZodSchema(responseSchema)) {
+            try {
+              // Это Zod схема
+              transformed.response[statusCode] = responseSchema.toJSONSchema(jsonSchemaOptions);
+            } catch (error) {
+              console.error(`Error converting response schema for ${statusCode}:`, error);
+              transformed.response[statusCode] = {};
+            }
+          } else {
+            // Оставляем как есть
+            transformed.response[statusCode] = responseSchema;
+          }
+        }
+      }
+
+      // Копируем остальные поля схемы
+      if (schema.tags) transformed.tags = schema.tags;
+      if (schema.summary) transformed.summary = schema.summary;
+      if (schema.description) transformed.description = schema.description;
+      if (schema.deprecated) transformed.deprecated = schema.deprecated;
+      if (schema.security) transformed.security = schema.security;
+      if (schema.hide) transformed.hide = schema.hide;
+
+      return { schema: transformed, url };
     },
   });
 

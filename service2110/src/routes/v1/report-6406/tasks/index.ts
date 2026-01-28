@@ -15,7 +15,7 @@ import {
   startTasksSchema,
   startTasksResponseSchema,
 } from '../../../../schemas/report-6406/tasks.schema.js';
-import { uuidParamSchema } from '../../../../schemas/common.schema.js';
+import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.js';
 
 export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -107,9 +107,7 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Tasks'],
       summary: 'Удалить задание',
       params: uuidParamSchema,
-      response: {
-        204: { type: 'null', description: 'Задание успешно удалено' },
-      },
+      description: 'Удаляет задание. Возвращает 204 No Content при успешном удалении.',
     },
   }, async (request, reply) => {
     try {
@@ -226,16 +224,7 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
       body: startTasksSchema,
       response: {
         200: startTasksResponseSchema,
-        507: {
-          type: 'object',
-          properties: {
-            type: { type: 'string' },
-            title: { type: 'string' },
-            status: { type: 'number' },
-            detail: { type: 'string' },
-          },
-          description: 'Недостаточно места в хранилище',
-        },
+        507: httpErrorSchema.describe('Недостаточно места в хранилище'),
       },
     },
   }, async (request, reply) => {
