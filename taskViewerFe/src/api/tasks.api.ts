@@ -1,6 +1,7 @@
 import type { Task, TaskDetail, UpdateTaskMetaInput } from '@/types/task.types';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+// Используем относительный путь - Vite dev server проксирует на http://localhost:3001
+const API_BASE_URL = '/api';
 
 export const tasksApi = {
   async getAllTasks(): Promise<Task[]> {
