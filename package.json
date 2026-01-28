@@ -8,21 +8,17 @@
     "taskViewerFe"
   ],
   "scripts": {
-    "dev": "concurrently -n \"BE,Viewer-BE,Viewer-FE\" -c \"blue,magenta,green\" \"npm run be:dev\" \"npm run viewer:be:dev\" \"npm run viewer:fe:dev\"",
-    "dev:be": "concurrently -n \"BE\" -c \"blue\" \"npm run be:dev\"",
-    "dev:viewer": "concurrently -n \"Viewer-BE,Viewer-FE\" -c \"magenta,green\" \"npm run viewer:be:dev\" \"npm run viewer:fe:dev\"",
-    "be:dev": "npm run start:dev -w be",
-    "be:build": "npm run build -w be",
-    "be:lint": "npm run lint -w be",
-    "be:lint:fix": "npm run lint:fix -w be",
-    "be:db:generate": "npm run db:generate -w be",
-    "be:db:push": "npm run db:push -w be",
-    "be:db:seed": "npm run db:seed -w be",
-    "be:db:studio": "npm run db:studio -w be",
+    "dev": "npm run start:dev -w be",
+    "build": "npm run build -w be",
+    "lint": "npm run lint -w be",
+    "lint:fix": "npm run lint:fix -w be",
+    "db:generate": "npm run db:generate -w be",
+    "db:push": "npm run db:push -w be",
+    "db:seed": "npm run db:seed -w be",
+    "db:studio": "npm run db:studio -w be",
     "docker:db:up": "cd be && docker-compose up postgres -d",
     "docker:db:down": "cd be && docker-compose down",
-    "viewer:be:dev": "npm run start:dev -w taskViewerBe",
-    "viewer:fe:dev": "npm run dev -w taskViewerFe"
+    "taskViewer:dev": "concurrently -n \"TaskViewer-BE,TaskViewer-FE\" -c \"magenta,green\" \"npm run start:dev -w taskViewerBe\" \"npm run dev -w taskViewerFe\""
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {
