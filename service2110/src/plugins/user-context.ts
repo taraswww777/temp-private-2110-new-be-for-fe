@@ -36,9 +36,6 @@ declare module 'fastify' {
  * Плагин для извлечения информации о пользователе из заголовков запроса
  */
 const userContextPlugin: FastifyPluginAsync = async (fastify) => {
-  // Декорируем request объектом user
-  fastify.decorateRequest('user', { getter() { return {} as UserContext; } });
-
   // Хук для извлечения информации о пользователе из заголовков
   fastify.addHook('onRequest', async (request, reply) => {
     // Извлекаем данные из заголовков
@@ -61,7 +58,8 @@ const userContextPlugin: FastifyPluginAsync = async (fastify) => {
       });
     }
 
-    // Устанавливаем контекст пользователя
+    // Устанавливаем контекст пользователя напрямую
+    // @ts-expect-error - добавляем свойство динамически
     request.user = {
       role: role as UserRole,
       name,
