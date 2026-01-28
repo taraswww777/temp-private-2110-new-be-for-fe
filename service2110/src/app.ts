@@ -98,7 +98,6 @@ export async function buildApp() {
       ],
       tags: [
         { name: 'Health', description: 'Health check endpoints' },
-        { name: 'Items', description: 'Items CRUD endpoints' },
         { name: 'Report 6406 - References', description: 'Справочники для формы отчётности 6406' },
         { name: 'Report 6406 - Tasks', description: 'Задания на построение отчётов для формы 6406' },
         { name: 'Report 6406 - Packages', description: 'Пакеты заданий для формы 6406' },

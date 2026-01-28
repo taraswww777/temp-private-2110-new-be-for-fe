@@ -128,12 +128,14 @@ npm run docker:db:down
 ### Health Check
 - `GET /health` - Проверка состояния приложения и БД
 
-### Items (примеры CRUD)
-- `GET /api/v1/items` - Получить все элементы
-- `GET /api/v1/items/:id` - Получить элемент по ID
-- `POST /api/v1/items` - Создать элемент
-- `PATCH /api/v1/items/:id` - Обновить элемент
-- `DELETE /api/v1/items/:id` - Удалить элемент
+### Report 6406 API
+- `GET /api/v1/report-6406/references/*` - Справочники (филиалы, валюты, форматы и т.д.)
+- `POST /api/v1/report-6406/tasks` - Создать задание на построение отчёта
+- `GET /api/v1/report-6406/tasks` - Получить список заданий
+- `POST /api/v1/report-6406/packages` - Создать пакет заданий
+- `GET /api/v1/report-6406/packages` - Получить список пакетов
+
+Полная документация доступна в Swagger UI.
 
 ### Документация
 - `GET /docs` - Swagger UI (интерактивная документация)
