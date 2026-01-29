@@ -15,7 +15,8 @@
 **Проверки:**
 - **service2110** (Backend):
   - ✅ Lint (ESLint)
-  - ⏭️ Build (временно отключен, есть известные ошибки TS)
+  - ✅ Build (TypeScript)
+  - ✅ Type Check (tsc --noEmit)
 - **taskViewerBe** (Task Viewer Backend):
   - ✅ Lint (ESLint)
   - ✅ Build (TypeScript)
