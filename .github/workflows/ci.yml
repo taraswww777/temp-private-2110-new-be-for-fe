@@ -24,7 +24,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+      
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            service2110/node_modules
+            taskViewerBe/node_modules
+            taskViewerFe/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       
       - name: Install dependencies
         run: npm ci
@@ -34,10 +45,6 @@ jobs:
       
       - name: Build Service2110
         run: npm run build -w service2110
-      
-      - name: Check TypeScript types
-        run: npx tsc --noEmit
-        working-directory: ./service2110
 
   # Проверка Task Viewer Backend
   taskviewer-be:
@@ -52,7 +59,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+      
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            service2110/node_modules
+            taskViewerBe/node_modules
+            taskViewerFe/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       
       - name: Install dependencies
         run: npm ci
@@ -62,10 +80,6 @@ jobs:
       
       - name: Build TaskViewer BE
         run: npm run build -w taskViewerBe
-      
-      - name: Check TypeScript types
-        run: npx tsc --noEmit
-        working-directory: ./taskViewerBe
 
   # Проверка Task Viewer Frontend
   taskviewer-fe:
@@ -80,7 +94,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+      
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            service2110/node_modules
+            taskViewerBe/node_modules
+            taskViewerFe/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       
       - name: Install dependencies
         run: npm ci

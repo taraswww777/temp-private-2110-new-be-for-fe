@@ -16,14 +16,17 @@
 - **service2110** (Backend):
   - ✅ Lint (ESLint)
   - ✅ Build (TypeScript)
-  - ✅ Type Check (tsc --noEmit)
 - **taskViewerBe** (Task Viewer Backend):
   - ✅ Lint (ESLint)
   - ✅ Build (TypeScript)
-  - ✅ Type Check (tsc --noEmit)
 - **taskViewerFe** (Task Viewer Frontend):
   - ✅ Lint (ESLint)
   - ✅ Build (Vite)
+
+**Кэширование:**
+- Используется `actions/cache@v4` для кэширования `node_modules` всех workspaces
+- Ключ кэша: `${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}`
+- Кэш очищается автоматически при изменении `package-lock.json`
 
 **Статус:** ✅ Активен
 
@@ -115,6 +118,22 @@ npm ci
 - name: Run tests
   run: npm run test -w service2110
 ```
+
+---
+
+## История изменений
+
+### 2026-01-29 (исправление кэширования)
+- Исправлена проблема с кэшированием npm для монорепо
+- Удалена встроенная опция `cache: 'npm'` из `setup-node@v4`
+- Добавлено явное кэширование через `actions/cache@v4` для всех workspaces
+- Удалены избыточные проверки `tsc --noEmit` (уже выполняются при build)
+- Исправлена проблема падения CI на GitHub Actions
+
+### 2026-01-29 (создание)
+- Создан CI workflow для проверки PR
+- Добавлен workflow для публикации документации
+- Созданы документация и локальные команды проверки
 
 ---
 

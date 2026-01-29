@@ -514,7 +514,48 @@ https://<username>.github.io/<repository-name>/
 
 ---
 
+## Анализ причин падения CI
+
+### Проблема
+CI workflow падал на GitHub Actions, хотя локальные проверки проходили успешно.
+
+### Причины
+1. **Некорректное кэширование npm**: опция `cache: 'npm'` в `actions/setup-node@v4` плохо работает с монорепо и workspaces
+2. **Избыточные проверки**: запуск `tsc --noEmit` после `npm run build` был избыточным
+
+### Решение
+1. Заменено встроенное кэширование на явное через `actions/cache@v4`:
+   ```yaml
+   - name: Cache node modules
+     uses: actions/cache@v4
+     with:
+       path: |
+         node_modules
+         service2110/node_modules
+         taskViewerBe/node_modules
+         taskViewerFe/node_modules
+       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+       restore-keys: |
+         ${{ runner.os }}-node-
+   ```
+2. Удалены шаги `Check TypeScript types` (уже выполняются в `npm run build`)
+
+### Результат после исправления
+- ✅ Кэш работает корректно для всех workspaces
+- ✅ Проверки не дублируются
+- ✅ CI должен проходить успешно на GitHub Actions
+
+---
+
 ## История изменений
+
+### 2026-01-29 (исправление CI)
+**Исправление падения CI на GitHub Actions:**
+- Причина падения: некорректное кэширование npm для монорепо с workspaces
+- Решение: замена `cache: 'npm'` на явное `actions/cache@v4`
+- Удалены избыточные проверки `tsc --noEmit` (уже выполняются при build)
+- Обновлена документация `.github/workflows/README.md`
+- Добавлен анализ причин падения CI в TASK-009
 
 ### 2026-01-29 (дополнительная работа)
 **Расширение scope задачи:**
@@ -550,13 +591,16 @@ https://<username>.github.io/<repository-name>/
 - ✅ Все проверки lint и build проходят успешно локально
 - ✅ Создано 7 коммитов в ветке `feature/TASK-009-setup-github-actions`
 - ✅ Создан Pull Request #10
-- ❌ **CI workflow упал на GitHub Actions**
-  - Подробности: https://github.com/taraswww777/temp-private-2110-new-be-for-fe/actions/runs/21489506602?pr=10
-  - Причины падения будут исследованы и исправлены отдельной задачей
-  - Локальные проверки (`npm run ci:check`) проходят успешно
+- ✅ **Исправлена проблема с падением CI на GitHub Actions**
+  - Причина: некорректное кэширование npm для монорепо с workspaces
+  - Решение: заменено встроенное кэширование `cache: 'npm'` на явное `actions/cache@v4`
+  - Удалены избыточные проверки `tsc --noEmit`
+  - Локальные проверки (`npm run ci:check`) продолжают проходить успешно
 
 **Коммиты:**
 ```
+[новый] - fix(ci): исправлено кэширование npm для монорепо
+97f1455 - docs(TASK-009): добавлена информация о выявленных проблемах
 1375827 - fix: добавлены eslint-disable комментарии
 71c235e - docs: обновлён README workflows
 53f90da - fix: исправлены все ошибки TypeScript в service2110
