@@ -62,6 +62,24 @@
       "createdDate": "2026-01-29T00:00:00Z",
       "completedDate": "2026-01-29T12:00:00Z",
       "branch": "feature/TASK-007-refactor-api"
+    },
+    {
+      "id": "TASK-008",
+      "title": "Стандартизация хранения и передачи размеров файлов и пакетов",
+      "status": "backlog",
+      "file": "TASK-008-standardize-size-storage-and-api.md",
+      "createdDate": "2026-01-29T14:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-009",
+      "title": "Настройка GitHub Actions и GitHub Pages для публикации Swagger документации",
+      "status": "backlog",
+      "file": "TASK-009-setup-github-actions-and-pages.md",
+      "createdDate": "2026-01-29T16:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
