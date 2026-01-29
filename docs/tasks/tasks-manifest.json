@@ -39,29 +39,29 @@
     {
       "id": "TASK-005",
       "title": "Добавление новой функциональности в API формы 6406",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-005-extend-6406-api-universal-report.md",
       "createdDate": "2026-01-28T14:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-01-29T00:00:00Z",
+      "branch": "feature/TASK-005-extend-6406-api"
     },
     {
       "id": "TASK-006",
       "title": "Исправление отображения схем в Swagger документации",
-      "status": "in-progress",
+      "status": "completed",
       "file": "TASK-006-fix-swagger-schemas-display.md",
       "createdDate": "2026-01-28T16:00:00Z",
-      "completedDate": null,
+      "completedDate": "2026-01-29T10:00:00Z",
       "branch": "feature/TASK-006-fix-swagger-schemas"
     },
     {
       "id": "TASK-007",
       "title": "Рефакторинг структуры API для формы 6406",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-007-refactor-api-structure.md",
-      "createdDate": "2026-01-29T12:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "createdDate": "2026-01-29T00:00:00Z",
+      "completedDate": "2026-01-29T12:00:00Z",
+      "branch": "feature/TASK-007-refactor-api"
     }
   ]
 }
