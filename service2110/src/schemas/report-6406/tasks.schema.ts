@@ -104,8 +104,17 @@ export const taskSchema = z.object({
   canCancel: z.boolean(),
   canDelete: z.boolean(),
   canStart: z.boolean(),
-  fileSize: z.number().nullable(),
-  filesCount: z.number().int(),
+  fileSize: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Размер файла в байтах (например, 10485760 = 10 MB). NULL если размер неизвестен.')
+    .nullable(),
+  filesCount: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Количество файлов в задании'),
   fileUrl: z.string().nullable(),
   errorMessage: z.string().nullable(),
   lastStatusChangedAt: z.string().datetime(),
@@ -136,7 +145,12 @@ export const taskListItemSchema = z.object({
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   status: reportTaskStatusSchema,
-  fileSize: z.number().nullable(),
+  fileSize: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Размер файла в байтах')
+    .nullable(),
   format: fileFormatSchema,
   reportType: reportTypeSchema,
   updatedAt: z.string().datetime(),

@@ -538,7 +538,10 @@
                     "fileSize": {
                       "anyOf": [
                         {
-                          "type": "number"
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991,
+                          "description": "Размер файла в байтах (например, 10485760 = 10 MB). NULL если размер неизвестен."
                         },
                         {
                           "type": "null"
@@ -547,8 +550,9 @@
                     },
                     "filesCount": {
                       "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Количество файлов в задании"
                     },
                     "fileUrl": {
                       "anyOf": [
@@ -916,7 +920,10 @@
                           "fileSize": {
                             "anyOf": [
                               {
-                                "type": "number"
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991,
+                                "description": "Размер файла в байтах"
                               },
                               {
                                 "type": "null"
@@ -1245,7 +1252,10 @@
                     "fileSize": {
                       "anyOf": [
                         {
-                          "type": "number"
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991,
+                          "description": "Размер файла в байтах (например, 10485760 = 10 MB). NULL если размер неизвестен."
                         },
                         {
                           "type": "null"
@@ -1254,8 +1264,9 @@
                     },
                     "filesCount": {
                       "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Количество файлов в задании"
                     },
                     "fileUrl": {
                       "anyOf": [
@@ -1927,8 +1938,9 @@
                           },
                           "fileSize": {
                             "type": "integer",
-                            "minimum": -9007199254740991,
-                            "maximum": 9007199254740991
+                            "minimum": 0,
+                            "maximum": 9007199254740991,
+                            "description": "Размер файла в байтах (например, 10485760 = 10 MB)"
                           },
                           "fileType": {
                             "type": "string"
@@ -2313,8 +2325,9 @@
                     },
                     "fileSize": {
                       "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Размер экспортированного файла в байтах (например, 52428800 = 50 MB)"
                     },
                     "downloadUrlExpiresAt": {
                       "type": "string",
@@ -2323,8 +2336,9 @@
                     },
                     "recordsCount": {
                       "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Количество записей в экспортированном файле"
                     },
                     "createdAt": {
                       "type": "string",
@@ -2426,7 +2440,8 @@
                     "totalSize": {
                       "type": "integer",
                       "minimum": 0,
-                      "maximum": 9007199254740991
+                      "maximum": 9007199254740991,
+                      "description": "Общий размер пакета в байтах, например 157286400 = 150 MB (сумма размеров всех файлов)"
                     },
                     "updatedAt": {
                       "type": "string",
@@ -2565,7 +2580,8 @@
                           "totalSize": {
                             "type": "integer",
                             "minimum": 0,
-                            "maximum": 9007199254740991
+                            "maximum": 9007199254740991,
+                            "description": "Общий размер пакета в байтах, например 157286400 = 150 MB (сумма размеров всех файлов)"
                           },
                           "updatedAt": {
                             "type": "string",
@@ -2829,7 +2845,8 @@
                     "totalSize": {
                       "type": "integer",
                       "minimum": 0,
-                      "maximum": 9007199254740991
+                      "maximum": 9007199254740991,
+                      "description": "Общий размер пакета в байтах, например 157286400 = 150 MB (сумма размеров всех файлов)"
                     },
                     "updatedAt": {
                       "type": "string",
@@ -2896,7 +2913,10 @@
                           "fileSize": {
                             "anyOf": [
                               {
-                                "type": "number"
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991,
+                                "description": "Размер файла в байтах"
                               },
                               {
                                 "type": "null"
@@ -3342,35 +3362,45 @@
                   "properties": {
                     "totalBytes": {
                       "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Общий объём хранилища в байтах (например, 1099511627776 = 1 TB)"
                     },
                     "usedBytes": {
                       "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Использовано байт в хранилище (например, 524288000000 = 488.28 GB)"
                     },
                     "freeBytes": {
                       "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Свободно байт в хранилище (например, 575223627776 = 535.72 GB)"
                     },
                     "usedPercent": {
-                      "type": "number"
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "description": "Процент использования хранилища"
                     },
                     "totalHuman": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Общий объём хранилища в человекочитаемом формате (например, \"1.00 TB\")"
                     },
                     "usedHuman": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Использовано в человекочитаемом формате (например, \"488.28 GB\")"
                     },
                     "freeHuman": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Свободно в человекочитаемом формате (например, \"535.72 GB\")"
                     },
                     "warning": {
                       "anyOf": [
                         {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Предупреждение о заполнении хранилища (если применимо)"
                         },
                         {
                           "type": "null"

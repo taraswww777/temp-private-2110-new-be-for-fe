@@ -52,9 +52,17 @@ export const exportTasksResponseSchema = z.object({
   exportId: z.string().uuid(),
   status: z.literal('COMPLETED'),
   fileUrl: z.string(),
-  fileSize: z.number().int(),
+  fileSize: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Размер экспортированного файла в байтах (например, 52428800 = 50 MB)'),
   downloadUrlExpiresAt: z.string().datetime(),
-  recordsCount: z.number().int(),
+  recordsCount: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Количество записей в экспортированном файле'),
   createdAt: z.string().datetime(),
 });
 
