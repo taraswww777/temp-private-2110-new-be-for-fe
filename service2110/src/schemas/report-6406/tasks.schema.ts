@@ -152,29 +152,17 @@ export const tasksQuerySchema = paginationQuerySchema.extend({
   sortBy: z.enum(['createdAt', 'branchId', 'status', 'periodStart', 'updatedAt']).default('createdAt'),
   sortOrder: sortOrderSchema,
   
-  // Фильтры по статусам (множественный выбор через запятую)
-  statuses: z.union([
-    reportTaskStatusSchema,
-    z.array(reportTaskStatusSchema),
-  ]).optional().transform(val => val ? (Array.isArray(val) ? val : [val]) : undefined),
+  // Фильтры по статусам (массив)
+  statuses: z.array(reportTaskStatusSchema).optional(),
   
-  // Фильтры по филиалам (множественный выбор через запятую)
-  branchIds: z.union([
-    z.coerce.number().int().positive(),
-    z.array(z.coerce.number().int().positive()),
-  ]).optional().transform(val => val ? (Array.isArray(val) ? val : [val]) : undefined),
+  // Фильтры по филиалам (массив чисел)
+  branchIds: z.array(z.coerce.number().int().positive()).optional(),
   
-  // Фильтры по типам отчётов (множественный выбор через запятую)
-  reportTypes: z.union([
-    reportTypeSchema,
-    z.array(reportTypeSchema),
-  ]).optional().transform(val => val ? (Array.isArray(val) ? val : [val]) : undefined),
+  // Фильтры по типам отчётов (массив)
+  reportTypes: z.array(reportTypeSchema).optional(),
   
-  // Фильтры по форматам (множественный выбор через запятую)
-  formats: z.union([
-    fileFormatSchema,
-    z.array(fileFormatSchema),
-  ]).optional().transform(val => val ? (Array.isArray(val) ? val : [val]) : undefined),
+  // Фильтры по форматам (массив)
+  formats: z.array(fileFormatSchema).optional(),
   
   // Фильтры по периоду начала (periodStart)
   periodStartFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),

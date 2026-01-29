@@ -11,7 +11,7 @@ export const statusHistoryItemSchema = z.object({
   changedAt: z.string().datetime(),
   changedBy: z.string().nullable(),
   comment: z.string().nullable(),
-  metadata: z.record(z.unknown()).nullable(),
+  metadata: z.record(z.string(), z.any()).nullable().describe('Дополнительные метаданные в формате ключ-значение'),
 });
 
 export type StatusHistoryItem = z.infer<typeof statusHistoryItemSchema>;

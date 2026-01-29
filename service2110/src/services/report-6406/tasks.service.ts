@@ -93,22 +93,22 @@ export class TasksService {
     const conditions = [];
     
     // Фильтр по статусам
-    if (statuses && statuses.length > 0) {
+    if (statuses?.length) {
       conditions.push(inArray(report6406Tasks.status, statuses));
     }
     
     // Фильтр по филиалам
-    if (branchIds && branchIds.length > 0) {
+    if (branchIds?.length) {
       conditions.push(inArray(report6406Tasks.branchId, branchIds));
     }
     
     // Фильтр по типам отчётов
-    if (reportTypes && reportTypes.length > 0) {
+    if (reportTypes?.length) {
       conditions.push(inArray(report6406Tasks.reportType, reportTypes));
     }
     
     // Фильтр по форматам
-    if (formats && formats.length > 0) {
+    if (formats?.length) {
       conditions.push(inArray(report6406Tasks.format, formats));
     }
     
