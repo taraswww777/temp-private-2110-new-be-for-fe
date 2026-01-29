@@ -158,7 +158,8 @@ export class PackagesService {
         branchName: task.branchName,
         periodStart: task.periodStart,
         periodEnd: task.periodEnd,
-        status: task.status,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        status: task.status as any,
         fileSize: task.fileSize,
         format: task.format,
         reportType: task.reportType,

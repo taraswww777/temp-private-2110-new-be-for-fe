@@ -40,6 +40,7 @@ export const errorHandler: FastifyPluginAsync = async (fastify) => {
         title: error.name || 'Error',
         status: statusCode,
         detail: error.message,
+        
         instance,
       };
 

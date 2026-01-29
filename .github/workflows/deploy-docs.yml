@@ -1,0 +1,113 @@
+name: Deploy Swagger Documentation to GitHub Pages
+
+# Запускать при пуше в main ветку и при изменениях в swagger.json
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'service2110/docs/swagger/swagger.json'
+      - '.github/workflows/deploy-docs.yml'
+  # Возможность запустить вручную из интерфейса GitHub
+  workflow_dispatch:
+
+# Разрешения для публикации на GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Разрешить только один concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      
+      - name: Create docs directory
+        run: |
+          mkdir -p _site
+          cp service2110/docs/swagger/swagger.json _site/swagger.json
+      
+      - name: Generate Swagger HTML
+        run: |
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="ru">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>API Documentation - Service 2110</title>
+              <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css">
+              <style>
+                  html {
+                      box-sizing: border-box;
+                      overflow: -moz-scrollbars-vertical;
+                      overflow-y: scroll;
+                  }
+                  *, *:before, *:after {
+                      box-sizing: inherit;
+                  }
+                  body {
+                      margin: 0;
+                      padding: 0;
+                  }
+                  .topbar {
+                      display: none;
+                  }
+              </style>
+          </head>
+          <body>
+              <div id="swagger-ui"></div>
+              <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
+              <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js"></script>
+              <script>
+                  window.onload = function() {
+                      window.ui = SwaggerUIBundle({
+                          url: "./swagger.json",
+                          dom_id: '#swagger-ui',
+                          deepLinking: true,
+                          presets: [
+                              SwaggerUIBundle.presets.apis,
+                              SwaggerUIStandalonePreset
+                          ],
+                          plugins: [
+                              SwaggerUIBundle.plugins.DownloadUrl
+                          ],
+                          layout: "StandaloneLayout",
+                          tryItOutEnabled: false,
+                          displayRequestDuration: true,
+                          filter: true,
+                          syntaxHighlight: {
+                              activate: true,
+                              theme: "monokai"
+                          }
+                      });
+                  };
+              </script>
+          </body>
+          </html>
+          EOF
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

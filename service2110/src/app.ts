@@ -145,7 +145,8 @@ export async function buildApp() {
       // Преобразуем body, если это Zod схема
       if (isZodSchema(schema.body)) {
         try {
-          transformed.body = schema.body.toJSONSchema(jsonSchemaOptions);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          transformed.body = (schema.body as any).toJSONSchema(jsonSchemaOptions);
         } catch (error) {
           console.error('Error converting body schema:', error);
           transformed.body = {};
@@ -157,7 +158,8 @@ export async function buildApp() {
       // Преобразуем querystring, если это Zod схема
       if (isZodSchema(schema.querystring)) {
         try {
-          transformed.querystring = schema.querystring.toJSONSchema(jsonSchemaOptions);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          transformed.querystring = (schema.querystring as any).toJSONSchema(jsonSchemaOptions);
         } catch (error) {
           console.error('Error converting querystring schema:', error);
           transformed.querystring = {};
@@ -169,7 +171,8 @@ export async function buildApp() {
       // Преобразуем params, если это Zod схема
       if (isZodSchema(schema.params)) {
         try {
-          transformed.params = schema.params.toJSONSchema(jsonSchemaOptions);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          transformed.params = (schema.params as any).toJSONSchema(jsonSchemaOptions);
         } catch (error) {
           console.error('Error converting params schema:', error);
           transformed.params = {};
@@ -181,7 +184,8 @@ export async function buildApp() {
       // Преобразуем headers, если это Zod схема
       if (isZodSchema(schema.headers)) {
         try {
-          transformed.headers = schema.headers.toJSONSchema(jsonSchemaOptions);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          transformed.headers = (schema.headers as any).toJSONSchema(jsonSchemaOptions);
         } catch (error) {
           console.error('Error converting headers schema:', error);
           transformed.headers = {};
@@ -193,18 +197,22 @@ export async function buildApp() {
       // Преобразуем response
       if (schema.response) {
         transformed.response = {};
-        for (const [statusCode, responseSchema] of Object.entries(schema.response)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        for (const [statusCode, responseSchema] of Object.entries(schema.response as Record<string, any>)) {
           if (isZodSchema(responseSchema)) {
             try {
               // Это Zod схема
-              transformed.response[statusCode] = responseSchema.toJSONSchema(jsonSchemaOptions);
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (transformed.response as any)[statusCode] = (responseSchema as any).toJSONSchema(jsonSchemaOptions);
             } catch (error) {
               console.error(`Error converting response schema for ${statusCode}:`, error);
-              transformed.response[statusCode] = {};
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (transformed.response as any)[statusCode] = {};
             }
           } else {
             // Оставляем как есть
-            transformed.response[statusCode] = responseSchema;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (transformed.response as any)[statusCode] = responseSchema;
           }
         }
       }

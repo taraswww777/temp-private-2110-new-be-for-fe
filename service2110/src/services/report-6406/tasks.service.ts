@@ -344,7 +344,8 @@ export class TasksService {
         results.push({
           taskId,
           success: true,
-          status: result.status,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          status: result.status as any,
           updatedAt: result.updatedAt,
         });
       } catch (error) {
@@ -535,7 +536,7 @@ export class TasksService {
       branchName: task.branchName,
       periodStart: task.periodStart,
       periodEnd: task.periodEnd,
-      status: task.status,
+      status: task.status as TaskStatus,
       fileSize: task.fileSize,
       format: task.format,
       reportType: task.reportType,
