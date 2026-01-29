@@ -31,7 +31,15 @@ export const packageSchema = z.object({
   createdBy: z.string(),
   lastCopiedToTfrAt: z.string().datetime().nullable(),
   tasksCount: z.number().int().min(0),
-  totalSize: z.number().int().min(0),
+  totalSize: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Общий размер пакета в байтах (сумма размеров всех файлов)')
+    .openapi({
+      example: 157286400,
+      description: 'Общий размер пакета в байтах (например, 157286400 = 150 MB)',
+    }),
   updatedAt: z.string().datetime(),
 });
 

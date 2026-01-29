@@ -14,7 +14,15 @@ export type FileStatusType = z.infer<typeof fileStatusSchema>;
 export const taskFileSchema = z.object({
   id: z.string().uuid(),
   fileName: z.string(),
-  fileSize: z.number().int(),
+  fileSize: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Размер файла в байтах')
+    .openapi({
+      example: 10485760,
+      description: 'Размер файла в байтах (например, 10485760 = 10 MB)',
+    }),
   fileType: z.string(),
   status: fileStatusSchema,
   downloadUrl: z.string().nullable(),

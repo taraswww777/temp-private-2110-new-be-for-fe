@@ -28,6 +28,10 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
   status: varchar('status', { length: 30 }).notNull().default('created'),
   
   // Информация о результате
+  /**
+   * Размер файла в байтах.
+   * Может быть NULL если размер ещё не известен (задание не завершено).
+   */
   fileSize: bigint('file_size', { mode: 'number' }),
   filesCount: integer('files_count').notNull().default(0),
   fileUrl: text('file_url'),

@@ -8,6 +8,10 @@
     "build": "tsc",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -24,6 +28,7 @@
     "@fastify/swagger": "9.6.1",
     "@fastify/swagger-ui": "5.2.5",
     "@types/node": "25.0.10",
+    "@vitest/coverage-v8": "^2.1.8",
     "dotenv": "17.2.3",
     "drizzle-kit": "0.31.8",
     "drizzle-orm": "0.45.1",
@@ -35,6 +40,7 @@
     "tsx": "4.21.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.54.0",
+    "vitest": "^2.1.8",
     "zod": "4.3.6"
   },
   "dependencies": {

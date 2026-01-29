@@ -10,6 +10,10 @@ export const report6406Packages = pgTable('report_6406_packages', {
   createdBy: varchar('created_by', { length: 255 }).notNull(),
   lastCopiedToTfrAt: timestamp('last_copied_to_tfr_at'),
   tasksCount: integer('tasks_count').notNull().default(0),
+  /**
+   * Общий размер пакета в байтах (сумма размеров всех файлов).
+   * По умолчанию 0 (пустой пакет).
+   */
   totalSize: bigint('total_size', { mode: 'number' }).notNull().default(0),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (table) => ({

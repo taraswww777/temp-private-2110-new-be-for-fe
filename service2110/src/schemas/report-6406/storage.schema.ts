@@ -4,14 +4,66 @@ import { z } from 'zod';
  * Схема для ответа о состоянии хранилища
  */
 export const storageVolumeResponseSchema = z.object({
-  totalBytes: z.number().int(),
-  usedBytes: z.number().int(),
-  freeBytes: z.number().int(),
-  usedPercent: z.number(),
-  totalHuman: z.string(),
-  usedHuman: z.string(),
-  freeHuman: z.string(),
-  warning: z.string().nullable(),
+  totalBytes: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Общий объём хранилища в байтах')
+    .openapi({
+      example: 1099511627776,
+      description: 'Общий объём хранилища в байтах (например, 1099511627776 = 1 TB)',
+    }),
+  usedBytes: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Использовано байт в хранилище')
+    .openapi({
+      example: 524288000000,
+      description: 'Использовано байт (например, 524288000000 = 488.28 GB)',
+    }),
+  freeBytes: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Свободно байт в хранилище')
+    .openapi({
+      example: 575223627776,
+      description: 'Свободно байт (например, 575223627776 = 535.72 GB)',
+    }),
+  usedPercent: z
+    .number()
+    .min(0)
+    .max(100)
+    .describe('Процент использования хранилища')
+    .openapi({
+      example: 47.68,
+    }),
+  totalHuman: z
+    .string()
+    .describe('Общий объём хранилища в человекочитаемом формате')
+    .openapi({
+      example: '1.00 TB',
+    }),
+  usedHuman: z
+    .string()
+    .describe('Использовано в человекочитаемом формате')
+    .openapi({
+      example: '488.28 GB',
+    }),
+  freeHuman: z
+    .string()
+    .describe('Свободно в человекочитаемом формате')
+    .openapi({
+      example: '535.72 GB',
+    }),
+  warning: z
+    .string()
+    .nullable()
+    .describe('Предупреждение о заполнении хранилища (если применимо)')
+    .openapi({
+      example: null,
+    }),
 });
 
 export type StorageVolumeResponse = z.infer<typeof storageVolumeResponseSchema>;
