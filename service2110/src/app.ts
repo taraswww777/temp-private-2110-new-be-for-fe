@@ -86,18 +86,31 @@ export async function buildApp() {
   // Регистрация плагина для контекста пользователя
   await app.register(userContextPlugin);
 
-  // Swagger плагин
+  // Swagger плагин (OpenAPI 3.1)
   await app.register(fastifySwagger, {
     openapi: {
+      openapi: '3.1.0',
       info: {
         title: 'Backend API',
-        description: 'API документация для Backend проекта на Fastify + TypeScript + PostgreSQL',
-        version: '1.0.0',
+        description: 'API документация для Backend проекта на Fastify + TypeScript + PostgreSQL\n\n## Глоссарий терминов\n\n- **ТФР (Территориальный финансовый репозиторий)** - централизованное хранилище финансовых отчётов\n- **DAPP** - Data Application Processing - система обработки данных\n- **FC** - File Conversion - система конвертации файлов',
+        version: '2.0.0',
+        license: {
+          name: 'MIT',
+          url: 'https://opensource.org/licenses/MIT',
+        },
       },
       servers: [
         {
           url: `http://localhost:${env.PORT}`,
           description: 'Development server',
+        },
+        {
+          url: 'https://api-stage.example.com',
+          description: 'Staging server',
+        },
+        {
+          url: 'https://api.example.com',
+          description: 'Production server',
         },
       ],
       tags: [
@@ -113,18 +126,20 @@ export async function buildApp() {
         return { schema, url };
       }
 
-      const transformed: Record<string, any> = {};
+      const transformed: Record<string, unknown> = {};
 
       // Проверяем, является ли объект Zod схемой (имеет метод toJSONSchema)
-      const isZodSchema = (obj: any): boolean => {
-        return obj && typeof obj === 'object' && typeof obj.toJSONSchema === 'function';
+      const isZodSchema = (obj: unknown): boolean => {
+        return obj !== null && typeof obj === 'object' && 'toJSONSchema' in obj && typeof (obj as { toJSONSchema?: unknown }).toJSONSchema === 'function';
       };
 
-      // Опции для toJSONSchema - удаляем несовместимые метаданные
+      // Опции для toJSONSchema - OpenAPI 3.1 совместимость
       const jsonSchemaOptions = { 
         target: 'openApi3' as const, 
         $refStrategy: 'none' as const,
         removeIncompatibleMeta: true,
+        // OpenAPI 3.1 использует JSON Schema 2020-12
+        // nullable автоматически конвертируется в anyOf: [{ type: 'xxx' }, { type: 'null' }]
       };
 
       // Преобразуем body, если это Zod схема

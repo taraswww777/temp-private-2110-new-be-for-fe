@@ -11,7 +11,6 @@ import {
   bulkDeleteResponseSchema,
   bulkCancelTasksSchema,
   bulkCancelResponseSchema,
-  cancelTaskResponseSchema,
   startTasksSchema,
   startTasksResponseSchema,
 } from '../../../../schemas/report-6406/tasks.schema.js';
@@ -99,51 +98,14 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   /**
-   * DELETE /api/v1/report-6406/tasks/:id
-   * Удалить задание
+   * DELETE /api/v1/report-6406/tasks
+   * Универсальное удаление заданий (одного или нескольких)
    */
-  app.delete('/:id', {
+  app.delete('/', {
     schema: {
       tags: ['Report 6406 - Tasks'],
-      summary: 'Удалить задание',
-      params: uuidParamSchema,
-      description: 'Удаляет задание. Возвращает 204 No Content при успешном удалении.',
-    },
-  }, async (request, reply) => {
-    try {
-      await tasksService.deleteTask(request.params.id);
-      return reply.status(204).send();
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message.includes('not found')) {
-          return reply.status(404).send({
-            type: 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
-            title: 'Not Found',
-            status: 404,
-            detail: error.message,
-          });
-        }
-        if (error.message.includes('Cannot delete')) {
-          return reply.status(409).send({
-            type: 'https://tools.ietf.org/html/rfc7231#section-6.5.8',
-            title: 'Conflict',
-            status: 409,
-            detail: error.message,
-          });
-        }
-      }
-      throw error;
-    }
-  });
-
-  /**
-   * POST /api/v1/report-6406/tasks/bulk-delete
-   * Массовое удаление заданий
-   */
-  app.post('/bulk-delete', {
-    schema: {
-      tags: ['Report 6406 - Tasks'],
-      summary: 'Массовое удаление заданий',
+      summary: 'Удалить одно или несколько заданий',
+      description: 'Удаляет задания. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
       body: bulkDeleteTasksSchema,
       response: {
         200: bulkDeleteResponseSchema,
@@ -155,60 +117,21 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   /**
-   * POST /api/v1/report-6406/tasks/:id/cancel
-   * Отменить задание
+   * POST /api/v1/report-6406/tasks/cancel
+   * Универсальная отмена заданий (одного или нескольких)
    */
-  app.post('/:id/cancel', {
+  app.post('/cancel', {
     schema: {
       tags: ['Report 6406 - Tasks'],
-      summary: 'Отменить задание (перевести в статус CANCELLED)',
-      params: uuidParamSchema,
-      response: {
-        200: cancelTaskResponseSchema,
-      },
-    },
-  }, async (request, reply) => {
-    try {
-      const result = await tasksService.cancelTask(request.params.id, request.user.name);
-      return reply.status(200).send(result);
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message.includes('not found')) {
-          return reply.status(404).send({
-            type: 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
-            title: 'Not Found',
-            status: 404,
-            detail: error.message,
-          });
-        }
-        if (error.message.includes('Cannot cancel')) {
-          return reply.status(409).send({
-            type: 'https://tools.ietf.org/html/rfc7231#section-6.5.8',
-            title: 'Conflict',
-            status: 409,
-            detail: error.message,
-          });
-        }
-      }
-      throw error;
-    }
-  });
-
-  /**
-   * POST /api/v1/report-6406/tasks/bulk-cancel
-   * Массовая отмена заданий
-   */
-  app.post('/bulk-cancel', {
-    schema: {
-      tags: ['Report 6406 - Tasks'],
-      summary: 'Массовая отмена заданий',
+      summary: 'Отменить одно или несколько заданий',
+      description: 'Отменяет задания (переводит в статус KILLED_DAPP). Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
       body: bulkCancelTasksSchema,
       response: {
         200: bulkCancelResponseSchema,
       },
     },
   }, async (request, reply) => {
-    const result = await tasksService.bulkCancelTasks(request.body);
+    const result = await tasksService.bulkCancelTasks(request.body, request.user.name);
     return reply.status(200).send(result);
   });
 

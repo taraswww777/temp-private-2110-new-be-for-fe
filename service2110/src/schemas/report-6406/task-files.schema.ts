@@ -32,10 +32,7 @@ export type TaskFile = z.infer<typeof taskFileSchema>;
 export const taskFilesQuerySchema = paginationQuerySchema.extend({
   sortBy: z.enum(['status', 'fileName', 'fileSize', 'createdAt']).default('status'),
   sortOrder: sortOrderSchema,
-  status: z.union([
-    fileStatusSchema,
-    z.array(fileStatusSchema),
-  ]).optional().transform(val => val ? (Array.isArray(val) ? val : [val]) : undefined),
+  status: z.array(fileStatusSchema).optional(),
 });
 
 export type TaskFilesQuery = z.infer<typeof taskFilesQuerySchema>;

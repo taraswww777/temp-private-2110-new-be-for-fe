@@ -145,22 +145,42 @@ export const taskListItemSchema = z.object({
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
 
 /**
- * Схема для query параметров списка заданий
+ * Схема для query параметров списка заданий (расширенная фильтрация)
  */
 export const tasksQuerySchema = paginationQuerySchema.extend({
-  sortBy: z.enum(['createdAt', 'branchId', 'status', 'periodStart']).default('createdAt'),
+  // Сортировка
+  sortBy: z.enum(['createdAt', 'branchId', 'status', 'periodStart', 'updatedAt']).default('createdAt'),
   sortOrder: sortOrderSchema,
-  status: z.union([
-    reportTaskStatusSchema,
-    z.array(reportTaskStatusSchema),
-  ]).optional().transform(val => val ? (Array.isArray(val) ? val : [val]) : undefined),
-  branchId: z.coerce.number().int().positive().optional(),
-  reportType: z.union([
-    reportTypeSchema,
-    z.array(reportTypeSchema),
-  ]).optional().transform(val => val ? (Array.isArray(val) ? val : [val]) : undefined),
+  
+  // Фильтры по статусам (массив)
+  statuses: z.array(reportTaskStatusSchema).optional(),
+  
+  // Фильтры по филиалам (массив чисел)
+  branchIds: z.array(z.coerce.number().int().positive()).optional(),
+  
+  // Фильтры по типам отчётов (массив)
+  reportTypes: z.array(reportTypeSchema).optional(),
+  
+  // Фильтры по форматам (массив)
+  formats: z.array(fileFormatSchema).optional(),
+  
+  // Фильтры по периоду начала (periodStart)
   periodStartFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   periodStartTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  
+  // Фильтры по периоду окончания (periodEnd)
+  periodEndFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  periodEndTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  
+  // Фильтры по дате создания
+  createdAtFrom: z.string().datetime().optional(),
+  createdAtTo: z.string().datetime().optional(),
+  
+  // Фильтр по создателю
+  createdBy: z.string().optional(),
+  
+  // Поисковая строка
+  search: z.string().optional(),
 });
 
 export type TasksQuery = z.infer<typeof tasksQuerySchema>;
@@ -185,14 +205,15 @@ export const bulkDeleteTasksSchema = z.object({
 export type BulkDeleteTasksInput = z.infer<typeof bulkDeleteTasksSchema>;
 
 /**
- * Схема для ответа при массовом удалении
+ * Схема для ответа при массовом удалении (с детальными результатами)
  */
 export const bulkDeleteResponseSchema = z.object({
   deleted: z.number().int().min(0),
   failed: z.number().int().min(0),
-  errors: z.array(z.object({
+  results: z.array(z.object({
     taskId: z.string().uuid(),
-    reason: z.string(),
+    success: z.boolean(),
+    reason: z.string().optional(),
   })),
 });
 
@@ -208,14 +229,17 @@ export const bulkCancelTasksSchema = z.object({
 export type BulkCancelTasksInput = z.infer<typeof bulkCancelTasksSchema>;
 
 /**
- * Схема для ответа при массовой отмене
+ * Схема для ответа при массовой отмене (с детальными результатами)
  */
 export const bulkCancelResponseSchema = z.object({
   cancelled: z.number().int().min(0),
   failed: z.number().int().min(0),
-  errors: z.array(z.object({
+  results: z.array(z.object({
     taskId: z.string().uuid(),
-    reason: z.string(),
+    success: z.boolean(),
+    status: reportTaskStatusSchema.optional(),
+    updatedAt: z.string().datetime().optional(),
+    reason: z.string().optional(),
   })),
 });
 

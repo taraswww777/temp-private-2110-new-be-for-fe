@@ -99,14 +99,15 @@ export const bulkDeletePackagesSchema = z.object({
 export type BulkDeletePackagesInput = z.infer<typeof bulkDeletePackagesSchema>;
 
 /**
- * Схема для ответа при массовом удалении пакетов
+ * Схема для ответа при массовом удалении пакетов (с детальными результатами)
  */
 export const bulkDeletePackagesResponseSchema = z.object({
   deleted: z.number().int().min(0),
   failed: z.number().int().min(0),
-  errors: z.array(z.object({
+  results: z.array(z.object({
     packageId: z.string().uuid(),
-    reason: z.string(),
+    success: z.boolean(),
+    reason: z.string().optional(),
   })),
 });
 
@@ -157,14 +158,15 @@ export const bulkRemoveTasksFromPackageSchema = z.object({
 export type BulkRemoveTasksFromPackageInput = z.infer<typeof bulkRemoveTasksFromPackageSchema>;
 
 /**
- * Схема для ответа при массовом удалении заданий из пакета
+ * Схема для ответа при массовом удалении заданий из пакета (с детальными результатами)
  */
 export const bulkRemoveTasksResponseSchema = z.object({
   removed: z.number().int().min(0),
-  notFound: z.number().int().min(0),
-  errors: z.array(z.object({
+  failed: z.number().int().min(0),
+  results: z.array(z.object({
     taskId: z.string().uuid(),
-    reason: z.string(),
+    success: z.boolean(),
+    reason: z.string().optional(),
   })),
 });
 

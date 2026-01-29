@@ -18,7 +18,15 @@
     "db:studio": "npm run db:studio -w service2110",
     "docker:db:up": "cd service2110 && docker-compose up postgres -d",
     "docker:db:down": "cd service2110 && docker-compose down",
-    "taskViewer:dev": "concurrently -n \"TaskViewer-BE,TaskViewer-FE\" -c \"magenta,green\" \"npm run start:dev -w taskViewerBe\" \"npm run dev -w taskViewerFe\""
+    "taskViewer:dev": "concurrently -n \"TaskViewer-BE,TaskViewer-FE\" -c \"magenta,green\" \"npm run start:dev -w taskViewerBe\" \"npm run dev -w taskViewerFe\"",
+    "kill:port": "node scripts/kill-port.js",
+    "kill:3000": "node scripts/kill-port.js 3000",
+    "kill:3001": "node scripts/kill-port.js 3001",
+    "kill:5173": "node scripts/kill-port.js 5173",
+    "kill:all": "npm run kill:3000 && npm run kill:3001 && npm run kill:5173",
+    "kill:node": "taskkill /F /IM node.exe 2>nul || echo \"✅ No node processes running\"",
+    "predev": "npm run kill:3000",
+    "pretaskViewer:dev": "npm run kill:3001 && npm run kill:5173"
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {

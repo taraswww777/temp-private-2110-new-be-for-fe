@@ -59,7 +59,7 @@ const userContextPlugin: FastifyPluginAsync = async (fastify) => {
     }
 
     // Устанавливаем контекст пользователя напрямую
-    (request as any).user = {
+    (request as { user: UserContext }).user = {
       role: role as UserRole,
       name,
       id,

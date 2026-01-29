@@ -15,71 +15,63 @@ export class ReferencesService {
   async getBranches(): Promise<BranchesResponse> {
     const branchesList = await db.select().from(branches);
     
-    return {
-      branches: branchesList,
-    };
+    return branchesList;
   }
 
   /**
    * Получить список типов отчётов
    */
   async getReportTypes(): Promise<ReportTypesResponse> {
-    return {
-      reportTypes: [
-        {
-          code: 'LSOZ',
-          name: 'Информация об открытых и закрытых счетах',
-        },
-        {
-          code: 'LSOS',
-          name: 'Информация о счетах. Остатки',
-        },
-        {
-          code: 'LSOP',
-          name: 'Информация о счетах. Операции',
-        },
-      ],
-    };
+    return [
+      {
+        code: 'LSOZ',
+        name: 'Информация об открытых и закрытых счетах',
+      },
+      {
+        code: 'LSOS',
+        name: 'Информация о счетах. Остатки',
+      },
+      {
+        code: 'LSOP',
+        name: 'Информация о счетах. Операции',
+      },
+    ];
   }
 
   /**
    * Получить список валют
    */
   async getCurrencies(): Promise<CurrenciesResponse> {
-    return {
-      currencies: [
-        {
-          code: 'RUB',
-          name: 'Рубль',
-        },
-        {
-          code: 'FOREIGN',
-          name: 'Иностранная валюта',
-        },
-      ],
-    };
+    return [
+      {
+        code: 'RUB',
+        name: 'Рубль',
+      },
+      {
+        code: 'FOREIGN',
+        name: 'Иностранная валюта',
+      },
+    ];
   }
 
   /**
    * Получить список форматов файлов
    */
   async getFormats(): Promise<FormatsResponse> {
-    return {
-      formats: [
-        {
-          code: 'TXT',
-          name: 'Текстовый файл',
-        },
-        {
-          code: 'XLSX',
-          name: 'Excel файл',
-        },
-        {
-          code: 'XML',
-          name: 'XML файл',
-        },
-      ],
-    };
+    return [
+      {
+        code: 'TXT',
+        name: 'Текстовый файл',
+      },
+      {
+        code: 'XLSX',
+        name: 'Excel файл',
+      },
+      {
+        code: 'XML',
+        name: 'XML файл',
+      },
+    ];
   }
 
   /**
@@ -88,9 +80,7 @@ export class ReferencesService {
   async getSources(): Promise<SourcesResponse> {
     const sourcesList = await db.select().from(sources);
     
-    return {
-      sources: sourcesList,
-    };
+    return sourcesList;
   }
 }
 
