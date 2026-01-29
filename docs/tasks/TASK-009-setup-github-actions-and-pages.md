@@ -516,14 +516,14 @@ https://<username>.github.io/<repository-name>/
 
 ## Анализ причин падения CI
 
-### Проблема
+### Проблема 1: Некорректное кэширование npm
 CI workflow падал на GitHub Actions, хотя локальные проверки проходили успешно.
 
-### Причины
+**Причины:**
 1. **Некорректное кэширование npm**: опция `cache: 'npm'` в `actions/setup-node@v4` плохо работает с монорепо и workspaces
 2. **Избыточные проверки**: запуск `tsc --noEmit` после `npm run build` был избыточным
 
-### Решение
+**Решение:**
 1. Заменено встроенное кэширование на явное через `actions/cache@v4`:
    ```yaml
    - name: Cache node modules
@@ -540,16 +540,40 @@ CI workflow падал на GitHub Actions, хотя локальные пров
    ```
 2. Удалены шаги `Check TypeScript types` (уже выполняются в `npm run build`)
 
-### Результат после исправления
-- ✅ Кэш работает корректно для всех workspaces
-- ✅ Проверки не дублируются
-- ✅ CI должен проходить успешно на GitHub Actions
+**Результат:** ✅ Кэш работает корректно для всех workspaces
+
+---
+
+### Проблема 2: Несоответствие package.json и package-lock.json
+После первого исправления CI падал с ошибкой: `npm ci can only install packages when your package.json and package-lock.json are in sync`
+
+**Причины:**
+- В `service2110/package.json` были добавлены новые зависимости:
+  - `vitest: ^2.1.8`
+  - `@vitest/coverage-v8: ^2.1.8`
+  - `zod-to-json-schema: ^3.25.1`
+- Файл `package-lock.json` не был обновлен после добавления зависимостей
+- При запуске `npm ci` в GitHub Actions возникала ошибка синхронизации
+
+**Решение:**
+1. Выполнен `npm install` для синхронизации package-lock.json
+2. Закоммичен обновленный package-lock.json (добавлено 70 пакетов, удалено 205)
+
+**Результат:** ✅ package.json и package-lock.json синхронизированы, npm ci работает корректно
 
 ---
 
 ## История изменений
 
-### 2026-01-29 (исправление CI)
+### 2026-01-29 (исправление CI - package-lock.json)
+**Исправление второй проблемы CI:**
+- Причина: несоответствие между package.json и package-lock.json
+- В service2110/package.json были добавлены новые зависимости (vitest, coverage, zod-to-json-schema)
+- package-lock.json не был обновлен и закоммичен
+- Решение: выполнен `npm install` и закоммичен обновленный package-lock.json
+- Результат: добавлено 70 пакетов, удалено 205 неиспользуемых пакетов
+
+### 2026-01-29 (исправление CI - кэширование)
 **Исправление падения CI на GitHub Actions:**
 - Причина падения: некорректное кэширование npm для монорепо с workspaces
 - Решение: замена `cache: 'npm'` на явное `actions/cache@v4`
@@ -599,7 +623,8 @@ CI workflow падал на GitHub Actions, хотя локальные пров
 
 **Коммиты:**
 ```
-[новый] - fix(ci): исправлено кэширование npm для монорепо
+a5f8208 - fix(deps): обновлён package-lock.json для синхронизации
+4eb1831 - fix(ci): исправлено кэширование npm для монорепо
 97f1455 - docs(TASK-009): добавлена информация о выявленных проблемах
 1375827 - fix: добавлены eslint-disable комментарии
 71c235e - docs: обновлён README workflows
