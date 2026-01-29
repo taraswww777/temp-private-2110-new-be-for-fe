@@ -59,11 +59,11 @@ export const storageVolumeResponseSchema = z.object({
     }),
   warning: z
     .string()
-    .nullable()
     .describe('Предупреждение о заполнении хранилища (если применимо)')
     .openapi({
       example: null,
-    }),
+    })
+    .nullable(),
 });
 
 export type StorageVolumeResponse = z.infer<typeof storageVolumeResponseSchema>;

@@ -108,12 +108,12 @@ export const taskSchema = z.object({
     .number()
     .int()
     .min(0)
-    .nullable()
     .describe('Размер файла в байтах. NULL если размер неизвестен.')
     .openapi({
       example: 10485760,
       description: 'Размер файла в байтах (например, 10485760 = 10 MB)',
-    }),
+    })
+    .nullable(),
   filesCount: z
     .number()
     .int()
@@ -156,11 +156,11 @@ export const taskListItemSchema = z.object({
     .number()
     .int()
     .min(0)
-    .nullable()
     .describe('Размер файла в байтах')
     .openapi({
       example: 10485760,
-    }),
+    })
+    .nullable(),
   format: fileFormatSchema,
   reportType: reportTypeSchema,
   updatedAt: z.string().datetime(),
