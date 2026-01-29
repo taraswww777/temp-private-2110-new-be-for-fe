@@ -114,7 +114,14 @@ export const taskSchema = z.object({
       example: 10485760,
       description: 'Размер файла в байтах (например, 10485760 = 10 MB)',
     }),
-  filesCount: z.number().int(),
+  filesCount: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Количество файлов в задании')
+    .openapi({
+      example: 5,
+    }),
   fileUrl: z.string().nullable(),
   errorMessage: z.string().nullable(),
   lastStatusChangedAt: z.string().datetime(),
