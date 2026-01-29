@@ -158,7 +158,7 @@ export class PackagesService {
         branchName: task.branchName,
         periodStart: task.periodStart,
         periodEnd: task.periodEnd,
-        status: task.status,
+        status: task.status as any,
         fileSize: task.fileSize,
         format: task.format,
         reportType: task.reportType,

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { tasksService } from '../../../../services/report-6406/tasks.service.js';

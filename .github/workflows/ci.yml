@@ -32,10 +32,12 @@ jobs:
       - name: Lint Service2110
         run: npm run lint -w service2110
       
-      # Build отключен временно из-за существующих ошибок TypeScript
-      # TODO: Исправить ошибки TypeScript и включить проверку сборки
-      # - name: Build Service2110
-      #   run: npm run build -w service2110
+      - name: Build Service2110
+        run: npm run build -w service2110
+      
+      - name: Check TypeScript types
+        run: npx tsc --noEmit
+        working-directory: ./service2110
 
   # Проверка Task Viewer Backend
   taskviewer-be:
