@@ -18,7 +18,15 @@
     "db:studio": "npm run db:studio -w service2110",
     "docker:db:up": "cd service2110 && docker-compose up postgres -d",
     "docker:db:down": "cd service2110 && docker-compose down",
-    "taskViewer:dev": "concurrently -n \"TaskViewer-BE,TaskViewer-FE\" -c \"magenta,green\" \"npm run start:dev -w taskViewerBe\" \"npm run dev -w taskViewerFe\""
+    "taskViewer:dev": "concurrently -n \"TaskViewer-BE,TaskViewer-FE\" -c \"magenta,green\" \"npm run start:dev -w taskViewerBe\" \"npm run dev -w taskViewerFe\"",
+    "kill:port": "node -e \"const port = process.argv[1]; require('child_process').exec(`netstat -ano | findstr :${port}`, (err, stdout) => { if (stdout) { const pid = stdout.trim().split(/\\s+/).pop(); require('child_process').exec(`taskkill /PID ${pid} /F`); console.log(`Killed process on port ${port}`); } else { console.log(`No process found on port ${port}`); } });\"",
+    "kill:3000": "FOR /F \"tokens=5\" %P IN ('netstat -ano ^| findstr :3000') DO @IF NOT \"%P\"==\"0\" taskkill /PID %P /F 2>nul || echo Port 3000 is free",
+    "kill:3001": "FOR /F \"tokens=5\" %P IN ('netstat -ano ^| findstr :3001') DO @IF NOT \"%P\"==\"0\" taskkill /PID %P /F 2>nul || echo Port 3001 is free",
+    "kill:5173": "FOR /F \"tokens=5\" %P IN ('netstat -ano ^| findstr :5173') DO @IF NOT \"%P\"==\"0\" taskkill /PID %P /F 2>nul || echo Port 5173 is free",
+    "kill:all": "npm run kill:3000 && npm run kill:3001 && npm run kill:5173",
+    "kill:node": "taskkill /F /IM node.exe 2>nul || echo No node processes running",
+    "predev": "npm run kill:3000",
+    "pretaskViewer:dev": "npm run kill:3001 && npm run kill:5173"
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {
