@@ -80,29 +80,72 @@ export class TasksService {
    * Получить список заданий с фильтрацией и пагинацией
    */
   async getTasks(query: TasksQuery): Promise<TasksListResponse> {
-    const { page, limit, sortBy, sortOrder, status, branchId, reportType, periodStartFrom, periodStartTo } = query;
+    const { 
+      page, limit, sortBy, sortOrder, 
+      statuses, branchIds, reportTypes, formats,
+      periodStartFrom, periodStartTo, 
+      periodEndFrom, periodEndTo,
+      createdAtFrom, createdAtTo,
+      createdBy, search 
+    } = query;
     
     // Построение WHERE условий
     const conditions = [];
     
-    if (status && status.length > 0) {
-      conditions.push(inArray(report6406Tasks.status, status));
+    // Фильтр по статусам
+    if (statuses && statuses.length > 0) {
+      conditions.push(inArray(report6406Tasks.status, statuses));
     }
     
-    if (branchId) {
-      conditions.push(eq(report6406Tasks.branchId, branchId));
+    // Фильтр по филиалам
+    if (branchIds && branchIds.length > 0) {
+      conditions.push(inArray(report6406Tasks.branchId, branchIds));
     }
     
-    if (reportType && reportType.length > 0) {
-      conditions.push(inArray(report6406Tasks.reportType, reportType));
+    // Фильтр по типам отчётов
+    if (reportTypes && reportTypes.length > 0) {
+      conditions.push(inArray(report6406Tasks.reportType, reportTypes));
     }
     
+    // Фильтр по форматам
+    if (formats && formats.length > 0) {
+      conditions.push(inArray(report6406Tasks.format, formats));
+    }
+    
+    // Фильтры по periodStart
     if (periodStartFrom) {
       conditions.push(gte(report6406Tasks.periodStart, periodStartFrom));
     }
-    
     if (periodStartTo) {
       conditions.push(lte(report6406Tasks.periodStart, periodStartTo));
+    }
+    
+    // Фильтры по periodEnd
+    if (periodEndFrom) {
+      conditions.push(gte(report6406Tasks.periodEnd, periodEndFrom));
+    }
+    if (periodEndTo) {
+      conditions.push(lte(report6406Tasks.periodEnd, periodEndTo));
+    }
+    
+    // Фильтры по дате создания
+    if (createdAtFrom) {
+      conditions.push(gte(report6406Tasks.createdAt, new Date(createdAtFrom)));
+    }
+    if (createdAtTo) {
+      conditions.push(lte(report6406Tasks.createdAt, new Date(createdAtTo)));
+    }
+    
+    // Фильтр по создателю
+    if (createdBy) {
+      conditions.push(eq(report6406Tasks.createdBy, createdBy));
+    }
+    
+    // Поисковая строка (поиск по названию филиала или ID)
+    if (search) {
+      conditions.push(
+        sql`${report6406Tasks.branchName} ILIKE ${'%' + search + '%'} OR ${report6406Tasks.id}::text ILIKE ${'%' + search + '%'}`
+      );
     }
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
@@ -119,6 +162,7 @@ export class TasksService {
       branchId: report6406Tasks.branchId,
       status: report6406Tasks.status,
       periodStart: report6406Tasks.periodStart,
+      updatedAt: report6406Tasks.updatedAt,
     }[sortBy];
 
     const orderByClause = sortOrder === 'ASC' ? asc(orderByColumn) : desc(orderByColumn);
@@ -200,19 +244,24 @@ export class TasksService {
   }
 
   /**
-   * Массовое удаление заданий
+   * Массовое удаление заданий (универсальный метод для одного или нескольких)
    */
   async bulkDeleteTasks(input: BulkDeleteTasksInput): Promise<BulkDeleteResponse> {
     let deleted = 0;
-    const errors: Array<{ taskId: string; reason: string }> = [];
+    const results: Array<{ taskId: string; success: boolean; reason?: string }> = [];
 
     for (const taskId of input.taskIds) {
       try {
         await this.deleteTask(taskId);
         deleted++;
-      } catch (error) {
-        errors.push({
+        results.push({
           taskId,
+          success: true,
+        });
+      } catch (error) {
+        results.push({
+          taskId,
+          success: false,
           reason: error instanceof Error ? error.message : 'Unknown error',
         });
       }
@@ -220,8 +269,8 @@ export class TasksService {
 
     return {
       deleted,
-      failed: errors.length,
-      errors,
+      failed: input.taskIds.length - deleted,
+      results,
     };
   }
 
@@ -276,19 +325,32 @@ export class TasksService {
   }
 
   /**
-   * Массовая отмена заданий
+   * Массовая отмена заданий (универсальный метод для одного или нескольких)
    */
-  async bulkCancelTasks(input: BulkCancelTasksInput): Promise<BulkCancelResponse> {
+  async bulkCancelTasks(input: BulkCancelTasksInput, cancelledBy?: string): Promise<BulkCancelResponse> {
     let cancelled = 0;
-    const errors: Array<{ taskId: string; reason: string }> = [];
+    const results: Array<{ 
+      taskId: string; 
+      success: boolean; 
+      status?: TaskStatus;
+      updatedAt?: string;
+      reason?: string;
+    }> = [];
 
     for (const taskId of input.taskIds) {
       try {
-        await this.cancelTask(taskId);
+        const result = await this.cancelTask(taskId, cancelledBy);
         cancelled++;
-      } catch (error) {
-        errors.push({
+        results.push({
           taskId,
+          success: true,
+          status: result.status,
+          updatedAt: result.updatedAt,
+        });
+      } catch (error) {
+        results.push({
+          taskId,
+          success: false,
           reason: error instanceof Error ? error.message : 'Unknown error',
         });
       }
@@ -296,8 +358,8 @@ export class TasksService {
 
     return {
       cancelled,
-      failed: errors.length,
-      errors,
+      failed: input.taskIds.length - cancelled,
+      results,
     };
   }
 

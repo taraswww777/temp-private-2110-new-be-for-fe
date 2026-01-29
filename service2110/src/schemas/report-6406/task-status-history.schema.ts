@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { paginationQuerySchema, paginationResponseSchema } from '../common.schema.js';
 import { reportTaskStatusSchema } from './tasks.schema.js';
 
 /**
@@ -18,19 +17,9 @@ export const statusHistoryItemSchema = z.object({
 export type StatusHistoryItem = z.infer<typeof statusHistoryItemSchema>;
 
 /**
- * Схема для query параметров истории статусов
+ * Схема для ответа со списком истории статусов (простой массив без пагинации)
+ * История изменений статусов обычно небольшая (десятки записей), поэтому пагинация не требуется
  */
-export const statusHistoryQuerySchema = paginationQuerySchema;
-
-export type StatusHistoryQuery = z.infer<typeof statusHistoryQuerySchema>;
-
-/**
- * Схема для ответа со списком истории статусов
- */
-export const statusHistoryResponseSchema = z.object({
-  taskId: z.string().uuid(),
-  history: z.array(statusHistoryItemSchema),
-  pagination: paginationResponseSchema,
-});
+export const statusHistoryResponseSchema = z.array(statusHistoryItemSchema);
 
 export type StatusHistoryResponse = z.infer<typeof statusHistoryResponseSchema>;

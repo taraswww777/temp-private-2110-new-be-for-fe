@@ -12,11 +12,9 @@ export const branchSchema = z.object({
 export type Branch = z.infer<typeof branchSchema>;
 
 /**
- * Схема для ответа со списком филиалов
+ * Схема для ответа со списком филиалов (прямой массив)
  */
-export const branchesResponseSchema = z.object({
-  branches: z.array(branchSchema),
-});
+export const branchesResponseSchema = z.array(branchSchema);
 
 export type BranchesResponse = z.infer<typeof branchesResponseSchema>;
 
@@ -31,11 +29,9 @@ export const reportTypeReferenceSchema = z.object({
 export type ReportTypeReference = z.infer<typeof reportTypeReferenceSchema>;
 
 /**
- * Схема для ответа со списком типов отчётов
+ * Схема для ответа со списком типов отчётов (прямой массив)
  */
-export const reportTypesResponseSchema = z.object({
-  reportTypes: z.array(reportTypeReferenceSchema),
-});
+export const reportTypesResponseSchema = z.array(reportTypeReferenceSchema);
 
 export type ReportTypesResponse = z.infer<typeof reportTypesResponseSchema>;
 
@@ -50,11 +46,9 @@ export const currencyReferenceSchema = z.object({
 export type CurrencyReference = z.infer<typeof currencyReferenceSchema>;
 
 /**
- * Схема для ответа со списком валют
+ * Схема для ответа со списком валют (прямой массив)
  */
-export const currenciesResponseSchema = z.object({
-  currencies: z.array(currencyReferenceSchema),
-});
+export const currenciesResponseSchema = z.array(currencyReferenceSchema);
 
 export type CurrenciesResponse = z.infer<typeof currenciesResponseSchema>;
 
@@ -69,11 +63,9 @@ export const formatReferenceSchema = z.object({
 export type FormatReference = z.infer<typeof formatReferenceSchema>;
 
 /**
- * Схема для ответа со списком форматов
+ * Схема для ответа со списком форматов (прямой массив)
  */
-export const formatsResponseSchema = z.object({
-  formats: z.array(formatReferenceSchema),
-});
+export const formatsResponseSchema = z.array(formatReferenceSchema);
 
 export type FormatsResponse = z.infer<typeof formatsResponseSchema>;
 
@@ -89,10 +81,8 @@ export const sourceSchema = z.object({
 export type Source = z.infer<typeof sourceSchema>;
 
 /**
- * Схема для ответа со списком источников
+ * Схема для ответа со списком источников (прямой массив)
  */
-export const sourcesResponseSchema = z.object({
-  sources: z.array(sourceSchema),
-});
+export const sourcesResponseSchema = z.array(sourceSchema);
 
 export type SourcesResponse = z.infer<typeof sourcesResponseSchema>;

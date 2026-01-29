@@ -122,41 +122,14 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   /**
-   * DELETE /api/v1/report-6406/packages/:id
-   * Удалить пакет
+   * DELETE /api/v1/report-6406/packages
+   * Универсальное удаление пакетов (одного или нескольких)
    */
-  app.delete('/:id', {
+  app.delete('/', {
     schema: {
       tags: ['Report 6406 - Packages'],
-      summary: 'Удалить пакет',
-      params: uuidParamSchema,
-      description: 'Удаляет пакет. Возвращает 204 No Content при успешном удалении.',
-    },
-  }, async (request, reply) => {
-    try {
-      await packagesService.deletePackage(request.params.id);
-      return reply.status(204).send();
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('not found')) {
-        return reply.status(404).send({
-          type: 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
-          title: 'Not Found',
-          status: 404,
-          detail: error.message,
-        });
-      }
-      throw error;
-    }
-  });
-
-  /**
-   * POST /api/v1/report-6406/packages/bulk-delete
-   * Массовое удаление пакетов
-   */
-  app.post('/bulk-delete', {
-    schema: {
-      tags: ['Report 6406 - Packages'],
-      summary: 'Массовое удаление пакетов',
+      summary: 'Удалить один или несколько пакетов',
+      description: 'Удаляет пакеты. Возвращает 200 OK с детальной информацией о результате операции для каждого пакета.',
       body: bulkDeletePackagesSchema,
       response: {
         200: bulkDeletePackagesResponseSchema,
@@ -199,44 +172,14 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   /**
-   * DELETE /api/v1/report-6406/packages/:packageId/tasks/:taskId
-   * Удалить задание из пакета
+   * DELETE /api/v1/report-6406/packages/:packageId/tasks
+   * Универсальное удаление заданий из пакета (одного или нескольких)
    */
-  app.delete('/:packageId/tasks/:taskId', {
+  app.delete('/:packageId/tasks', {
     schema: {
       tags: ['Report 6406 - Packages'],
-      summary: 'Удалить задание из пакета',
-      params: uuidParamSchema.extend({
-        packageId: uuidParamSchema.shape.id,
-        taskId: uuidParamSchema.shape.id,
-      }).pick({ packageId: true, taskId: true }),
-      description: 'Удаляет задание из пакета. Возвращает 204 No Content при успешном удалении.',
-    },
-  }, async (request, reply) => {
-    try {
-      await packagesService.removeTaskFromPackage(request.params.packageId, request.params.taskId);
-      return reply.status(204).send();
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('not found')) {
-        return reply.status(404).send({
-          type: 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
-          title: 'Not Found',
-          status: 404,
-          detail: error.message,
-        });
-      }
-      throw error;
-    }
-  });
-
-  /**
-   * POST /api/v1/report-6406/packages/:packageId/tasks/bulk-remove
-   * Массовое удаление заданий из пакета
-   */
-  app.post('/:packageId/tasks/bulk-remove', {
-    schema: {
-      tags: ['Report 6406 - Packages'],
-      summary: 'Массовое удаление заданий из пакета',
+      summary: 'Удалить одно или несколько заданий из пакета',
+      description: 'Удаляет задания из пакета. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
       params: uuidParamSchema.extend({ packageId: uuidParamSchema.shape.id }).pick({ packageId: true }),
       body: bulkRemoveTasksFromPackageSchema,
       response: {

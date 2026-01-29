@@ -222,19 +222,24 @@ export class PackagesService {
   }
 
   /**
-   * Массовое удаление пакетов
+   * Массовое удаление пакетов (универсальный метод для одного или нескольких)
    */
   async bulkDeletePackages(input: BulkDeletePackagesInput): Promise<BulkDeletePackagesResponse> {
     let deleted = 0;
-    const errors: Array<{ packageId: string; reason: string }> = [];
+    const results: Array<{ packageId: string; success: boolean; reason?: string }> = [];
 
     for (const packageId of input.packageIds) {
       try {
         await this.deletePackage(packageId);
         deleted++;
-      } catch (error) {
-        errors.push({
+        results.push({
           packageId,
+          success: true,
+        });
+      } catch (error) {
+        results.push({
+          packageId,
+          success: false,
           reason: error instanceof Error ? error.message : 'Unknown error',
         });
       }
@@ -242,8 +247,8 @@ export class PackagesService {
 
     return {
       deleted,
-      failed: errors.length,
-      errors,
+      failed: input.packageIds.length - deleted,
+      results,
     };
   }
 
@@ -361,22 +366,27 @@ export class PackagesService {
   }
 
   /**
-   * Массовое удаление заданий из пакета
+   * Массовое удаление заданий из пакета (универсальный метод для одного или нескольких)
    */
   async bulkRemoveTasksFromPackage(
     packageId: string,
     input: BulkRemoveTasksFromPackageInput
   ): Promise<BulkRemoveTasksResponse> {
     let removed = 0;
-    const errors: Array<{ taskId: string; reason: string }> = [];
+    const results: Array<{ taskId: string; success: boolean; reason?: string }> = [];
 
     for (const taskId of input.taskIds) {
       try {
         await this.removeTaskFromPackage(packageId, taskId);
         removed++;
-      } catch (error) {
-        errors.push({
+        results.push({
           taskId,
+          success: true,
+        });
+      } catch (error) {
+        results.push({
+          taskId,
+          success: false,
           reason: error instanceof Error ? error.message : 'Unknown error',
         });
       }
@@ -384,8 +394,8 @@ export class PackagesService {
 
     return {
       removed,
-      notFound: errors.length,
-      errors,
+      failed: input.taskIds.length - removed,
+      results,
     };
   }
 
