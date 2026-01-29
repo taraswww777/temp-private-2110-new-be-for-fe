@@ -75,11 +75,11 @@
     {
       "id": "TASK-009",
       "title": "Настройка GitHub Actions и GitHub Pages для публикации Swagger документации",
-      "status": "backlog",
+      "status": "in_progress",
       "file": "TASK-009-setup-github-actions-and-pages.md",
       "createdDate": "2026-01-29T16:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": "feature/TASK-009-setup-github-actions"
     }
   ]
 }

@@ -26,7 +26,9 @@
     "kill:all": "npm run kill:3000 && npm run kill:3001 && npm run kill:5173",
     "kill:node": "taskkill /F /IM node.exe 2>nul || echo \"✅ No node processes running\"",
     "predev": "npm run kill:3000",
-    "pretaskViewer:dev": "npm run kill:3001 && npm run kill:5173"
+    "pretaskViewer:dev": "npm run kill:3001 && npm run kill:5173",
+    "docs:generate": "node scripts/generate-swagger-html.js",
+    "docs:preview": "npm run docs:generate && echo \"📄 Open docs/public/index.html in your browser\""
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {
