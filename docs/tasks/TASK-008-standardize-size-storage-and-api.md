@@ -641,11 +641,18 @@ export const MAX_STORAGE_SIZE = 10 * SIZE_UNITS.TB; // 10 TB
 
 ## Уточнения
 
-**2026-01-29:**
+**2026-01-29 (Создание задачи):**
 - Задача создана для регламентации работы с размерами файлов и пакетов
 - Существующая реализация уже использует байты, но нужна явная документация
 - Требуется проверка консистентности всех модулей
 - Необходимо добавить примеры для frontend разработчиков
+
+**2026-01-29 (В процессе выполнения):**
+- Обнаружено отсутствие валидации `.min(0)` для полей `filesCount`, `recordsCount` в `export.schema.ts`
+- Метод `.openapi()` не поддерживается в стандартном Zod (только `.describe()`)
+- Fastify с `fastify-type-provider-zod` использует автоматическую конвертацию через `toJSONSchema()`
+- Важный момент: порядок методов - модификаторы типов (`.nullable()`, `.optional()`) должны быть последними
+- Дополнительно обновлена схема `export.schema.ts` для консистентности
 
 ## История изменений
 
@@ -664,10 +671,11 @@ export const MAX_STORAGE_SIZE = 10 * SIZE_UNITS.TB; // 10 TB
    - Добавлены JSDoc комментарии с явным указанием "в байтах"
 
 2. **Улучшение Zod схем** ✅
-   - Добавлены `.describe()` для всех полей с размерами
-   - Добавлены `.openapi()` с примерами и описаниями
-   - Добавлена валидация `.min(0)` для всех размеров
-   - Обновлены схемы: `tasks.schema.ts`, `task-files.schema.ts`, `packages.schema.ts`, `storage.schema.ts`
+   - Добавлены `.describe()` для всех полей с размерами (с примерами значений)
+   - ~~Добавлены `.openapi()`~~ - метод не поддерживается, используется только `.describe()`
+   - Добавлена валидация `.min(0)` для всех размеров и счетчиков
+   - Обновлены схемы: `tasks.schema.ts`, `task-files.schema.ts`, `packages.schema.ts`, `storage.schema.ts`, `export.schema.ts`
+   - Всего проверено и обновлено: 26 полей с валидацией `.min(0)`, 17 полей с `.describe()`
 
 3. **Unit тесты** ✅
    - Создан полный набор тестов для `file-size-formatter.ts`
@@ -693,11 +701,12 @@ export const MAX_STORAGE_SIZE = 10 * SIZE_UNITS.TB; // 10 TB
 - `service2110/src/db/schema/report-6406-task-files.schema.ts`
 - `service2110/src/db/schema/report-6406-packages.schema.ts`
 
-#### Zod схемы (добавлены describe и openapi):
+#### Zod схемы (добавлены describe и валидация min(0)):
 - `service2110/src/schemas/report-6406/tasks.schema.ts`
 - `service2110/src/schemas/report-6406/task-files.schema.ts`
 - `service2110/src/schemas/report-6406/packages.schema.ts`
 - `service2110/src/schemas/report-6406/storage.schema.ts`
+- `service2110/src/schemas/report-6406/export.schema.ts`
 
 #### Новые файлы:
 - `service2110/vitest.config.ts` - конфигурация для тестирования
@@ -710,10 +719,153 @@ export const MAX_STORAGE_SIZE = 10 * SIZE_UNITS.TB; // 10 TB
 ### Статистика
 
 - **Проверено схем БД:** 3
-- **Обновлено Zod схем:** 4
+- **Обновлено Zod схем:** 5 (tasks, task-files, packages, storage, export)
+- **Полей с валидацией `.min(0)`:** 26
+- **Полей с `.describe()`:** 17
 - **Создано unit тестов:** 74
 - **Добавлено скриптов:** 4
 - **Строк документации:** 570 (уже существовала)
+- **Всего изменено файлов:** 14
+- **Всего строк добавлено:** 566
+- **Всего строк удалено:** 54
+
+### Технические проблемы и решения
+
+#### Проблема 1: Метод `.openapi()` не существует
+
+**Ошибка:**
+```
+TypeError: z.number(...).int(...).min(...).describe(...).openapi is not a function
+```
+
+**Причина:**
+Метод `.openapi()` не является частью стандартной библиотеки Zod. Это расширение из библиотек типа `@asteasolutions/zod-to-openapi`, которая не установлена в проекте.
+
+**Решение:**
+- Использовать только метод `.describe()` для документации
+- Fastify с `fastify-type-provider-zod` автоматически генерирует OpenAPI схемы через метод `toJSONSchema()`
+- Примеры значений включены в текст описания внутри `.describe()`
+
+**Коммит:** `2c20df3`
+
+#### Проблема 2: Порядок вызова методов с `.nullable()`
+
+**Ошибка:**
+```
+TypeError: z.number(...).int(...).min(...).nullable(...).describe(...).openapi is not a function
+```
+
+**Причина:**
+Методы-модификаторы типов (`.nullable()`, `.optional()`) должны вызываться последними в цепочке.
+
+**Решение:**
+```typescript
+// ❌ Неправильно
+.nullable().describe().openapi()
+
+// ✅ Правильно
+.describe().openapi().nullable()
+
+// ✅ Финальный вариант (без openapi)
+.describe().nullable()
+```
+
+**Коммит:** `f053d63` (частично отменен в `2c20df3`)
+
+#### Проблема 3: Отсутствие валидации для счетчиков
+
+**Обнаружено:**
+Поля `filesCount`, `recordsCount` в схеме `export.schema.ts` не имели валидации `.min(0)`.
+
+**Решение:**
+- Добавлена валидация `.min(0)` для всех счетчиков
+- Добавлены описания с примерами
+- Проверены все числовые поля в проекте
+
+**Коммит:** `0572276`
+
+#### Проблема 4: Vitest не установлен
+
+**Обнаружено:**
+При попытке запуска `npm test` получена ошибка:
+```
+'vitest' is not recognized as an internal or external command
+```
+
+**Причина:**
+Зависимости добавлены в `package.json`, но не установлены через `npm install`.
+
+**Решение для будущих разработчиков:**
+```bash
+cd service2110
+npm install
+npm test
+```
+
+**Статус:** Документировано в README тестов
+
+### Рекомендации для будущей разработки
+
+#### При добавлении новых полей с размерами:
+
+1. **В схеме БД (Drizzle ORM):**
+   ```typescript
+   /**
+    * Описание поля в байтах.
+    */
+   fieldName: bigint('field_name', { mode: 'number' }).notNull()
+   ```
+
+2. **В Zod схеме:**
+   ```typescript
+   fieldName: z
+     .number()
+     .int()
+     .min(0)
+     .describe('Описание поля в байтах (например, 10485760 = 10 MB)')
+   ```
+
+3. **Для nullable полей:**
+   ```typescript
+   fieldName: z
+     .number()
+     .int()
+     .min(0)
+     .describe('Описание')
+     .nullable()  // Модификаторы типов всегда в конце!
+   ```
+
+4. **НЕ использовать:**
+   - ❌ `.openapi()` - не поддерживается
+   - ❌ Поля типа `fileSizeMb`, `totalSizeKb` - всегда в байтах
+   - ❌ `integer` вместо `bigint` в БД - недостаточный диапазон
+   - ❌ Строковые типы для размеров
+
+#### Запуск тестов:
+
+```bash
+# Первый раз - установить зависимости
+cd service2110
+npm install
+
+# Запустить все тесты
+npm test
+
+# Запустить в watch режиме
+npm run test:watch
+
+# С покрытием
+npm run test:coverage
+```
+
+#### Проверка Swagger документации:
+
+1. Запустить сервер: `npm run dev`
+2. Открыть: http://localhost:3000/docs
+3. Проверить что поля с размерами имеют:
+   - Тип: `integer` (int64)
+   - Описание с указанием "в байтах"
+   - Примеры значений
 
 ---
 
