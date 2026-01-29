@@ -516,15 +516,21 @@ https://<username>.github.io/<repository-name>/
 
 ## История изменений
 
+### 2026-01-29 (выполнение)
+- Создан GitHub Actions workflow `.github/workflows/deploy-docs.yml`
+- Создан локальный генератор `scripts/generate-swagger-html.js`
+- Добавлены npm команды `docs:generate` и `docs:preview`
+- Обновлена документация в README.md и scripts/README.md
+- Добавлен `docs/public/` в .gitignore
+- Задача выполнена в ветке `feature/TASK-009-setup-github-actions`
+
 ### 2026-01-29 (создание)
 - Создано задание TASK-009
 - Определены требования к GitHub Actions и GitHub Pages
 - Добавлены детальные инструкции для владельца репозитория
-- Создан workflow конфигурация для автоматической публикации
-- Добавлены опциональные скрипты для локальной генерации
 
 ---
 
-**Дата создания:** 2026-01-29
+**Дата создания:** 2026-01-29  
+**Дата завершения:** 2026-01-29  
 **Автор:** AI Assistant
-**Статус:** В бэклоге
