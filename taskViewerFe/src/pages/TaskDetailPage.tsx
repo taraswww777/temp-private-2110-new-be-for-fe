@@ -33,6 +33,7 @@ export function TaskDetailPage() {
 
   useEffect(() => {
     fetchTask();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleSave = async (updates: UpdateTaskMetaInput) => {

@@ -48,6 +48,7 @@ describe('file-size-formatter', () => {
     });
 
     it('должен обрабатывать очень большие числа', () => {
+      // eslint-disable-next-line no-loss-of-precision
       const largeNumber = 9223372036854775807; // Max bigint value
       const result = formatBytes(largeNumber);
       expect(result).toContain('PB');

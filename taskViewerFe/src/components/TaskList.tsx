@@ -20,6 +20,21 @@ interface TaskListProps {
   onTaskUpdate: () => void;
 }
 
+const SortIcon = ({ 
+  column, 
+  sortBy, 
+  sortOrder 
+}: { 
+  column: 'id' | 'createdDate' | 'status';
+  sortBy: 'id' | 'createdDate' | 'status';
+  sortOrder: 'asc' | 'desc';
+}) => {
+  if (sortBy !== column) {
+    return <span className="ml-2 text-muted-foreground">⇅</span>;
+  }
+  return <span className="ml-2">{sortOrder === 'asc' ? '↑' : '↓'}</span>;
+};
+
 export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all');
@@ -49,17 +64,20 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
       let comparison = 0;
 
       switch (sortBy) {
-        case 'id':
+        case 'id': {
           comparison = a.id.localeCompare(b.id);
           break;
-        case 'createdDate':
+        }
+        case 'createdDate': {
           const dateA = a.createdDate ? new Date(a.createdDate).getTime() : 0;
           const dateB = b.createdDate ? new Date(b.createdDate).getTime() : 0;
           comparison = dateA - dateB;
           break;
-        case 'status':
+        }
+        case 'status': {
           comparison = a.status.localeCompare(b.status);
           break;
+        }
       }
 
       return sortOrder === 'asc' ? comparison : -comparison;
@@ -91,13 +109,6 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
       setSortBy(column);
       setSortOrder('asc');
     }
-  };
-
-  const SortIcon = ({ column }: { column: 'id' | 'createdDate' | 'status' }) => {
-    if (sortBy !== column) {
-      return <span className="ml-2 text-muted-foreground">⇅</span>;
-    }
-    return <span className="ml-2">{sortOrder === 'asc' ? '↑' : '↓'}</span>;
   };
 
   const handleCopyId = async (id: string, e: React.MouseEvent) => {
@@ -132,7 +143,7 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
               >
                 <div className="flex items-center">
                   ID
-                  <SortIcon column="id" />
+                  <SortIcon column="id" sortBy={sortBy} sortOrder={sortOrder} />
                 </div>
               </th>
               <th className="h-12 px-4 text-left align-middle font-medium">Название</th>
@@ -142,7 +153,7 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
               >
                 <div className="flex items-center">
                   Статус
-                  <SortIcon column="status" />
+                  <SortIcon column="status" sortBy={sortBy} sortOrder={sortOrder} />
                 </div>
               </th>
               <th 
@@ -151,7 +162,7 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
               >
                 <div className="flex items-center">
                   Дата создания
-                  <SortIcon column="createdDate" />
+                  <SortIcon column="createdDate" sortBy={sortBy} sortOrder={sortOrder} />
                 </div>
               </th>
               <th className="h-12 px-4 text-left align-middle font-medium">Ветка</th>
