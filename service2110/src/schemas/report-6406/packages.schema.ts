@@ -35,11 +35,7 @@ export const packageSchema = z.object({
     .number()
     .int()
     .min(0)
-    .describe('Общий размер пакета в байтах (сумма размеров всех файлов)')
-    .openapi({
-      example: 157286400,
-      description: 'Общий размер пакета в байтах (например, 157286400 = 150 MB)',
-    }),
+    .describe('Общий размер пакета в байтах, например 157286400 = 150 MB (сумма размеров всех файлов)'),
   updatedAt: z.string().datetime(),
 });
 

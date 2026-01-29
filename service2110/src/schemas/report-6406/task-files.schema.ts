@@ -18,11 +18,7 @@ export const taskFileSchema = z.object({
     .number()
     .int()
     .min(0)
-    .describe('Размер файла в байтах')
-    .openapi({
-      example: 10485760,
-      description: 'Размер файла в байтах (например, 10485760 = 10 MB)',
-    }),
+    .describe('Размер файла в байтах (например, 10485760 = 10 MB)'),
   fileType: z.string(),
   status: fileStatusSchema,
   downloadUrl: z.string().nullable(),

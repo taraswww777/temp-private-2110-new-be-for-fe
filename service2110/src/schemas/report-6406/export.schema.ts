@@ -56,20 +56,13 @@ export const exportTasksResponseSchema = z.object({
     .number()
     .int()
     .min(0)
-    .describe('Размер экспортированного файла в байтах')
-    .openapi({
-      example: 52428800,
-      description: 'Размер экспортированного файла в байтах (например, 52428800 = 50 MB)',
-    }),
+    .describe('Размер экспортированного файла в байтах (например, 52428800 = 50 MB)'),
   downloadUrlExpiresAt: z.string().datetime(),
   recordsCount: z
     .number()
     .int()
     .min(0)
-    .describe('Количество записей в экспортированном файле')
-    .openapi({
-      example: 150,
-    }),
+    .describe('Количество записей в экспортированном файле'),
   createdAt: z.string().datetime(),
 });
 
