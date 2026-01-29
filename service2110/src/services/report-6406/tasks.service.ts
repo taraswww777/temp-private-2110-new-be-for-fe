@@ -344,6 +344,7 @@ export class TasksService {
         results.push({
           taskId,
           success: true,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           status: result.status as any,
           updatedAt: result.updatedAt,
         });

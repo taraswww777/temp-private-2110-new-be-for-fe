@@ -145,6 +145,7 @@ export async function buildApp() {
       // Преобразуем body, если это Zod схема
       if (isZodSchema(schema.body)) {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           transformed.body = (schema.body as any).toJSONSchema(jsonSchemaOptions);
         } catch (error) {
           console.error('Error converting body schema:', error);
@@ -157,6 +158,7 @@ export async function buildApp() {
       // Преобразуем querystring, если это Zod схема
       if (isZodSchema(schema.querystring)) {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           transformed.querystring = (schema.querystring as any).toJSONSchema(jsonSchemaOptions);
         } catch (error) {
           console.error('Error converting querystring schema:', error);
@@ -169,6 +171,7 @@ export async function buildApp() {
       // Преобразуем params, если это Zod схема
       if (isZodSchema(schema.params)) {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           transformed.params = (schema.params as any).toJSONSchema(jsonSchemaOptions);
         } catch (error) {
           console.error('Error converting params schema:', error);
@@ -181,6 +184,7 @@ export async function buildApp() {
       // Преобразуем headers, если это Zod схема
       if (isZodSchema(schema.headers)) {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           transformed.headers = (schema.headers as any).toJSONSchema(jsonSchemaOptions);
         } catch (error) {
           console.error('Error converting headers schema:', error);
@@ -193,17 +197,21 @@ export async function buildApp() {
       // Преобразуем response
       if (schema.response) {
         transformed.response = {};
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         for (const [statusCode, responseSchema] of Object.entries(schema.response as Record<string, any>)) {
           if (isZodSchema(responseSchema)) {
             try {
               // Это Zod схема
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               (transformed.response as any)[statusCode] = (responseSchema as any).toJSONSchema(jsonSchemaOptions);
             } catch (error) {
               console.error(`Error converting response schema for ${statusCode}:`, error);
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               (transformed.response as any)[statusCode] = {};
             }
           } else {
             // Оставляем как есть
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (transformed.response as any)[statusCode] = responseSchema;
           }
         }

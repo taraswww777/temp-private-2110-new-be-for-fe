@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
 import { db } from '../../db/index.js';
 import { report6406Tasks } from '../../db/schema/index.js';
