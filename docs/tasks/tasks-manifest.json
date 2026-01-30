@@ -120,11 +120,20 @@
     {
       "id": "TASK-014",
       "title": "Разбор замечаний и вопросов по API формы 6406",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-014-api-6406-review-remarks.md",
       "createdDate": "2026-01-30T12:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-01-30T14:00:00Z",
+      "branch": "feature/TASK-014-api-6406-review-remarks"
+    },
+    {
+      "id": "TASK-015",
+      "title": "Доработки API формы 6406 (следующие шаги)",
+      "status": "completed",
+      "file": "TASK-015-api-6406-follow-up.md",
+      "createdDate": "2026-01-30T14:00:00Z",
+      "completedDate": "2026-01-30T15:00:00Z",
+      "branch": "feature/TASK-015-api-6406-follow-up"
     }
   ]
 }

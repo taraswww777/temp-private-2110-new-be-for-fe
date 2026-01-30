@@ -127,13 +127,22 @@ export async function buildApp() {
           // Получаем компоненты и применяем рекурсивную обработку
           const components = getOpenApiComponents();
           
-          // Функция для нормализации JSON Schema для сравнения
+          // Функция для нормализации JSON Schema для сравнения (в т.ч. типизация items в массивах)
           const normalizeForComparison = (schema: unknown): string | null => {
             if (!schema || typeof schema !== 'object') {
               return null;
             }
             
             const s = schema as Record<string, unknown>;
+            
+            // Для массивов — учитываем тип элементов, чтобы не сливать TasksListResponseDto с PaginatedResponseDto
+            if (s.type === 'array') {
+              const itemsNorm = s.items ? normalizeForComparison(s.items) : null;
+              const ref = (s.items && typeof s.items === 'object' && '$ref' in (s.items as object))
+                ? (s.items as { $ref: string }).$ref
+                : null;
+              return JSON.stringify({ type: 'array', items: itemsNorm ?? ref ?? 'any' });
+            }
             
             // Для объектов
             if (s.type === 'object') {
@@ -146,11 +155,19 @@ export async function buildApp() {
               for (const [key, value] of Object.entries(props)) {
                 if (value && typeof value === 'object') {
                   const prop = value as Record<string, unknown>;
-                  propertyTypes[key] = {
-                    type: prop.type,
-                    format: prop.format,
-                    enum: prop.enum ? (Array.isArray(prop.enum) ? prop.enum.slice().sort() : prop.enum) : undefined,
-                  };
+                  if (prop.type === 'array') {
+                    const itemsNorm = prop.items ? normalizeForComparison(prop.items) : null;
+                    const ref = (prop.items && typeof prop.items === 'object' && '$ref' in (prop.items as object))
+                      ? (prop.items as { $ref: string }).$ref
+                      : null;
+                    propertyTypes[key] = { type: 'array', items: itemsNorm ?? ref ?? 'any' };
+                  } else {
+                    propertyTypes[key] = {
+                      type: prop.type,
+                      format: prop.format,
+                      enum: prop.enum ? (Array.isArray(prop.enum) ? prop.enum.slice().sort() : prop.enum) : undefined,
+                    };
+                  }
                 }
               }
               const normalized: Record<string, unknown> = {

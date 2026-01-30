@@ -278,7 +278,7 @@ export const getTasksRequestSchema = z.object({
 export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;
 
 /**
- * Схема для ответа GET /api/v1/report-6406/tasks/ (пагинированный список)
+ * Схема для ответа POST /api/v1/report-6406/tasks/list (пагинированный список)
  */
 export const tasksListResponseSchema = z.object({
   items: z.array(taskListItemSchema).describe('Список заданий'),
