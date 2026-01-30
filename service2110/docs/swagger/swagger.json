@@ -148,15 +148,16 @@
                     "type": "object",
                     "properties": {
                       "id": {
-                        "type": "integer",
-                        "minimum": -9007199254740991,
-                        "maximum": 9007199254740991
+                        "type": "string",
+                        "description": "Идентификатор филиала"
                       },
                       "code": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Код филиала"
                       },
                       "name": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Название филиала"
                       }
                     },
                     "required": [
