@@ -80,6 +80,42 @@
       "createdDate": "2026-01-29T16:00:00Z",
       "completedDate": "2026-01-29T20:00:00Z",
       "branch": "feature/TASK-009-setup-github-actions"
+    },
+    {
+      "id": "TASK-010",
+      "title": "Review API формы 6406 (Часть 1: Базовые схемы)",
+      "status": "backlog",
+      "file": "TASK-010-review-api-6406.md",
+      "createdDate": "2026-01-30T10:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-011",
+      "title": "Review API формы 6406 (Часть 2: Рефакторинг GET /tasks/)",
+      "status": "backlog",
+      "file": "TASK-011-review-api-6406-part2.md",
+      "createdDate": "2026-01-30T10:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-012",
+      "title": "Review API формы 6406 (Часть 3: Унификация DTO деталей)",
+      "status": "backlog",
+      "file": "TASK-012-review-api-6406-part3.md",
+      "createdDate": "2026-01-30T10:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-013",
+      "title": "Добавление возможности получения заданий для добавления в пакет",
+      "status": "backlog",
+      "file": "TASK-013-add-available-tasks-for-package.md",
+      "createdDate": "2026-01-30T11:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
