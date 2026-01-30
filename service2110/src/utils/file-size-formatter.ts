@@ -14,8 +14,8 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
-  
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const maxIndex = sizes.length - 1;
+  const i = Math.min(maxIndex, Math.floor(Math.log(bytes) / Math.log(k)));
   
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
@@ -31,8 +31,8 @@ export function formatBytesFixed(bytes: number): string {
   
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
-  
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const maxIndex = sizes.length - 1;
+  const i = Math.min(maxIndex, Math.floor(Math.log(bytes) / Math.log(k)));
   const value = bytes / Math.pow(k, i);
   
   return `${value.toFixed(2)} ${sizes[i]}`;
@@ -70,5 +70,5 @@ export function parseBytes(sizeStr: string): number {
     throw new Error(`Unknown unit: ${unit}`);
   }
   
-  return Math.floor(value * multiplier);
+  return Math.round(value * multiplier);
 }

@@ -48,29 +48,36 @@ jobs:
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>API Documentation - Service 2110</title>
-              <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css">
+              <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.31.0/swagger-ui.css">
               <style>
-                  html {
-                      box-sizing: border-box;
-                      overflow: -moz-scrollbars-vertical;
-                      overflow-y: scroll;
+                  html { box-sizing: border-box; overflow-y: scroll; }
+                  *, *:before, *:after { box-sizing: inherit; }
+                  body { margin: 0; padding: 0; }
+                  .topbar { display: none; }
+                  .theme-toggle-btn {
+                      position: fixed; top: 10px; right: 10px; z-index: 9999;
+                      padding: 8px 14px; border-radius: 8px; cursor: pointer;
+                      font-size: 13px; font-family: inherit; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+                      border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.15); color: inherit;
                   }
-                  *, *:before, *:after {
-                      box-sizing: inherit;
+                  .theme-toggle-btn:hover { background: rgba(0,0,0,.25); }
+                  html:not(.dark-mode) .theme-toggle-btn {
+                      border-color: rgba(0,0,0,.2); background: rgba(0,0,0,.06);
                   }
-                  body {
-                      margin: 0;
-                      padding: 0;
-                  }
-                  .topbar {
-                      display: none;
-                  }
+                  html:not(.dark-mode) .theme-toggle-btn:hover { background: rgba(0,0,0,.1); }
               </style>
           </head>
           <body>
               <div id="swagger-ui"></div>
-              <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
-              <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js"></script>
+              <script>
+                  (function() {
+                      var key = 'swagger-ui-theme';
+                      var isDark = localStorage.getItem(key) !== 'light';
+                      document.documentElement.classList.toggle('dark-mode', isDark);
+                  })();
+              </script>
+              <script src="https://unpkg.com/swagger-ui-dist@5.31.0/swagger-ui-bundle.js"></script>
+              <script src="https://unpkg.com/swagger-ui-dist@5.31.0/swagger-ui-standalone-preset.js"></script>
               <script>
                   window.onload = function() {
                       window.ui = SwaggerUIBundle({
@@ -88,11 +95,23 @@ jobs:
                           tryItOutEnabled: false,
                           displayRequestDuration: true,
                           filter: true,
-                          syntaxHighlight: {
-                              activate: true,
-                              theme: "monokai"
-                          }
+                          syntaxHighlight: { activate: true, theme: "monokai" }
                       });
+                      var key = 'swagger-ui-theme';
+                      function updateBtn() {
+                          var dark = document.documentElement.classList.contains('dark-mode');
+                          btn.textContent = dark ? 'Светлая тема' : 'Тёмная тема';
+                      }
+                      var btn = document.createElement('button');
+                      btn.type = 'button';
+                      btn.className = 'theme-toggle-btn';
+                      updateBtn();
+                      btn.onclick = function() {
+                          document.documentElement.classList.toggle('dark-mode');
+                          localStorage.setItem(key, document.documentElement.classList.contains('dark-mode') ? 'dark' : 'light');
+                          updateBtn();
+                      };
+                      document.body.appendChild(btn);
                   };
               </script>
           </body>
