@@ -21,7 +21,7 @@
         "description": "Проверка состояния приложения и подключения к БД",
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -48,7 +48,7 @@
             }
           },
           "503": {
-            "description": "Default Response",
+            "description": "Service Unavailable",
             "content": {
               "application/json": {
                 "schema": {
@@ -139,7 +139,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -181,7 +181,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -217,7 +217,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -253,7 +253,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -289,7 +289,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -341,23 +341,26 @@
                 "type": "object",
                 "properties": {
                   "branchId": {
-                    "type": "integer",
-                    "exclusiveMinimum": 0,
-                    "maximum": 9007199254740991
+                    "type": "string",
+                    "description": "Идентификатор филиала"
                   },
                   "periodStart": {
                     "type": "string",
-                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                    "description": "Дата начала отчётного периода (формат: YYYY-MM-DD)"
                   },
                   "periodEnd": {
                     "type": "string",
-                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                    "description": "Дата окончания отчётного периода (формат: YYYY-MM-DD)"
                   },
                   "accountMask": {
+                    "description": "Маска счетов для фильтрации",
                     "type": "string",
                     "maxLength": 20
                   },
                   "accountMaskSecondOrder": {
+                    "description": "Маска счетов второго порядка",
                     "type": "string",
                     "maxLength": 2
                   },
@@ -385,6 +388,7 @@
                     ]
                   },
                   "source": {
+                    "description": "Источник данных",
                     "type": "string",
                     "maxLength": 20
                   }
@@ -405,7 +409,7 @@
         },
         "responses": {
           "201": {
-            "description": "Default Response",
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -414,12 +418,14 @@
                     "id": {
                       "type": "string",
                       "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "description": "Уникальный идентификатор задания"
                     },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата и время создания"
                     },
                     "createdBy": {
                       "anyOf": [
@@ -429,23 +435,26 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Пользователь, создавший задание"
                     },
                     "branchId": {
-                      "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
+                      "type": "string",
+                      "description": "Идентификатор филиала"
                     },
                     "branchName": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Название филиала"
                     },
                     "periodStart": {
                       "type": "string",
-                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                      "description": "Дата начала отчётного периода"
                     },
                     "periodEnd": {
                       "type": "string",
-                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                      "description": "Дата окончания отчётного периода"
                     },
                     "accountMask": {
                       "anyOf": [
@@ -455,7 +464,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Маска счетов для фильтрации"
                     },
                     "accountMaskSecondOrder": {
                       "anyOf": [
@@ -465,7 +475,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Маска счетов второго порядка"
                     },
                     "currency": {
                       "type": "string",
@@ -498,7 +509,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Источник данных"
                     },
                     "status": {
                       "type": "string",
@@ -527,13 +539,16 @@
                       ]
                     },
                     "canCancel": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Возможность отмены задания"
                     },
                     "canDelete": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Возможность удаления задания"
                     },
                     "canStart": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Возможность запуска задания"
                     },
                     "fileSize": {
                       "anyOf": [
@@ -562,7 +577,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "URL для скачивания файла"
                     },
                     "errorMessage": {
                       "anyOf": [
@@ -572,12 +588,14 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Сообщение об ошибке"
                     },
                     "lastStatusChangedAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата и время последнего изменения статуса"
                     },
                     "startedAt": {
                       "anyOf": [
@@ -589,7 +607,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Дата и время начала обработки"
                     },
                     "completedAt": {
                       "anyOf": [
@@ -601,12 +620,14 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Дата и время завершения"
                     },
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата и время последнего обновления"
                     }
                   },
                   "required": [
@@ -658,7 +679,8 @@
             },
             "in": "query",
             "name": "page",
-            "required": true
+            "required": true,
+            "description": "Номер страницы (начиная с 0)"
           },
           {
             "schema": {
@@ -669,7 +691,8 @@
             },
             "in": "query",
             "name": "limit",
-            "required": true
+            "required": true,
+            "description": "Количество элементов на странице"
           },
           {
             "schema": {
@@ -685,7 +708,8 @@
             },
             "in": "query",
             "name": "sortBy",
-            "required": true
+            "required": true,
+            "description": "Поле для сортировки"
           },
           {
             "schema": {
@@ -732,20 +756,20 @@
             },
             "in": "query",
             "name": "statuses",
-            "required": false
+            "required": false,
+            "description": "Список статусов для фильтрации"
           },
           {
             "schema": {
               "type": "array",
               "items": {
-                "type": "integer",
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991
+                "type": "string"
               }
             },
             "in": "query",
             "name": "branchIds",
-            "required": false
+            "required": false,
+            "description": "Список идентификаторов филиалов для фильтрации"
           },
           {
             "schema": {
@@ -761,7 +785,8 @@
             },
             "in": "query",
             "name": "reportTypes",
-            "required": false
+            "required": false,
+            "description": "Список типов отчётов для фильтрации"
           },
           {
             "schema": {
@@ -777,7 +802,8 @@
             },
             "in": "query",
             "name": "formats",
-            "required": false
+            "required": false,
+            "description": "Список форматов для фильтрации"
           },
           {
             "schema": {
@@ -786,7 +812,8 @@
             },
             "in": "query",
             "name": "periodStartFrom",
-            "required": false
+            "required": false,
+            "description": "Начальная дата периода для фильтрации"
           },
           {
             "schema": {
@@ -795,7 +822,8 @@
             },
             "in": "query",
             "name": "periodStartTo",
-            "required": false
+            "required": false,
+            "description": "Конечная дата периода для фильтрации"
           },
           {
             "schema": {
@@ -804,7 +832,8 @@
             },
             "in": "query",
             "name": "periodEndFrom",
-            "required": false
+            "required": false,
+            "description": "Начальная дата окончания периода для фильтрации"
           },
           {
             "schema": {
@@ -813,7 +842,8 @@
             },
             "in": "query",
             "name": "periodEndTo",
-            "required": false
+            "required": false,
+            "description": "Конечная дата окончания периода для фильтрации"
           },
           {
             "schema": {
@@ -823,7 +853,8 @@
             },
             "in": "query",
             "name": "createdAtFrom",
-            "required": false
+            "required": false,
+            "description": "Начальная дата создания для фильтрации"
           },
           {
             "schema": {
@@ -833,7 +864,8 @@
             },
             "in": "query",
             "name": "createdAtTo",
-            "required": false
+            "required": false,
+            "description": "Конечная дата создания для фильтрации"
           },
           {
             "schema": {
@@ -841,7 +873,8 @@
             },
             "in": "query",
             "name": "createdBy",
-            "required": false
+            "required": false,
+            "description": "Фильтр по создателю"
           },
           {
             "schema": {
@@ -849,12 +882,13 @@
             },
             "in": "query",
             "name": "search",
-            "required": false
+            "required": false,
+            "description": "Строка для поиска"
           }
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -868,28 +902,32 @@
                           "id": {
                             "type": "string",
                             "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "description": "Уникальный идентификатор задания"
                           },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time",
-                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                            "description": "Дата и время создания"
                           },
                           "branchId": {
-                            "type": "integer",
-                            "minimum": -9007199254740991,
-                            "maximum": 9007199254740991
+                            "type": "string",
+                            "description": "Идентификатор филиала"
                           },
                           "branchName": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Название филиала"
                           },
                           "periodStart": {
                             "type": "string",
-                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                            "description": "Дата начала отчётного периода"
                           },
                           "periodEnd": {
                             "type": "string",
-                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                            "description": "Дата окончания отчётного периода"
                           },
                           "status": {
                             "type": "string",
@@ -949,7 +987,8 @@
                           "updatedAt": {
                             "type": "string",
                             "format": "date-time",
-                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                            "description": "Дата и время последнего обновления"
                           }
                         },
                         "required": [
@@ -974,22 +1013,26 @@
                         "page": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Текущий номер страницы"
                         },
                         "limit": {
                           "type": "integer",
                           "minimum": 1,
-                          "maximum": 100
+                          "maximum": 100,
+                          "description": "Размер страницы"
                         },
                         "totalItems": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Общее количество элементов"
                         },
                         "totalPages": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Общее количество страниц"
                         }
                       },
                       "required": [
@@ -1045,7 +1088,7 @@
         },
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1119,7 +1162,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1128,12 +1171,14 @@
                     "id": {
                       "type": "string",
                       "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "description": "Уникальный идентификатор задания"
                     },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата и время создания"
                     },
                     "createdBy": {
                       "anyOf": [
@@ -1143,23 +1188,26 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Пользователь, создавший задание"
                     },
                     "branchId": {
-                      "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
+                      "type": "string",
+                      "description": "Идентификатор филиала"
                     },
                     "branchName": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Название филиала"
                     },
                     "periodStart": {
                       "type": "string",
-                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                      "description": "Дата начала отчётного периода"
                     },
                     "periodEnd": {
                       "type": "string",
-                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                      "description": "Дата окончания отчётного периода"
                     },
                     "accountMask": {
                       "anyOf": [
@@ -1169,7 +1217,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Маска счетов для фильтрации"
                     },
                     "accountMaskSecondOrder": {
                       "anyOf": [
@@ -1179,7 +1228,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Маска счетов второго порядка"
                     },
                     "currency": {
                       "type": "string",
@@ -1212,7 +1262,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Источник данных"
                     },
                     "status": {
                       "type": "string",
@@ -1241,13 +1292,16 @@
                       ]
                     },
                     "canCancel": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Возможность отмены задания"
                     },
                     "canDelete": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Возможность удаления задания"
                     },
                     "canStart": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Возможность запуска задания"
                     },
                     "fileSize": {
                       "anyOf": [
@@ -1276,7 +1330,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "URL для скачивания файла"
                     },
                     "errorMessage": {
                       "anyOf": [
@@ -1286,12 +1341,14 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Сообщение об ошибке"
                     },
                     "lastStatusChangedAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата и время последнего изменения статуса"
                     },
                     "startedAt": {
                       "anyOf": [
@@ -1303,7 +1360,8 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Дата и время начала обработки"
                     },
                     "completedAt": {
                       "anyOf": [
@@ -1315,12 +1373,14 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Дата и время завершения"
                     },
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата и время последнего обновления"
                     },
                     "packages": {
                       "type": "array",
@@ -1420,7 +1480,7 @@
         },
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1539,7 +1599,7 @@
         },
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1696,7 +1756,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1841,7 +1901,8 @@
             },
             "in": "query",
             "name": "page",
-            "required": true
+            "required": true,
+            "description": "Номер страницы (начиная с 0)"
           },
           {
             "schema": {
@@ -1852,7 +1913,8 @@
             },
             "in": "query",
             "name": "limit",
-            "required": true
+            "required": true,
+            "description": "Количество элементов на странице"
           },
           {
             "schema": {
@@ -1912,7 +1974,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -2018,22 +2080,26 @@
                         "page": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Текущий номер страницы"
                         },
                         "limit": {
                           "type": "integer",
                           "minimum": 1,
-                          "maximum": 100
+                          "maximum": 100,
+                          "description": "Размер страницы"
                         },
                         "totalItems": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Общее количество элементов"
                         },
                         "totalPages": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Общее количество страниц"
                         }
                       },
                       "required": [
@@ -2089,7 +2155,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -2177,6 +2243,7 @@
                     "type": "object",
                     "properties": {
                       "statuses": {
+                        "description": "Список статусов для фильтрации",
                         "type": "array",
                         "items": {
                           "type": "string",
@@ -2206,14 +2273,14 @@
                         }
                       },
                       "branchIds": {
+                        "description": "Список идентификаторов филиалов для фильтрации",
                         "type": "array",
                         "items": {
-                          "type": "integer",
-                          "exclusiveMinimum": 0,
-                          "maximum": 9007199254740991
+                          "type": "string"
                         }
                       },
                       "reportTypes": {
+                        "description": "Список типов отчётов для фильтрации",
                         "type": "array",
                         "items": {
                           "type": "string",
@@ -2225,6 +2292,7 @@
                         }
                       },
                       "formats": {
+                        "description": "Список форматов для фильтрации",
                         "type": "array",
                         "items": {
                           "type": "string",
@@ -2236,27 +2304,33 @@
                         }
                       },
                       "periodStartFrom": {
+                        "description": "Начальная дата периода",
                         "type": "string",
                         "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                       },
                       "periodStartTo": {
+                        "description": "Конечная дата периода",
                         "type": "string",
                         "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                       },
                       "periodEndFrom": {
+                        "description": "Начальная дата окончания периода",
                         "type": "string",
                         "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                       },
                       "periodEndTo": {
+                        "description": "Конечная дата окончания периода",
                         "type": "string",
                         "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                       },
                       "createdAtFrom": {
+                        "description": "Начальная дата создания",
                         "type": "string",
                         "format": "date-time",
                         "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                       },
                       "createdAtTo": {
+                        "description": "Конечная дата создания",
                         "type": "string",
                         "format": "date-time",
                         "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
@@ -2273,6 +2347,7 @@
                   },
                   "sortBy": {
                     "default": "createdAt",
+                    "description": "Поле для сортировки",
                     "type": "string",
                     "enum": [
                       "createdAt",
@@ -2303,7 +2378,7 @@
         },
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -2312,16 +2387,19 @@
                     "exportId": {
                       "type": "string",
                       "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "description": "Идентификатор экспорта"
                     },
                     "status": {
                       "type": "string",
+                      "description": "Статус экспорта",
                       "enum": [
                         "COMPLETED"
                       ]
                     },
                     "fileUrl": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "URL для скачивания файла"
                     },
                     "fileSize": {
                       "type": "integer",
@@ -2332,7 +2410,8 @@
                     "downloadUrlExpiresAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата истечения срока действия ссылки"
                     },
                     "recordsCount": {
                       "type": "integer",
@@ -2343,7 +2422,8 @@
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата создания экспорта"
                     }
                   },
                   "required": [
@@ -2378,12 +2458,14 @@
                   "name": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255
+                    "maxLength": 255,
+                    "description": "Название пакета"
                   },
                   "createdBy": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255
+                    "maxLength": 255,
+                    "description": "Создатель пакета"
                   }
                 },
                 "required": [
@@ -2398,7 +2480,7 @@
         },
         "responses": {
           "201": {
-            "description": "Default Response",
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -2407,18 +2489,22 @@
                     "id": {
                       "type": "string",
                       "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "description": "Уникальный идентификатор пакета"
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Название пакета"
                     },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата создания пакета"
                     },
                     "createdBy": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Создатель пакета"
                     },
                     "lastCopiedToTfrAt": {
                       "anyOf": [
@@ -2430,12 +2516,14 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Дата последнего копирования в ТФР"
                     },
                     "tasksCount": {
                       "type": "integer",
                       "minimum": 0,
-                      "maximum": 9007199254740991
+                      "maximum": 9007199254740991,
+                      "description": "Количество заданий в пакете"
                     },
                     "totalSize": {
                       "type": "integer",
@@ -2446,7 +2534,8 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата последнего обновления"
                     }
                   },
                   "required": [
@@ -2481,7 +2570,8 @@
             },
             "in": "query",
             "name": "page",
-            "required": true
+            "required": true,
+            "description": "Номер страницы (начиная с 0)"
           },
           {
             "schema": {
@@ -2492,7 +2582,8 @@
             },
             "in": "query",
             "name": "limit",
-            "required": true
+            "required": true,
+            "description": "Количество элементов на странице"
           },
           {
             "schema": {
@@ -2533,7 +2624,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -2547,18 +2638,22 @@
                           "id": {
                             "type": "string",
                             "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "description": "Уникальный идентификатор пакета"
                           },
                           "name": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Название пакета"
                           },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time",
-                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                            "description": "Дата создания пакета"
                           },
                           "createdBy": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Создатель пакета"
                           },
                           "lastCopiedToTfrAt": {
                             "anyOf": [
@@ -2570,12 +2665,14 @@
                               {
                                 "type": "null"
                               }
-                            ]
+                            ],
+                            "description": "Дата последнего копирования в ТФР"
                           },
                           "tasksCount": {
                             "type": "integer",
                             "minimum": 0,
-                            "maximum": 9007199254740991
+                            "maximum": 9007199254740991,
+                            "description": "Количество заданий в пакете"
                           },
                           "totalSize": {
                             "type": "integer",
@@ -2586,7 +2683,8 @@
                           "updatedAt": {
                             "type": "string",
                             "format": "date-time",
-                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                            "description": "Дата последнего обновления"
                           }
                         },
                         "required": [
@@ -2608,22 +2706,26 @@
                         "page": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Текущий номер страницы"
                         },
                         "limit": {
                           "type": "integer",
                           "minimum": 1,
-                          "maximum": 100
+                          "maximum": 100,
+                          "description": "Размер страницы"
                         },
                         "totalItems": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Общее количество элементов"
                         },
                         "totalPages": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Общее количество страниц"
                         }
                       },
                       "required": [
@@ -2679,7 +2781,7 @@
         },
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -2803,7 +2905,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -2812,18 +2914,22 @@
                     "id": {
                       "type": "string",
                       "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "description": "Уникальный идентификатор пакета"
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Название пакета"
                     },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата создания пакета"
                     },
                     "createdBy": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Создатель пакета"
                     },
                     "lastCopiedToTfrAt": {
                       "anyOf": [
@@ -2835,12 +2941,14 @@
                         {
                           "type": "null"
                         }
-                      ]
+                      ],
+                      "description": "Дата последнего копирования в ТФР"
                     },
                     "tasksCount": {
                       "type": "integer",
                       "minimum": 0,
-                      "maximum": 9007199254740991
+                      "maximum": 9007199254740991,
+                      "description": "Количество заданий в пакете"
                     },
                     "totalSize": {
                       "type": "integer",
@@ -2851,7 +2959,8 @@
                     "updatedAt": {
                       "type": "string",
                       "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                      "description": "Дата последнего обновления"
                     },
                     "tasks": {
                       "type": "array",
@@ -2861,28 +2970,32 @@
                           "id": {
                             "type": "string",
                             "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "description": "Уникальный идентификатор задания"
                           },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time",
-                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                            "description": "Дата и время создания"
                           },
                           "branchId": {
-                            "type": "integer",
-                            "minimum": -9007199254740991,
-                            "maximum": 9007199254740991
+                            "type": "string",
+                            "description": "Идентификатор филиала"
                           },
                           "branchName": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Название филиала"
                           },
                           "periodStart": {
                             "type": "string",
-                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                            "description": "Дата начала отчётного периода"
                           },
                           "periodEnd": {
                             "type": "string",
-                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                            "description": "Дата окончания отчётного периода"
                           },
                           "status": {
                             "type": "string",
@@ -2942,7 +3055,8 @@
                           "updatedAt": {
                             "type": "string",
                             "format": "date-time",
-                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                            "description": "Дата и время последнего обновления"
                           },
                           "addedAt": {
                             "type": "string",
@@ -2973,22 +3087,26 @@
                         "page": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Текущий номер страницы"
                         },
                         "limit": {
                           "type": "integer",
                           "minimum": 1,
-                          "maximum": 100
+                          "maximum": 100,
+                          "description": "Размер страницы"
                         },
                         "totalItems": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Общее количество элементов"
                         },
                         "totalPages": {
                           "type": "integer",
                           "minimum": 0,
-                          "maximum": 9007199254740991
+                          "maximum": 9007199254740991,
+                          "description": "Общее количество страниц"
                         }
                       },
                       "required": [
@@ -3033,7 +3151,8 @@
                   "name": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255
+                    "maxLength": 255,
+                    "description": "Новое название пакета"
                   }
                 },
                 "required": [
@@ -3059,7 +3178,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -3137,7 +3256,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -3238,7 +3357,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -3312,7 +3431,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -3354,7 +3473,7 @@
         "description": "Возвращает информацию о общем, занятом и свободном объёме хранилища. Включает предупреждение при превышении порога заполнения.",
         "responses": {
           "200": {
-            "description": "Default Response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
