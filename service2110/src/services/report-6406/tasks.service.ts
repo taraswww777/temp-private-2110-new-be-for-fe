@@ -10,7 +10,7 @@ import {
 import { eq, and, inArray, gte, lte, sql, desc, asc, ne } from 'drizzle-orm';
 import type {
   CreateTaskInput,
-  TasksQuery,
+  GetTasksRequest,
   TasksListResponse,
   TaskDetail,
   BulkDeleteTasksInput,
@@ -29,7 +29,7 @@ export class TasksService {
   /**
    * Создать новое задание
    */
-  async createTask(input: CreateTaskInput, createdBy?: string): Promise<Task> {
+  async createTask(input: CreateTaskInput, createdBy: string): Promise<Task> {
     // Получить название филиала
     const [branch] = await db
       .select()
@@ -57,7 +57,7 @@ export class TasksService {
           reportType: input.reportType,
           source: input.source || null,
           status: TaskStatus.CREATED,
-          createdBy: createdBy || null,
+          createdBy,
           filesCount: 0,
         })
         .returning();
@@ -68,7 +68,7 @@ export class TasksService {
         status: TaskStatus.CREATED,
         previousStatus: null,
         changedAt: new Date(),
-        changedBy: createdBy || null,
+        changedBy: createdBy,
         comment: 'Task created',
       });
 
@@ -77,76 +77,15 @@ export class TasksService {
   }
 
   /**
-   * Получить список заданий с фильтрацией и пагинацией
+   * Получить список заданий с фильтрацией и пагинацией (body: pagination, sorting, filter)
    */
-  async getTasks(query: TasksQuery): Promise<TasksListResponse> {
-    const { 
-      number: pageNumber, size: pageSize, sortBy, sortOrder, 
-      statuses, branchIds, reportTypes, formats,
-      periodStartFrom, periodStartTo, 
-      periodEndFrom, periodEndTo,
-      createdAtFrom, createdAtTo,
-      createdBy, search 
-    } = query;
-    
-    // Построение WHERE условий
-    const conditions = [];
-    
-    // Фильтр по статусам
-    if (statuses?.length) {
-      conditions.push(inArray(report6406Tasks.status, statuses));
-    }
-    
-    // Фильтр по филиалам
-    if (branchIds?.length) {
-      conditions.push(inArray(report6406Tasks.branchId, branchIds));
-    }
-    
-    // Фильтр по типам отчётов
-    if (reportTypes?.length) {
-      conditions.push(inArray(report6406Tasks.reportType, reportTypes));
-    }
-    
-    // Фильтр по форматам
-    if (formats?.length) {
-      conditions.push(inArray(report6406Tasks.format, formats));
-    }
-    
-    // Фильтры по periodStart
-    if (periodStartFrom) {
-      conditions.push(gte(report6406Tasks.periodStart, periodStartFrom));
-    }
-    if (periodStartTo) {
-      conditions.push(lte(report6406Tasks.periodStart, periodStartTo));
-    }
-    
-    // Фильтры по periodEnd
-    if (periodEndFrom) {
-      conditions.push(gte(report6406Tasks.periodEnd, periodEndFrom));
-    }
-    if (periodEndTo) {
-      conditions.push(lte(report6406Tasks.periodEnd, periodEndTo));
-    }
-    
-    // Фильтры по дате создания
-    if (createdAtFrom) {
-      conditions.push(gte(report6406Tasks.createdAt, new Date(createdAtFrom)));
-    }
-    if (createdAtTo) {
-      conditions.push(lte(report6406Tasks.createdAt, new Date(createdAtTo)));
-    }
-    
-    // Фильтр по создателю
-    if (createdBy) {
-      conditions.push(eq(report6406Tasks.createdBy, createdBy));
-    }
-    
-    // Поисковая строка (поиск по названию филиала или ID)
-    if (search) {
-      conditions.push(
-        sql`${report6406Tasks.branchName} ILIKE ${'%' + search + '%'} OR ${report6406Tasks.id}::text ILIKE ${'%' + search + '%'}`
-      );
-    }
+  async getTasks(body: GetTasksRequest): Promise<TasksListResponse> {
+    const { pagination, sorting, filter } = body;
+    const pageNumber = pagination.number;
+    const pageSize = pagination.size;
+
+    // Построение WHERE из filter[]
+    const conditions = this.buildFilterConditions(filter);
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
@@ -156,16 +95,32 @@ export class TasksService {
       .from(report6406Tasks)
       .where(whereClause);
 
-    // Сортировка
-    const orderByColumn = {
+    // Сортировка: column -> DB column, direction 'asc'|'desc'
+    type SortableColumn =
+      | typeof report6406Tasks.createdAt
+      | typeof report6406Tasks.branchId
+      | typeof report6406Tasks.status
+      | typeof report6406Tasks.periodStart
+      | typeof report6406Tasks.periodEnd
+      | typeof report6406Tasks.updatedAt
+      | typeof report6406Tasks.branchName
+      | typeof report6406Tasks.reportType
+      | typeof report6406Tasks.format
+      | typeof report6406Tasks.createdBy;
+    const sortColumnMap: Record<string, SortableColumn> = {
       createdAt: report6406Tasks.createdAt,
       branchId: report6406Tasks.branchId,
       status: report6406Tasks.status,
       periodStart: report6406Tasks.periodStart,
+      periodEnd: report6406Tasks.periodEnd,
       updatedAt: report6406Tasks.updatedAt,
-    }[sortBy];
-
-    const orderByClause = sortOrder === 'ASC' ? asc(orderByColumn) : desc(orderByColumn);
+      branchName: report6406Tasks.branchName,
+      reportType: report6406Tasks.reportType,
+      format: report6406Tasks.format,
+      createdBy: report6406Tasks.createdBy,
+    };
+    const orderByColumn = sortColumnMap[sorting.column] ?? report6406Tasks.createdAt;
+    const orderByClause = sorting.direction === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
 
     // Получение данных
     const tasks = await db
@@ -177,14 +132,86 @@ export class TasksService {
       .offset((pageNumber - 1) * pageSize);
 
     return {
-      tasks: tasks.map(task => this.formatTaskListItem(task)),
-      pagination: {
-        number: pageNumber,
-        size: pageSize,
-        totalItems: count,
-        totalPages: Math.ceil(count / pageSize),
-      },
+      items: tasks.map((task) => this.formatTaskListItem(task)),
+      totalItems: count,
     };
+  }
+
+  /**
+   * Построение условий WHERE из массива FilterDto
+   */
+  private buildFilterConditions(filter: GetTasksRequest['filter']) {
+    if (!filter?.length) return [];
+
+    type StringCol =
+      | typeof report6406Tasks.branchId
+      | typeof report6406Tasks.branchName
+      | typeof report6406Tasks.status
+      | typeof report6406Tasks.reportType
+      | typeof report6406Tasks.format
+      | typeof report6406Tasks.source
+      | typeof report6406Tasks.createdBy;
+    type DateCol = typeof report6406Tasks.periodStart | typeof report6406Tasks.periodEnd;
+    type DateTimeCol = typeof report6406Tasks.createdAt | typeof report6406Tasks.updatedAt;
+    const conditions: ReturnType<typeof eq>[] = [];
+    const stringColumns: Record<string, StringCol> = {
+      branchId: report6406Tasks.branchId,
+      branchName: report6406Tasks.branchName,
+      status: report6406Tasks.status,
+      reportType: report6406Tasks.reportType,
+      format: report6406Tasks.format,
+      source: report6406Tasks.source,
+      createdBy: report6406Tasks.createdBy,
+    };
+    const dateColumns: Record<string, DateCol> = {
+      periodStart: report6406Tasks.periodStart,
+      periodEnd: report6406Tasks.periodEnd,
+    };
+    const dateTimeColumns: Record<string, DateTimeCol> = {
+      createdAt: report6406Tasks.createdAt,
+      updatedAt: report6406Tasks.updatedAt,
+    };
+
+    for (const f of filter) {
+      const col = stringColumns[f.column];
+      if (col) {
+        if (f.operator === 'equals') {
+          conditions.push(eq(col, f.value));
+        } else if (f.operator === 'notEquals') {
+          conditions.push(ne(col, f.value));
+        } else if (f.operator === 'contains') {
+          conditions.push(sql`${col}::text ILIKE ${'%' + f.value + '%'}` as ReturnType<typeof eq>);
+        }
+        continue;
+      }
+      const dateCol = dateColumns[f.column];
+      if (dateCol) {
+        if (f.operator === 'equals') {
+          conditions.push(eq(dateCol, f.value));
+        } else if (f.operator === 'notEquals') {
+          conditions.push(ne(dateCol, f.value));
+        } else if (f.operator === 'greaterThan') {
+          conditions.push(sql`${dateCol} > ${f.value}` as ReturnType<typeof eq>);
+        } else if (f.operator === 'lessThan') {
+          conditions.push(sql`${dateCol} < ${f.value}` as ReturnType<typeof eq>);
+        }
+        continue;
+      }
+      const dtCol = dateTimeColumns[f.column];
+      if (dtCol) {
+        const d = new Date(f.value);
+        if (f.operator === 'equals') {
+          conditions.push(eq(dtCol, d));
+        } else if (f.operator === 'notEquals') {
+          conditions.push(ne(dtCol, d));
+        } else if (f.operator === 'greaterThan') {
+          conditions.push(gte(dtCol, d));
+        } else if (f.operator === 'lessThan') {
+          conditions.push(lte(dtCol, d));
+        }
+      }
+    }
+    return conditions;
   }
 
   /**
@@ -499,7 +526,7 @@ export class TasksService {
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
-      createdBy: task.createdBy,
+      createdBy: task.createdBy ?? '',
       branchId: task.branchId,
       branchName: task.branchName,
       periodStart: task.periodStart,
@@ -526,12 +553,14 @@ export class TasksService {
   }
 
   /**
-   * Форматирование задания для списка
+   * Форматирование задания для списка (TaskListItemDto)
    */
   private formatTaskListItem(task: typeof report6406Tasks.$inferSelect) {
+    const permissions = getStatusPermissions(task.status as TaskStatus);
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
+      createdBy: task.createdBy ?? '',
       branchId: task.branchId,
       branchName: task.branchName,
       periodStart: task.periodStart,
@@ -541,6 +570,9 @@ export class TasksService {
       format: task.format,
       reportType: task.reportType,
       updatedAt: task.updatedAt.toISOString(),
+      canCancel: permissions.canCancel,
+      canDelete: permissions.canDelete,
+      canStart: permissions.canStart,
     };
   }
 }

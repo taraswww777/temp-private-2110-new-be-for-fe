@@ -456,15 +456,8 @@
             "$ref": "#/components/schemas/DateTimeSchema"
           },
           "createdBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Пользователь, создавший задание"
+            "type": "string",
+            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
             "type": "string",
@@ -649,6 +642,10 @@
           "createdAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
           },
+          "createdBy": {
+            "type": "string",
+            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)"
+          },
           "branchId": {
             "type": "string",
             "description": "Идентификатор филиала"
@@ -687,11 +684,24 @@
           },
           "updatedAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "canCancel": {
+            "type": "boolean",
+            "description": "Можно ли отменить задание"
+          },
+          "canDelete": {
+            "type": "boolean",
+            "description": "Можно ли удалить задание"
+          },
+          "canStart": {
+            "type": "boolean",
+            "description": "Можно ли запустить задание"
           }
         },
         "required": [
           "id",
           "createdAt",
+          "createdBy",
           "branchId",
           "branchName",
           "periodStart",
@@ -700,30 +710,40 @@
           "fileSize",
           "format",
           "reportType",
-          "updatedAt"
+          "updatedAt",
+          "canCancel",
+          "canDelete",
+          "canStart"
         ],
         "additionalProperties": false,
         "title": "TaskListItemDto"
       },
-      "TasksListResponseDto": {
+      "GetTasksRequestDto": {
         "type": "object",
         "properties": {
-          "tasks": {
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationRequestDto"
+          },
+          "sorting": {
+            "$ref": "#/components/schemas/SortingRequestDto"
+          },
+          "filter": {
+            "description": "Фильтры для списка заданий",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/TaskListItemDto"
+              "$ref": "#/components/schemas/FilterDto"
             }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/PaginationMetadataDto"
           }
         },
         "required": [
-          "tasks",
-          "pagination"
+          "pagination",
+          "sorting"
         ],
         "additionalProperties": false,
-        "title": "TasksListResponseDto"
+        "title": "GetTasksRequestDto"
+      },
+      "TasksListResponseDto": {
+        "$ref": "#/components/schemas/PaginatedResponseDto"
       },
       "TaskDetailDto": {
         "type": "object",
@@ -738,15 +758,8 @@
             "$ref": "#/components/schemas/DateTimeSchema"
           },
           "createdBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Пользователь, создавший задание"
+            "type": "string",
+            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
             "type": "string",
@@ -1483,6 +1496,10 @@
                 "createdAt": {
                   "$ref": "#/components/schemas/DateTimeSchema"
                 },
+                "createdBy": {
+                  "type": "string",
+                  "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)"
+                },
                 "branchId": {
                   "type": "string",
                   "description": "Идентификатор филиала"
@@ -1522,6 +1539,18 @@
                 "updatedAt": {
                   "$ref": "#/components/schemas/DateTimeSchema"
                 },
+                "canCancel": {
+                  "type": "boolean",
+                  "description": "Можно ли отменить задание"
+                },
+                "canDelete": {
+                  "type": "boolean",
+                  "description": "Можно ли удалить задание"
+                },
+                "canStart": {
+                  "type": "boolean",
+                  "description": "Можно ли запустить задание"
+                },
                 "addedAt": {
                   "$ref": "#/components/schemas/DateTimeSchema"
                 }
@@ -1529,6 +1558,7 @@
               "required": [
                 "id",
                 "createdAt",
+                "createdBy",
                 "branchId",
                 "branchName",
                 "periodStart",
@@ -1538,6 +1568,9 @@
                 "format",
                 "reportType",
                 "updatedAt",
+                "canCancel",
+                "canDelete",
+                "canStart",
                 "addedAt"
               ],
               "additionalProperties": false
@@ -2133,228 +2166,6 @@
           }
         }
       },
-      "get": {
-        "summary": "Получить список заданий с пагинацией и фильтрацией",
-        "tags": [
-          "Report 6406 - Tasks"
-        ],
-        "parameters": [
-          {
-            "schema": {
-              "default": 1,
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            },
-            "in": "query",
-            "name": "number",
-            "required": true,
-            "description": "Номер страницы (начиная с 1)"
-          },
-          {
-            "schema": {
-              "default": 20,
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100
-            },
-            "in": "query",
-            "name": "size",
-            "required": true,
-            "description": "Размер страницы"
-          },
-          {
-            "schema": {
-              "default": "createdAt",
-              "type": "string",
-              "enum": [
-                "createdAt",
-                "branchId",
-                "status",
-                "periodStart",
-                "updatedAt"
-              ]
-            },
-            "in": "query",
-            "name": "sortBy",
-            "required": true,
-            "description": "Поле для сортировки"
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/SortOrderEnumSchema"
-            },
-            "in": "query",
-            "name": "sortOrder",
-            "required": true
-          },
-          {
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "upload_generation",
-                  "registered",
-                  "failed",
-                  "upload_not_formed",
-                  "upload_formed",
-                  "accepted_dapp",
-                  "submitted_dapp",
-                  "killed_dapp",
-                  "new_dapp",
-                  "saving_dapp",
-                  "created",
-                  "deleted",
-                  "started",
-                  "start_failed",
-                  "converting",
-                  "completed",
-                  "convert_stopped",
-                  "in_queue",
-                  "file_success_not_exist",
-                  "failed_fc",
-                  "have_broken_files"
-                ]
-              }
-            },
-            "in": "query",
-            "name": "statuses",
-            "required": false,
-            "description": "Список статусов для фильтрации"
-          },
-          {
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "in": "query",
-            "name": "branchIds",
-            "required": false,
-            "description": "Список идентификаторов филиалов для фильтрации"
-          },
-          {
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "LSOZ",
-                  "LSOS",
-                  "LSOP"
-                ]
-              }
-            },
-            "in": "query",
-            "name": "reportTypes",
-            "required": false,
-            "description": "Список типов отчётов для фильтрации"
-          },
-          {
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "TXT",
-                  "XLSX",
-                  "XML"
-                ]
-              }
-            },
-            "in": "query",
-            "name": "formats",
-            "required": false,
-            "description": "Список форматов для фильтрации"
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/DateSchema"
-            },
-            "in": "query",
-            "name": "periodStartFrom",
-            "required": false,
-            "description": "Начальная дата периода для фильтрации"
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/DateSchema"
-            },
-            "in": "query",
-            "name": "periodStartTo",
-            "required": false,
-            "description": "Конечная дата периода для фильтрации"
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/DateSchema"
-            },
-            "in": "query",
-            "name": "periodEndFrom",
-            "required": false,
-            "description": "Начальная дата окончания периода для фильтрации"
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/DateSchema"
-            },
-            "in": "query",
-            "name": "periodEndTo",
-            "required": false,
-            "description": "Конечная дата окончания периода для фильтрации"
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/DateTimeSchema"
-            },
-            "in": "query",
-            "name": "createdAtFrom",
-            "required": false,
-            "description": "Начальная дата создания для фильтрации"
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/DateTimeSchema"
-            },
-            "in": "query",
-            "name": "createdAtTo",
-            "required": false,
-            "description": "Конечная дата создания для фильтрации"
-          },
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query",
-            "name": "createdBy",
-            "required": false,
-            "description": "Фильтр по создателю"
-          },
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query",
-            "name": "search",
-            "required": false,
-            "description": "Строка для поиска"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TasksListResponseDto"
-                }
-              }
-            }
-          }
-        }
-      },
       "delete": {
         "summary": "Удалить одно или несколько заданий",
         "tags": [
@@ -2393,6 +2204,36 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BulkDeleteTasksResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/list": {
+      "post": {
+        "summary": "Получить список заданий (пагинация, сортировка, фильтрация)",
+        "tags": [
+          "Report 6406 - Tasks"
+        ],
+        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTasksRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TasksListResponseDto"
                 }
               }
             }

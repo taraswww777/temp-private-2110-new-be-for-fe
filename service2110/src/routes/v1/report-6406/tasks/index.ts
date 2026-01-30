@@ -6,7 +6,7 @@ import { tasksService } from '../../../../services/report-6406/tasks.service.js'
 import {
   createTaskSchema,
   taskSchema,
-  tasksQuerySchema,
+  getTasksRequestSchema,
   tasksListResponseSchema,
   taskDetailSchema,
   bulkDeleteTasksSchema,
@@ -52,20 +52,22 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   /**
-   * GET /api/v1/report-6406/tasks
-   * Получить список заданий с пагинацией и фильтрацией
+   * POST /api/v1/report-6406/tasks/list
+   * Получить список заданий с пагинацией, сортировкой и фильтрацией (body: pagination, sorting, filter).
+   * Используется POST вместо GET, т.к. Fastify не поддерживает body для GET; структура запроса/ответа по TASK-011.
    */
-  app.get('/', {
+  app.post('/list', {
     schema: {
       tags: ['Report 6406 - Tasks'],
-      summary: 'Получить список заданий с пагинацией и фильтрацией',
-      querystring: tasksQuerySchema,
+      summary: 'Получить список заданий (пагинация, сортировка, фильтрация)',
+      description: 'Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems.',
+      body: getTasksRequestSchema,
       response: {
         200: tasksListResponseSchema,
       },
     },
   }, async (request, reply) => {
-    const result = await tasksService.getTasks(request.query);
+    const result = await tasksService.getTasks(request.body);
     return reply.status(200).send(result);
   });
 
