@@ -696,6 +696,15 @@
           "canStart": {
             "type": "boolean",
             "description": "Можно ли запустить задание"
+          },
+          "packageIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "description": "ID пакетов, в которые входит задание (пустой массив = не в пакете)"
           }
         },
         "required": [
@@ -713,7 +722,8 @@
           "updatedAt",
           "canCancel",
           "canDelete",
-          "canStart"
+          "canStart",
+          "packageIds"
         ],
         "additionalProperties": false,
         "title": "TaskListItemDto"
@@ -1773,6 +1783,15 @@
                   "type": "boolean",
                   "description": "Можно ли запустить задание"
                 },
+                "packageIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "description": "ID пакетов, в которые входит задание (пустой массив = не в пакете)"
+                },
                 "addedAt": {
                   "$ref": "#/components/schemas/DateTimeSchema"
                 }
@@ -1793,6 +1812,7 @@
                 "canCancel",
                 "canDelete",
                 "canStart",
+                "packageIds",
                 "addedAt"
               ],
               "additionalProperties": false
@@ -2439,7 +2459,7 @@
         "tags": [
           "Report 6406 - Tasks"
         ],
-        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems.",
+        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems. Фильтр по пакету: column=packageId, operator=notEquals, value=<packageId> — задания, доступные для добавления в пакет; column=packageId, operator=equals, value=null — задания без пакета.",
         "requestBody": {
           "content": {
             "application/json": {

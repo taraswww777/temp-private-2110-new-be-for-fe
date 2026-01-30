@@ -7,7 +7,7 @@ import {
   branches,
   TaskStatus,
 } from '../../db/schema/index.js';
-import { eq, and, inArray, gte, lte, sql, desc, asc, ne } from 'drizzle-orm';
+import { eq, and, inArray, gte, lte, sql, desc, asc, ne, exists, not } from 'drizzle-orm';
 import type {
   CreateTaskInput,
   GetTasksRequest,
@@ -133,14 +133,36 @@ export class TasksService {
       .limit(pageSize)
       .offset((pageNumber - 1) * pageSize);
 
+    // Подгрузка packageIds для заданий списка (связь many-to-many)
+    const taskIds = tasks.map((t) => t.id);
+    const packageLinks =
+      taskIds.length > 0
+        ? await db
+            .select({
+              taskId: report6406PackageTasks.taskId,
+              packageId: report6406PackageTasks.packageId,
+            })
+            .from(report6406PackageTasks)
+            .where(inArray(report6406PackageTasks.taskId, taskIds))
+        : [];
+    const taskIdToPackageIds = new Map<string, string[]>();
+    for (const link of packageLinks) {
+      const arr = taskIdToPackageIds.get(link.taskId) ?? [];
+      arr.push(link.packageId);
+      taskIdToPackageIds.set(link.taskId, arr);
+    }
+
     return {
-      items: tasks.map((task) => this.formatTaskListItem(task)),
+      items: tasks.map((task) =>
+        this.formatTaskListItem(task, taskIdToPackageIds.get(task.id) ?? []),
+      ),
       totalItems: count,
     };
   }
 
   /**
    * Построение условий WHERE из массива FilterDto
+   * Поддержка фильтра packageId: задания в/не в указанном пакете (связь через report_6406_package_tasks).
    */
   private buildFilterConditions(filter: GetTasksRequest['filter']) {
     if (!filter?.length) return [];
@@ -155,7 +177,7 @@ export class TasksService {
       | typeof report6406Tasks.createdBy;
     type DateCol = typeof report6406Tasks.periodStart | typeof report6406Tasks.periodEnd;
     type DateTimeCol = typeof report6406Tasks.createdAt | typeof report6406Tasks.updatedAt;
-    const conditions: ReturnType<typeof eq>[] = [];
+    const conditions: Array<ReturnType<typeof eq> | ReturnType<typeof sql>> = [];
     const stringColumns: Record<string, StringCol> = {
       branchId: report6406Tasks.branchId,
       branchName: report6406Tasks.branchName,
@@ -175,6 +197,71 @@ export class TasksService {
     };
 
     for (const f of filter) {
+      // Фильтр по пакету: задания в/не в пакете (связь many-to-many через report_6406_package_tasks)
+      if (f.column === 'packageId') {
+        const valueNull = f.value.toLowerCase() === 'null';
+        if (f.operator === 'equals') {
+          if (valueNull) {
+            // Задания, не входящие ни в один пакет
+            conditions.push(
+              not(
+                exists(
+                  db
+                    .select({ one: sql`1` })
+                    .from(report6406PackageTasks)
+                    .where(eq(report6406PackageTasks.taskId, report6406Tasks.id)),
+                ),
+              ),
+            );
+          } else {
+            // Задания, входящие в пакет с указанным ID
+            conditions.push(
+              exists(
+                db
+                  .select({ one: sql`1` })
+                  .from(report6406PackageTasks)
+                  .where(
+                    and(
+                      eq(report6406PackageTasks.taskId, report6406Tasks.id),
+                      eq(report6406PackageTasks.packageId, f.value),
+                    ),
+                  ),
+              ),
+            );
+          }
+        } else if (f.operator === 'notEquals') {
+          if (valueNull) {
+            // Задания, входящие хотя бы в один пакет
+            conditions.push(
+              exists(
+                db
+                  .select({ one: sql`1` })
+                  .from(report6406PackageTasks)
+                  .where(eq(report6406PackageTasks.taskId, report6406Tasks.id)),
+              ),
+            );
+          } else {
+            // Задания, не входящие в указанный пакет (доступны для добавления в этот пакет)
+            conditions.push(
+              not(
+                exists(
+                  db
+                    .select({ one: sql`1` })
+                    .from(report6406PackageTasks)
+                    .where(
+                      and(
+                        eq(report6406PackageTasks.taskId, report6406Tasks.id),
+                        eq(report6406PackageTasks.packageId, f.value),
+                      ),
+                    ),
+                ),
+              ),
+            );
+          }
+        }
+        continue;
+      }
+
       const col = stringColumns[f.column];
       if (col) {
         if (f.operator === 'equals') {
@@ -592,9 +679,12 @@ export class TasksService {
   }
 
   /**
-   * Форматирование задания для списка (TaskListItemDto)
+   * Форматирование задания для списка (TaskListItemDto), с полем packageIds
    */
-  private formatTaskListItem(task: typeof report6406Tasks.$inferSelect) {
+  private formatTaskListItem(
+    task: typeof report6406Tasks.$inferSelect,
+    packageIds: string[] = [],
+  ) {
     const permissions = getStatusPermissions(task.status as TaskStatus);
     return {
       id: task.id,
@@ -612,6 +702,7 @@ export class TasksService {
       canCancel: permissions.canCancel,
       canDelete: permissions.canDelete,
       canStart: permissions.canStart,
+      packageIds,
     };
   }
 }

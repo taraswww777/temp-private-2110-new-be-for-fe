@@ -87,7 +87,7 @@
       "status": "completed",
       "file": "TASK-010-review-api-6406.md",
       "createdDate": "2026-01-30T10:00:00Z",
-      "completedDate": "2026-01-30T00:00:00Z",
+      "completedDate": "2026-01-30T12:00:00Z",
       "branch": "feature/TASK-010-review-api-6406-part1"
     },
     {
@@ -96,7 +96,7 @@
       "status": "completed",
       "file": "TASK-011-review-api-6406-part2.md",
       "createdDate": "2026-01-30T10:00:00Z",
-      "completedDate": "2026-01-30T00:00:00Z",
+      "completedDate": "2026-01-30T12:00:00Z",
       "branch": "feature/TASK-011-review-api-6406-part2"
     },
     {
@@ -111,11 +111,11 @@
     {
       "id": "TASK-013",
       "title": "Добавление возможности получения заданий для добавления в пакет",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-013-add-available-tasks-for-package.md",
       "createdDate": "2026-01-30T11:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-01-30T12:30:00Z",
+      "branch": "feature/TASK-013-available-tasks-for-package"
     },
     {
       "id": "TASK-014",

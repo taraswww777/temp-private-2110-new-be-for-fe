@@ -209,6 +209,9 @@ export const taskListItemSchema = z.object({
   canCancel: z.boolean().describe('Можно ли отменить задание'),
   canDelete: z.boolean().describe('Можно ли удалить задание'),
   canStart: z.boolean().describe('Можно ли запустить задание'),
+  packageIds: z
+    .array(z.string().uuid())
+    .describe('ID пакетов, в которые входит задание (пустой массив = не в пакете)'),
 });
 
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
