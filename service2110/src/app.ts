@@ -216,6 +216,39 @@ export async function buildApp() {
           }
         }
       }
+      
+      // Добавляем описания для статусов, если их нет
+      if (transformed.response) {
+        const statusDescriptions: Record<string, string> = {
+          '200': 'OK',
+          '201': 'Created',
+          '204': 'No Content',
+          '400': 'Bad Request',
+          '401': 'Unauthorized',
+          '403': 'Forbidden',
+          '404': 'Not Found',
+          '409': 'Conflict',
+          '500': 'Internal Server Error',
+          '503': 'Service Unavailable',
+        };
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        for (const statusCode of Object.keys(transformed.response as Record<string, any>)) {
+          if (statusDescriptions[statusCode]) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (transformed.response as any)[statusCode] = {
+              description: statusDescriptions[statusCode],
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              content: (transformed.response as any)[statusCode].content || {
+                'application/json': {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  schema: (transformed.response as any)[statusCode]
+                }
+              }
+            };
+          }
+        }
+      }
 
       // Копируем остальные поля схемы
       if (schema.tags) transformed.tags = schema.tags;

@@ -4,8 +4,8 @@ import { z } from 'zod';
  * Схема для пагинации в query параметрах
  */
 export const paginationQuerySchema = z.object({
-  page: z.coerce.number().int().min(0).default(0),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  page: z.coerce.number().int().min(0).default(0).describe('Номер страницы (начиная с 0)'),
+  limit: z.coerce.number().int().min(1).max(100).default(20).describe('Количество элементов на странице'),
 });
 
 export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
@@ -21,10 +21,10 @@ export type SortOrder = z.infer<typeof sortOrderSchema>;
  * Схема для ответа с пагинацией
  */
 export const paginationResponseSchema = z.object({
-  page: z.number().int().min(0),
-  limit: z.number().int().min(1).max(100),
-  totalItems: z.number().int().min(0),
-  totalPages: z.number().int().min(0),
+  page: z.number().int().min(0).describe('Текущий номер страницы'),
+  limit: z.number().int().min(1).max(100).describe('Размер страницы'),
+  totalItems: z.number().int().min(0).describe('Общее количество элементов'),
+  totalPages: z.number().int().min(0).describe('Общее количество страниц'),
 });
 
 export type PaginationResponse = z.infer<typeof paginationResponseSchema>;
@@ -66,3 +66,14 @@ export const httpErrorSchema = z.object({
 });
 
 export type HttpError = z.infer<typeof httpErrorSchema>;
+
+/**
+ * Схема для фильтрации данных
+ */
+export const filterSchema = z.object({
+  column: z.string().describe('Колонка для фильтрации'),
+  operator: z.enum(['equals', 'notEquals', 'contains', 'greaterThan', 'lessThan']).describe('Оператор сравнения'),
+  value: z.string().describe('Значение для фильтрации'),
+});
+
+export type Filter = z.infer<typeof filterSchema>;
