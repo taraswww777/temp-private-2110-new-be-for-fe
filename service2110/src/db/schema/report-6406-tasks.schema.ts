@@ -11,7 +11,7 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
   createdBy: varchar('created_by', { length: 255 }),
   
   // Информация о филиале и периоде
-  branchId: integer('branch_id').notNull(),
+  branchId: varchar('branch_id', { length: 50 }).notNull(),
   branchName: varchar('branch_name', { length: 255 }).notNull(),
   periodStart: date('period_start').notNull(),
   periodEnd: date('period_end').notNull(),

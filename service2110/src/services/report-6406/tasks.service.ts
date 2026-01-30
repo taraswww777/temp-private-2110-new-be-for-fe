@@ -81,7 +81,7 @@ export class TasksService {
    */
   async getTasks(query: TasksQuery): Promise<TasksListResponse> {
     const { 
-      page, limit, sortBy, sortOrder, 
+      number: pageNumber, size: pageSize, sortBy, sortOrder, 
       statuses, branchIds, reportTypes, formats,
       periodStartFrom, periodStartTo, 
       periodEndFrom, periodEndTo,
@@ -173,16 +173,16 @@ export class TasksService {
       .from(report6406Tasks)
       .where(whereClause)
       .orderBy(orderByClause)
-      .limit(limit)
-      .offset(page * limit);
+      .limit(pageSize)
+      .offset((pageNumber - 1) * pageSize);
 
     return {
       tasks: tasks.map(task => this.formatTaskListItem(task)),
       pagination: {
-        page,
-        limit,
+        number: pageNumber,
+        size: pageSize,
         totalItems: count,
-        totalPages: Math.ceil(count / limit),
+        totalPages: Math.ceil(count / pageSize),
       },
     };
   }

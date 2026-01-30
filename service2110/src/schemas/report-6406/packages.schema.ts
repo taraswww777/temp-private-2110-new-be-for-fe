@@ -1,13 +1,13 @@
 import { z } from 'zod';
-import { paginationQuerySchema, sortOrderSchema, paginationResponseSchema } from '../common.schema';
+import { paginationQuerySchema, sortOrderSchema, paginationMetadataSchema } from '../common.schema';
 import { taskListItemSchema } from './tasks.schema';
 
 /**
  * Схема для создания пакета
  */
 export const createPackageSchema = z.object({
-  name: z.string().min(1).max(255),
-  createdBy: z.string().min(1).max(255),
+  name: z.string().min(1).max(255).describe('Название пакета'),
+  createdBy: z.string().min(1).max(255).describe('Создатель пакета'),
 });
 
 export type CreatePackageInput = z.infer<typeof createPackageSchema>;
@@ -16,7 +16,7 @@ export type CreatePackageInput = z.infer<typeof createPackageSchema>;
  * Схема для обновления пакета
  */
 export const updatePackageSchema = z.object({
-  name: z.string().min(1).max(255),
+  name: z.string().min(1).max(255).describe('Новое название пакета'),
 });
 
 export type UpdatePackageInput = z.infer<typeof updatePackageSchema>;
@@ -25,18 +25,18 @@ export type UpdatePackageInput = z.infer<typeof updatePackageSchema>;
  * Схема для полного пакета
  */
 export const packageSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string(),
-  createdAt: z.string().datetime(),
-  createdBy: z.string(),
-  lastCopiedToTfrAt: z.string().datetime().nullable(),
-  tasksCount: z.number().int().min(0),
+  id: z.string().uuid().describe('Уникальный идентификатор пакета'),
+  name: z.string().describe('Название пакета'),
+  createdAt: z.string().datetime().describe('Дата создания пакета'),
+  createdBy: z.string().describe('Создатель пакета'),
+  lastCopiedToTfrAt: z.string().datetime().nullable().describe('Дата последнего копирования в ТФР'),
+  tasksCount: z.number().int().min(0).describe('Количество заданий в пакете'),
   totalSize: z
     .number()
     .int()
     .min(0)
     .describe('Общий размер пакета в байтах, например 157286400 = 150 MB (сумма размеров всех файлов)'),
-  updatedAt: z.string().datetime(),
+  updatedAt: z.string().datetime().describe('Дата последнего обновления'),
 });
 
 export type Package = z.infer<typeof packageSchema>;
@@ -55,7 +55,7 @@ export type PackageTaskItem = z.infer<typeof packageTaskItemSchema>;
  */
 export const packageDetailSchema = packageSchema.extend({
   tasks: z.array(packageTaskItemSchema),
-  tasksPagination: paginationResponseSchema,
+  tasksPagination: paginationMetadataSchema,
 });
 
 export type PackageDetail = z.infer<typeof packageDetailSchema>;
@@ -75,8 +75,8 @@ export type PackagesQuery = z.infer<typeof packagesQuerySchema>;
  * Схема для query параметров заданий в пакете
  */
 export const packageTasksQuerySchema = z.object({
-  tasksPage: z.coerce.number().int().min(0).default(0),
-  tasksLimit: z.coerce.number().int().min(1).max(100).default(20),
+  tasksNumber: z.coerce.number().int().min(1).default(1).describe('Номер страницы заданий в пакете (начиная с 1)'),
+  tasksSize: z.coerce.number().int().min(1).max(100).default(20).describe('Размер страницы заданий'),
   tasksSortBy: z.enum(['createdAt', 'branchId', 'status', 'periodStart']).default('createdAt'),
   tasksSortOrder: sortOrderSchema,
 });
@@ -88,7 +88,7 @@ export type PackageTasksQuery = z.infer<typeof packageTasksQuerySchema>;
  */
 export const packagesListResponseSchema = z.object({
   packages: z.array(packageSchema),
-  pagination: paginationResponseSchema,
+  pagination: paginationMetadataSchema,
 });
 
 export type PackagesListResponse = z.infer<typeof packagesListResponseSchema>;

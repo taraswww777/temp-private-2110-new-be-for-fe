@@ -1,33 +1,53 @@
 import { z } from 'zod';
 
 /**
- * Схема для пагинации в query параметрах
+ * Схема для пагинации в query параметрах (PaginationRequestDto по задаче: number, size)
  */
 export const paginationQuerySchema = z.object({
-  page: z.coerce.number().int().min(0).default(0),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  number: z.coerce.number().int().min(1).default(1).describe('Номер страницы (начиная с 1)'),
+  size: z.coerce.number().int().min(1).max(100).default(20).describe('Размер страницы'),
 });
 
 export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
 
 /**
- * Схема для сортировки в query параметрах
+ * Схема для сортировки (SortingRequestDto): direction + column
+ */
+export const sortingRequestSchema = z.object({
+  direction: z.enum(['asc', 'desc']).describe('Направление сортировки'),
+  column: z.string().describe('Колонка для сортировки'),
+});
+
+export type SortingRequest = z.infer<typeof sortingRequestSchema>;
+
+/**
+ * Схема для направления сортировки в query параметрах (enum ASC/DESC)
  */
 export const sortOrderSchema = z.enum(['ASC', 'DESC']).default('DESC');
 
 export type SortOrder = z.infer<typeof sortOrderSchema>;
 
 /**
- * Схема для ответа с пагинацией
+ * Метаданные пагинации в ответе (number, size, totalItems, totalPages)
  */
-export const paginationResponseSchema = z.object({
-  page: z.number().int().min(0),
-  limit: z.number().int().min(1).max(100),
-  totalItems: z.number().int().min(0),
-  totalPages: z.number().int().min(0),
+export const paginationMetadataSchema = z.object({
+  number: z.number().int().min(1).describe('Текущий номер страницы'),
+  size: z.number().int().min(1).max(100).describe('Размер страницы'),
+  totalItems: z.number().int().min(0).describe('Общее количество элементов'),
+  totalPages: z.number().int().min(0).describe('Общее количество страниц'),
 });
 
-export type PaginationResponse = z.infer<typeof paginationResponseSchema>;
+export type PaginationMetadata = z.infer<typeof paginationMetadataSchema>;
+
+/**
+ * Обобщённая схема пагинированного ответа (шаблон: items + totalItems)
+ */
+export const paginatedResponseSchema = z.object({
+  items: z.array(z.any()).describe('Список элементов'),
+  totalItems: z.number().int().min(0).describe('Общее количество элементов'),
+});
+
+export type PaginatedResponse = z.infer<typeof paginatedResponseSchema>;
 
 /**
  * Схема для UUID параметров
@@ -66,3 +86,54 @@ export const httpErrorSchema = z.object({
 });
 
 export type HttpError = z.infer<typeof httpErrorSchema>;
+
+/**
+ * Схема для фильтрации данных
+ */
+export const filterSchema = z.object({
+  column: z.string().describe('Колонка для фильтрации'),
+  operator: z.enum(['equals', 'notEquals', 'contains', 'greaterThan', 'lessThan']).describe('Оператор сравнения'),
+  value: z.string().describe('Значение для фильтрации'),
+});
+
+export type Filter = z.infer<typeof filterSchema>;
+
+/**
+ * Переиспользуемая схема для даты в формате YYYY-MM-DD
+ * Используется в query параметрах для фильтрации по датам
+ */
+export const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата в формате YYYY-MM-DD');
+
+export type DateString = z.infer<typeof dateSchema>;
+
+/**
+ * Переиспользуемая схема для даты-времени в формате ISO 8601
+ * Используется в query параметрах для фильтрации по датам создания/обновления
+ */
+export const dateTimeSchema = z.string().datetime().describe('Дата и время в формате ISO 8601');
+
+export type DateTimeString = z.infer<typeof dateTimeSchema>;
+
+/**
+ * Схема ответа GET /health (200 OK)
+ */
+export const healthResponseSchema = z.object({
+  status: z.string().describe('Статус приложения'),
+  timestamp: z.string().describe('Время ответа в ISO 8601'),
+  database: z.string().describe('Статус подключения к БД'),
+});
+
+export type HealthResponse = z.infer<typeof healthResponseSchema>;
+
+/**
+ * Схема ответа об ошибке с полем instance (503 и др.)
+ */
+export const httpErrorWithInstanceSchema = z.object({
+  type: z.string().describe('URI типа ошибки'),
+  title: z.string().describe('Заголовок ошибки'),
+  status: z.number().int().describe('HTTP статус'),
+  detail: z.string().describe('Детали ошибки'),
+  instance: z.string().describe('URI запроса'),
+});
+
+export type HttpErrorWithInstance = z.infer<typeof httpErrorWithInstanceSchema>;

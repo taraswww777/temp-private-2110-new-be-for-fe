@@ -46,7 +46,7 @@ export class PackagesService {
    * Получить список пакетов с пагинацией
    */
   async getPackages(query: PackagesQuery): Promise<PackagesListResponse> {
-    const { page, limit, sortBy, sortOrder, search } = query;
+    const { number: pageNumber, size: pageSize, sortBy, sortOrder, search } = query;
 
     // Построение WHERE условий
     const conditions = [];
@@ -79,16 +79,16 @@ export class PackagesService {
       .from(report6406Packages)
       .where(whereClause)
       .orderBy(orderByClause)
-      .limit(limit)
-      .offset(page * limit);
+      .limit(pageSize)
+      .offset((pageNumber - 1) * pageSize);
 
     return {
       packages: packages.map(pkg => this.formatPackage(pkg)),
       pagination: {
-        page,
-        limit,
+        number: pageNumber,
+        size: pageSize,
         totalItems: count,
-        totalPages: Math.ceil(count / limit),
+        totalPages: Math.ceil(count / pageSize),
       },
     };
   }
@@ -108,7 +108,7 @@ export class PackagesService {
     }
 
     // Получить задания в пакете
-    const { tasksPage, tasksLimit, tasksSortBy, tasksSortOrder } = tasksQuery;
+    const { tasksNumber, tasksSize, tasksSortBy, tasksSortOrder } = tasksQuery;
 
     // Подсчет общего количества заданий в пакете
     const [{ count }] = await db
@@ -146,8 +146,8 @@ export class PackagesService {
       .innerJoin(report6406Tasks, eq(report6406PackageTasks.taskId, report6406Tasks.id))
       .where(eq(report6406PackageTasks.packageId, id))
       .orderBy(orderByClause)
-      .limit(tasksLimit)
-      .offset(tasksPage * tasksLimit);
+      .limit(tasksSize)
+      .offset((tasksNumber - 1) * tasksSize);
 
     return {
       ...this.formatPackage(pkg),
@@ -167,10 +167,10 @@ export class PackagesService {
         addedAt: task.addedAt.toISOString(),
       })),
       tasksPagination: {
-        page: tasksPage,
-        limit: tasksLimit,
+        number: tasksNumber,
+        size: tasksSize,
         totalItems: count,
-        totalPages: Math.ceil(count / tasksLimit),
+        totalPages: Math.ceil(count / tasksSize),
       },
     };
   }

@@ -14,7 +14,7 @@ export class TaskFilesService {
    * Получить список файлов задания
    */
   async getTaskFiles(taskId: string, query: TaskFilesQuery): Promise<TaskFilesResponse> {
-    const { page, limit, sortBy, sortOrder, status: statusFilter } = query;
+    const { number: pageNumber, size: pageSize, sortBy, sortOrder, status: statusFilter } = query;
 
     // Проверяем существование задания
     const [task] = await db
@@ -56,8 +56,8 @@ export class TaskFilesService {
       .from(report6406TaskFiles)
       .where(sql`${sql.join(conditions, sql` AND `)}`)
       .orderBy(orderByClause)
-      .limit(limit)
-      .offset(page * limit);
+      .limit(pageSize)
+      .offset((pageNumber - 1) * pageSize);
 
     // Форматирование файлов с генерацией pre-signed URLs
     const formattedFiles = files.map(file => {
@@ -89,10 +89,10 @@ export class TaskFilesService {
       taskId,
       files: formattedFiles,
       pagination: {
-        page,
-        limit,
+        number: pageNumber,
+        size: pageSize,
         totalItems: count,
-        totalPages: Math.ceil(count / limit),
+        totalPages: Math.ceil(count / pageSize),
       },
     };
   }
