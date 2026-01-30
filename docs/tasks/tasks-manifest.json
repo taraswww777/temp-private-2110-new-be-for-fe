@@ -87,7 +87,7 @@
       "status": "completed",
       "file": "TASK-010-review-api-6406.md",
       "createdDate": "2026-01-30T10:00:00Z",
-      "completedDate": "2026-01-30T00:00:00Z",
+      "completedDate": "2026-01-30T12:00:00Z",
       "branch": "feature/TASK-010-review-api-6406-part1"
     },
     {
@@ -96,7 +96,7 @@
       "status": "completed",
       "file": "TASK-011-review-api-6406-part2.md",
       "createdDate": "2026-01-30T10:00:00Z",
-      "completedDate": "2026-01-30T00:00:00Z",
+      "completedDate": "2026-01-30T12:00:00Z",
       "branch": "feature/TASK-011-review-api-6406-part2"
     },
     {
