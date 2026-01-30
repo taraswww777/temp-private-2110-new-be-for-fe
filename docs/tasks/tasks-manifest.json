@@ -116,6 +116,15 @@
       "createdDate": "2026-01-30T11:00:00Z",
       "completedDate": null,
       "branch": null
+    },
+    {
+      "id": "TASK-014",
+      "title": "Разбор замечаний и вопросов по API формы 6406",
+      "status": "backlog",
+      "file": "TASK-014-api-6406-review-remarks.md",
+      "createdDate": "2026-01-30T12:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
