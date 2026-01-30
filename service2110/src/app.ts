@@ -568,7 +568,7 @@ export async function buildApp() {
     },
   });
 
-  // Swagger UI
+  // Swagger UI (тёмная тема по умолчанию + переключатель)
   await app.register(fastifySwaggerUi, {
     routePrefix: '/docs',
     uiConfig: {
@@ -576,6 +576,36 @@ export async function buildApp() {
       deepLinking: false,
     },
     staticCSP: true,
+    theme: {
+      css: [
+        {
+          filename: 'theme-toggle.css',
+          content: [
+            '.theme-toggle-btn{position:fixed;top:10px;right:10px;z-index:9999;padding:8px 14px;',
+            'border-radius:8px;border:1px solid rgba(255,255,255,.2);cursor:pointer;font-size:13px;',
+            'background:rgba(0,0,0,.15);color:inherit;font-family:inherit;box-shadow:0 1px 3px rgba(0,0,0,.2)}',
+            '.theme-toggle-btn:hover{background:rgba(0,0,0,.25)}',
+            'html:not(.dark-mode) .theme-toggle-btn{border-color:rgba(0,0,0,.2);background:rgba(0,0,0,.06)}',
+            'html:not(.dark-mode) .theme-toggle-btn:hover{background:rgba(0,0,0,.1)}',
+          ].join(''),
+        },
+      ],
+      js: [
+        {
+          filename: 'theme-toggle.js',
+          content: [
+            "(function(){var k='swagger-ui-theme';var d=localStorage.getItem(k)!=='light';",
+            "document.documentElement.classList.toggle('dark-mode',d);",
+            "function u(){var d=document.documentElement.classList.contains('dark-mode');",
+            "btn.textContent=d?'Светлая тема':'Тёмная тема';}",
+            "var btn=document.createElement('button');btn.type='button';btn.className='theme-toggle-btn';u();",
+            "btn.onclick=function(){document.documentElement.classList.toggle('dark-mode');",
+            "localStorage.setItem(k,document.documentElement.classList.contains('dark-mode')?'dark':'light');u();};",
+            "document.body.appendChild(btn);})();",
+          ].join(''),
+        },
+      ],
+    },
   });
 
   // Логирование всех запросов в dev режиме
