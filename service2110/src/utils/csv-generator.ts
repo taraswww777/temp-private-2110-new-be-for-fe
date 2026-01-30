@@ -11,7 +11,7 @@ export interface TaskCsvRecord {
   ID: string;
   'Created At': string;
   'Created By': string;
-  'Branch ID': number;
+  'Branch ID': string;
   'Branch Name': string;
   'Period Start': string;
   'Period End': string;
