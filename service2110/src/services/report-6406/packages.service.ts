@@ -3,8 +3,10 @@ import {
   report6406Packages,
   report6406PackageTasks,
   report6406Tasks,
+  TaskStatus,
 } from '../../db/schema/index.js';
 import { eq, sql, desc, asc, like, and } from 'drizzle-orm';
+import { getStatusPermissions } from '../../types/status-model.js';
 import type {
   CreatePackageInput,
   UpdatePackageInput,
@@ -131,6 +133,7 @@ export class PackagesService {
       .select({
         id: report6406Tasks.id,
         createdAt: report6406Tasks.createdAt,
+        createdBy: report6406Tasks.createdBy,
         branchId: report6406Tasks.branchId,
         branchName: report6406Tasks.branchName,
         periodStart: report6406Tasks.periodStart,
@@ -151,21 +154,27 @@ export class PackagesService {
 
     return {
       ...this.formatPackage(pkg),
-      tasks: tasks.map(task => ({
-        id: task.id,
-        createdAt: task.createdAt.toISOString(),
-        branchId: task.branchId,
-        branchName: task.branchName,
-        periodStart: task.periodStart,
-        periodEnd: task.periodEnd,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        status: task.status as any,
-        fileSize: task.fileSize,
-        format: task.format,
-        reportType: task.reportType,
-        updatedAt: task.updatedAt.toISOString(),
-        addedAt: task.addedAt.toISOString(),
-      })),
+      tasks: tasks.map((task) => {
+        const permissions = getStatusPermissions(task.status as TaskStatus);
+        return {
+          id: task.id,
+          createdAt: task.createdAt.toISOString(),
+          createdBy: task.createdBy,
+          branchId: task.branchId,
+          branchName: task.branchName,
+          periodStart: task.periodStart,
+          periodEnd: task.periodEnd,
+          status: task.status as TaskStatus,
+          fileSize: task.fileSize,
+          format: task.format,
+          reportType: task.reportType,
+          updatedAt: task.updatedAt.toISOString(),
+          canCancel: permissions.canCancel,
+          canDelete: permissions.canDelete,
+          canStart: permissions.canStart,
+          addedAt: task.addedAt.toISOString(),
+        };
+      }),
       tasksPagination: {
         number: tasksNumber,
         size: tasksSize,

@@ -1,5 +1,11 @@
 import { z } from 'zod';
-import { paginationQuerySchema, sortOrderSchema, paginationMetadataSchema } from '../common.schema.js';
+import {
+  paginationQuerySchema,
+  sortOrderSchema,
+  paginationMetadataSchema,
+  sortingRequestSchema,
+  filterSchema,
+} from '../common.schema.js';
 
 /**
  * Enum схемы для валидации
@@ -135,16 +141,17 @@ export const taskDetailSchema = taskSchema.extend({
 export type TaskDetail = z.infer<typeof taskDetailSchema>;
 
 /**
- * Схема для краткого задания в списке
+ * Схема для элемента списка заданий (TaskListItemDto)
  */
 export const taskListItemSchema = z.object({
   id: z.string().uuid().describe('Уникальный идентификатор задания'),
   createdAt: z.string().datetime().describe('Дата и время создания'),
+  createdBy: z.string().nullable().describe('ФИО сотрудника, создавшего задание'),
   branchId: z.string().describe('Идентификатор филиала'),
   branchName: z.string().describe('Название филиала'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
-  status: reportTaskStatusSchema,
+  status: reportTaskStatusSchema.describe('Статус задания'),
   fileSize: z
     .number()
     .int()
@@ -154,57 +161,30 @@ export const taskListItemSchema = z.object({
   format: fileFormatSchema,
   reportType: reportTypeSchema,
   updatedAt: z.string().datetime().describe('Дата и время последнего обновления'),
+  canCancel: z.boolean().describe('Можно ли отменить задание'),
+  canDelete: z.boolean().describe('Можно ли удалить задание'),
+  canStart: z.boolean().describe('Можно ли запустить задание'),
 });
 
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
 
 /**
- * Схема для query параметров списка заданий (расширенная фильтрация)
+ * Схема тела запроса GET /api/v1/report-6406/tasks/ (пагинация, сортировка, фильтрация)
  */
-export const tasksQuerySchema = paginationQuerySchema.extend({
-  // Сортировка
-  sortBy: z.enum(['createdAt', 'branchId', 'status', 'periodStart', 'updatedAt']).default('createdAt').describe('Поле для сортировки'),
-  sortOrder: sortOrderSchema,
-  
-  // Фильтры по статусам (массив)
-  statuses: z.array(reportTaskStatusSchema).optional().describe('Список статусов для фильтрации'),
-  
-  // Фильтры по филиалам (массив строк)
-  branchIds: z.array(z.coerce.string()).optional().describe('Список идентификаторов филиалов для фильтрации'),
-  
-  // Фильтры по типам отчётов (массив)
-  reportTypes: z.array(reportTypeSchema).optional().describe('Список типов отчётов для фильтрации'),
-  
-  // Фильтры по форматам (массив)
-  formats: z.array(fileFormatSchema).optional().describe('Список форматов для фильтрации'),
-  
-  // Фильтры по периоду начала (periodStart)
-  periodStartFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Начальная дата периода для фильтрации'),
-  periodStartTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Конечная дата периода для фильтрации'),
-  
-  // Фильтры по периоду окончания (periodEnd)
-  periodEndFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Начальная дата окончания периода для фильтрации'),
-  periodEndTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Конечная дата окончания периода для фильтрации'),
-  
-  // Фильтры по дате создания
-  createdAtFrom: z.string().datetime().optional().describe('Начальная дата создания для фильтрации'),
-  createdAtTo: z.string().datetime().optional().describe('Конечная дата создания для фильтрации'),
-  
-  // Фильтр по создателю
-  createdBy: z.string().optional().describe('Фильтр по создателю'),
-  
-  // Поисковая строка
-  search: z.string().optional().describe('Строка для поиска'),
+export const getTasksRequestSchema = z.object({
+  pagination: paginationQuerySchema.describe('Параметры пагинации'),
+  sorting: sortingRequestSchema.describe('Параметры сортировки'),
+  filter: z.array(filterSchema).optional().describe('Фильтры для списка заданий'),
 });
 
-export type TasksQuery = z.infer<typeof tasksQuerySchema>;
+export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;
 
 /**
- * Схема для ответа со списком заданий
+ * Схема для ответа GET /api/v1/report-6406/tasks/ (пагинированный список)
  */
 export const tasksListResponseSchema = z.object({
-  tasks: z.array(taskListItemSchema),
-  pagination: paginationMetadataSchema,
+  items: z.array(taskListItemSchema).describe('Список заданий'),
+  totalItems: z.number().int().min(0).describe('Общее количество заданий'),
 });
 
 export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;

@@ -282,7 +282,7 @@
 
 ## Уточнения в процессе выполнения
 
-_Этот раздел будет заполняться по мере выполнения задания._
+- **Реализация списка заданий:** Вместо GET с телом запроса используется **POST /api/v1/report-6406/tasks/list**, т.к. Fastify не поддерживает валидацию body для GET (`FST_ERR_ROUTE_BODY_VALIDATION_SCHEMA_NOT_SUPPORTED`). Структура тела запроса (pagination, sorting, filter) и ответа (items, totalItems) соответствует заданию.
 
 ---
 
