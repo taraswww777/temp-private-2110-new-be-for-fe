@@ -102,11 +102,11 @@
     {
       "id": "TASK-012",
       "title": "Review API формы 6406 (Часть 3: Унификация DTO деталей)",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-012-review-api-6406-part3.md",
       "createdDate": "2026-01-30T10:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-01-30T12:00:00Z",
+      "branch": "feature/TASK-012-review-api-6406-part3"
     },
     {
       "id": "TASK-013",
