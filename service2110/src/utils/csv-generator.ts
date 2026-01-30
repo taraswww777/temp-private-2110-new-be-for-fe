@@ -16,7 +16,7 @@ export interface TaskCsvRecord {
   'Period Start': string;
   'Period End': string;
   'Account Mask': string;
-  'Account Mask Second Order': string;
+  'Account Second Order': string;
   'Currency': string;
   'Format': string;
   'Report Type': string;
@@ -45,7 +45,7 @@ export function taskToCsvRecord(task: Report6406Task): TaskCsvRecord {
     'Period Start': task.periodStart,
     'Period End': task.periodEnd,
     'Account Mask': task.accountMask || '',
-    'Account Mask Second Order': task.accountMaskSecondOrder || '',
+    'Account Second Order': task.accountSecondOrder || '',
     'Currency': task.currency,
     'Format': task.format,
     'Report Type': task.reportType,

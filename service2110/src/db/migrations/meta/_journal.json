@@ -15,6 +15,13 @@
       "when": 1738075200000,
       "tag": "0001_extend_6406_api",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1738224000000,
+      "tag": "0002_rename_account_second_order",
+      "breakpoints": true
     }
   ]
 }

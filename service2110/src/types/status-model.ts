@@ -16,6 +16,7 @@ export enum TaskStatus {
   UPLOAD_FORMED = 'upload_formed',
   ACCEPTED_DAPP = 'accepted_dapp',
   SUBMITTED_DAPP = 'submitted_dapp',
+  /** Задание отменено на нашей стороне; при синхронизации с внешней системой — KILLED_DAPP */
   KILLED_DAPP = 'killed_dapp',
   NEW_DAPP = 'new_dapp',
   SAVING_DAPP = 'saving_dapp',
@@ -126,7 +127,7 @@ export const STATUS_PERMISSIONS_MAP: Record<TaskStatus, StatusPermissions> = {
     canCancel: true,
     canDelete: true,
     canStart: false,
-    displayName: 'Задание остановлено',
+    displayName: 'Задание отменено',
   },
   [TaskStatus.NEW_DAPP]: {
     isEndDapp: false,
