@@ -58,13 +58,15 @@ jobs:
                       position: fixed; top: 10px; right: 10px; z-index: 9999;
                       padding: 8px 14px; border-radius: 8px; cursor: pointer;
                       font-size: 13px; font-family: inherit; box-shadow: 0 1px 3px rgba(0,0,0,.2);
-                      border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.15); color: inherit;
+                      border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.15);
+                      color: rgba(255,255,255,.95);
                   }
-                  .theme-toggle-btn:hover { background: rgba(0,0,0,.25); }
+                  .theme-toggle-btn:hover { background: rgba(0,0,0,.25); color: #fff; }
                   html:not(.dark-mode) .theme-toggle-btn {
                       border-color: rgba(0,0,0,.2); background: rgba(0,0,0,.06);
+                      color: #1a1a1a;
                   }
-                  html:not(.dark-mode) .theme-toggle-btn:hover { background: rgba(0,0,0,.1); }
+                  html:not(.dark-mode) .theme-toggle-btn:hover { background: rgba(0,0,0,.1); color: #000; }
               </style>
           </head>
           <body>
