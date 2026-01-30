@@ -59,11 +59,11 @@ export const createTaskSchema = z.object({
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
   accountMask: z.string().max(20).optional().describe('Маска счетов для фильтрации'),
-  accountMaskSecondOrder: z.string().max(2).optional().describe('Маска счетов второго порядка'),
-  currency: currencySchema,
+  accountSecondOrder: z.string().max(2).optional().describe('Счета второго порядка'),
+  currency: currencySchema.optional().describe('Валюта (опционально при создании; по умолчанию RUB)'),
   format: fileFormatSchema,
   reportType: reportTypeSchema,
-  source: z.string().max(20).optional().describe('Источник данных'),
+  source: z.string().max(20).optional().describe('Ссылка на справочник или идентификатор источника данных'),
 }).refine(
   (data) => {
     const start = new Date(data.periodStart);
@@ -101,11 +101,11 @@ export const taskSchema = z.object({
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
   accountMask: z.string().nullable().describe('Маска счетов для фильтрации'),
-  accountMaskSecondOrder: z.string().nullable().describe('Маска счетов второго порядка'),
+  accountSecondOrder: z.string().nullable().describe('Счета второго порядка'),
   currency: currencySchema,
   format: fileFormatSchema,
   reportType: reportTypeSchema,
-  source: z.string().nullable().describe('Источник данных'),
+  source: z.string().nullable().describe('Ссылка на справочник или идентификатор источника данных'),
   status: reportTaskStatusSchema,
   canCancel: z.boolean().describe('Возможность отмены задания'),
   canDelete: z.boolean().describe('Возможность удаления задания'),
@@ -114,7 +114,7 @@ export const taskSchema = z.object({
     .number()
     .int()
     .min(0)
-    .describe('Размер файла в байтах (например, 10485760 = 10 MB). NULL если размер неизвестен.')
+    .describe('Размер файла в байтах. null — размер ещё не рассчитан (задание не завершено).')
     .nullable(),
   filesCount: z
     .number()
@@ -153,11 +153,11 @@ export const taskDetailsSchema = z.object({
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
   accountMask: z.string().nullable().describe('Маска счетов для фильтрации'),
-  accountMaskSecondOrder: z.string().nullable().describe('Маска счетов второго порядка'),
+  accountSecondOrder: z.string().nullable().describe('Счета второго порядка'),
   currency: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
   format: fileFormatSchema,
   reportType: reportTypeSchema,
-  source: z.string().nullable().describe('Источник данных'),
+  source: z.string().nullable().describe('Ссылка на справочник или идентификатор источника данных'),
   status: reportTaskStatusSchema.describe('Статус задания'),
   canCancel: z.boolean().describe('Возможность отмены задания'),
   canDelete: z.boolean().describe('Возможность удаления задания'),
@@ -166,7 +166,7 @@ export const taskDetailsSchema = z.object({
     .number()
     .int()
     .min(0)
-    .describe('Размер файла в байтах (например, 10485760 = 10 MB). NULL если размер неизвестен.')
+    .describe('Размер файла в байтах. null — размер ещё не рассчитан.')
     .nullable(),
   filesCount: z
     .number()
@@ -201,7 +201,7 @@ export const taskListItemSchema = z.object({
     .number()
     .int()
     .min(0)
-    .describe('Размер файла в байтах')
+    .describe('Размер файла в байтах; null — размер ещё не рассчитан.')
     .nullable(),
   format: fileFormatSchema,
   reportType: reportTypeSchema,
@@ -217,12 +217,62 @@ export const taskListItemSchema = z.object({
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
 
 /**
- * Схема тела запроса GET /api/v1/report-6406/tasks/ (пагинация, сортировка, фильтрация)
+ * Допустимые колонки для сортировки списка заданий (детерминированный набор)
+ */
+export const taskListSortColumnSchema = z.enum([
+  'createdAt',
+  'branchId',
+  'status',
+  'periodStart',
+  'periodEnd',
+  'updatedAt',
+  'branchName',
+  'reportType',
+  'format',
+  'createdBy',
+]);
+export type TaskListSortColumn = z.infer<typeof taskListSortColumnSchema>;
+
+/**
+ * Допустимые колонки для фильтрации списка заданий (детерминированный набор).
+ * packageId — фильтр по пакету (value: UUID или "null"); даты — YYYY-MM-DD; дата-время — ISO 8601; статус — enum.
+ */
+export const taskListFilterColumnSchema = z.enum([
+  'packageId',
+  'branchId',
+  'branchName',
+  'status',
+  'reportType',
+  'format',
+  'source',
+  'createdBy',
+  'periodStart',
+  'periodEnd',
+  'createdAt',
+  'updatedAt',
+]);
+export type TaskListFilterColumn = z.infer<typeof taskListFilterColumnSchema>;
+
+/** Схема сортировки для списка заданий (колонка — enum) */
+export const tasksListSortingSchema = z.object({
+  direction: z.enum(['asc', 'desc']).describe('Направление сортировки'),
+  column: taskListSortColumnSchema.describe('Колонка для сортировки'),
+});
+
+/** Схема одного фильтра для списка заданий (колонка — enum) */
+export const taskListFilterItemSchema = z.object({
+  column: taskListFilterColumnSchema.describe('Колонка для фильтрации'),
+  operator: z.enum(['equals', 'notEquals', 'contains', 'greaterThan', 'lessThan']).describe('Оператор сравнения'),
+  value: z.string().describe('Значение (статус — enum, даты — YYYY-MM-DD, дата-время — ISO 8601)'),
+});
+
+/**
+ * Схема тела запроса POST /api/v1/report-6406/tasks/list (пагинация, сортировка, фильтрация)
  */
 export const getTasksRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
-  sorting: sortingRequestSchema.describe('Параметры сортировки'),
-  filter: z.array(filterSchema).optional().describe('Фильтры для списка заданий'),
+  sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
+  filter: z.array(taskListFilterItemSchema).optional().describe('Фильтры для списка заданий'),
 });
 
 export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;

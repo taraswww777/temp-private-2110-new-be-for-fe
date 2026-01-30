@@ -127,7 +127,7 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Report 6406 - Tasks'],
       summary: 'Отменить одно или несколько заданий',
-      description: 'Отменяет задания (переводит в статус KILLED_DAPP). Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
+      description: 'Отменяет задания на нашей стороне (переводит в статус «Задание отменено»). Синхронизация с внешней системой может в дальнейшем приводить к статусу KILLED_DAPP. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
       body: bulkCancelTasksSchema,
       response: {
         200: bulkCancelResponseSchema,

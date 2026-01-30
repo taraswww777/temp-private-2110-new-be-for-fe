@@ -18,7 +18,7 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
   
   // Фильтры для построения отчёта
   accountMask: varchar('account_mask', { length: 20 }),
-  accountMaskSecondOrder: varchar('account_mask_second_order', { length: 2 }),
+  accountSecondOrder: varchar('account_second_order', { length: 2 }),
   currency: varchar('currency', { length: 20 }).notNull().$type<'RUB' | 'FOREIGN'>(),
   format: varchar('format', { length: 10 }).notNull().$type<'TXT' | 'XLSX' | 'XML'>(),
   reportType: varchar('report_type', { length: 10 }).notNull().$type<'LSOZ' | 'LSOS' | 'LSOP'>(),
