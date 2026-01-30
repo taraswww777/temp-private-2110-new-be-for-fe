@@ -13,6 +13,7 @@ import { env } from './config/env.js';
 import { routes } from './routes/index.js';
 import { errorHandler } from './plugins/error-handler.js';
 import userContextPlugin from './plugins/user-context.js';
+import { getOpenApiComponents } from './schemas/openapi-components.js';
 
 export async function buildApp() {
   const app = Fastify({
@@ -120,6 +121,9 @@ export async function buildApp() {
         { name: 'Report 6406 - Packages', description: 'Пакеты заданий для формы 6406' },
         { name: 'Report 6406 - Storage', description: 'Мониторинг хранилища отчётов' },
       ],
+      components: {
+        schemas: getOpenApiComponents(),
+      },
     },
     transform: ({ schema, url }) => {
       if (!schema) {
@@ -136,7 +140,7 @@ export async function buildApp() {
       // Опции для toJSONSchema - OpenAPI 3.1 совместимость
       const jsonSchemaOptions = { 
         target: 'openApi3' as const, 
-        $refStrategy: 'none' as const,
+        $refStrategy: 'root' as const, // Используем root для вынесения схем в components/schemas
         removeIncompatibleMeta: true,
         // OpenAPI 3.1 использует JSON Schema 2020-12
         // nullable автоматически конвертируется в anyOf: [{ type: 'xxx' }, { type: 'null' }]
