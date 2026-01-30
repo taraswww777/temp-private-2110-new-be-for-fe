@@ -138,10 +138,10 @@
     {
       "id": "TASK-016",
       "title": "GET /storage/volume — массив хранилищ, имя, id, человекочитаемые поля",
-      "status": "open",
+      "status": "completed",
       "file": "TASK-016-storage-volume-response-array.md",
       "createdDate": "2026-01-30T16:00:00Z",
-      "completedDate": null,
+      "completedDate": "2026-01-30T18:00:00Z",
       "branch": "feature/TASK-016-storage-volume-array"
     }
   ]
