@@ -14,6 +14,7 @@ import { routes } from './routes/index.js';
 import { errorHandler } from './plugins/error-handler.js';
 import userContextPlugin from './plugins/user-context.js';
 import { getOpenApiComponents } from './schemas/openapi-components.js';
+import { getSchemaName } from './schemas/schema-registry.js';
 
 export async function buildApp() {
   const app = Fastify({
@@ -137,63 +138,55 @@ export async function buildApp() {
         return obj !== null && typeof obj === 'object' && 'toJSONSchema' in obj && typeof (obj as { toJSONSchema?: unknown }).toJSONSchema === 'function';
       };
 
-      // Опции для toJSONSchema - OpenAPI 3.1 совместимость
-      const jsonSchemaOptions = { 
-        target: 'openApi3' as const, 
-        $refStrategy: 'root' as const, // Используем root для вынесения схем в components/schemas
-        removeIncompatibleMeta: true,
-        // OpenAPI 3.1 использует JSON Schema 2020-12
-        // nullable автоматически конвертируется в anyOf: [{ type: 'xxx' }, { type: 'null' }]
+      // Функция для конвертации схемы с созданием $ref для зарегистрированных схем
+      const convertSchema = (zodSchema: unknown): unknown => {
+        // Проверяем, зарегистрирована ли схема
+        const schemaName = getSchemaName(zodSchema);
+        if (schemaName) {
+          // Возвращаем ссылку на компонент
+          return {
+            $ref: `#/components/schemas/${schemaName}`
+          };
+        }
+
+        // Если не зарегистрирована, конвертируем как обычно
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return (zodSchema as any).toJSONSchema({
+            target: 'openApi3' as const,
+            $refStrategy: 'none' as const,
+            removeIncompatibleMeta: true,
+          });
+        } catch (error) {
+          console.error('Error converting schema:', error);
+          return {};
+        }
       };
 
       // Преобразуем body, если это Zod схема
       if (isZodSchema(schema.body)) {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          transformed.body = (schema.body as any).toJSONSchema(jsonSchemaOptions);
-        } catch (error) {
-          console.error('Error converting body schema:', error);
-          transformed.body = {};
-        }
+        transformed.body = convertSchema(schema.body);
       } else if (schema.body) {
         transformed.body = schema.body;
       }
 
       // Преобразуем querystring, если это Zod схема
       if (isZodSchema(schema.querystring)) {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          transformed.querystring = (schema.querystring as any).toJSONSchema(jsonSchemaOptions);
-        } catch (error) {
-          console.error('Error converting querystring schema:', error);
-          transformed.querystring = {};
-        }
+        transformed.querystring = convertSchema(schema.querystring);
       } else if (schema.querystring) {
         transformed.querystring = schema.querystring;
       }
 
       // Преобразуем params, если это Zod схема
       if (isZodSchema(schema.params)) {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          transformed.params = (schema.params as any).toJSONSchema(jsonSchemaOptions);
-        } catch (error) {
-          console.error('Error converting params schema:', error);
-          transformed.params = {};
-        }
+        transformed.params = convertSchema(schema.params);
       } else if (schema.params) {
         transformed.params = schema.params;
       }
 
       // Преобразуем headers, если это Zod схема
       if (isZodSchema(schema.headers)) {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          transformed.headers = (schema.headers as any).toJSONSchema(jsonSchemaOptions);
-        } catch (error) {
-          console.error('Error converting headers schema:', error);
-          transformed.headers = {};
-        }
+        transformed.headers = convertSchema(schema.headers);
       } else if (schema.headers) {
         transformed.headers = schema.headers;
       }
@@ -204,15 +197,8 @@ export async function buildApp() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         for (const [statusCode, responseSchema] of Object.entries(schema.response as Record<string, any>)) {
           if (isZodSchema(responseSchema)) {
-            try {
-              // Это Zod схема
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (transformed.response as any)[statusCode] = (responseSchema as any).toJSONSchema(jsonSchemaOptions);
-            } catch (error) {
-              console.error(`Error converting response schema for ${statusCode}:`, error);
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (transformed.response as any)[statusCode] = {};
-            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (transformed.response as any)[statusCode] = convertSchema(responseSchema);
           } else {
             // Оставляем как есть
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
