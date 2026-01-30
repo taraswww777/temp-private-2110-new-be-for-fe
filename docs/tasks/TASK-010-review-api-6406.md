@@ -165,10 +165,10 @@ GET /api/v1/report-6406/tasks/{id}
 - [x] Все числовые поля уже имели `.min(0)` где необходимо
 
 ### Переиспользование схем через $ref
-- [x] Создан реестр схем (`schema-registry.ts`) с 24 зарегистрированными схемами
-- [x] Реализована функция `convertSchema()` для проверки регистрации и создания $ref ссылок
-- [x] 15 endpoints используют $ref ссылки на компоненты вместо дублирования
-- [x] Размер swagger.json уменьшился на 20% (168KB → 135KB)
+- [x] Создан реестр схем (`schema-registry.ts`) с 50+ зарегистрированными схемами (общие, enum, справочники, задания, пакеты, экспорт, storage, response DTO)
+- [x] Реализована функция `convertSchema()` и рекурсивная замена вложенных схем (`replaceNestedSchemas`) с сравнением по нормализованной структуре
+- [x] В paths используются $ref на компоненты для body, response, вложенных объектов (pagination), query-параметров (даты), items массивов (enum)
+- [x] Все ответы с JSON-телом описаны отдельными DTO и в paths ссылаются на них через $ref (исключение: mock-files — отдача файлов)
 - [x] Все ссылки корректны и указывают на существующие схемы в `components/schemas`
 
 ### Валидация
@@ -399,6 +399,76 @@ GET /api/v1/report-6406/tasks/{id}
 
 ---
 
+### Выясненные уточнения (дополнения к задаче)
+
+Ниже зафиксированы уточнения, выявленные в процессе выполнения и расширения задачи.
+
+#### 1. Переиспользование вложенных схем в paths
+
+**Уточнение:** В `paths` не только верхнеуровневые body/response, но и вложенные объекты (например, `pagination`, `tasksPagination` внутри ответов) должны ссылаться на `components/schemas`, а не дублироваться inline.
+
+**Реализация:**
+- В `app.ts` при формировании `components.schemas` применяется рекурсивная функция `replaceNestedSchemas`: обход JSON Schema, сравнение вложенных объектов с зарегистрированными схемами по нормализованной структуре (type, propertyKeys, required, propertyTypes), замена совпадений на `$ref`.
+- Та же логика используется в transform для схем из route (body, querystring, response): после конвертации Zod → JSON Schema вызывается `replaceNestedSchemas`.
+- Порядок обработки компонентов: сначала простые типы (DateSchema, DateTimeSchema), затем enum-схемы, затем объекты — чтобы при сравнении все нужные схемы уже были в `processedComponents` и не возникало циклических подстановок.
+
+**Результат:** Поля `pagination` и `tasksPagination` в ответах ссылаются на `#/components/schemas/PaginationResponseDto`.
+
+#### 2. Схемы для дат в query-параметрах
+
+**Уточнение:** Повторяющиеся схемы для дат в query (строка с `pattern` YYYY-MM-DD и строка с `format: date-time`) нужно описать один раз в `components/schemas` и в paths использовать через `$ref`.
+
+**Реализация:**
+- В `common.schema.ts`: `dateSchema` (YYYY-MM-DD), `dateTimeSchema` (ISO 8601).
+- Зарегистрированы как `DateSchema`, `DateTimeSchema` в реестре и в openapi-components.
+- В хуке `onReady` после генерации swagger выполняется обход всех `paths` → `parameters`; схема каждого параметра сравнивается с зарегистрированными (по type, format, pattern, enum); при совпадении подставляется `$ref` (например, `#/components/schemas/DateSchema`, `#/components/schemas/DateTimeSchema`).
+
+**Результат:** Параметры вроде `periodStartFrom`, `periodEndTo`, `createdAtFrom`, `createdAtTo` в paths ссылаются на DateSchema/DateTimeSchema вместо дублирования схем.
+
+#### 3. Enum-схемы для переиспользования
+
+**Уточнение:** Схемы вида «массив строк с enum» (formats: [TXT, XLSX, XML], reportTypes: [LSOZ, LSOS, LSOP] и т.д.) должны быть общими компонентами, а в paths — только `$ref`.
+
+**Реализация:**
+- Зарегистрированы enum-схемы: `FileFormatEnumSchema`, `ReportTypeEnumSchema`, `ReportTaskStatusEnumSchema`, `CurrencyEnumSchema`, `SortOrderEnumSchema` (Zod enum → JSON Schema с type/enum).
+- Они добавлены в список «простых» типов при сборке components (обрабатываются до сложных объектов).
+- Функция сравнения для подстановки `$ref` расширена на простые типы (string с enum); рекурсивная замена обрабатывает и `schema.items` в массивах.
+
+**Результат:** В paths поля `formats`, `reportTypes`, `statuses` и т.п. в request/response используют `items: { $ref: "#/components/schemas/FileFormatEnumSchema" }` (и аналоги для остальных enum) вместо inline `type: array, items: { type: string, enum: [...] }`.
+
+#### 4. Все responses в виде отдельных DTO
+
+**Уточнение:** У всех paths ответы (responses) с телом должны быть описаны отдельными DTO в `components/schemas`, в paths — только ссылка `$ref`, без inline-описания структуры.
+
+**Реализация:**
+- **Health:** В `common.schema.ts` добавлены `healthResponseSchema` (200) и `httpErrorWithInstanceSchema` (503 с полем instance). Роут переведён на них. Зарегистрированы как HealthResponseDto, HttpErrorWithInstanceDto.
+- **References:** Ответы-массивы зарегистрированы как BranchesResponseDto, ReportTypesResponseDto, CurrenciesResponseDto, FormatsResponseDto, SourcesResponseDto (z.array соответствующей схемы).
+- **Tasks:** StatusHistoryItemDto, StatusHistoryResponseDto; TaskFileDto, TaskFilesResponseDto; RetryFileConversionResponseDto — все зарегистрированы и используются в роутах.
+- **Packages:** UpdatePackageResponseDto, AddTasksToPackageResponseDto, BulkRemoveTasksResponseDto, CopyToTfrResponseDto — зарегистрированы.
+- **Storage:** StorageVolumeDto зарегистрирован.
+
+**Исключение:** `GET /mock-files/*` отдают файлы (text/plain, text/csv), не JSON; у них оставлено описание "Default Response" без DTO.
+
+**Результат:** Все пути с JSON-ответами в paths ссылаются на отдельные DTO в components/schemas; swagger остаётся валидным.
+
+#### 5. Сводка по зарегистрированным схемам (актуальное состояние)
+
+- **Общие:** PaginationRequestDto, PaginationResponseDto, FilterDto, DateSchema, DateTimeSchema, FileFormatEnumSchema, ReportTypeEnumSchema, ReportTaskStatusEnumSchema, CurrencyEnumSchema, SortOrderEnumSchema, HealthResponseDto, HttpErrorWithInstanceDto.
+- **Справочники:** BranchDto, ReportTypeDto, CurrencyDto, FormatDto, SourceDto, BranchesResponseDto, ReportTypesResponseDto, CurrenciesResponseDto, FormatsResponseDto, SourcesResponseDto.
+- **Задания:** CreateTaskDto, TaskDto, TaskListItemDto, TasksListResponseDto, TaskDetailDto, BulkDeleteTasksResponseDto, BulkCancelTasksResponseDto, StartTasksResponseDto, StatusHistoryItemDto, StatusHistoryResponseDto, TaskFileDto, TaskFilesResponseDto, RetryFileConversionResponseDto.
+- **Пакеты:** CreatePackageDto, UpdatePackageDto, PackageDto, PackageDetailDto, PackagesListResponseDto, BulkDeletePackagesResponseDto, UpdatePackageResponseDto, AddTasksToPackageResponseDto, BulkRemoveTasksResponseDto, CopyToTfrResponseDto.
+- **Экспорт:** ExportTasksRequestDto, ExportTasksResponseDto.
+- **Storage:** StorageVolumeDto.
+
+#### 6. Важные технические решения
+
+- **Не редактировать swagger.json вручную** — файл генерируется при старте приложения из Zod-схем и transform/onReady.
+- **Порядок обработки components:** simpleTypes → enumTypes → objectTypes, чтобы вложенные и enum-схемы были доступны при сравнении и не создавались циклические ссылки.
+- **Сравнение схем:** нормализация (type, propertyKeys, required, propertyTypes для объектов; type, format, pattern, enum для примитивов) и сравнение по JSON.stringify нормализованного представления.
+- **Параметры paths:** замена схем в `parameters[].schema` на `$ref` выполняется в onReady по уже сгенерированному swagger, т.к. fastify-swagger разворачивает querystring в parameters после transform.
+
+---
+
 ## Связанные документы
 
 - OpenAPI спецификация формы 6406
@@ -419,3 +489,4 @@ GET /api/v1/report-6406/tasks/{id}
 | 2026-01-30 | 📋 Бэклог | Задание создано (часть 1 из 3) |
 | 2026-01-30 | ✅ Выполнено | Базовые схемы созданы, типы унифицированы, описания добавлены, swagger регенерирован и валиден |
 | 2026-01-30 | ✅ Выполнено | Добавлено переиспользование схем через $ref ссылки: создан реестр схем, 15 endpoints используют ссылки, размер файла уменьшен на 20% |
+| 2026-01-30 | ✅ Выполнено | Расширено переиспользование: вложенные схемы (pagination), схемы дат в query, enum-схемы (formats, reportTypes, statuses и др.), все responses в виде отдельных DTO; выясненные уточнения зафиксированы в задаче |
