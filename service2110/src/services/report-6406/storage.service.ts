@@ -1,20 +1,22 @@
 import { db } from '../../db/index.js';
 import { report6406Tasks } from '../../db/schema/index.js';
 import { sql, ne } from 'drizzle-orm';
-import type { StorageVolumeResponse } from '../../schemas/report-6406/storage.schema.js';
+import type { StorageVolumeItem } from '../../schemas/report-6406/storage.schema.js';
 import { formatBytesFixed } from '../../utils/file-size-formatter.js';
 import { env } from '../../config/env.js';
 import { TaskStatus } from '../../types/status-model.js';
 
+const DEFAULT_STORAGE_ID = 'default';
+const DEFAULT_STORAGE_NAME = 'Корзина 1';
+
 export class StorageService {
   /**
-   * Получить информацию о объёме хранилища
+   * Получить информацию о объёме хранилищ (массив: по одному элементу на каждое хранилище).
+   * Пока хранилище одно — возвращается массив из одного элемента.
    */
-  async getStorageVolume(): Promise<StorageVolumeResponse> {
+  async getStorageVolume(): Promise<StorageVolumeItem[]> {
     const totalBytes = env.STORAGE_MAX_SIZE_BYTES || 1099511627776; // 1TB по умолчанию
-    const warningThreshold = env.STORAGE_WARNING_THRESHOLD || 85; // 85% по умолчанию
 
-    // Подсчитываем используемый объём: сумма fileSize всех заданий кроме удалённых
     const [result] = await db
       .select({
         usedBytes: sql<number>`COALESCE(SUM(${report6406Tasks.fileSize}), 0)::bigint`,
@@ -24,29 +26,39 @@ export class StorageService {
 
     const usedBytes = Number(result.usedBytes) || 0;
     const freeBytes = totalBytes - usedBytes;
-    const usedPercent = (usedBytes / totalBytes) * 100;
+    const usedPercent = totalBytes > 0 ? (usedBytes / totalBytes) * 100 : 0;
+    const percent = Math.round(usedPercent * 100) / 100;
 
-    // Форматирование в человекочитаемый вид
     const totalHuman = formatBytesFixed(totalBytes);
-    const usedHuman = formatBytesFixed(usedBytes);
     const freeHuman = formatBytesFixed(freeBytes);
 
-    // Предупреждение если использовано больше порогового значения
-    let warning: string | null = null;
-    if (usedPercent >= warningThreshold) {
-      warning = `Storage usage is above ${warningThreshold}%. Consider cleaning up old reports.`;
-    }
-
-    return {
-      totalBytes,
-      usedBytes,
-      freeBytes,
-      usedPercent: Math.round(usedPercent * 100) / 100, // Округляем до 2 знаков после запятой
+    const item: StorageVolumeItem = {
+      id: DEFAULT_STORAGE_ID,
+      name: DEFAULT_STORAGE_NAME,
       totalHuman,
-      usedHuman,
       freeHuman,
-      warning,
+      percent,
     };
+
+    return [item];
+  }
+
+  /**
+   * Получить свободный объём в байтах для первого (по умолчанию) хранилища.
+   * Используется внутренне для проверки «достаточно ли места» при запуске заданий.
+   */
+  async getStorageFreeBytes(): Promise<number> {
+    const totalBytes = env.STORAGE_MAX_SIZE_BYTES || 1099511627776;
+
+    const [result] = await db
+      .select({
+        usedBytes: sql<number>`COALESCE(SUM(${report6406Tasks.fileSize}), 0)::bigint`,
+      })
+      .from(report6406Tasks)
+      .where(ne(report6406Tasks.status, TaskStatus.DELETED));
+
+    const usedBytes = Number(result.usedBytes) || 0;
+    return Math.max(0, totalBytes - usedBytes);
   }
 }
 
