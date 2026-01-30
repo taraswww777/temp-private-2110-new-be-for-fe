@@ -1,33 +1,53 @@
 import { z } from 'zod';
 
 /**
- * Схема для пагинации в query параметрах
+ * Схема для пагинации в query параметрах (PaginationRequestDto по задаче: number, size)
  */
 export const paginationQuerySchema = z.object({
-  page: z.coerce.number().int().min(0).default(0).describe('Номер страницы (начиная с 0)'),
-  limit: z.coerce.number().int().min(1).max(100).default(20).describe('Количество элементов на странице'),
+  number: z.coerce.number().int().min(1).default(1).describe('Номер страницы (начиная с 1)'),
+  size: z.coerce.number().int().min(1).max(100).default(20).describe('Размер страницы'),
 });
 
 export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
 
 /**
- * Схема для сортировки в query параметрах
+ * Схема для сортировки (SortingRequestDto): direction + column
+ */
+export const sortingRequestSchema = z.object({
+  direction: z.enum(['asc', 'desc']).describe('Направление сортировки'),
+  column: z.string().describe('Колонка для сортировки'),
+});
+
+export type SortingRequest = z.infer<typeof sortingRequestSchema>;
+
+/**
+ * Схема для направления сортировки в query параметрах (enum ASC/DESC)
  */
 export const sortOrderSchema = z.enum(['ASC', 'DESC']).default('DESC');
 
 export type SortOrder = z.infer<typeof sortOrderSchema>;
 
 /**
- * Схема для ответа с пагинацией
+ * Метаданные пагинации в ответе (number, size, totalItems, totalPages)
  */
-export const paginationResponseSchema = z.object({
-  page: z.number().int().min(0).describe('Текущий номер страницы'),
-  limit: z.number().int().min(1).max(100).describe('Размер страницы'),
+export const paginationMetadataSchema = z.object({
+  number: z.number().int().min(1).describe('Текущий номер страницы'),
+  size: z.number().int().min(1).max(100).describe('Размер страницы'),
   totalItems: z.number().int().min(0).describe('Общее количество элементов'),
   totalPages: z.number().int().min(0).describe('Общее количество страниц'),
 });
 
-export type PaginationResponse = z.infer<typeof paginationResponseSchema>;
+export type PaginationMetadata = z.infer<typeof paginationMetadataSchema>;
+
+/**
+ * Обобщённая схема пагинированного ответа (шаблон: items + totalItems)
+ */
+export const paginatedResponseSchema = z.object({
+  items: z.array(z.any()).describe('Список элементов'),
+  totalItems: z.number().int().min(0).describe('Общее количество элементов'),
+});
+
+export type PaginatedResponse = z.infer<typeof paginatedResponseSchema>;
 
 /**
  * Схема для UUID параметров

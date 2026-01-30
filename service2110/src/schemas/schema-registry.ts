@@ -4,7 +4,9 @@
 
 import { 
   paginationQuerySchema, 
-  paginationResponseSchema, 
+  paginationMetadataSchema,
+  paginatedResponseSchema,
+  sortingRequestSchema,
   filterSchema,
   dateSchema,
   dateTimeSchema,
@@ -71,7 +73,9 @@ import {
 export const schemaRegistry = new Map<string, unknown>([
   // Общие схемы
   ['PaginationRequestDto', paginationQuerySchema],
-  ['PaginationResponseDto', paginationResponseSchema],
+  ['PaginationMetadataDto', paginationMetadataSchema],
+  ['PaginatedResponseDto', paginatedResponseSchema],
+  ['SortingRequestDto', sortingRequestSchema],
   ['FilterDto', filterSchema],
   ['DateSchema', dateSchema],
   ['DateTimeSchema', dateTimeSchema],

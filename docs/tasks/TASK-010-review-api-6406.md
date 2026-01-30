@@ -412,7 +412,7 @@ GET /api/v1/report-6406/tasks/{id}
 - Та же логика используется в transform для схем из route (body, querystring, response): после конвертации Zod → JSON Schema вызывается `replaceNestedSchemas`.
 - Порядок обработки компонентов: сначала простые типы (DateSchema, DateTimeSchema), затем enum-схемы, затем объекты — чтобы при сравнении все нужные схемы уже были в `processedComponents` и не возникало циклических подстановок.
 
-**Результат:** Поля `pagination` и `tasksPagination` в ответах ссылаются на `#/components/schemas/PaginationResponseDto`.
+**Результат:** Поля `pagination` и `tasksPagination` в ответах ссылаются на `#/components/schemas/PaginationMetadataDto`.
 
 #### 2. Схемы для дат в query-параметрах
 
@@ -460,7 +460,34 @@ GET /api/v1/report-6406/tasks/{id}
 - **Экспорт:** ExportTasksRequestDto, ExportTasksResponseDto.
 - **Storage:** StorageVolumeDto.
 
-#### 6. Важные технические решения
+#### 7. Доработки по детальному описанию (30.01.2026)
+
+Выполнены три доработки для 100% соответствия «Требованиям» и «Порядку выполнения»:
+
+**SortingRequestDto**
+- Добавлена схема `sortingRequestSchema` в `common.schema.ts` с полями `direction` (enum: asc, desc) и `column` (string).
+- Зарегистрирована в реестре и openapi-components как `SortingRequestDto`.
+
+**Пагинация: number и size**
+- Запрос: `paginationQuerySchema` переведён на поля `number` (integer, minimum: 1, номер страницы с 1) и `size` (integer, min: 1, max: 100).
+- Ответ: метаданные пагинации вынесены в `paginationMetadataSchema` с полями `number`, `size`, `totalItems`, `totalPages` (в реестре — `PaginationMetadataDto`).
+- Во всех эндпоинтах с пагинацией (tasks, packages, task-files) query-параметры и тело ответа используют `number`/`size`; offset вычисляется как `(number - 1) * size`.
+- В пакетах для пагинации заданий внутри пакета: `tasksPage`/`tasksLimit` заменены на `tasksNumber`/`tasksSize`.
+
+**PaginatedResponseDto (обобщённая)**
+- Добавлена схема `paginatedResponseSchema` с полями `items` (array) и `totalItems` (integer, min: 0) — шаблон для пагинированных ответов.
+- Зарегистрирована как `PaginatedResponseDto`. Конкретные списки (TasksListResponseDto и др.) по-прежнему используют структуру `items` + вложенный объект `pagination` (PaginationMetadataDto).
+
+**Изменённые файлы:**
+- `src/schemas/common.schema.ts` — paginationQuerySchema (number/size), sortingRequestSchema, paginationMetadataSchema, paginatedResponseSchema.
+- `src/schemas/report-6406/tasks.schema.ts`, `packages.schema.ts`, `task-files.schema.ts` — переход на paginationMetadataSchema, packageTasksQuerySchema (tasksNumber/tasksSize).
+- `src/schemas/schema-registry.ts`, `openapi-components.ts` — новые схемы и переименования.
+- `src/services/report-6406/tasks.service.ts`, `packages.service.ts`, `task-files.service.ts` — логика пагинации (number, size, offset).
+- `docs/swagger/swagger.json` — регенерирован.
+
+**Внимание:** Смена query-параметров с `page`/`limit` на `number`/`size` и нумерации страницы с 1 — **breaking change** для клиентов API; требуется согласование с frontend.
+
+#### 8. Важные технические решения
 
 - **Не редактировать swagger.json вручную** — файл генерируется при старте приложения из Zod-схем и transform/onReady.
 - **Порядок обработки components:** simpleTypes → enumTypes → objectTypes, чтобы вложенные и enum-схемы были доступны при сравнении и не создавались циклические ссылки.

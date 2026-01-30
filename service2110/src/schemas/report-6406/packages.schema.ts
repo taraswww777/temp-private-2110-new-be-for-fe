@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, sortOrderSchema, paginationResponseSchema } from '../common.schema';
+import { paginationQuerySchema, sortOrderSchema, paginationMetadataSchema } from '../common.schema';
 import { taskListItemSchema } from './tasks.schema';
 
 /**
@@ -55,7 +55,7 @@ export type PackageTaskItem = z.infer<typeof packageTaskItemSchema>;
  */
 export const packageDetailSchema = packageSchema.extend({
   tasks: z.array(packageTaskItemSchema),
-  tasksPagination: paginationResponseSchema,
+  tasksPagination: paginationMetadataSchema,
 });
 
 export type PackageDetail = z.infer<typeof packageDetailSchema>;
@@ -75,8 +75,8 @@ export type PackagesQuery = z.infer<typeof packagesQuerySchema>;
  * Схема для query параметров заданий в пакете
  */
 export const packageTasksQuerySchema = z.object({
-  tasksPage: z.coerce.number().int().min(0).default(0),
-  tasksLimit: z.coerce.number().int().min(1).max(100).default(20),
+  tasksNumber: z.coerce.number().int().min(1).default(1).describe('Номер страницы заданий в пакете (начиная с 1)'),
+  tasksSize: z.coerce.number().int().min(1).max(100).default(20).describe('Размер страницы заданий'),
   tasksSortBy: z.enum(['createdAt', 'branchId', 'status', 'periodStart']).default('createdAt'),
   tasksSortOrder: sortOrderSchema,
 });
@@ -88,7 +88,7 @@ export type PackageTasksQuery = z.infer<typeof packageTasksQuerySchema>;
  */
 export const packagesListResponseSchema = z.object({
   packages: z.array(packageSchema),
-  pagination: paginationResponseSchema,
+  pagination: paginationMetadataSchema,
 });
 
 export type PackagesListResponse = z.infer<typeof packagesListResponseSchema>;

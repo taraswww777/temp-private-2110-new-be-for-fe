@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, sortOrderSchema, paginationResponseSchema } from '../common.schema.js';
+import { paginationQuerySchema, sortOrderSchema, paginationMetadataSchema } from '../common.schema.js';
 
 /**
  * Enum схемы для валидации
@@ -204,7 +204,7 @@ export type TasksQuery = z.infer<typeof tasksQuerySchema>;
  */
 export const tasksListResponseSchema = z.object({
   tasks: z.array(taskListItemSchema),
-  pagination: paginationResponseSchema,
+  pagination: paginationMetadataSchema,
 });
 
 export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;

@@ -4,7 +4,9 @@
 
 import { 
   paginationQuerySchema, 
-  paginationResponseSchema, 
+  paginationMetadataSchema,
+  paginatedResponseSchema,
+  sortingRequestSchema,
   filterSchema,
   dateSchema,
   dateTimeSchema,
@@ -95,7 +97,9 @@ export function getOpenApiComponents() {
   return {
     // Общие схемы
     PaginationRequestDto: zodToJsonSchema(paginationQuerySchema, 'PaginationRequestDto'),
-    PaginationResponseDto: zodToJsonSchema(paginationResponseSchema, 'PaginationResponseDto'),
+    PaginationMetadataDto: zodToJsonSchema(paginationMetadataSchema, 'PaginationMetadataDto'),
+    PaginatedResponseDto: zodToJsonSchema(paginatedResponseSchema, 'PaginatedResponseDto'),
+    SortingRequestDto: zodToJsonSchema(sortingRequestSchema, 'SortingRequestDto'),
     FilterDto: zodToJsonSchema(filterSchema, 'FilterDto'),
     DateSchema: zodToJsonSchema(dateSchema, 'DateSchema'),
     DateTimeSchema: zodToJsonSchema(dateTimeSchema, 'DateTimeSchema'),

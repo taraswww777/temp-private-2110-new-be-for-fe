@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, paginationResponseSchema, sortOrderSchema } from '../common.schema.js';
+import { paginationQuerySchema, paginationMetadataSchema, sortOrderSchema } from '../common.schema.js';
 
 /**
  * Enum для статусов файлов
@@ -47,7 +47,7 @@ export type TaskFilesQuery = z.infer<typeof taskFilesQuerySchema>;
 export const taskFilesResponseSchema = z.object({
   taskId: z.string().uuid(),
   files: z.array(taskFileSchema),
-  pagination: paginationResponseSchema,
+  pagination: paginationMetadataSchema,
 });
 
 export type TaskFilesResponse = z.infer<typeof taskFilesResponseSchema>;

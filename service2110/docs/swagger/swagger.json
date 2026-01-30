@@ -89,38 +89,38 @@
       "PaginationRequestDto": {
         "type": "object",
         "properties": {
-          "page": {
-            "default": 0,
-            "description": "Номер страницы (начиная с 0)",
+          "number": {
+            "default": 1,
+            "description": "Номер страницы (начиная с 1)",
             "type": "integer",
-            "minimum": 0,
+            "minimum": 1,
             "maximum": 9007199254740991
           },
-          "limit": {
+          "size": {
             "default": 20,
-            "description": "Количество элементов на странице",
+            "description": "Размер страницы",
             "type": "integer",
             "minimum": 1,
             "maximum": 100
           }
         },
         "required": [
-          "page",
-          "limit"
+          "number",
+          "size"
         ],
         "additionalProperties": false,
         "title": "PaginationRequestDto"
       },
-      "PaginationResponseDto": {
+      "PaginationMetadataDto": {
         "type": "object",
         "properties": {
-          "page": {
+          "number": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 1,
             "maximum": 9007199254740991,
             "description": "Текущий номер страницы"
           },
-          "limit": {
+          "size": {
             "type": "integer",
             "minimum": 1,
             "maximum": 100,
@@ -140,13 +140,58 @@
           }
         },
         "required": [
-          "page",
-          "limit",
+          "number",
+          "size",
           "totalItems",
           "totalPages"
         ],
         "additionalProperties": false,
-        "title": "PaginationResponseDto"
+        "title": "PaginationMetadataDto"
+      },
+      "PaginatedResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {},
+            "description": "Список элементов"
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество элементов"
+          }
+        },
+        "required": [
+          "items",
+          "totalItems"
+        ],
+        "additionalProperties": false,
+        "title": "PaginatedResponseDto"
+      },
+      "SortingRequestDto": {
+        "type": "object",
+        "properties": {
+          "direction": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "Направление сортировки"
+          },
+          "column": {
+            "type": "string",
+            "description": "Колонка для сортировки"
+          }
+        },
+        "required": [
+          "direction",
+          "column"
+        ],
+        "additionalProperties": false,
+        "title": "SortingRequestDto"
       },
       "FilterDto": {
         "type": "object",
@@ -670,7 +715,7 @@
             }
           },
           "pagination": {
-            "$ref": "#/components/schemas/PaginationResponseDto"
+            "$ref": "#/components/schemas/PaginationMetadataDto"
           }
         },
         "required": [
@@ -1239,7 +1284,7 @@
             }
           },
           "pagination": {
-            "$ref": "#/components/schemas/PaginationResponseDto"
+            "$ref": "#/components/schemas/PaginationMetadataDto"
           }
         },
         "required": [
@@ -1499,7 +1544,7 @@
             }
           },
           "tasksPagination": {
-            "$ref": "#/components/schemas/PaginationResponseDto"
+            "$ref": "#/components/schemas/PaginationMetadataDto"
           }
         },
         "required": [
@@ -1527,7 +1572,7 @@
             }
           },
           "pagination": {
-            "$ref": "#/components/schemas/PaginationResponseDto"
+            "$ref": "#/components/schemas/PaginationMetadataDto"
           }
         },
         "required": [
@@ -2096,15 +2141,15 @@
         "parameters": [
           {
             "schema": {
-              "default": 0,
+              "default": 1,
               "type": "integer",
-              "minimum": 0,
+              "minimum": 1,
               "maximum": 9007199254740991
             },
             "in": "query",
-            "name": "page",
+            "name": "number",
             "required": true,
-            "description": "Номер страницы (начиная с 0)"
+            "description": "Номер страницы (начиная с 1)"
           },
           {
             "schema": {
@@ -2114,9 +2159,9 @@
               "maximum": 100
             },
             "in": "query",
-            "name": "limit",
+            "name": "size",
             "required": true,
-            "description": "Количество элементов на странице"
+            "description": "Размер страницы"
           },
           {
             "schema": {
@@ -2556,15 +2601,15 @@
         "parameters": [
           {
             "schema": {
-              "default": 0,
+              "default": 1,
               "type": "integer",
-              "minimum": 0,
+              "minimum": 1,
               "maximum": 9007199254740991
             },
             "in": "query",
-            "name": "page",
+            "name": "number",
             "required": true,
-            "description": "Номер страницы (начиная с 0)"
+            "description": "Номер страницы (начиная с 1)"
           },
           {
             "schema": {
@@ -2574,9 +2619,9 @@
               "maximum": 100
             },
             "in": "query",
-            "name": "limit",
+            "name": "size",
             "required": true,
-            "description": "Количество элементов на странице"
+            "description": "Размер страницы"
           },
           {
             "schema": {
@@ -2786,15 +2831,15 @@
         "parameters": [
           {
             "schema": {
-              "default": 0,
+              "default": 1,
               "type": "integer",
-              "minimum": 0,
+              "minimum": 1,
               "maximum": 9007199254740991
             },
             "in": "query",
-            "name": "page",
+            "name": "number",
             "required": true,
-            "description": "Номер страницы (начиная с 0)"
+            "description": "Номер страницы (начиная с 1)"
           },
           {
             "schema": {
@@ -2804,9 +2849,9 @@
               "maximum": 100
             },
             "in": "query",
-            "name": "limit",
+            "name": "size",
             "required": true,
-            "description": "Количество элементов на странице"
+            "description": "Размер страницы"
           },
           {
             "schema": {
@@ -2907,14 +2952,15 @@
         "parameters": [
           {
             "schema": {
-              "default": 0,
+              "default": 1,
               "type": "integer",
-              "minimum": 0,
+              "minimum": 1,
               "maximum": 9007199254740991
             },
             "in": "query",
-            "name": "tasksPage",
-            "required": true
+            "name": "tasksNumber",
+            "required": true,
+            "description": "Номер страницы заданий в пакете (начиная с 1)"
           },
           {
             "schema": {
@@ -2924,8 +2970,9 @@
               "maximum": 100
             },
             "in": "query",
-            "name": "tasksLimit",
-            "required": true
+            "name": "tasksSize",
+            "required": true,
+            "description": "Размер страницы заданий"
           },
           {
             "schema": {
