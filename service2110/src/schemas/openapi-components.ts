@@ -5,7 +5,10 @@
 import { 
   paginationQuerySchema, 
   paginationResponseSchema, 
-  filterSchema 
+  filterSchema,
+  dateSchema,
+  dateTimeSchema,
+  sortOrderSchema,
 } from './common.schema.js';
 import {
   createTaskSchema,
@@ -16,6 +19,10 @@ import {
   bulkDeleteResponseSchema,
   bulkCancelResponseSchema,
   startTasksResponseSchema,
+  fileFormatSchema,
+  reportTypeSchema,
+  reportTaskStatusSchema,
+  currencySchema,
 } from './report-6406/tasks.schema.js';
 import {
   branchSchema,
@@ -69,6 +76,13 @@ export function getOpenApiComponents() {
     PaginationRequestDto: zodToJsonSchema(paginationQuerySchema, 'PaginationRequestDto'),
     PaginationResponseDto: zodToJsonSchema(paginationResponseSchema, 'PaginationResponseDto'),
     FilterDto: zodToJsonSchema(filterSchema, 'FilterDto'),
+    DateSchema: zodToJsonSchema(dateSchema, 'DateSchema'),
+    DateTimeSchema: zodToJsonSchema(dateTimeSchema, 'DateTimeSchema'),
+    FileFormatEnumSchema: zodToJsonSchema(fileFormatSchema, 'FileFormatEnumSchema'),
+    ReportTypeEnumSchema: zodToJsonSchema(reportTypeSchema, 'ReportTypeEnumSchema'),
+    ReportTaskStatusEnumSchema: zodToJsonSchema(reportTaskStatusSchema, 'ReportTaskStatusEnumSchema'),
+    CurrencyEnumSchema: zodToJsonSchema(currencySchema, 'CurrencyEnumSchema'),
+    SortOrderEnumSchema: zodToJsonSchema(sortOrderSchema, 'SortOrderEnumSchema'),
     
     // Справочники
     BranchDto: zodToJsonSchema(branchSchema, 'BranchDto'),

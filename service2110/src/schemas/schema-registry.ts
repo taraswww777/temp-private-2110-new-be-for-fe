@@ -5,7 +5,10 @@
 import { 
   paginationQuerySchema, 
   paginationResponseSchema, 
-  filterSchema 
+  filterSchema,
+  dateSchema,
+  dateTimeSchema,
+  sortOrderSchema,
 } from './common.schema.js';
 import {
   createTaskSchema,
@@ -16,6 +19,10 @@ import {
   bulkDeleteResponseSchema,
   bulkCancelResponseSchema,
   startTasksResponseSchema,
+  fileFormatSchema,
+  reportTypeSchema,
+  reportTaskStatusSchema,
+  currencySchema,
 } from './report-6406/tasks.schema.js';
 import {
   branchSchema,
@@ -45,6 +52,13 @@ export const schemaRegistry = new Map<string, unknown>([
   ['PaginationRequestDto', paginationQuerySchema],
   ['PaginationResponseDto', paginationResponseSchema],
   ['FilterDto', filterSchema],
+  ['DateSchema', dateSchema],
+  ['DateTimeSchema', dateTimeSchema],
+  ['FileFormatEnumSchema', fileFormatSchema],
+  ['ReportTypeEnumSchema', reportTypeSchema],
+  ['ReportTaskStatusEnumSchema', reportTaskStatusSchema],
+  ['CurrencyEnumSchema', currencySchema],
+  ['SortOrderEnumSchema', sortOrderSchema],
   
   // Справочники
   ['BranchDto', branchSchema],

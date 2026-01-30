@@ -14,7 +14,7 @@ import { routes } from './routes/index.js';
 import { errorHandler } from './plugins/error-handler.js';
 import userContextPlugin from './plugins/user-context.js';
 import { getOpenApiComponents } from './schemas/openapi-components.js';
-import { getSchemaName } from './schemas/schema-registry.js';
+import { getSchemaName, schemaRegistry } from './schemas/schema-registry.js';
 
 export async function buildApp() {
   const app = Fastify({
@@ -123,7 +123,156 @@ export async function buildApp() {
         { name: 'Report 6406 - Storage', description: 'Мониторинг хранилища отчётов' },
       ],
       components: {
-        schemas: getOpenApiComponents(),
+        schemas: (() => {
+          // Получаем компоненты и применяем рекурсивную обработку
+          const components = getOpenApiComponents();
+          
+          // Функция для нормализации JSON Schema для сравнения
+          const normalizeForComparison = (schema: unknown): string | null => {
+            if (!schema || typeof schema !== 'object') {
+              return null;
+            }
+            
+            const s = schema as Record<string, unknown>;
+            
+            // Для объектов
+            if (s.type === 'object') {
+              const props = s.properties as Record<string, unknown> | undefined;
+              if (!props) {
+                return null;
+              }
+              
+              const normalized: Record<string, unknown> = {
+                type: 'object',
+                propertyKeys: Object.keys(props).sort(),
+                propertyTypes: {} as Record<string, unknown>,
+                required: Array.isArray(s.required) ? (s.required as string[]).slice().sort() : [],
+                additionalProperties: s.additionalProperties,
+              };
+              
+              for (const [key, value] of Object.entries(props)) {
+                if (value && typeof value === 'object') {
+                  const prop = value as Record<string, unknown>;
+                  normalized.propertyTypes[key] = {
+                    type: prop.type,
+                    format: prop.format,
+                    enum: prop.enum ? (Array.isArray(prop.enum) ? prop.enum.slice().sort() : prop.enum) : undefined,
+                  };
+                }
+              }
+              
+              return JSON.stringify(normalized);
+            }
+            
+            // Для простых типов (string, number и т.д.)
+            if (s.type === 'string' || s.type === 'number' || s.type === 'integer' || s.type === 'boolean') {
+              const normalized: Record<string, unknown> = {
+                type: s.type,
+                format: s.format,
+                pattern: s.pattern,
+                enum: s.enum ? (Array.isArray(s.enum) ? (s.enum as unknown[]).slice().sort() : s.enum) : undefined,
+                minimum: s.minimum,
+                maximum: s.maximum,
+              };
+              
+              return JSON.stringify(normalized);
+            }
+            
+            return null;
+          };
+          
+          // Функция для сравнения JSON Schema объектов
+          const compareJsonSchemas = (schema1: unknown, schema2: unknown): boolean => {
+            const normalized1 = normalizeForComparison(schema1);
+            const normalized2 = normalizeForComparison(schema2);
+            
+            if (!normalized1 || !normalized2) {
+              return false;
+            }
+            
+            return normalized1 === normalized2;
+          };
+          
+          // Функция для рекурсивной замены вложенных объектов на $ref ссылки
+          const replaceNestedSchemas = (jsonSchema: unknown, registeredSchemas: Record<string, unknown>): unknown => {
+            if (!jsonSchema || typeof jsonSchema !== 'object') {
+              return jsonSchema;
+            }
+            
+            const schema = jsonSchema as Record<string, unknown>;
+            
+            if (schema.$ref) {
+              return schema;
+            }
+            
+            // Сначала рекурсивно обрабатываем вложенные объекты
+            if (schema.properties && typeof schema.properties === 'object') {
+              const newProperties: Record<string, unknown> = {};
+              for (const [key, value] of Object.entries(schema.properties as Record<string, unknown>)) {
+                newProperties[key] = replaceNestedSchemas(value, registeredSchemas);
+              }
+              schema.properties = newProperties;
+            }
+            
+            if (schema.items) {
+              schema.items = replaceNestedSchemas(schema.items, registeredSchemas);
+            }
+            
+            if (Array.isArray(schema.anyOf)) {
+              schema.anyOf = schema.anyOf.map((item: unknown) => replaceNestedSchemas(item, registeredSchemas));
+            }
+            if (Array.isArray(schema.oneOf)) {
+              schema.oneOf = schema.oneOf.map((item: unknown) => replaceNestedSchemas(item, registeredSchemas));
+            }
+            if (Array.isArray(schema.allOf)) {
+              schema.allOf = schema.allOf.map((item: unknown) => replaceNestedSchemas(item, registeredSchemas));
+            }
+            
+            // После рекурсивной обработки проверяем, соответствует ли текущая схема зарегистрированной схеме
+            // Работает как для объектов, так и для простых типов
+            if (!schema.$ref && (schema.type === 'object' || schema.type === 'string' || schema.type === 'number' || schema.type === 'integer' || schema.type === 'boolean')) {
+              for (const [name, registeredSchema] of Object.entries(registeredSchemas)) {
+                // Пропускаем саму схему, чтобы не создавать циклические ссылки
+                if (name === (schema.title as string)) {
+                  continue;
+                }
+                if (compareJsonSchemas(schema, registeredSchema)) {
+                  return {
+                    $ref: `#/components/schemas/${name}`
+                  };
+                }
+              }
+            }
+            
+            return schema;
+          };
+          
+          // Применяем рекурсивную обработку ко всем компонентам
+          // Важно: обрабатываем компоненты в правильном порядке, чтобы избежать циклических ссылок
+          const processedComponents: Record<string, unknown> = {};
+          const componentNames = Object.keys(components);
+          
+          // Сначала обрабатываем простые типы (DateSchema, DateTimeSchema), затем объекты
+          const simpleTypes = ['DateSchema', 'DateTimeSchema'];
+          const enumTypes = ['FileFormatEnumSchema', 'ReportTypeEnumSchema', 'ReportTaskStatusEnumSchema', 'CurrencyEnumSchema', 'SortOrderEnumSchema'];
+          const objectTypes = componentNames.filter(name => !simpleTypes.includes(name) && !enumTypes.includes(name));
+          
+          // Обрабатываем простые типы и enum первыми
+          for (const name of [...simpleTypes, ...enumTypes]) {
+            if (components[name]) {
+              processedComponents[name] = components[name];
+            }
+          }
+          
+          // Затем обрабатываем объекты
+          for (const name of objectTypes) {
+            if (components[name]) {
+              processedComponents[name] = replaceNestedSchemas(components[name], processedComponents);
+            }
+          }
+          
+          return processedComponents;
+        })(),
       },
     },
     transform: ({ schema, url }) => {
@@ -138,6 +287,155 @@ export async function buildApp() {
         return obj !== null && typeof obj === 'object' && 'toJSONSchema' in obj && typeof (obj as { toJSONSchema?: unknown }).toJSONSchema === 'function';
       };
 
+      // Получаем все зарегистрированные схемы в виде JSON Schema для сравнения
+      const registeredSchemas = getOpenApiComponents();
+      
+      // Функция для нормализации JSON Schema для сравнения (удаляет несущественные поля)
+      const normalizeSchema = (schema: unknown): unknown => {
+        if (!schema || typeof schema !== 'object') {
+          return schema;
+        }
+        
+        const s = schema as Record<string, unknown>;
+        const normalized: Record<string, unknown> = {};
+        
+        // Копируем только существенные поля для сравнения
+        if (s.type) normalized.type = s.type;
+        if (s.properties) {
+          normalized.properties = s.properties;
+        }
+        if (s.required) {
+          normalized.required = Array.isArray(s.required) 
+            ? (s.required as unknown[]).slice().sort() 
+            : s.required;
+        }
+        if (s.additionalProperties !== undefined) {
+          normalized.additionalProperties = s.additionalProperties;
+        }
+        
+        return normalized;
+      };
+      
+      // Функция для нормализации JSON Schema для сравнения (извлекает только ключевые поля)
+      const normalizeForComparison = (schema: unknown): string | null => {
+        if (!schema || typeof schema !== 'object') {
+          return null;
+        }
+        
+        const s = schema as Record<string, unknown>;
+        
+        // Для объектов
+        if (s.type === 'object') {
+          const props = s.properties as Record<string, unknown> | undefined;
+          if (!props) {
+            return null;
+          }
+          
+          const normalized: Record<string, unknown> = {
+            type: 'object',
+            propertyKeys: Object.keys(props).sort(),
+            propertyTypes: {} as Record<string, unknown>,
+            required: Array.isArray(s.required) ? (s.required as string[]).slice().sort() : [],
+            additionalProperties: s.additionalProperties,
+          };
+          
+          for (const [key, value] of Object.entries(props)) {
+            if (value && typeof value === 'object') {
+              const prop = value as Record<string, unknown>;
+              normalized.propertyTypes[key] = {
+                type: prop.type,
+                format: prop.format,
+                enum: prop.enum ? (Array.isArray(prop.enum) ? prop.enum.slice().sort() : prop.enum) : undefined,
+              };
+            }
+          }
+          
+          return JSON.stringify(normalized);
+        }
+        
+        // Для простых типов (string, number и т.д.)
+        if (s.type === 'string' || s.type === 'number' || s.type === 'integer' || s.type === 'boolean') {
+          const normalized: Record<string, unknown> = {
+            type: s.type,
+            format: s.format,
+            pattern: s.pattern,
+            enum: s.enum ? (Array.isArray(s.enum) ? (s.enum as unknown[]).slice().sort() : s.enum) : undefined,
+            minimum: s.minimum,
+            maximum: s.maximum,
+          };
+          
+          return JSON.stringify(normalized);
+        }
+        
+        return null;
+      };
+      
+      // Функция для сравнения JSON Schema объектов по структуре
+      const compareJsonSchemas = (schema1: unknown, schema2: unknown): boolean => {
+        const normalized1 = normalizeForComparison(schema1);
+        const normalized2 = normalizeForComparison(schema2);
+        
+        if (!normalized1 || !normalized2) {
+          return false;
+        }
+        
+        return normalized1 === normalized2;
+      };
+      
+      // Функция для рекурсивной замены вложенных объектов на $ref ссылки
+      const replaceNestedSchemas = (jsonSchema: unknown): unknown => {
+        if (!jsonSchema || typeof jsonSchema !== 'object') {
+          return jsonSchema;
+        }
+        
+        const schema = jsonSchema as Record<string, unknown>;
+        
+        // Если это уже ссылка, пропускаем
+        if (schema.$ref) {
+          return schema;
+        }
+        
+        // Сначала рекурсивно обрабатываем вложенные объекты
+        // Рекурсивно обрабатываем properties
+        if (schema.properties && typeof schema.properties === 'object') {
+          const newProperties: Record<string, unknown> = {};
+          for (const [key, value] of Object.entries(schema.properties as Record<string, unknown>)) {
+            newProperties[key] = replaceNestedSchemas(value);
+          }
+          schema.properties = newProperties;
+        }
+        
+        // Рекурсивно обрабатываем items (для массивов)
+        if (schema.items) {
+          schema.items = replaceNestedSchemas(schema.items);
+        }
+        
+        // Рекурсивно обрабатываем anyOf, oneOf, allOf
+        if (Array.isArray(schema.anyOf)) {
+          schema.anyOf = schema.anyOf.map((item: unknown) => replaceNestedSchemas(item));
+        }
+        if (Array.isArray(schema.oneOf)) {
+          schema.oneOf = schema.oneOf.map((item: unknown) => replaceNestedSchemas(item));
+        }
+        if (Array.isArray(schema.allOf)) {
+          schema.allOf = schema.allOf.map((item: unknown) => replaceNestedSchemas(item));
+        }
+        
+        // После рекурсивной обработки проверяем, соответствует ли текущий объект зарегистрированной схеме
+        // Это должно быть после рекурсивной обработки, чтобы не заменять объекты, которые уже были заменены
+        if (schema.type === 'object' && schema.properties && !schema.$ref) {
+          for (const [name, registeredSchema] of Object.entries(registeredSchemas)) {
+            if (compareJsonSchemas(schema, registeredSchema)) {
+              return {
+                $ref: `#/components/schemas/${name}`
+              };
+            }
+          }
+        }
+        
+        return schema;
+      };
+      
       // Функция для конвертации схемы с созданием $ref для зарегистрированных схем
       const convertSchema = (zodSchema: unknown): unknown => {
         // Проверяем, зарегистрирована ли схема
@@ -152,11 +450,14 @@ export async function buildApp() {
         // Если не зарегистрирована, конвертируем как обычно
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return (zodSchema as any).toJSONSchema({
+          const jsonSchema = (zodSchema as any).toJSONSchema({
             target: 'openApi3' as const,
             $refStrategy: 'none' as const,
             removeIncompatibleMeta: true,
           });
+          
+          // Рекурсивно заменяем вложенные объекты на $ref ссылки
+          return replaceNestedSchemas(jsonSchema);
         } catch (error) {
           console.error('Error converting schema:', error);
           return {};
@@ -286,6 +587,131 @@ export async function buildApp() {
   // Хук для сохранения swagger.json после старта
   app.addHook('onReady', async () => {
     const swaggerJson = app.swagger();
+    
+    // Получаем зарегистрированные схемы для сравнения
+    const registeredSchemas = getOpenApiComponents();
+    
+    // Функция для нормализации JSON Schema для сравнения
+    const normalizeForComparison = (schema: unknown): string | null => {
+      if (!schema || typeof schema !== 'object') {
+        return null;
+      }
+      
+      const s = schema as Record<string, unknown>;
+      
+      // Для объектов
+      if (s.type === 'object') {
+        const props = s.properties as Record<string, unknown> | undefined;
+        if (!props) {
+          return null;
+        }
+        
+        const normalized: Record<string, unknown> = {
+          type: 'object',
+          propertyKeys: Object.keys(props).sort(),
+          propertyTypes: {} as Record<string, unknown>,
+          required: Array.isArray(s.required) ? (s.required as string[]).slice().sort() : [],
+          additionalProperties: s.additionalProperties,
+        };
+        
+        for (const [key, value] of Object.entries(props)) {
+          if (value && typeof value === 'object') {
+            const prop = value as Record<string, unknown>;
+            normalized.propertyTypes[key] = {
+              type: prop.type,
+              format: prop.format,
+              enum: prop.enum ? (Array.isArray(prop.enum) ? prop.enum.slice().sort() : prop.enum) : undefined,
+            };
+          }
+        }
+        
+        return JSON.stringify(normalized);
+      }
+      
+      // Для простых типов (string, number и т.д.)
+      if (s.type === 'string' || s.type === 'number' || s.type === 'integer' || s.type === 'boolean') {
+        const normalized: Record<string, unknown> = {
+          type: s.type,
+          format: s.format,
+          pattern: s.pattern,
+          enum: s.enum ? (Array.isArray(s.enum) ? (s.enum as unknown[]).slice().sort() : s.enum) : undefined,
+          minimum: s.minimum,
+          maximum: s.maximum,
+        };
+        
+        return JSON.stringify(normalized);
+      }
+      
+      return null;
+    };
+    
+    // Функция для сравнения JSON Schema
+    const compareJsonSchemas = (schema1: unknown, schema2: unknown): boolean => {
+      const normalized1 = normalizeForComparison(schema1);
+      const normalized2 = normalizeForComparison(schema2);
+      
+      if (!normalized1 || !normalized2) {
+        return false;
+      }
+      
+      return normalized1 === normalized2;
+    };
+    
+    // Функция для замены схем в параметрах на $ref ссылки
+    const replaceSchemaInParameters = (parameters: unknown[]): unknown[] => {
+      return parameters.map((param: unknown) => {
+        if (!param || typeof param !== 'object') {
+          return param;
+        }
+        
+        const p = param as Record<string, unknown>;
+        
+        // Обрабатываем schema внутри параметра
+        if (p.schema && typeof p.schema === 'object') {
+          const paramSchema = p.schema as Record<string, unknown>;
+          
+          // Проверяем, соответствует ли схема параметра зарегистрированной схеме
+          for (const [name, registeredSchema] of Object.entries(registeredSchemas)) {
+            if (compareJsonSchemas(paramSchema, registeredSchema)) {
+              p.schema = {
+                $ref: `#/components/schemas/${name}`
+              };
+              break;
+            }
+          }
+        }
+        
+        return p;
+      });
+    };
+    
+    // Обрабатываем все пути и их методы
+    if (swaggerJson.paths && typeof swaggerJson.paths === 'object') {
+      const paths = swaggerJson.paths as Record<string, unknown>;
+      
+      for (const [path, pathItem] of Object.entries(paths)) {
+        if (!pathItem || typeof pathItem !== 'object') {
+          continue;
+        }
+        
+        const item = pathItem as Record<string, unknown>;
+        
+        // Обрабатываем все HTTP методы
+        for (const [method, operation] of Object.entries(item)) {
+          if (!operation || typeof operation !== 'object') {
+            continue;
+          }
+          
+          const op = operation as Record<string, unknown>;
+          
+          // Обрабатываем parameters
+          if (Array.isArray(op.parameters)) {
+            op.parameters = replaceSchemaInParameters(op.parameters);
+          }
+        }
+      }
+    }
+    
     const swaggerPath = join(process.cwd(), 'docs', 'swagger', 'swagger.json');
     writeFileSync(swaggerPath, JSON.stringify(swaggerJson, null, 2));
     app.log.info(`Swagger JSON saved to ${swaggerPath}`);

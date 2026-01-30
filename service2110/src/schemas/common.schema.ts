@@ -77,3 +77,19 @@ export const filterSchema = z.object({
 });
 
 export type Filter = z.infer<typeof filterSchema>;
+
+/**
+ * Переиспользуемая схема для даты в формате YYYY-MM-DD
+ * Используется в query параметрах для фильтрации по датам
+ */
+export const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата в формате YYYY-MM-DD');
+
+export type DateString = z.infer<typeof dateSchema>;
+
+/**
+ * Переиспользуемая схема для даты-времени в формате ISO 8601
+ * Используется в query параметрах для фильтрации по датам создания/обновления
+ */
+export const dateTimeSchema = z.string().datetime().describe('Дата и время в формате ISO 8601');
+
+export type DateTimeString = z.infer<typeof dateTimeSchema>;
