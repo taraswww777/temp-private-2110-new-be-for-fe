@@ -5,7 +5,10 @@
   "scripts": {
     "start": "docker-compose up --build",
     "start:dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "checks": "npm run typecheck && npm run lint && npm run test:run",
+    "typecheck": "tsc --noEmit",
+    "build:prod": "tsc",
+    "build": "npm run checks && npm run build:prod",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "test": "vitest",
