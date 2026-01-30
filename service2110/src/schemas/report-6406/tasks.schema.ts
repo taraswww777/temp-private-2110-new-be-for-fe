@@ -141,6 +141,51 @@ export const taskDetailSchema = taskSchema.extend({
 export type TaskDetail = z.infer<typeof taskDetailSchema>;
 
 /**
+ * Единая схема для детальной информации о задании (POST 201 и GET /{id} 200).
+ * Без лишних полей errorMessage, fileUrl. С полями s3FolderId, type, accounts для UI.
+ */
+export const taskDetailsSchema = z.object({
+  id: z.string().uuid().describe('Уникальный идентификатор задания'),
+  createdAt: z.string().datetime().describe('Дата и время создания'),
+  createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
+  branchId: z.string().describe('Идентификатор филиала'),
+  branchName: z.string().describe('Название филиала'),
+  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
+  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
+  accountMask: z.string().nullable().describe('Маска счетов для фильтрации'),
+  accountMaskSecondOrder: z.string().nullable().describe('Маска счетов второго порядка'),
+  currency: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
+  format: fileFormatSchema,
+  reportType: reportTypeSchema,
+  source: z.string().nullable().describe('Источник данных'),
+  status: reportTaskStatusSchema.describe('Статус задания'),
+  canCancel: z.boolean().describe('Возможность отмены задания'),
+  canDelete: z.boolean().describe('Возможность удаления задания'),
+  canStart: z.boolean().describe('Возможность запуска задания'),
+  fileSize: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Размер файла в байтах (например, 10485760 = 10 MB). NULL если размер неизвестен.')
+    .nullable(),
+  filesCount: z
+    .number()
+    .int()
+    .min(0)
+    .describe('Количество файлов в задании'),
+  lastStatusChangedAt: z.string().datetime().describe('Дата и время последнего изменения статуса'),
+  startedAt: z.string().datetime().nullable().describe('Дата и время начала обработки'),
+  completedAt: z.string().datetime().nullable().describe('Дата и время завершения'),
+  updatedAt: z.string().datetime().describe('Дата и время последнего обновления'),
+  s3FolderId: z.string().nullable().describe('ID папки в S3'),
+  type: z.string().nullable().describe('Тип задания'),
+  accounts: z.array(z.string()).describe('Список счетов'),
+  packages: z.array(taskPackageInfoSchema).describe('Пакеты, в которые входит задание'),
+});
+
+export type TaskDetails = z.infer<typeof taskDetailsSchema>;
+
+/**
  * Схема для элемента списка заданий (TaskListItemDto)
  */
 export const taskListItemSchema = z.object({

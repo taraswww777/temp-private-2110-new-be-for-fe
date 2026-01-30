@@ -13,6 +13,7 @@ import type {
   GetTasksRequest,
   TasksListResponse,
   TaskDetail,
+  TaskDetails,
   BulkDeleteTasksInput,
   BulkDeleteResponse,
   BulkCancelTasksInput,
@@ -29,7 +30,7 @@ export class TasksService {
   /**
    * Создать новое задание
    */
-  async createTask(input: CreateTaskInput, createdBy: string): Promise<Task> {
+  async createTask(input: CreateTaskInput, createdBy: string): Promise<TaskDetails> {
     // Получить название филиала
     const [branch] = await db
       .select()
@@ -72,7 +73,8 @@ export class TasksService {
         comment: 'Task created',
       });
 
-      return this.formatTask(task);
+      const created = this.formatTask(task);
+      return this.getTaskById(created.id);
     });
   }
 
@@ -215,9 +217,9 @@ export class TasksService {
   }
 
   /**
-   * Получить задание по ID с информацией о пакетах
+   * Получить задание по ID с информацией о пакетах (TaskDetailsDto — без fileUrl, errorMessage; с s3FolderId, type, accounts)
    */
-  async getTaskById(id: string): Promise<TaskDetail> {
+  async getTaskById(id: string): Promise<TaskDetails> {
     const [task] = await db
       .select()
       .from(report6406Tasks)
@@ -239,14 +241,7 @@ export class TasksService {
       .innerJoin(report6406Packages, eq(report6406PackageTasks.packageId, report6406Packages.id))
       .where(eq(report6406PackageTasks.taskId, id));
 
-    return {
-      ...this.formatTask(task),
-      packages: packagesList.map(pkg => ({
-        id: pkg.id,
-        name: pkg.name,
-        addedAt: pkg.addedAt.toISOString(),
-      })),
-    };
+    return this.formatTaskDetails(task, packagesList);
   }
 
   /**
@@ -549,6 +544,50 @@ export class TasksService {
       startedAt: task.startedAt?.toISOString() ?? null,
       completedAt: task.completedAt?.toISOString() ?? null,
       updatedAt: task.updatedAt.toISOString(),
+    };
+  }
+
+  /**
+   * Форматирование задания для TaskDetailsDto (POST 201 и GET /:id 200).
+   * Без fileUrl, errorMessage; с s3FolderId, type, accounts, packages.
+   */
+  private formatTaskDetails(
+    task: typeof report6406Tasks.$inferSelect,
+    packagesList: Array<{ id: string; name: string; addedAt: Date }>,
+  ): TaskDetails {
+    const permissions = getStatusPermissions(task.status as TaskStatus);
+    return {
+      id: task.id,
+      createdAt: task.createdAt.toISOString(),
+      createdBy: task.createdBy ?? '',
+      branchId: task.branchId,
+      branchName: task.branchName,
+      periodStart: task.periodStart,
+      periodEnd: task.periodEnd,
+      accountMask: task.accountMask,
+      accountMaskSecondOrder: task.accountMaskSecondOrder,
+      currency: task.currency,
+      format: task.format,
+      reportType: task.reportType,
+      source: task.source,
+      status: task.status as TaskStatus,
+      canCancel: permissions.canCancel,
+      canDelete: permissions.canDelete,
+      canStart: permissions.canStart,
+      fileSize: task.fileSize,
+      filesCount: task.filesCount,
+      lastStatusChangedAt: task.lastStatusChangedAt.toISOString(),
+      startedAt: task.startedAt?.toISOString() ?? null,
+      completedAt: task.completedAt?.toISOString() ?? null,
+      updatedAt: task.updatedAt.toISOString(),
+      s3FolderId: null,
+      type: task.reportType,
+      accounts: [],
+      packages: packagesList.map((pkg) => ({
+        id: pkg.id,
+        name: pkg.name,
+        addedAt: pkg.addedAt.toISOString(),
+      })),
     };
   }
 

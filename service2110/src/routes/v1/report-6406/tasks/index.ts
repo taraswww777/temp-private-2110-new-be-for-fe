@@ -5,10 +5,9 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { tasksService } from '../../../../services/report-6406/tasks.service.js';
 import {
   createTaskSchema,
-  taskSchema,
+  taskDetailsSchema,
   getTasksRequestSchema,
   tasksListResponseSchema,
-  taskDetailSchema,
   bulkDeleteTasksSchema,
   bulkDeleteResponseSchema,
   bulkCancelTasksSchema,
@@ -31,7 +30,7 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
       summary: 'Создать новое задание на построение отчёта',
       body: createTaskSchema,
       response: {
-        201: taskSchema,
+        201: taskDetailsSchema,
       },
     },
   }, async (request, reply) => {
@@ -81,7 +80,7 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
       summary: 'Получить детальную информацию о задании',
       params: uuidParamSchema,
       response: {
-        200: taskDetailSchema,
+        200: taskDetailsSchema,
       },
     },
   }, async (request, reply) => {

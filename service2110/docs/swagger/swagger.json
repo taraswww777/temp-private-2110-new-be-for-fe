@@ -958,6 +958,228 @@
         "additionalProperties": false,
         "title": "TaskDetailDto"
       },
+      "TaskDetailsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Уникальный идентификатор задания"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
+          },
+          "branchId": {
+            "type": "string",
+            "description": "Идентификатор филиала"
+          },
+          "branchName": {
+            "type": "string",
+            "description": "Название филиала"
+          },
+          "periodStart": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "periodEnd": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "accountMask": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Маска счетов для фильтрации"
+          },
+          "accountMaskSecondOrder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Маска счетов второго порядка"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyEnumSchema"
+          },
+          "format": {
+            "$ref": "#/components/schemas/FileFormatEnumSchema"
+          },
+          "reportType": {
+            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Источник данных"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+          },
+          "canCancel": {
+            "type": "boolean",
+            "description": "Возможность отмены задания"
+          },
+          "canDelete": {
+            "type": "boolean",
+            "description": "Возможность удаления задания"
+          },
+          "canStart": {
+            "type": "boolean",
+            "description": "Возможность запуска задания"
+          },
+          "fileSize": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Размер файла в байтах (например, 10485760 = 10 MB). NULL если размер неизвестен."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "filesCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Количество файлов в задании"
+          },
+          "lastStatusChangedAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeSchema"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Дата и время начала обработки"
+          },
+          "completedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeSchema"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Дата и время завершения"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "s3FolderId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ID папки в S3"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Тип задания"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Список счетов"
+          },
+          "packages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "addedAt": {
+                  "$ref": "#/components/schemas/DateTimeSchema"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "addedAt"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Пакеты, в которые входит задание"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "createdBy",
+          "branchId",
+          "branchName",
+          "periodStart",
+          "periodEnd",
+          "accountMask",
+          "accountMaskSecondOrder",
+          "currency",
+          "format",
+          "reportType",
+          "source",
+          "status",
+          "canCancel",
+          "canDelete",
+          "canStart",
+          "fileSize",
+          "filesCount",
+          "lastStatusChangedAt",
+          "startedAt",
+          "completedAt",
+          "updatedAt",
+          "s3FolderId",
+          "type",
+          "accounts",
+          "packages"
+        ],
+        "additionalProperties": false,
+        "title": "TaskDetailsDto"
+      },
       "BulkDeleteTasksResponseDto": {
         "type": "object",
         "properties": {
@@ -2159,7 +2381,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TaskDto"
+                  "$ref": "#/components/schemas/TaskDetailsDto"
                 }
               }
             }
@@ -2265,7 +2487,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TaskDetailDto"
+                  "$ref": "#/components/schemas/TaskDetailsDto"
                 }
               }
             }
