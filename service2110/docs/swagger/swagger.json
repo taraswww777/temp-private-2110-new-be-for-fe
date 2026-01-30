@@ -456,15 +456,8 @@
             "$ref": "#/components/schemas/DateTimeSchema"
           },
           "createdBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Пользователь, создавший задание"
+            "type": "string",
+            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
             "type": "string",
@@ -650,15 +643,8 @@
             "$ref": "#/components/schemas/DateTimeSchema"
           },
           "createdBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "ФИО сотрудника, создавшего задание"
+            "type": "string",
+            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)"
           },
           "branchId": {
             "type": "string",
@@ -772,15 +758,8 @@
             "$ref": "#/components/schemas/DateTimeSchema"
           },
           "createdBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Пользователь, создавший задание"
+            "type": "string",
+            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
             "type": "string",
@@ -1518,15 +1497,8 @@
                   "$ref": "#/components/schemas/DateTimeSchema"
                 },
                 "createdBy": {
-                  "anyOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "description": "ФИО сотрудника, создавшего задание"
+                  "type": "string",
+                  "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)"
                 },
                 "branchId": {
                   "type": "string",

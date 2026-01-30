@@ -29,7 +29,7 @@ export class TasksService {
   /**
    * Создать новое задание
    */
-  async createTask(input: CreateTaskInput, createdBy?: string): Promise<Task> {
+  async createTask(input: CreateTaskInput, createdBy: string): Promise<Task> {
     // Получить название филиала
     const [branch] = await db
       .select()
@@ -57,7 +57,7 @@ export class TasksService {
           reportType: input.reportType,
           source: input.source || null,
           status: TaskStatus.CREATED,
-          createdBy: createdBy || null,
+          createdBy,
           filesCount: 0,
         })
         .returning();
@@ -68,7 +68,7 @@ export class TasksService {
         status: TaskStatus.CREATED,
         previousStatus: null,
         changedAt: new Date(),
-        changedBy: createdBy || null,
+        changedBy: createdBy,
         comment: 'Task created',
       });
 
@@ -526,7 +526,7 @@ export class TasksService {
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
-      createdBy: task.createdBy,
+      createdBy: task.createdBy ?? '',
       branchId: task.branchId,
       branchName: task.branchName,
       periodStart: task.periodStart,
@@ -560,7 +560,7 @@ export class TasksService {
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
-      createdBy: task.createdBy,
+      createdBy: task.createdBy ?? '',
       branchId: task.branchId,
       branchName: task.branchName,
       periodStart: task.periodStart,

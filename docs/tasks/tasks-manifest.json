@@ -84,20 +84,20 @@
     {
       "id": "TASK-010",
       "title": "Review API формы 6406 (Часть 1: Базовые схемы)",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-010-review-api-6406.md",
       "createdDate": "2026-01-30T10:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-01-30T00:00:00Z",
+      "branch": "feature/TASK-010-review-api-6406-part1"
     },
     {
       "id": "TASK-011",
       "title": "Review API формы 6406 (Часть 2: Рефакторинг GET /tasks/)",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-011-review-api-6406-part2.md",
       "createdDate": "2026-01-30T10:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-01-30T00:00:00Z",
+      "branch": "feature/TASK-011-review-api-6406-part2"
     },
     {
       "id": "TASK-012",

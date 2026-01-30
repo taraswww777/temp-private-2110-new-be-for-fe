@@ -95,7 +95,7 @@ export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
 export const taskSchema = z.object({
   id: z.string().uuid().describe('Уникальный идентификатор задания'),
   createdAt: z.string().datetime().describe('Дата и время создания'),
-  createdBy: z.string().nullable().describe('Пользователь, создавший задание'),
+  createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
   branchId: z.string().describe('Идентификатор филиала'),
   branchName: z.string().describe('Название филиала'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
@@ -146,7 +146,7 @@ export type TaskDetail = z.infer<typeof taskDetailSchema>;
 export const taskListItemSchema = z.object({
   id: z.string().uuid().describe('Уникальный идентификатор задания'),
   createdAt: z.string().datetime().describe('Дата и время создания'),
-  createdBy: z.string().nullable().describe('ФИО сотрудника, создавшего задание'),
+  createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)'),
   branchId: z.string().describe('Идентификатор филиала'),
   branchName: z.string().describe('Название филиала'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),

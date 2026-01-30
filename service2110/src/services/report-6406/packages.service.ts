@@ -159,7 +159,7 @@ export class PackagesService {
         return {
           id: task.id,
           createdAt: task.createdAt.toISOString(),
-          createdBy: task.createdBy,
+          createdBy: task.createdBy ?? '',
           branchId: task.branchId,
           branchName: task.branchName,
           periodStart: task.periodStart,
