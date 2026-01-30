@@ -1,13 +1,11 @@
 name: Deploy Swagger Documentation to GitHub Pages
 
-# Запускать при пуше в main ветку и при изменениях в swagger.json
+# Запускать только при влитии (merge) PR в main
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
-    paths:
-      - 'service2110/docs/swagger/swagger.json'
-      - '.github/workflows/deploy-docs.yml'
   # Возможность запустить вручную из интерфейса GitHub
   workflow_dispatch:
 
@@ -26,6 +24,8 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
+    # Выполнять при ручном запуске или при слиянии PR в main (не при простом закрытии)
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main')
     
     steps:
       - name: Checkout repository
