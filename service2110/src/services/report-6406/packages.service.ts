@@ -5,7 +5,7 @@ import {
   report6406Tasks,
   TaskStatus,
 } from '../../db/schema/index.js';
-import { eq, sql, desc, asc, like, and } from 'drizzle-orm';
+import { eq, sql, desc, asc, like, and, inArray } from 'drizzle-orm';
 import { getStatusPermissions } from '../../types/status-model.js';
 import type {
   CreatePackageInput,
@@ -152,6 +152,25 @@ export class PackagesService {
       .limit(tasksSize)
       .offset((tasksNumber - 1) * tasksSize);
 
+    // Подгрузка всех packageIds для заданий (задание может быть в нескольких пакетах)
+    const taskIds = tasks.map((t) => t.id);
+    const packageLinks =
+      taskIds.length > 0
+        ? await db
+            .select({
+              taskId: report6406PackageTasks.taskId,
+              packageId: report6406PackageTasks.packageId,
+            })
+            .from(report6406PackageTasks)
+            .where(inArray(report6406PackageTasks.taskId, taskIds))
+        : [];
+    const taskIdToPackageIds = new Map<string, string[]>();
+    for (const link of packageLinks) {
+      const arr = taskIdToPackageIds.get(link.taskId) ?? [];
+      arr.push(link.packageId);
+      taskIdToPackageIds.set(link.taskId, arr);
+    }
+
     return {
       ...this.formatPackage(pkg),
       tasks: tasks.map((task) => {
@@ -172,6 +191,7 @@ export class PackagesService {
           canCancel: permissions.canCancel,
           canDelete: permissions.canDelete,
           canStart: permissions.canStart,
+          packageIds: taskIdToPackageIds.get(task.id) ?? [id],
           addedAt: task.addedAt.toISOString(),
         };
       }),
