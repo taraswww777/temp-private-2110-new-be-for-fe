@@ -1,12 +1,10 @@
 name: Deploy Swagger Documentation to GitHub Pages
 
-# Запускать только при влитии (merge) PR в main
+# Как в CI: триггер только при изменении ветки main (push в main)
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - main
-  # Возможность запустить вручную из интерфейса GitHub
   workflow_dispatch:
 
 # Разрешения для публикации на GitHub Pages
@@ -24,15 +22,9 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    # Выполнять при ручном запуске или при слиянии PR в main (не при простом закрытии)
-    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main')
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          # При влитии PR деплоим именно ветку main (состояние после merge)
-          ref: ${{ github.event_name == 'pull_request' && 'refs/heads/main' || github.ref }}
       
       - name: Setup Pages
         uses: actions/configure-pages@v5
