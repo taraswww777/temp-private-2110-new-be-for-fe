@@ -62,7 +62,7 @@ import {
   statusHistoryItemSchema,
   statusHistoryResponseSchema,
 } from './report-6406/task-status-history.schema.js';
-import { storageVolumeResponseSchema } from './report-6406/storage.schema.js';
+import { storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.js';
 import {
   taskFileSchema,
   taskFilesResponseSchema,
@@ -159,6 +159,7 @@ export function getOpenApiComponents() {
     ExportTasksResponseDto: zodToJsonSchema(exportTasksResponseSchema, 'ExportTasksResponseDto'),
     
     // Storage
-    StorageVolumeDto: zodToJsonSchema(storageVolumeResponseSchema, 'StorageVolumeDto'),
+    StorageVolumeItemDto: zodToJsonSchema(storageVolumeItemSchema, 'StorageVolumeItemDto'),
+    StorageVolumeListResponseDto: zodToJsonSchema(storageVolumeListResponseSchema, 'StorageVolumeListResponseDto'),
   };
 }

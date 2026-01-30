@@ -1,42 +1,33 @@
 import { z } from 'zod';
 
 /**
- * Схема для ответа о состоянии хранилища
+ * Схема элемента массива хранилищ (корзина, ТФР и т.д.)
  */
-export const storageVolumeResponseSchema = z.object({
-  totalBytes: z
-    .number()
-    .int()
-    .min(0)
-    .describe('Общий объём хранилища в байтах (например, 1099511627776 = 1 TB)'),
-  usedBytes: z
-    .number()
-    .int()
-    .min(0)
-    .describe('Использовано байт в хранилище (например, 524288000000 = 488.28 GB)'),
-  freeBytes: z
-    .number()
-    .int()
-    .min(0)
-    .describe('Свободно байт в хранилище (например, 575223627776 = 535.72 GB)'),
-  usedPercent: z
-    .number()
-    .min(0)
-    .max(100)
-    .describe('Процент использования хранилища'),
+export const storageVolumeItemSchema = z.object({
+  id: z
+    .string()
+    .describe('Уникальный идентификатор хранилища для key в JSX'),
+  name: z
+    .string()
+    .describe('Имя хранилища (например, "Корзина 1", "ТФР")'),
   totalHuman: z
     .string()
     .describe('Общий объём хранилища в человекочитаемом формате (например, "1.00 TB")'),
-  usedHuman: z
-    .string()
-    .describe('Использовано в человекочитаемом формате (например, "488.28 GB")'),
   freeHuman: z
     .string()
-    .describe('Свободно в человекочитаемом формате (например, "535.72 GB")'),
-  warning: z
-    .string()
-    .describe('Предупреждение о заполнении хранилища (если применимо)')
-    .nullable(),
+    .describe('Свободный объём в человекочитаемом формате (например, "535.72 GB")'),
+  percent: z
+    .number()
+    .min(0)
+    .max(100)
+    .describe('Процент заполнения (0–100)'),
 });
 
-export type StorageVolumeResponse = z.infer<typeof storageVolumeResponseSchema>;
+export type StorageVolumeItem = z.infer<typeof storageVolumeItemSchema>;
+
+/**
+ * Схема ответа GET /storage/volume — массив хранилищ
+ */
+export const storageVolumeListResponseSchema = z.array(storageVolumeItemSchema);
+
+export type StorageVolumeListResponse = z.infer<typeof storageVolumeListResponseSchema>;

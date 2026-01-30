@@ -2273,69 +2273,48 @@
         "additionalProperties": false,
         "title": "ExportTasksResponseDto"
       },
-      "StorageVolumeDto": {
+      "StorageVolumeItemDto": {
         "type": "object",
         "properties": {
-          "totalBytes": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общий объём хранилища в байтах (например, 1099511627776 = 1 TB)"
+          "id": {
+            "type": "string",
+            "description": "Уникальный идентификатор хранилища для key в JSX"
           },
-          "usedBytes": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Использовано байт в хранилище (например, 524288000000 = 488.28 GB)"
-          },
-          "freeBytes": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Свободно байт в хранилище (например, 575223627776 = 535.72 GB)"
-          },
-          "usedPercent": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 100,
-            "description": "Процент использования хранилища"
+          "name": {
+            "type": "string",
+            "description": "Имя хранилища (например, \"Корзина 1\", \"ТФР\")"
           },
           "totalHuman": {
             "type": "string",
             "description": "Общий объём хранилища в человекочитаемом формате (например, \"1.00 TB\")"
           },
-          "usedHuman": {
-            "type": "string",
-            "description": "Использовано в человекочитаемом формате (например, \"488.28 GB\")"
-          },
           "freeHuman": {
             "type": "string",
-            "description": "Свободно в человекочитаемом формате (например, \"535.72 GB\")"
+            "description": "Свободный объём в человекочитаемом формате (например, \"535.72 GB\")"
           },
-          "warning": {
-            "anyOf": [
-              {
-                "type": "string",
-                "description": "Предупреждение о заполнении хранилища (если применимо)"
-              },
-              {
-                "type": "null"
-              }
-            ]
+          "percent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Процент заполнения (0–100)"
           }
         },
         "required": [
-          "totalBytes",
-          "usedBytes",
-          "freeBytes",
-          "usedPercent",
+          "id",
+          "name",
           "totalHuman",
-          "usedHuman",
           "freeHuman",
-          "warning"
+          "percent"
         ],
         "additionalProperties": false,
-        "title": "StorageVolumeDto"
+        "title": "StorageVolumeItemDto"
+      },
+      "StorageVolumeListResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/StorageVolumeItemDto"
+        },
+        "title": "StorageVolumeListResponseDto"
       }
     }
   },
@@ -3427,18 +3406,18 @@
     },
     "/api/v1/report-6406/storage/volume": {
       "get": {
-        "summary": "Получить информацию о объёме хранилища",
+        "summary": "Получить объём хранилищ",
         "tags": [
           "Report 6406 - Storage"
         ],
-        "description": "Возвращает информацию о общем, занятом и свободном объёме хранилища. Включает предупреждение при превышении порога заполнения.",
+        "description": "Возвращает массив сущностей по одному на каждое хранилище (корзина 1, корзина 2, ТФР). Каждый элемент содержит id, name, totalHuman, freeHuman, percent для отображения и key в JSX.",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StorageVolumeDto"
+                  "$ref": "#/components/schemas/StorageVolumeListResponseDto"
                 }
               }
             }

@@ -510,12 +510,11 @@ export class TasksService {
 
         // Проверяем наличие свободного места (моковая проверка: 100MB на задание)
         const estimatedSize = 104857600; // 100MB
-        const storageInfo = await storageService.getStorageVolume();
-        
-        if (storageInfo.freeBytes < estimatedSize) {
+        const freeBytes = await storageService.getStorageFreeBytes();
+        if (freeBytes < estimatedSize) {
           errors.push({
             taskId,
-            reason: `Not enough storage space. Required: 100MB, Available: ${(storageInfo.freeBytes / 1024 / 1024).toFixed(2)}MB`,
+            reason: `Not enough storage space. Required: 100MB, Available: ${(freeBytes / 1024 / 1024).toFixed(2)}MB`,
           });
           continue;
         }
