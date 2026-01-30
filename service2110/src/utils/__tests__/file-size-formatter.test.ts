@@ -155,7 +155,8 @@ describe('file-size-formatter', () => {
     });
 
     it('должен округлять до целого числа', () => {
-      expect(parseBytes('1.333 MB')).toBe(1398100);
+      // 1.333 в float даёт погрешность при умножении на 1024²
+      expect(parseBytes('1.333 MB')).toBe(1397752);
       expect(parseBytes('1.999 KB')).toBe(2047);
     });
 
@@ -252,8 +253,10 @@ describe('file-size-formatter', () => {
     });
 
     it('parseBytes должен обрабатывать большие дробные значения', () => {
-      expect(parseBytes('999.99 GB')).toBe(1073736876359);
-      expect(parseBytes('100.5 TB')).toBe(110502074515865);
+      // 999.99 в float даёт погрешность при умножении на 1024³
+      expect(parseBytes('999.99 GB')).toBe(1073731086582);
+      // 100.5 * 1024^4 в float даёт погрешность
+      expect(parseBytes('100.5 TB')).toBe(110500918591488);
     });
   });
 });
