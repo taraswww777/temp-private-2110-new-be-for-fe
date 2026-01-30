@@ -134,6 +134,15 @@
       "createdDate": "2026-01-30T14:00:00Z",
       "completedDate": "2026-01-30T15:00:00Z",
       "branch": "feature/TASK-015-api-6406-follow-up"
+    },
+    {
+      "id": "TASK-016",
+      "title": "GET /storage/volume — массив хранилищ, имя, id, человекочитаемые поля",
+      "status": "open",
+      "file": "TASK-016-storage-volume-response-array.md",
+      "createdDate": "2026-01-30T16:00:00Z",
+      "completedDate": null,
+      "branch": "feature/TASK-016-storage-volume-array"
     }
   ]
 }
