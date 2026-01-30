@@ -142,25 +142,24 @@ export async function buildApp() {
                 return null;
               }
               
-              const normalized: Record<string, unknown> = {
-                type: 'object',
-                propertyKeys: Object.keys(props).sort(),
-                propertyTypes: {} as Record<string, unknown>,
-                required: Array.isArray(s.required) ? (s.required as string[]).slice().sort() : [],
-                additionalProperties: s.additionalProperties,
-              };
-              
+              const propertyTypes: Record<string, unknown> = {};
               for (const [key, value] of Object.entries(props)) {
                 if (value && typeof value === 'object') {
                   const prop = value as Record<string, unknown>;
-                  normalized.propertyTypes[key] = {
+                  propertyTypes[key] = {
                     type: prop.type,
                     format: prop.format,
                     enum: prop.enum ? (Array.isArray(prop.enum) ? prop.enum.slice().sort() : prop.enum) : undefined,
                   };
                 }
               }
-              
+              const normalized: Record<string, unknown> = {
+                type: 'object',
+                propertyKeys: Object.keys(props).sort(),
+                propertyTypes,
+                required: Array.isArray(s.required) ? (s.required as string[]).slice().sort() : [],
+                additionalProperties: s.additionalProperties,
+              };
               return JSON.stringify(normalized);
             }
             
@@ -250,28 +249,27 @@ export async function buildApp() {
           // Применяем рекурсивную обработку ко всем компонентам
           // Важно: обрабатываем компоненты в правильном порядке, чтобы избежать циклических ссылок
           const processedComponents: Record<string, unknown> = {};
-          const componentNames = Object.keys(components);
+          const componentsRecord = components as Record<string, unknown>;
+          const componentNames = Object.keys(componentsRecord);
           
-          // Сначала обрабатываем простые типы (DateSchema, DateTimeSchema), затем объекты
           const simpleTypes = ['DateSchema', 'DateTimeSchema'];
           const enumTypes = ['FileFormatEnumSchema', 'ReportTypeEnumSchema', 'ReportTaskStatusEnumSchema', 'CurrencyEnumSchema', 'SortOrderEnumSchema'];
           const objectTypes = componentNames.filter(name => !simpleTypes.includes(name) && !enumTypes.includes(name));
           
-          // Обрабатываем простые типы и enum первыми
           for (const name of [...simpleTypes, ...enumTypes]) {
-            if (components[name]) {
-              processedComponents[name] = components[name];
+            if (componentsRecord[name]) {
+              processedComponents[name] = componentsRecord[name];
             }
           }
           
-          // Затем обрабатываем объекты
           for (const name of objectTypes) {
-            if (components[name]) {
-              processedComponents[name] = replaceNestedSchemas(components[name], processedComponents);
+            if (componentsRecord[name]) {
+              processedComponents[name] = replaceNestedSchemas(componentsRecord[name], processedComponents);
             }
           }
           
-          return processedComponents;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return processedComponents as any;
         })(),
       },
     },
@@ -331,18 +329,11 @@ export async function buildApp() {
             return null;
           }
           
-          const normalized: Record<string, unknown> = {
-            type: 'object',
-            propertyKeys: Object.keys(props).sort(),
-            propertyTypes: {} as Record<string, unknown>,
-            required: Array.isArray(s.required) ? (s.required as string[]).slice().sort() : [],
-            additionalProperties: s.additionalProperties,
-          };
-          
+          const propertyTypes: Record<string, unknown> = {};
           for (const [key, value] of Object.entries(props)) {
             if (value && typeof value === 'object') {
               const prop = value as Record<string, unknown>;
-              normalized.propertyTypes[key] = {
+              propertyTypes[key] = {
                 type: prop.type,
                 format: prop.format,
                 enum: prop.enum ? (Array.isArray(prop.enum) ? prop.enum.slice().sort() : prop.enum) : undefined,
@@ -350,6 +341,13 @@ export async function buildApp() {
             }
           }
           
+          const normalized: Record<string, unknown> = {
+            type: 'object',
+            propertyKeys: Object.keys(props).sort(),
+            propertyTypes,
+            required: Array.isArray(s.required) ? (s.required as string[]).slice().sort() : [],
+            additionalProperties: s.additionalProperties,
+          };
           return JSON.stringify(normalized);
         }
         
@@ -606,25 +604,24 @@ export async function buildApp() {
           return null;
         }
         
-        const normalized: Record<string, unknown> = {
-          type: 'object',
-          propertyKeys: Object.keys(props).sort(),
-          propertyTypes: {} as Record<string, unknown>,
-          required: Array.isArray(s.required) ? (s.required as string[]).slice().sort() : [],
-          additionalProperties: s.additionalProperties,
-        };
-        
+        const propertyTypes: Record<string, unknown> = {};
         for (const [key, value] of Object.entries(props)) {
           if (value && typeof value === 'object') {
             const prop = value as Record<string, unknown>;
-            normalized.propertyTypes[key] = {
+            propertyTypes[key] = {
               type: prop.type,
               format: prop.format,
               enum: prop.enum ? (Array.isArray(prop.enum) ? prop.enum.slice().sort() : prop.enum) : undefined,
             };
           }
         }
-        
+        const normalized: Record<string, unknown> = {
+          type: 'object',
+          propertyKeys: Object.keys(props).sort(),
+          propertyTypes,
+          required: Array.isArray(s.required) ? (s.required as string[]).slice().sort() : [],
+          additionalProperties: s.additionalProperties,
+        };
         return JSON.stringify(normalized);
       }
       

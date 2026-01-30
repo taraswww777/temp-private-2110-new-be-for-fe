@@ -9,6 +9,8 @@ import {
   dateSchema,
   dateTimeSchema,
   sortOrderSchema,
+  healthResponseSchema,
+  httpErrorWithInstanceSchema,
 } from './common.schema.js';
 import {
   createTaskSchema,
@@ -30,6 +32,11 @@ import {
   currencyReferenceSchema,
   formatReferenceSchema,
   sourceSchema,
+  branchesResponseSchema,
+  reportTypesResponseSchema,
+  currenciesResponseSchema,
+  formatsResponseSchema,
+  sourcesResponseSchema,
 } from './report-6406/references.schema.js';
 import {
   createPackageSchema,
@@ -38,11 +45,25 @@ import {
   packageDetailSchema,
   packagesListResponseSchema,
   bulkDeletePackagesResponseSchema,
+  updatePackageResponseSchema,
+  addTasksToPackageResponseSchema,
+  bulkRemoveTasksResponseSchema,
+  copyToTfrResponseSchema,
 } from './report-6406/packages.schema.js';
 import {
   exportTasksRequestSchema,
   exportTasksResponseSchema,
 } from './report-6406/export.schema.js';
+import {
+  statusHistoryItemSchema,
+  statusHistoryResponseSchema,
+} from './report-6406/task-status-history.schema.js';
+import { storageVolumeResponseSchema } from './report-6406/storage.schema.js';
+import {
+  taskFileSchema,
+  taskFilesResponseSchema,
+  retryFileConversionResponseSchema,
+} from './report-6406/task-files.schema.js';
 
 /**
  * Функция для конвертации Zod схемы в JSON Schema с именем
@@ -83,6 +104,8 @@ export function getOpenApiComponents() {
     ReportTaskStatusEnumSchema: zodToJsonSchema(reportTaskStatusSchema, 'ReportTaskStatusEnumSchema'),
     CurrencyEnumSchema: zodToJsonSchema(currencySchema, 'CurrencyEnumSchema'),
     SortOrderEnumSchema: zodToJsonSchema(sortOrderSchema, 'SortOrderEnumSchema'),
+    HealthResponseDto: zodToJsonSchema(healthResponseSchema, 'HealthResponseDto'),
+    HttpErrorWithInstanceDto: zodToJsonSchema(httpErrorWithInstanceSchema, 'HttpErrorWithInstanceDto'),
     
     // Справочники
     BranchDto: zodToJsonSchema(branchSchema, 'BranchDto'),
@@ -90,6 +113,11 @@ export function getOpenApiComponents() {
     CurrencyDto: zodToJsonSchema(currencyReferenceSchema, 'CurrencyDto'),
     FormatDto: zodToJsonSchema(formatReferenceSchema, 'FormatDto'),
     SourceDto: zodToJsonSchema(sourceSchema, 'SourceDto'),
+    BranchesResponseDto: zodToJsonSchema(branchesResponseSchema, 'BranchesResponseDto'),
+    ReportTypesResponseDto: zodToJsonSchema(reportTypesResponseSchema, 'ReportTypesResponseDto'),
+    CurrenciesResponseDto: zodToJsonSchema(currenciesResponseSchema, 'CurrenciesResponseDto'),
+    FormatsResponseDto: zodToJsonSchema(formatsResponseSchema, 'FormatsResponseDto'),
+    SourcesResponseDto: zodToJsonSchema(sourcesResponseSchema, 'SourcesResponseDto'),
     
     // Задания
     CreateTaskDto: zodToJsonSchema(createTaskSchema, 'CreateTaskDto'),
@@ -100,6 +128,11 @@ export function getOpenApiComponents() {
     BulkDeleteTasksResponseDto: zodToJsonSchema(bulkDeleteResponseSchema, 'BulkDeleteTasksResponseDto'),
     BulkCancelTasksResponseDto: zodToJsonSchema(bulkCancelResponseSchema, 'BulkCancelTasksResponseDto'),
     StartTasksResponseDto: zodToJsonSchema(startTasksResponseSchema, 'StartTasksResponseDto'),
+    StatusHistoryItemDto: zodToJsonSchema(statusHistoryItemSchema, 'StatusHistoryItemDto'),
+    StatusHistoryResponseDto: zodToJsonSchema(statusHistoryResponseSchema, 'StatusHistoryResponseDto'),
+    TaskFileDto: zodToJsonSchema(taskFileSchema, 'TaskFileDto'),
+    TaskFilesResponseDto: zodToJsonSchema(taskFilesResponseSchema, 'TaskFilesResponseDto'),
+    RetryFileConversionResponseDto: zodToJsonSchema(retryFileConversionResponseSchema, 'RetryFileConversionResponseDto'),
     
     // Пакеты
     CreatePackageDto: zodToJsonSchema(createPackageSchema, 'CreatePackageDto'),
@@ -108,9 +141,16 @@ export function getOpenApiComponents() {
     PackageDetailDto: zodToJsonSchema(packageDetailSchema, 'PackageDetailDto'),
     PackagesListResponseDto: zodToJsonSchema(packagesListResponseSchema, 'PackagesListResponseDto'),
     BulkDeletePackagesResponseDto: zodToJsonSchema(bulkDeletePackagesResponseSchema, 'BulkDeletePackagesResponseDto'),
+    UpdatePackageResponseDto: zodToJsonSchema(updatePackageResponseSchema, 'UpdatePackageResponseDto'),
+    AddTasksToPackageResponseDto: zodToJsonSchema(addTasksToPackageResponseSchema, 'AddTasksToPackageResponseDto'),
+    BulkRemoveTasksResponseDto: zodToJsonSchema(bulkRemoveTasksResponseSchema, 'BulkRemoveTasksResponseDto'),
+    CopyToTfrResponseDto: zodToJsonSchema(copyToTfrResponseSchema, 'CopyToTfrResponseDto'),
     
     // Экспорт
     ExportTasksRequestDto: zodToJsonSchema(exportTasksRequestSchema, 'ExportTasksRequestDto'),
     ExportTasksResponseDto: zodToJsonSchema(exportTasksResponseSchema, 'ExportTasksResponseDto'),
+    
+    // Storage
+    StorageVolumeDto: zodToJsonSchema(storageVolumeResponseSchema, 'StorageVolumeDto'),
   };
 }

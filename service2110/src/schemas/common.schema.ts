@@ -93,3 +93,27 @@ export type DateString = z.infer<typeof dateSchema>;
 export const dateTimeSchema = z.string().datetime().describe('Дата и время в формате ISO 8601');
 
 export type DateTimeString = z.infer<typeof dateTimeSchema>;
+
+/**
+ * Схема ответа GET /health (200 OK)
+ */
+export const healthResponseSchema = z.object({
+  status: z.string().describe('Статус приложения'),
+  timestamp: z.string().describe('Время ответа в ISO 8601'),
+  database: z.string().describe('Статус подключения к БД'),
+});
+
+export type HealthResponse = z.infer<typeof healthResponseSchema>;
+
+/**
+ * Схема ответа об ошибке с полем instance (503 и др.)
+ */
+export const httpErrorWithInstanceSchema = z.object({
+  type: z.string().describe('URI типа ошибки'),
+  title: z.string().describe('Заголовок ошибки'),
+  status: z.number().int().describe('HTTP статус'),
+  detail: z.string().describe('Детали ошибки'),
+  instance: z.string().describe('URI запроса'),
+});
+
+export type HttpErrorWithInstance = z.infer<typeof httpErrorWithInstanceSchema>;

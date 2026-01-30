@@ -179,6 +179,66 @@
         "additionalProperties": false,
         "title": "FilterDto"
       },
+      "HealthResponseDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Статус приложения"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Время ответа в ISO 8601"
+          },
+          "database": {
+            "type": "string",
+            "description": "Статус подключения к БД"
+          }
+        },
+        "required": [
+          "status",
+          "timestamp",
+          "database"
+        ],
+        "additionalProperties": false,
+        "title": "HealthResponseDto"
+      },
+      "HttpErrorWithInstanceDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "URI типа ошибки"
+          },
+          "title": {
+            "type": "string",
+            "description": "Заголовок ошибки"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991,
+            "description": "HTTP статус"
+          },
+          "detail": {
+            "type": "string",
+            "description": "Детали ошибки"
+          },
+          "instance": {
+            "type": "string",
+            "description": "URI запроса"
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail",
+          "instance"
+        ],
+        "additionalProperties": false,
+        "title": "HttpErrorWithInstanceDto"
+      },
       "BranchDto": {
         "type": "object",
         "properties": {
@@ -253,6 +313,41 @@
         ],
         "additionalProperties": false,
         "title": "SourceDto"
+      },
+      "BranchesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/BranchDto"
+        },
+        "title": "BranchesResponseDto"
+      },
+      "ReportTypesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ReportTypeDto"
+        },
+        "title": "ReportTypesResponseDto"
+      },
+      "CurrenciesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ReportTypeDto"
+        },
+        "title": "CurrenciesResponseDto"
+      },
+      "FormatsResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ReportTypeDto"
+        },
+        "title": "FormatsResponseDto"
+      },
+      "SourcesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SourceDto"
+        },
+        "title": "SourcesResponseDto"
       },
       "CreateTaskDto": {
         "type": "object",
@@ -972,6 +1067,218 @@
         "additionalProperties": false,
         "title": "StartTasksResponseDto"
       },
+      "StatusHistoryItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+          },
+          "previousStatus": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "changedAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "changedBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Дополнительные метаданные в формате ключ-значение"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "previousStatus",
+          "changedAt",
+          "changedBy",
+          "comment",
+          "metadata"
+        ],
+        "additionalProperties": false,
+        "title": "StatusHistoryItemDto"
+      },
+      "StatusHistoryResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/StatusHistoryItemDto"
+        },
+        "title": "StatusHistoryResponseDto"
+      },
+      "TaskFileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "fileSize": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Размер файла в байтах (например, 10485760 = 10 MB)"
+          },
+          "fileType": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CONVERTING",
+              "COMPLETED",
+              "FAILED"
+            ]
+          },
+          "downloadUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "downloadUrlExpiresAt": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          }
+        },
+        "required": [
+          "id",
+          "fileName",
+          "fileSize",
+          "fileType",
+          "status",
+          "downloadUrl",
+          "downloadUrlExpiresAt",
+          "errorMessage",
+          "createdAt",
+          "updatedAt"
+        ],
+        "additionalProperties": false,
+        "title": "TaskFileDto"
+      },
+      "TaskFilesResponseDto": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskFileDto"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationResponseDto"
+          }
+        },
+        "required": [
+          "taskId",
+          "files",
+          "pagination"
+        ],
+        "additionalProperties": false,
+        "title": "TaskFilesResponseDto"
+      },
+      "RetryFileConversionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CONVERTING",
+              "COMPLETED",
+              "FAILED"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "message"
+        ],
+        "additionalProperties": false,
+        "title": "RetryFileConversionResponseDto"
+      },
       "CreatePackageDto": {
         "type": "object",
         "properties": {
@@ -1233,6 +1540,147 @@
       "BulkDeletePackagesResponseDto": {
         "$ref": "#/components/schemas/BulkDeleteTasksResponseDto"
       },
+      "UpdatePackageResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "updatedAt"
+        ],
+        "additionalProperties": false,
+        "title": "UpdatePackageResponseDto"
+      },
+      "AddTasksToPackageResponseDto": {
+        "type": "object",
+        "properties": {
+          "added": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "alreadyInPackage": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "notFound": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "taskId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "taskId",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "added",
+          "alreadyInPackage",
+          "notFound",
+          "errors"
+        ],
+        "additionalProperties": false,
+        "title": "AddTasksToPackageResponseDto"
+      },
+      "BulkRemoveTasksResponseDto": {
+        "type": "object",
+        "properties": {
+          "removed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "failed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "taskId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "success": {
+                  "type": "boolean"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "taskId",
+                "success"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "removed",
+          "failed",
+          "results"
+        ],
+        "additionalProperties": false,
+        "title": "BulkRemoveTasksResponseDto"
+      },
+      "CopyToTfrResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "lastCopiedToTfrAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "lastCopiedToTfrAt",
+          "message"
+        ],
+        "additionalProperties": false,
+        "title": "CopyToTfrResponseDto"
+      },
       "ExportTasksRequestDto": {
         "type": "object",
         "properties": {
@@ -1368,6 +1816,70 @@
         ],
         "additionalProperties": false,
         "title": "ExportTasksResponseDto"
+      },
+      "StorageVolumeDto": {
+        "type": "object",
+        "properties": {
+          "totalBytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общий объём хранилища в байтах (например, 1099511627776 = 1 TB)"
+          },
+          "usedBytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Использовано байт в хранилище (например, 524288000000 = 488.28 GB)"
+          },
+          "freeBytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Свободно байт в хранилище (например, 575223627776 = 535.72 GB)"
+          },
+          "usedPercent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Процент использования хранилища"
+          },
+          "totalHuman": {
+            "type": "string",
+            "description": "Общий объём хранилища в человекочитаемом формате (например, \"1.00 TB\")"
+          },
+          "usedHuman": {
+            "type": "string",
+            "description": "Использовано в человекочитаемом формате (например, \"488.28 GB\")"
+          },
+          "freeHuman": {
+            "type": "string",
+            "description": "Свободно в человекочитаемом формате (например, \"535.72 GB\")"
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "Предупреждение о заполнении хранилища (если применимо)"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "totalBytes",
+          "usedBytes",
+          "freeBytes",
+          "usedPercent",
+          "totalHuman",
+          "usedHuman",
+          "freeHuman",
+          "warning"
+        ],
+        "additionalProperties": false,
+        "title": "StorageVolumeDto"
       }
     }
   },
@@ -1384,24 +1896,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string"
-                    },
-                    "timestamp": {
-                      "type": "string"
-                    },
-                    "database": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "status",
-                    "timestamp",
-                    "database"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/HealthResponseDto"
                 }
               }
             }
@@ -1411,32 +1906,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "number"
-                    },
-                    "detail": {
-                      "type": "string"
-                    },
-                    "instance": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "type",
-                    "title",
-                    "status",
-                    "detail",
-                    "instance"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/HttpErrorWithInstanceDto"
                 }
               }
             }
@@ -1502,10 +1972,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BranchDto"
-                  }
+                  "$ref": "#/components/schemas/BranchesResponseDto"
                 }
               }
             }
@@ -1525,10 +1992,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ReportTypeDto"
-                  }
+                  "$ref": "#/components/schemas/ReportTypesResponseDto"
                 }
               }
             }
@@ -1548,10 +2012,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ReportTypeDto"
-                  }
+                  "$ref": "#/components/schemas/CurrenciesResponseDto"
                 }
               }
             }
@@ -1571,10 +2032,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ReportTypeDto"
-                  }
+                  "$ref": "#/components/schemas/FormatsResponseDto"
                 }
               }
             }
@@ -1594,10 +2052,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SourceDto"
-                  }
+                  "$ref": "#/components/schemas/SourcesResponseDto"
                 }
               }
             }
@@ -2083,123 +2538,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                      },
-                      "status": {
-                        "type": "string",
-                        "enum": [
-                          "upload_generation",
-                          "registered",
-                          "failed",
-                          "upload_not_formed",
-                          "upload_formed",
-                          "accepted_dapp",
-                          "submitted_dapp",
-                          "killed_dapp",
-                          "new_dapp",
-                          "saving_dapp",
-                          "created",
-                          "deleted",
-                          "started",
-                          "start_failed",
-                          "converting",
-                          "completed",
-                          "convert_stopped",
-                          "in_queue",
-                          "file_success_not_exist",
-                          "failed_fc",
-                          "have_broken_files"
-                        ]
-                      },
-                      "previousStatus": {
-                        "anyOf": [
-                          {
-                            "type": "string",
-                            "enum": [
-                              "upload_generation",
-                              "registered",
-                              "failed",
-                              "upload_not_formed",
-                              "upload_formed",
-                              "accepted_dapp",
-                              "submitted_dapp",
-                              "killed_dapp",
-                              "new_dapp",
-                              "saving_dapp",
-                              "created",
-                              "deleted",
-                              "started",
-                              "start_failed",
-                              "converting",
-                              "completed",
-                              "convert_stopped",
-                              "in_queue",
-                              "file_success_not_exist",
-                              "failed_fc",
-                              "have_broken_files"
-                            ]
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ]
-                      },
-                      "changedAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                      },
-                      "changedBy": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ]
-                      },
-                      "comment": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ]
-                      },
-                      "metadata": {
-                        "anyOf": [
-                          {
-                            "type": "object",
-                            "additionalProperties": {}
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ],
-                        "description": "Дополнительные метаданные в формате ключ-значение"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "status",
-                      "previousStatus",
-                      "changedAt",
-                      "changedBy",
-                      "comment",
-                      "metadata"
-                    ],
-                    "additionalProperties": false
-                  }
+                  "$ref": "#/components/schemas/StatusHistoryResponseDto"
                 }
               }
             }
@@ -2296,112 +2635,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "taskId": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "files": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          },
-                          "fileName": {
-                            "type": "string"
-                          },
-                          "fileSize": {
-                            "type": "integer",
-                            "minimum": 0,
-                            "maximum": 9007199254740991,
-                            "description": "Размер файла в байтах (например, 10485760 = 10 MB)"
-                          },
-                          "fileType": {
-                            "type": "string"
-                          },
-                          "status": {
-                            "type": "string",
-                            "enum": [
-                              "PENDING",
-                              "CONVERTING",
-                              "COMPLETED",
-                              "FAILED"
-                            ]
-                          },
-                          "downloadUrl": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ]
-                          },
-                          "downloadUrlExpiresAt": {
-                            "anyOf": [
-                              {
-                                "type": "string",
-                                "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ]
-                          },
-                          "errorMessage": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ]
-                          },
-                          "createdAt": {
-                            "type": "string",
-                            "format": "date-time",
-                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                          },
-                          "updatedAt": {
-                            "type": "string",
-                            "format": "date-time",
-                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "fileName",
-                          "fileSize",
-                          "fileType",
-                          "status",
-                          "downloadUrl",
-                          "downloadUrlExpiresAt",
-                          "errorMessage",
-                          "createdAt",
-                          "updatedAt"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "pagination": {
-                      "$ref": "#/components/schemas/PaginationResponseDto"
-                    }
-                  },
-                  "required": [
-                    "taskId",
-                    "files",
-                    "pagination"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/TaskFilesResponseDto"
                 }
               }
             }
@@ -2444,32 +2678,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "PENDING",
-                        "CONVERTING",
-                        "COMPLETED",
-                        "FAILED"
-                      ]
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "status",
-                    "message"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/RetryFileConversionResponseDto"
                 }
               }
             }
@@ -2797,28 +3006,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "updatedAt"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/UpdatePackageResponseDto"
                 }
               }
             }
@@ -2875,52 +3063,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "added": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "alreadyInPackage": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "notFound": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "taskId": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          },
-                          "reason": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "taskId",
-                          "reason"
-                        ],
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "required": [
-                    "added",
-                    "alreadyInPackage",
-                    "notFound",
-                    "errors"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/AddTasksToPackageResponseDto"
                 }
               }
             }
@@ -2976,49 +3119,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "removed": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "failed": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991
-                    },
-                    "results": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "taskId": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          },
-                          "success": {
-                            "type": "boolean"
-                          },
-                          "reason": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "taskId",
-                          "success"
-                        ],
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "required": [
-                    "removed",
-                    "failed",
-                    "results"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/BulkRemoveTasksResponseDto"
                 }
               }
             }
@@ -3050,28 +3151,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                    },
-                    "lastCopiedToTfrAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "lastCopiedToTfrAt",
-                    "message"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/CopyToTfrResponseDto"
                 }
               }
             }
@@ -3092,67 +3172,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "totalBytes": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991,
-                      "description": "Общий объём хранилища в байтах (например, 1099511627776 = 1 TB)"
-                    },
-                    "usedBytes": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991,
-                      "description": "Использовано байт в хранилище (например, 524288000000 = 488.28 GB)"
-                    },
-                    "freeBytes": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991,
-                      "description": "Свободно байт в хранилище (например, 575223627776 = 535.72 GB)"
-                    },
-                    "usedPercent": {
-                      "type": "number",
-                      "minimum": 0,
-                      "maximum": 100,
-                      "description": "Процент использования хранилища"
-                    },
-                    "totalHuman": {
-                      "type": "string",
-                      "description": "Общий объём хранилища в человекочитаемом формате (например, \"1.00 TB\")"
-                    },
-                    "usedHuman": {
-                      "type": "string",
-                      "description": "Использовано в человекочитаемом формате (например, \"488.28 GB\")"
-                    },
-                    "freeHuman": {
-                      "type": "string",
-                      "description": "Свободно в человекочитаемом формате (например, \"535.72 GB\")"
-                    },
-                    "warning": {
-                      "anyOf": [
-                        {
-                          "type": "string",
-                          "description": "Предупреждение о заполнении хранилища (если применимо)"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    }
-                  },
-                  "required": [
-                    "totalBytes",
-                    "usedBytes",
-                    "freeBytes",
-                    "usedPercent",
-                    "totalHuman",
-                    "usedHuman",
-                    "freeHuman",
-                    "warning"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/StorageVolumeDto"
                 }
               }
             }

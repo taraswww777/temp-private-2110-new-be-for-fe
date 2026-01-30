@@ -9,6 +9,8 @@ import {
   dateSchema,
   dateTimeSchema,
   sortOrderSchema,
+  healthResponseSchema,
+  httpErrorWithInstanceSchema,
 } from './common.schema.js';
 import {
   createTaskSchema,
@@ -30,6 +32,11 @@ import {
   currencyReferenceSchema,
   formatReferenceSchema,
   sourceSchema,
+  branchesResponseSchema,
+  reportTypesResponseSchema,
+  currenciesResponseSchema,
+  formatsResponseSchema,
+  sourcesResponseSchema,
 } from './report-6406/references.schema.js';
 import {
   createPackageSchema,
@@ -38,11 +45,25 @@ import {
   packageDetailSchema,
   packagesListResponseSchema,
   bulkDeletePackagesResponseSchema,
+  updatePackageResponseSchema,
+  addTasksToPackageResponseSchema,
+  bulkRemoveTasksResponseSchema,
+  copyToTfrResponseSchema,
 } from './report-6406/packages.schema.js';
 import {
   exportTasksRequestSchema,
   exportTasksResponseSchema,
 } from './report-6406/export.schema.js';
+import {
+  statusHistoryItemSchema,
+  statusHistoryResponseSchema,
+} from './report-6406/task-status-history.schema.js';
+import { storageVolumeResponseSchema } from './report-6406/storage.schema.js';
+import {
+  taskFileSchema,
+  taskFilesResponseSchema,
+  retryFileConversionResponseSchema,
+} from './report-6406/task-files.schema.js';
 
 /**
  * Маппинг имён схем на Zod схемы
@@ -59,6 +80,8 @@ export const schemaRegistry = new Map<string, unknown>([
   ['ReportTaskStatusEnumSchema', reportTaskStatusSchema],
   ['CurrencyEnumSchema', currencySchema],
   ['SortOrderEnumSchema', sortOrderSchema],
+  ['HealthResponseDto', healthResponseSchema],
+  ['HttpErrorWithInstanceDto', httpErrorWithInstanceSchema],
   
   // Справочники
   ['BranchDto', branchSchema],
@@ -66,6 +89,11 @@ export const schemaRegistry = new Map<string, unknown>([
   ['CurrencyDto', currencyReferenceSchema],
   ['FormatDto', formatReferenceSchema],
   ['SourceDto', sourceSchema],
+  ['BranchesResponseDto', branchesResponseSchema],
+  ['ReportTypesResponseDto', reportTypesResponseSchema],
+  ['CurrenciesResponseDto', currenciesResponseSchema],
+  ['FormatsResponseDto', formatsResponseSchema],
+  ['SourcesResponseDto', sourcesResponseSchema],
   
   // Задания
   ['CreateTaskDto', createTaskSchema],
@@ -76,6 +104,11 @@ export const schemaRegistry = new Map<string, unknown>([
   ['BulkDeleteTasksResponseDto', bulkDeleteResponseSchema],
   ['BulkCancelTasksResponseDto', bulkCancelResponseSchema],
   ['StartTasksResponseDto', startTasksResponseSchema],
+  ['StatusHistoryItemDto', statusHistoryItemSchema],
+  ['StatusHistoryResponseDto', statusHistoryResponseSchema],
+  ['TaskFileDto', taskFileSchema],
+  ['TaskFilesResponseDto', taskFilesResponseSchema],
+  ['RetryFileConversionResponseDto', retryFileConversionResponseSchema],
   
   // Пакеты
   ['CreatePackageDto', createPackageSchema],
@@ -84,10 +117,17 @@ export const schemaRegistry = new Map<string, unknown>([
   ['PackageDetailDto', packageDetailSchema],
   ['PackagesListResponseDto', packagesListResponseSchema],
   ['BulkDeletePackagesResponseDto', bulkDeletePackagesResponseSchema],
+  ['UpdatePackageResponseDto', updatePackageResponseSchema],
+  ['AddTasksToPackageResponseDto', addTasksToPackageResponseSchema],
+  ['BulkRemoveTasksResponseDto', bulkRemoveTasksResponseSchema],
+  ['CopyToTfrResponseDto', copyToTfrResponseSchema],
   
   // Экспорт
   ['ExportTasksRequestDto', exportTasksRequestSchema],
   ['ExportTasksResponseDto', exportTasksResponseSchema],
+  
+  // Storage
+  ['StorageVolumeDto', storageVolumeResponseSchema],
 ]);
 
 /**

@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { z } from 'zod';
 import { client } from '../db/index.js';
+import { healthResponseSchema, httpErrorWithInstanceSchema } from '../schemas/common.schema.js';
 
 export const healthRoutes: FastifyPluginAsync = async (fastify) => {
   // GET /health - проверка состояния приложения
@@ -11,18 +11,8 @@ export const healthRoutes: FastifyPluginAsync = async (fastify) => {
         tags: ['Health'],
         description: 'Проверка состояния приложения и подключения к БД',
         response: {
-          200: z.object({
-            status: z.string(),
-            timestamp: z.string(),
-            database: z.string(),
-          }),
-          503: z.object({
-            type: z.string(),
-            title: z.string(),
-            status: z.number(),
-            detail: z.string(),
-            instance: z.string(),
-          }),
+          200: healthResponseSchema,
+          503: httpErrorWithInstanceSchema,
         },
       },
     },
