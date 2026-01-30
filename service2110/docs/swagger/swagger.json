@@ -825,7 +825,28 @@
         "title": "GetTasksRequestDto"
       },
       "TasksListResponseDto": {
-        "$ref": "#/components/schemas/PaginatedResponseDto"
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskListItemDto"
+            },
+            "description": "Список заданий"
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество заданий"
+          }
+        },
+        "required": [
+          "items",
+          "totalItems"
+        ],
+        "additionalProperties": false,
+        "title": "TasksListResponseDto"
       },
       "TaskDetailDto": {
         "type": "object",
@@ -1930,7 +1951,50 @@
         "title": "PackagesListResponseDto"
       },
       "BulkDeletePackagesResponseDto": {
-        "$ref": "#/components/schemas/BulkDeleteTasksResponseDto"
+        "type": "object",
+        "properties": {
+          "deleted": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "failed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "packageId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "success": {
+                  "type": "boolean"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "packageId",
+                "success"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "deleted",
+          "failed",
+          "results"
+        ],
+        "additionalProperties": false,
+        "title": "BulkDeletePackagesResponseDto"
       },
       "UpdatePackageResponseDto": {
         "type": "object",
