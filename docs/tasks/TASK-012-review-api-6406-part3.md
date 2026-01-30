@@ -13,6 +13,30 @@
 
 ---
 
+## Исходное описание задачи
+
+> Фрагмент из общей формулировки ревью API формы 6406 (полный текст — в TASK-010, раздел «Исходное описание задачи»). Ниже приведена часть, относящаяся к ответам POST /tasks/ и GET /tasks/{id}.
+
+```
+POST /api/v1/report-6406/tasks/
+
+- общая проблема - тело ответа на создание справочника и получение деталей о справочнике должно быть описано одним ДТО, тогда не было бы проблем описанных ниже 
+
+Тело ответа
+- filesCount не может быть отрицательным
+- fileUrl - урл на какой файл?  мне кажется это поле лишнее
+- errorMessage в 201 ответе явно лишнее
+- Отсутствует поле "ID папки в S3"
+- Отсутствует поле "currency" (Валюта)
+- непонятно откуда брать поле "Тип" на странице детали - дополнительные параметры
+- непонятно откуда брать поле "Счета" на странице детали - дополнительные параметры
+
+GET /api/v1/report-6406/tasks/{id}
+проблемы описаны выше, здесь повторяются
+```
+
+---
+
 ## Цели
 
 - Создать единый `TaskDetailsDto` для детальной информации о задании
@@ -97,37 +121,37 @@
 ## Критерии приёмки (Часть 3)
 
 ### TaskDetailsDto создан
-- [ ] Создана схема `TaskDetailsDto` в `components/schemas`
-- [ ] Включены все поля из текущих response POST и GET /{id}
-- [ ] Все ID имеют тип `string`
-- [ ] Все даты имеют тип `string` с `format: "date-time"`
-- [ ] Все поля имеют описания (`description`)
+- [x] Создана схема `TaskDetailsDto` в `components/schemas`
+- [x] Включены все поля из текущих response POST и GET /{id}
+- [x] Все ID имеют тип `string`
+- [x] Все даты имеют тип `string` с `format: "date-time"`
+- [x] Все поля имеют описания (`description`)
 
 ### Лишние поля удалены
-- [ ] Поле `errorMessage` удалено из схемы
-- [ ] Поле `fileUrl` удалено из схемы
+- [x] Поле `errorMessage` удалено из схемы
+- [x] Поле `fileUrl` удалено из схемы
 
 ### Существующие поля исправлены
-- [ ] Поле `filesCount` имеет `minimum: 0`
-- [ ] Числовые поля, которые не могут быть отрицательными, имеют `minimum: 0`
+- [x] Поле `filesCount` имеет `minimum: 0`
+- [x] Числовые поля, которые не могут быть отрицательными, имеют `minimum: 0`
 
 ### Недостающие поля добавлены
-- [ ] Поле `s3FolderId` (string) добавлено
-- [ ] Поле `currency` (string) добавлено
-- [ ] Поле `type` (string) добавлено
-- [ ] Поле `accounts` (array of string) добавлено
+- [x] Поле `s3FolderId` (string) добавлено
+- [x] Поле `currency` (string) добавлено
+- [x] Поле `type` (string) добавлено
+- [x] Поле `accounts` (array of string) добавлено
 
 ### Схема применена к endpoints
-- [ ] POST /tasks/ response 201 использует `$ref: '#/components/schemas/TaskDetailsDto'`
-- [ ] POST /tasks/ response 201 имеет описание "Created" или подобное
-- [ ] GET /tasks/{id} response 200 использует `$ref: '#/components/schemas/TaskDetailsDto'`
-- [ ] GET /tasks/{id} response 200 имеет описание "OK"
+- [x] POST /tasks/ response 201 использует `$ref: '#/components/schemas/TaskDetailsDto'`
+- [x] POST /tasks/ response 201 имеет описание "Created" или подобное
+- [x] GET /tasks/{id} response 200 использует `$ref: '#/components/schemas/TaskDetailsDto'`
+- [x] GET /tasks/{id} response 200 имеет описание "OK"
 
 ### Финальная валидация
-- [ ] OpenAPI спецификация валидна (`swagger-cli validate`)
-- [ ] DTO успешно генерируются через openapi-generator без ошибок
-- [ ] Schemas корректно отображаются в Swagger UI
-- [ ] Все три части рефакторинга (TASK-010, TASK-011, TASK-012) завершены
+- [x] OpenAPI спецификация валидна (`swagger-cli validate`)
+- [x] DTO успешно генерируются через openapi-generator без ошибок
+- [x] Schemas корректно отображаются в Swagger UI
+- [x] Все три части рефакторинга (TASK-010, TASK-011, TASK-012) завершены
 
 ---
 
@@ -336,7 +360,7 @@
 
 ## Уточнения в процессе выполнения
 
-_Этот раздел будет заполняться по мере выполнения задания._
+- Задача выполнена. Все критерии приёмки закрыты; TaskDetailsDto применён к POST 201 и GET /{id} 200.
 
 ---
 
