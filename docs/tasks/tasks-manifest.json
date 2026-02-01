@@ -147,20 +147,20 @@
     {
       "id": "TASK-017",
       "title": "Спека service2110 и скрипт причёсывания (update2)",
-      "status": "planned",
+      "status": "completed",
       "file": "TASK-017-fe-ui-api2-spec-and-update.md",
       "createdDate": "2026-01-30T20:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-02-01T00:00:00Z",
+      "branch": "feature/TASK-017-fe-ui-api2-spec-and-update"
     },
     {
       "id": "TASK-018",
       "title": "apiClient2 и полная цепочка api:fullUpdate2",
-      "status": "planned",
+      "status": "completed",
       "file": "TASK-018-fe-ui-apiClient2-fullUpdate2.md",
       "createdDate": "2026-01-30T20:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-02-01T00:00:00Z",
+      "branch": "feature/TASK-018-fe-ui-apiClient2-fullUpdate2"
     },
     {
       "id": "TASK-019",
