@@ -174,11 +174,11 @@
     {
       "id": "TASK-020",
       "title": "Рефакторинг FE — стор для ветки AppRouter, текущий стор без изменений",
-      "status": "planned",
+      "status": "in_progress",
       "file": "TASK-020-fe-refactor-store-appRouter.md",
       "createdDate": "2026-01-30T21:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": "feature/TASK-020-fe-refactor-store-appRouter"
     },
     {
       "id": "TASK-021",
