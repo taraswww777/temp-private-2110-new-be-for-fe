@@ -179,6 +179,15 @@
       "createdDate": "2026-01-30T21:00:00Z",
       "completedDate": null,
       "branch": null
+    },
+    {
+      "id": "TASK-021",
+      "title": "Скрипт автоматизации выполнения заданий AI-агентом",
+      "status": "planned",
+      "file": "TASK-021-automation-script-ai-tasks-runner.md",
+      "createdDate": "2026-01-30T22:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
