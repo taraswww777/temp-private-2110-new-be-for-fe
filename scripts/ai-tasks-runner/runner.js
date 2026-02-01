@@ -151,6 +151,15 @@ async function main() {
     process.exit(0);
   }
 
+  if (git.hasChanges()) {
+    console.error(
+      'Error: there are uncommitted changes. Commit or stash them before running the runner.\n' +
+        '  git status\n' +
+        '  git stash   # или git add ... && git commit ...'
+    );
+    process.exit(1);
+  }
+
   if (!noPull) {
     try {
       git.pull(config.baseBranch);
