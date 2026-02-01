@@ -143,6 +143,51 @@
       "createdDate": "2026-01-30T16:00:00Z",
       "completedDate": "2026-01-30T18:00:00Z",
       "branch": "feature/TASK-016-storage-volume-array"
+    },
+    {
+      "id": "TASK-017",
+      "title": "Спека service2110 и скрипт причёсывания (update2)",
+      "status": "planned",
+      "file": "TASK-017-fe-ui-api2-spec-and-update.md",
+      "createdDate": "2026-01-30T20:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-018",
+      "title": "apiClient2 и полная цепочка api:fullUpdate2",
+      "status": "planned",
+      "file": "TASK-018-fe-ui-apiClient2-fullUpdate2.md",
+      "createdDate": "2026-01-30T20:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-019",
+      "title": "apiMock2 и generateMockData2",
+      "status": "planned",
+      "file": "TASK-019-fe-ui-apiMock2-generateMockData2.md",
+      "createdDate": "2026-01-30T20:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-020",
+      "title": "Рефакторинг FE — стор для ветки AppRouter, текущий стор без изменений",
+      "status": "planned",
+      "file": "TASK-020-fe-refactor-store-appRouter.md",
+      "createdDate": "2026-01-30T21:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-021",
+      "title": "Скрипт автоматизации выполнения заданий AI-агентом",
+      "status": "planned",
+      "file": "TASK-021-automation-script-ai-tasks-runner.md",
+      "createdDate": "2026-01-30T22:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
