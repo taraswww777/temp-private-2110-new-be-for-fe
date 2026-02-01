@@ -1,7 +1,7 @@
 # TASK-017: Спека service2110 и скрипт причёсывания (update2)
 
-**Статус**: 📋 Запланировано  
-**Ветка**: _не создана_
+**Статус**: ✅ Выполнено  
+**Ветка**: `feature/TASK-017-fe-ui-api2-spec-and-update` (основной репо и temp-private-2110)
 
 **Часть общей работы:** 1 из 3 (второй контракт с бэком service2110). Следующие: [TASK-018](TASK-018-fe-ui-apiClient2-fullUpdate2.md), [TASK-019](TASK-019-fe-ui-apiMock2-generateMockData2.md).
 
@@ -43,10 +43,10 @@
 
 ## Критерии приёмки
 
-- [ ] Swagger скопирован в rawApiDocs; причёсанный `service2110.json` лежит в `temp-private-2110/docs/apiDocs/`.
-- [ ] В `scripts/swagger/config.ts` есть конфиг apiService2110 (пути к raw, apiDocs/service2110.json, apiClient2).
-- [ ] Реализован **updateLocalSwaggerFromRemote2** (чтение из rawApiDocs, sortJsonObject + middlewareClearOperationParameters(['Authorization']), сохранение в apiDocs/service2110.json).
-- [ ] В package.json добавлены скрипты для update2 (api:item:apiService2110:update и т.п.).
+- [x] Swagger скопирован в rawApiDocs; причёсанный `service2110.json` лежит в `temp-private-2110/docs/apiDocs/`.
+- [x] В `scripts/swagger/config.ts` есть конфиг apiService2110 (пути к raw, apiDocs/service2110.json, apiClient2).
+- [x] Реализован **updateLocalSwaggerFromRemote2** (чтение из rawApiDocs, sortJsonObject + middlewareClearOperationParameters(['Authorization']), сохранение в apiDocs/service2110.json).
+- [x] В package.json добавлены скрипты для update2 (api:item:apiService2110:update и т.п.).
 
 ---
 
