@@ -122,3 +122,13 @@
 - Роутинг: `temp-private-2110/src/App/AppRouter.tsx`
 - Текущий стор: `temp-private-2110/src/store/` (store.ts, reports/, api/reportsApi.ts)
 - Лоадеры: ReportTemplateModuleLoader.tsx, Report6406ModuleLoader.tsx, ReportManagerLegacyModuleLoader.tsx
+
+---
+
+## Уточнения (по ходу реализации)
+
+### apiClient2: пути к core в сгенерированных сервисах
+
+Генератор (openapi-typescript-codegen) выдаёт в файлах `apiClient2/api/service2110/services/*.ts` импорты `../../core/...`, тогда как из папки `services/` до корня apiClient2 нужно три уровня вверх — `../../../core/` (как в старой реализации apiClient: `api/reportService/services/` → `../../../core/`).
+
+**Решение:** доработка постобработки в `runFixSwaggerApiService2110.ts` → `fixClientApi2.ts`: в `correctGeneratedServices` заменять `from '../../core` и `from '../core` на `from '../../../core`, чтобы после каждой перегенерации API пути к core оставались корректными.
