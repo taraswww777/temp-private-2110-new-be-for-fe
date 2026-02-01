@@ -1,7 +1,8 @@
 # TASK-017: Спека service2110 и скрипт причёсывания (update2)
 
-**Статус**: 📋 Запланировано  
-**Ветка**: _не создана_
+**Статус**: ✅ Выполнено  
+**Ветка (основной репо):** `feature/TASK-017-fe-ui-api2-spec-and-update`  
+**Ветка (подрепо temp-private-2110):** `feature/VTB-526-fe-ui-api2-spec-and-update`
 
 **Часть общей работы:** 1 из 3 (второй контракт с бэком service2110). Следующие: [TASK-018](TASK-018-fe-ui-apiClient2-fullUpdate2.md), [TASK-019](TASK-019-fe-ui-apiMock2-generateMockData2.md).
 
@@ -18,6 +19,13 @@
 - Второй контракт — **service2110** (Backend API, Fastify), спека: `service2110/docs/swagger/swagger.json`.
 - Дальше с этой спекой работают TASK-018 (apiClient2) и TASK-019 (apiMock2).
 - Файл в rawApiDocs в дальнейшем обновляется **вручную**.
+
+### Подрепозиторий temp-private-2110 и задача VTB-526
+
+В подрепозитории **temp-private-2110** работы по TASK-017 (и далее по TASK-018, TASK-019, TASK-020 в части изменений в temp-private-2110) ведутся в рамках задачи **VTB-526**. Поэтому:
+
+- **Ветки** в temp-private-2110 создаются с префиксом задачи: `feature/VTB-526-...` (а не TASK-017 и т.п.).
+- **Сообщения коммитов** в temp-private-2110 начинаются с идентификатора задачи: `VTB-526: ...`.
 
 ---
 
@@ -43,10 +51,10 @@
 
 ## Критерии приёмки
 
-- [ ] Swagger скопирован в rawApiDocs; причёсанный `service2110.json` лежит в `temp-private-2110/docs/apiDocs/`.
-- [ ] В `scripts/swagger/config.ts` есть конфиг apiService2110 (пути к raw, apiDocs/service2110.json, apiClient2).
-- [ ] Реализован **updateLocalSwaggerFromRemote2** (чтение из rawApiDocs, sortJsonObject + middlewareClearOperationParameters(['Authorization']), сохранение в apiDocs/service2110.json).
-- [ ] В package.json добавлены скрипты для update2 (api:item:apiService2110:update и т.п.).
+- [x] Swagger скопирован в rawApiDocs; причёсанный `service2110.json` лежит в `temp-private-2110/docs/apiDocs/`.
+- [x] В `scripts/swagger/config.ts` есть конфиг apiService2110 (пути к raw, apiDocs/service2110.json, apiClient2).
+- [x] Реализован **updateLocalSwaggerFromRemote2** (чтение из rawApiDocs, sortJsonObject + middlewareClearOperationParameters(['Authorization']), сохранение в apiDocs/service2110.json).
+- [x] В package.json добавлены скрипты для update2 (api:item:apiService2110:update и т.п.).
 
 ---
 
@@ -56,3 +64,8 @@
 - Контракт: `service2110/docs/swagger/swagger.json`
 - Конфиг API1: `temp-private-2110/scripts/swagger/config.ts`
 - Обработка спеки API1: `temp-private-2110/scripts/swagger/updateLocalSwaggerFromRemote/`
+
+### Дополнения (выявленные в ходе выполнения)
+
+- **Run-скрипт** `runUpdateSwaggerApiService2110.ts` импортирует пути напрямую (через `getDirname` и `path.resolve`), а не из `config.ts`, чтобы скрипт работал без наличия файла `.env` (config при загрузке подтягивает envUtils и требует .env).
+- **rawApiDocs**: файлы `*.json` в `temp-private-2110/docs/rawApiDocs/` игнорируются через `.gitignore`; в репозиторий попадает только причёсанный файл в `docs/apiDocs/service2110.json`.
