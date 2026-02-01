@@ -54,11 +54,12 @@ export async function buildApp() {
   await app.register(routes);
 
   // Обработчик ошибок: информативные ответы для валидации и сериализации
-  app.setErrorHandler((err, request, reply) => {
-    const statusCode = err.statusCode ?? 500;
+  app.setErrorHandler((err: unknown, request, reply) => {
+    const error = err as { statusCode?: number; message?: string; code?: string; cause?: { issues?: unknown[] }; validation?: unknown[] };
+    const statusCode = error.statusCode ?? 500;
 
-    if (isResponseSerializationError(err) && err.cause?.issues) {
-      const details = formatValidationDetails(err.cause as Parameters<typeof formatValidationDetails>[0]);
+    if (isResponseSerializationError(err) && error.cause?.issues) {
+      const details = formatValidationDetails(error.cause as Parameters<typeof formatValidationDetails>[0]);
       const body: ApiErrorBody = {
         message: 'Ответ не соответствует схеме. Проверьте данные в манифесте задач (например, допустимые статусы: backlog, planned, in-progress, completed, cancelled).',
         code: 'VALIDATION_ERROR',
@@ -68,12 +69,15 @@ export async function buildApp() {
     }
 
     // Ошибки валидации тела/параметров запроса (если есть validation)
-    const validation = (err as { validation?: unknown[] }).validation;
+    const validation = error.validation;
     if (Array.isArray(validation) && validation.length > 0) {
-      const details: ValidationDetail[] = validation.map((v: { params?: { instancePath?: string }; message?: string }) => ({
-        path: (v.params as { instancePath?: string })?.instancePath ?? '',
-        message: (v as { message?: string }).message ?? 'Ошибка валидации',
-      }));
+      const details: ValidationDetail[] = validation.map((v: unknown) => {
+        const item = v as { params?: { instancePath?: string }; message?: string };
+        return {
+          path: item.params?.instancePath ?? '',
+          message: item.message ?? 'Ошибка валидации',
+        };
+      });
       const body: ApiErrorBody = {
         message: 'Данные запроса не прошли валидацию.',
         code: 'VALIDATION_ERROR',
@@ -84,8 +88,8 @@ export async function buildApp() {
 
     // Прочие ошибки — единый формат
     const body: ApiErrorBody = {
-      message: err.message ?? 'Внутренняя ошибка сервера',
-      code: (err as { code?: string }).code ?? 'INTERNAL_ERROR',
+      message: error.message ?? 'Внутренняя ошибка сервера',
+      code: error.code ?? 'INTERNAL_ERROR',
     };
     return reply.status(statusCode).send(body);
   });
