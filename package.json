@@ -31,7 +31,9 @@
     "docs:preview": "npm run docs:generate && echo \"📄 Open docs/public/index.html in your browser\"",
     "ci:lint": "npm run lint -w service2110 && npm run lint -w taskViewerBe && npm run lint -w taskViewerFe",
     "ci:build": "npm run build -w service2110 && npm run build -w taskViewerBe && npm run build -w taskViewerFe",
-    "ci:check": "npm run ci:lint && npm run ci:build"
+    "ci:check": "npm run ci:lint && npm run ci:build",
+    "ai-tasks:run": "node scripts/ai-tasks-runner/runner.js",
+    "ai-tasks:dry-run": "node scripts/ai-tasks-runner/runner.js --dry-run"
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {

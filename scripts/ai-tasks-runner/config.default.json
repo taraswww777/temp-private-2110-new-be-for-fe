@@ -1,0 +1,27 @@
+{
+  "manifestPath": "docs/tasks/tasks-manifest.json",
+  "tasksDir": "docs/tasks",
+  "logsDir": "docs/logs",
+  "baseBranch": "main",
+  "branchTemplate": "feature/{{id}}-{{slug}}",
+  "maxAttempts": 5,
+  "statusFilter": "planned",
+  "commitLogs": true,
+  "emptyCommitIfNoChanges": true,
+  "remote": "origin",
+  "execAgent": {
+    "command": "node",
+    "args": ["scripts/ai-tasks-runner/agents/exec-stub.js"],
+    "description": "Cursor agent or stub; set AI_TASKS_EXEC_CMD for custom command"
+  },
+  "verifyAgent": {
+    "command": "node",
+    "args": ["scripts/ai-tasks-runner/agents/verify-stub.js"],
+    "description": "Verification agent or stub; set AI_TASKS_VERIFY_CMD for custom"
+  },
+  "actualizeAgent": {
+    "command": "node",
+    "args": ["scripts/ai-tasks-runner/agents/actualize-stub.js"],
+    "description": "Actualization agent or stub; set AI_TASKS_ACTUALIZE_CMD for custom"
+  }
+}
