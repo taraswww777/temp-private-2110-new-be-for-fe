@@ -35,16 +35,39 @@ npm run ai-tasks:run
 | `--no-push` | Не выполнять push после задания |
 | `--no-pull` | Не выполнять pull базовой ветки в начале |
 
-### Переменные окружения
+### Переменные окружения и корневой `.env`
+
+Скрипт при старте загружает переменные из **корневого `.env`** репозитория (файл `.env` в корне репо). Все параметры конфигурации можно задать там с префиксом `AI_TASKS_` — они переопределяют значения из `config.default.json` и из файла конфига (если указан `--config`).
 
 | Переменная | Описание |
 |------------|----------|
-| `AI_TASKS_CONFIG` | Путь к конфигу (если не задан `--config`) |
-| `AI_TASKS_EXEC_CMD` | Команда запуска агента выполнения (например `cursor agent run --task {{TASK_PATH}}`) |
+| `AI_TASKS_CONFIG` | Путь к JSON-конфигу (если не задан `--config`) |
+| `AI_TASKS_MANIFEST_PATH` | Путь к манифесту (напр. `docs/tasks/tasks-manifest.json`) |
+| `AI_TASKS_TASKS_DIR` | Папка документов задач (напр. `docs/tasks`) |
+| `AI_TASKS_LOGS_DIR` | Папка логов (напр. `docs/logs`) |
+| `AI_TASKS_BASE_BRANCH` | Базовая ветка (напр. `main`) |
+| `AI_TASKS_BRANCH_TEMPLATE` | Шаблон ветки (напр. `feature/{{id}}-{{slug}}`) |
+| `AI_TASKS_MAX_ATTEMPTS` | Максимум попыток на задание (число) |
+| `AI_TASKS_STATUS_FILTER` | Фильтр по статусу в манифесте (напр. `planned`) |
+| `AI_TASKS_COMMIT_LOGS` | Коммитить ли логи (`true`/`false`) |
+| `AI_TASKS_EMPTY_COMMIT_IF_NO_CHANGES` | Пустой коммит при отсутствии изменений (`true`/`false`) |
+| `AI_TASKS_REMOTE` | Имя remote для push (напр. `origin`) |
+| `AI_TASKS_EXEC_CMD` | Команда запуска агента выполнения (строка: команда + аргументы) |
 | `AI_TASKS_VERIFY_CMD` | Команда запуска агента проверки |
 | `AI_TASKS_ACTUALIZE_CMD` | Команда запуска агента актуализации |
 
-Если переменная задана, её значение подставляется вместо команды из конфига (как одна строка: первый токен — команда, остальное — аргументы).
+Переменные команд агентов (`*_CMD`) задаются одной строкой: первый токен — команда, остальное — аргументы. Они переопределяют `execAgent`/`verifyAgent`/`actualizeAgent` из конфига.
+
+Полный список поддерживаемых параметров с комментариями: **`scripts/ai-tasks-runner/env.example`**. Для корня репо можно скопировать его в `.env.example`: `cp scripts/ai-tasks-runner/env.example .env.example`.
+
+Пример фрагмента корневого `.env`:
+
+```env
+AI_TASKS_BASE_BRANCH=main
+AI_TASKS_LOGS_DIR=docs/logs
+AI_TASKS_COMMIT_LOGS=true
+AI_TASKS_EXEC_CMD=node scripts/ai-tasks-runner/agents/exec-stub.js
+```
 
 ## Конфигурация
 

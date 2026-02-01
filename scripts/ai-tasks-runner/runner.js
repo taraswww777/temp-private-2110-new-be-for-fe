@@ -3,17 +3,19 @@
  * AI Tasks Runner — последовательное выполнение заданий из манифеста
  * с запуском агентов (exec, verify, actualize) и фиксацией в git.
  *
+ * Все переменные конфигурации можно задать в корневом .env репозитория (префикс AI_TASKS_).
+ * См. README и блок ниже.
+ *
  * Использование:
  *   node scripts/ai-tasks-runner/runner.js [--dry-run] [--config path] [--task-ids id1,id2] [--start-from id] [--no-push] [--no-pull]
- *
- * Переменные окружения:
- *   AI_TASKS_EXEC_CMD, AI_TASKS_VERIFY_CMD, AI_TASKS_ACTUALIZE_CMD — переопределение команд агентов
- *   AI_TASKS_CONFIG — путь к конфигу (если не --config)
  */
 
 const path = require('path');
 const fs = require('fs');
 const { REPO_ROOT, resolveFromRepo, getTaskNameFromFile, buildBranchName } = require('./lib/paths');
+
+// Загрузка переменных из корневого .env (до использования process.env в конфиге)
+require('dotenv').config({ path: path.join(REPO_ROOT, '.env') });
 const {
   ensureLogsDir,
   formatDateForFilename,
@@ -42,7 +44,29 @@ const startFrom = getOpt('--start-from');
 const noPush = hasOpt('--no-push');
 const noPull = hasOpt('--no-pull');
 
-// --- Config ---
+// --- Config (default → config file → .env) ---
+function parseBool(value) {
+  if (value === undefined || value === '') return undefined;
+  const v = String(value).toLowerCase();
+  return v === 'true' || v === '1' || v === 'yes';
+}
+
+function configFromEnv() {
+  const env = process.env;
+  const out = {};
+  if (env.AI_TASKS_MANIFEST_PATH != null) out.manifestPath = env.AI_TASKS_MANIFEST_PATH;
+  if (env.AI_TASKS_TASKS_DIR != null) out.tasksDir = env.AI_TASKS_TASKS_DIR;
+  if (env.AI_TASKS_LOGS_DIR != null) out.logsDir = env.AI_TASKS_LOGS_DIR;
+  if (env.AI_TASKS_BASE_BRANCH != null) out.baseBranch = env.AI_TASKS_BASE_BRANCH;
+  if (env.AI_TASKS_BRANCH_TEMPLATE != null) out.branchTemplate = env.AI_TASKS_BRANCH_TEMPLATE;
+  if (env.AI_TASKS_MAX_ATTEMPTS != null) out.maxAttempts = parseInt(env.AI_TASKS_MAX_ATTEMPTS, 10);
+  if (env.AI_TASKS_STATUS_FILTER != null) out.statusFilter = env.AI_TASKS_STATUS_FILTER;
+  if (env.AI_TASKS_COMMIT_LOGS != null) out.commitLogs = parseBool(env.AI_TASKS_COMMIT_LOGS);
+  if (env.AI_TASKS_EMPTY_COMMIT_IF_NO_CHANGES != null) out.emptyCommitIfNoChanges = parseBool(env.AI_TASKS_EMPTY_COMMIT_IF_NO_CHANGES);
+  if (env.AI_TASKS_REMOTE != null) out.remote = env.AI_TASKS_REMOTE;
+  return out;
+}
+
 function loadConfig() {
   const defaultPath = path.join(__dirname, 'config.default.json');
   const defaultConfig = JSON.parse(fs.readFileSync(defaultPath, 'utf8'));
@@ -51,12 +75,17 @@ function loadConfig() {
   if (fs.existsSync(filePath)) {
     fileConfig = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   }
-  return {
+  const envConfig = configFromEnv();
+  const merged = {
     ...defaultConfig,
     ...fileConfig,
-    commitLogs: fileConfig.commitLogs !== undefined ? fileConfig.commitLogs : defaultConfig.commitLogs,
-    emptyCommitIfNoChanges: fileConfig.emptyCommitIfNoChanges !== undefined
-      ? fileConfig.emptyCommitIfNoChanges
+    ...envConfig,
+  };
+  return {
+    ...merged,
+    commitLogs: merged.commitLogs !== undefined ? merged.commitLogs : defaultConfig.commitLogs,
+    emptyCommitIfNoChanges: merged.emptyCommitIfNoChanges !== undefined
+      ? merged.emptyCommitIfNoChanges
       : defaultConfig.emptyCommitIfNoChanges,
   };
 }
