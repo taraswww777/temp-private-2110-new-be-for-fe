@@ -165,11 +165,11 @@
     {
       "id": "TASK-019",
       "title": "apiMock2 и generateMockData2",
-      "status": "planned",
+      "status": "completed",
       "file": "TASK-019-fe-ui-apiMock2-generateMockData2.md",
       "createdDate": "2026-01-30T20:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-02-01T00:00:00Z",
+      "branch": "feature/TASK-019-fe-ui-apiMock2-generateMockData2"
     },
     {
       "id": "TASK-020",
