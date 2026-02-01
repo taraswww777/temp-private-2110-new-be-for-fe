@@ -206,6 +206,15 @@
       "createdDate": "2026-02-01T00:00:00Z",
       "completedDate": "2026-02-01T00:00:00Z",
       "branch": "feature/temp-private-2110"
+    },
+    {
+      "id": "TASK-024",
+      "title": "Рефакторинг модулей ветки AppRouter (Report6406, ReportTemplate, ReportsMenu)",
+      "status": "planned",
+      "file": "TASK-024-fe-refactor-modules-appRouter.md",
+      "createdDate": "2026-02-01T12:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
