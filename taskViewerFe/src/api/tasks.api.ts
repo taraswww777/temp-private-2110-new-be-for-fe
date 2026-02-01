@@ -1,3 +1,4 @@
+import { ApiError } from '@/api/apiError';
 import type { Task, TaskDetail, UpdateTaskMetaInput } from '@/types/task.types';
 
 // Используем относительный путь - Vite dev server проксирует на http://localhost:3001
@@ -7,7 +8,7 @@ export const tasksApi = {
   async getAllTasks(): Promise<Task[]> {
     const response = await fetch(`${API_BASE_URL}/tasks`);
     if (!response.ok) {
-      throw new Error('Failed to fetch tasks');
+      throw await ApiError.fromResponse(response);
     }
     return response.json();
   },
@@ -15,7 +16,7 @@ export const tasksApi = {
   async getTaskById(id: string): Promise<TaskDetail> {
     const response = await fetch(`${API_BASE_URL}/tasks/${id}`);
     if (!response.ok) {
-      throw new Error('Failed to fetch task');
+      throw await ApiError.fromResponse(response);
     }
     return response.json();
   },
@@ -29,7 +30,7 @@ export const tasksApi = {
       body: JSON.stringify(updates),
     });
     if (!response.ok) {
-      throw new Error('Failed to update task');
+      throw await ApiError.fromResponse(response);
     }
     return response.json();
   },

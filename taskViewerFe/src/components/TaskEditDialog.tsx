@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -41,7 +42,8 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
       await onSave(formData);
       setOpen(false);
     } catch (err) {
-      console.error('Failed to save task:', err);
+      const message = err instanceof Error ? err.message : 'Не удалось сохранить изменения';
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -81,6 +83,7 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="backlog">📋 Бэклог</SelectItem>
+                <SelectItem value="planned">📅 Запланировано</SelectItem>
                 <SelectItem value="in-progress">⏳ В работе</SelectItem>
                 <SelectItem value="completed">✅ Выполнено</SelectItem>
                 <SelectItem value="cancelled">❌ Отменено</SelectItem>

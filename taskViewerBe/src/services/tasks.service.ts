@@ -71,6 +71,7 @@ export const tasksService = {
     // Маппинг статусов на эмодзи
     const statusEmojiMap: Record<string, string> = {
       'backlog': '📋 Бэклог',
+      'planned': '📅 Запланировано',
       'in-progress': '⏳ В работе',
       'completed': '✅ Выполнено',
       'cancelled': '❌ Отменено',

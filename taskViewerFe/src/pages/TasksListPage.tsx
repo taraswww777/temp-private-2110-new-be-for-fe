@@ -1,6 +1,8 @@
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TaskList } from '@/components/TaskList';
 import { useTasks } from '@/hooks/useTasks';
+import { ApiError } from '@/api/apiError';
 
 export function TasksListPage() {
   const { tasks, loading, error, refetch } = useTasks();
@@ -15,10 +17,35 @@ export function TasksListPage() {
   }
 
   if (error) {
+    const isApiError = error instanceof ApiError;
+    const details = isApiError ? error.details : [];
     return (
-      <div className="rounded-lg border bg-destructive/10 p-4">
-        <p className="text-sm text-destructive">Ошибка загрузки задач: {error}</p>
-      </div>
+      <Card className="border-destructive/50 bg-destructive/5">
+        <CardHeader>
+          <CardTitle className="text-destructive">Ошибка загрузки задач</CardTitle>
+          <CardDescription className="text-destructive/90 whitespace-pre-wrap">
+            {error.message}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {details.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-foreground">Детали валидации:</p>
+              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                {details.map((d, i) => (
+                  <li key={i}>
+                    <span className="font-mono text-foreground">{d.path}</span>: {d.message}
+                    {d.expectedValues?.length ? ` (допустимые: ${d.expectedValues.join(', ')})` : ''}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <Button variant="outline" onClick={() => refetch()}>
+            Повторить запрос
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
 

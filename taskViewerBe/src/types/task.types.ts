@@ -1,7 +1,7 @@
 export interface Task {
   id: string;
   title: string;
-  status: 'backlog' | 'in-progress' | 'completed' | 'cancelled';
+  status: 'backlog' | 'planned' | 'in-progress' | 'completed' | 'cancelled';
   file: string;
   createdDate: string | null;
   completedDate: string | null;
