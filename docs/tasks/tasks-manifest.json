@@ -183,11 +183,29 @@
     {
       "id": "TASK-021",
       "title": "Скрипт автоматизации выполнения заданий AI-агентом",
-      "status": "planned",
+      "status": "completed",
       "file": "TASK-021-automation-script-ai-tasks-runner.md",
       "createdDate": "2026-01-30T22:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-02-01T00:00:00Z",
+      "branch": "feature/temp-private-2110"
+    },
+    {
+      "id": "TASK-022",
+      "title": "Информативные ошибки валидации в Task Viewer API и интерфейсе",
+      "status": "completed",
+      "file": "TASK-022-informative-validation-errors-task-viewer.md",
+      "createdDate": "2026-02-01T00:00:00Z",
+      "completedDate": "2026-02-01T00:00:00Z",
+      "branch": "feature/temp-private-2110"
+    },
+    {
+      "id": "TASK-023",
+      "title": "Поддержка статуса «planned» в Task Viewer",
+      "status": "completed",
+      "file": "TASK-023-task-status-planned-task-viewer.md",
+      "createdDate": "2026-02-01T00:00:00Z",
+      "completedDate": "2026-02-01T00:00:00Z",
+      "branch": "feature/temp-private-2110"
     }
   ]
 }

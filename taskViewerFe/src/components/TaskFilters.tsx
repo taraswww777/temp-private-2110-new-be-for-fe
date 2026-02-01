@@ -37,6 +37,7 @@ export function TaskFilters({
         <SelectContent>
           <SelectItem value="all">Все статусы</SelectItem>
           <SelectItem value="backlog">📋 Бэклог</SelectItem>
+          <SelectItem value="planned">📅 Запланировано</SelectItem>
           <SelectItem value="in-progress">⏳ В работе</SelectItem>
           <SelectItem value="completed">✅ Выполнено</SelectItem>
           <SelectItem value="cancelled">❌ Отменено</SelectItem>

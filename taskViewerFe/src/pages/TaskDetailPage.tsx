@@ -6,6 +6,7 @@ import { TaskStatusBadge } from '@/components/TaskStatusBadge';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { tasksApi } from '@/api/tasks.api';
+import { ApiError } from '@/api/apiError';
 import type { TaskDetail, UpdateTaskMetaInput } from '@/types/task.types';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -14,7 +15,7 @@ export function TaskDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [task, setTask] = useState<TaskDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const fetchTask = async () => {
     if (!id) return;
@@ -25,7 +26,7 @@ export function TaskDetailPage() {
       setTask(data);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setError(err instanceof Error ? err : new Error('Unknown error'));
     } finally {
       setLoading(false);
     }
@@ -57,12 +58,39 @@ export function TaskDetailPage() {
   }
 
   if (error || !task) {
+    const isApiError = error instanceof ApiError;
+    const details = isApiError ? error.details : [];
     return (
-      <div className="rounded-lg border bg-destructive/10 p-4">
-        <p className="text-sm text-destructive">
-          Ошибка загрузки задачи: {error || 'Задача не найдена'}
-        </p>
-      </div>
+      <Card className="border-destructive/50 bg-destructive/5">
+        <CardHeader>
+          <CardTitle className="text-destructive">
+            {error ? 'Ошибка загрузки задачи' : 'Задача не найдена'}
+          </CardTitle>
+          <CardDescription className="text-destructive/90 whitespace-pre-wrap">
+            {error?.message ?? 'Задача не найдена'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {details.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-foreground">Детали валидации:</p>
+              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                {details.map((d, i) => (
+                  <li key={i}>
+                    <span className="font-mono text-foreground">{d.path}</span>: {d.message}
+                    {d.expectedValues?.length ? ` (допустимые: ${d.expectedValues.join(', ')})` : ''}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {error && (
+            <Button variant="outline" onClick={() => fetchTask()}>
+              Повторить запрос
+            </Button>
+          )}
+        </CardContent>
+      </Card>
     );
   }
 

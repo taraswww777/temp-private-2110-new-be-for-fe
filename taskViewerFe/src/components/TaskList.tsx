@@ -91,7 +91,8 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
       await tasksApi.updateTaskMeta(taskId, { status: newStatus });
       onTaskUpdate();
     } catch (err) {
-      console.error('Failed to update task status:', err);
+      const message = err instanceof Error ? err.message : 'Не удалось обновить статус';
+      toast.error(message);
     }
   };
 
@@ -190,6 +191,7 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="backlog">📋 Бэклог</SelectItem>
+                      <SelectItem value="planned">📅 Запланировано</SelectItem>
                       <SelectItem value="in-progress">⏳ В работе</SelectItem>
                       <SelectItem value="completed">✅ Выполнено</SelectItem>
                       <SelectItem value="cancelled">❌ Отменено</SelectItem>
