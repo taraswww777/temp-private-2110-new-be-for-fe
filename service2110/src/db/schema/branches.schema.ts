@@ -1,10 +1,10 @@
-import { pgTable, integer, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
 
 /**
  * Справочник филиалов
  */
 export const branches = pgTable('branches', {
-  id: varchar('id', { length: 50 }).primaryKey(),
+  id: uuid('id').primaryKey(),
   code: varchar('code', { length: 10 }).notNull().unique(),
   name: varchar('name', { length: 255 }).notNull(),
 });

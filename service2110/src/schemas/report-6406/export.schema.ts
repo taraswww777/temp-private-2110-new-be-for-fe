@@ -10,7 +10,7 @@ export const exportFiltersSchema = z.object({
   statuses: z.array(reportTaskStatusSchema).optional().describe('Список статусов для фильтрации'),
   
   // Фильтры по филиалам (массив строк)
-  branchIds: z.array(z.coerce.string()).optional().describe('Список идентификаторов филиалов для фильтрации'),
+  branchIds: z.array(z.string().uuid()).optional().describe('Список идентификаторов филиалов для фильтрации'),
   
   // Фильтры по типам отчётов (массив)
   reportTypes: z.array(reportTypeSchema).optional().describe('Список типов отчётов для фильтрации'),

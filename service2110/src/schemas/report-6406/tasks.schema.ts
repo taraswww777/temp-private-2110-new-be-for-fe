@@ -55,7 +55,7 @@ export type ReportTypeType = z.infer<typeof reportTypeSchema>;
  * Схема для создания задания
  */
 export const createTaskSchema = z.object({
-  branchId: z.string().describe('Идентификатор филиала'),
+  branchId: z.string().uuid().describe('Идентификатор филиала'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
   accountMask: z.string().max(20).optional().describe('Маска счетов для фильтрации'),
@@ -96,7 +96,7 @@ export const taskSchema = z.object({
   id: z.string().uuid().describe('Уникальный идентификатор задания'),
   createdAt: z.string().datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchId: z.string().describe('Идентификатор филиала'),
+  branchId: z.string().uuid().describe('Идентификатор филиала'),
   branchName: z.string().describe('Название филиала'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
@@ -148,7 +148,7 @@ export const taskDetailsSchema = z.object({
   id: z.string().uuid().describe('Уникальный идентификатор задания'),
   createdAt: z.string().datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchId: z.string().describe('Идентификатор филиала'),
+  branchId: z.string().uuid().describe('Идентификатор филиала'),
   branchName: z.string().describe('Название филиала'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
@@ -192,7 +192,7 @@ export const taskListItemSchema = z.object({
   id: z.string().uuid().describe('Уникальный идентификатор задания'),
   createdAt: z.string().datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)'),
-  branchId: z.string().describe('Идентификатор филиала'),
+  branchId: z.string().uuid().describe('Идентификатор филиала'),
   branchName: z.string().describe('Название филиала'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
@@ -262,7 +262,6 @@ export const tasksListSortingSchema = z.object({
 /** Схема одного фильтра для списка заданий (колонка — enum) */
 export const taskListFilterItemSchema = z.object({
   column: taskListFilterColumnSchema.describe('Колонка для фильтрации'),
-  operator: z.enum(['equals', 'notEquals', 'contains', 'greaterThan', 'lessThan']).describe('Оператор сравнения'),
   value: z.string().describe('Значение (статус — enum, даты — YYYY-MM-DD, дата-время — ISO 8601)'),
 });
 
