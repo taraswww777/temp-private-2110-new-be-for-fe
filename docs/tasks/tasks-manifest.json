@@ -269,6 +269,15 @@
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
       "branch": null
+    },
+    {
+      "id": "TASK-031",
+      "title": "Добавление эндпоинта справочника счетов первого и второго порядка",
+      "status": "backlog",
+      "file": "TASK-031-add-accounts-reference-endpoint.md",
+      "createdDate": "2026-02-04T00:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
