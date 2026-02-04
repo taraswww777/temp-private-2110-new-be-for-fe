@@ -174,7 +174,7 @@
     {
       "id": "TASK-020",
       "title": "Рефакторинг FE — стор для ветки AppRouter, текущий стор без изменений",
-      "status": "in_progress",
+      "status": "in-progress",
       "file": "TASK-020-fe-refactor-store-appRouter.md",
       "createdDate": "2026-01-30T21:00:00Z",
       "completedDate": null,
@@ -210,16 +210,16 @@
     {
       "id": "TASK-024",
       "title": "Рефакторинг модулей ветки AppRouter (Report6406, ReportTemplate, ReportsMenu)",
-      "status": "planned",
+      "status": "completed",
       "file": "TASK-024-fe-refactor-modules-appRouter.md",
       "createdDate": "2026-02-01T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": "feature/TASK-024-fe-refactor-modules-appRouter"
     },
     {
       "id": "TASK-025",
       "title": "BasePageTemplate — отображение diskSpaces из сырых данных BE, утилита formatByteSize",
-      "status": "planned",
+      "status": "backlog",
       "file": "TASK-025-base-page-template-disk-space-format.md",
       "createdDate": "2026-02-03T00:00:00Z",
       "completedDate": null,
@@ -228,11 +228,29 @@
     {
       "id": "TASK-026",
       "title": "Форма «Создать отчёт» — обязательные поля и валидация до отправки",
-      "status": "planned",
+      "status": "backlog",
       "file": "TASK-026-create-report-form-validation.md",
       "createdDate": "2026-02-03T00:00:00Z",
       "completedDate": null,
       "branch": null
+    },
+    {
+      "id": "TASK-027",
+      "title": "Добавление эндпоинта истории изменения статусов задачи",
+      "status": "backlog",
+      "file": "TASK-027-add-task-status-history-endpoint.md",
+      "createdDate": "2026-02-04T00:00:00Z",
+      "completedDate": "2026-02-04T00:00:00Z",
+      "branch": "feature/TASK-027-add-task-status-history-endpoint"
+    },
+    {
+      "id": "TASK-028",
+      "title": "Добавление моков для эндпоинта истории изменения статусов задачи",
+      "status": "backlog",
+      "file": "TASK-028-add-task-status-history-mocks.md",
+      "createdDate": "2026-02-04T00:00:00Z",
+      "completedDate": "2026-02-04T00:00:00Z",
+      "branch": "feature/TASK-028-add-task-status-history-mocks"
     }
   ]
 }
