@@ -6,12 +6,9 @@ describe('GetTasksRequestSchema / filter packageId', () => {
     const body = {
       pagination: { number: 1, size: 20 },
       sorting: { direction: 'desc' as const, column: 'createdAt' },
-      filter: [
-        {
-          column: 'packageId',
-          value: 'a1b2c3d4-e5f6-4789-a012-345678901234',
-        },
-      ],
+      filter: {
+        packageId: 'a1b2c3d4-e5f6-4789-a012-345678901234',
+      },
     };
     const result = getTasksRequestSchema.safeParse(body);
     expect(result.success).toBe(true);
@@ -21,12 +18,9 @@ describe('GetTasksRequestSchema / filter packageId', () => {
     const body = {
       pagination: { number: 1, size: 20 },
       sorting: { direction: 'asc' as const, column: 'branchId' },
-      filter: [
-        {
-          column: 'packageId',
-          value: 'null',
-        },
-      ],
+      filter: {
+        packageId: null,
+      },
     };
     const result = getTasksRequestSchema.safeParse(body);
     expect(result.success).toBe(true);
@@ -36,27 +30,49 @@ describe('GetTasksRequestSchema / filter packageId', () => {
     const body = {
       pagination: { number: 1, size: 20 },
       sorting: { direction: 'asc' as const, column: 'createdAt' },
-      filter: [
-        {
-          column: 'branchIds',
-          value: '550e8400-e29b-41d4-a716-446655440001',
-        },
-      ],
+      filter: {
+        branchIds: ['550e8400-e29b-41d4-a716-446655440001'],
+      },
     };
     const result = getTasksRequestSchema.safeParse(body);
     expect(result.success).toBe(true);
   });
 
-  it('принимает фильтр branchIds с несколькими UUID (разделены запятой)', () => {
+  it('принимает фильтр branchIds с несколькими UUID', () => {
     const body = {
       pagination: { number: 1, size: 20 },
       sorting: { direction: 'asc' as const, column: 'createdAt' },
-      filter: [
-        {
-          column: 'branchIds',
-          value: '550e8400-e29b-41d4-a716-446655440001,550e8400-e29b-41d4-a716-446655440002,550e8400-e29b-41d4-a716-446655440003',
-        },
-      ],
+      filter: {
+        branchIds: [
+          '550e8400-e29b-41d4-a716-446655440001',
+          '550e8400-e29b-41d4-a716-446655440002',
+          '550e8400-e29b-41d4-a716-446655440003',
+        ],
+      },
+    };
+    const result = getTasksRequestSchema.safeParse(body);
+    expect(result.success).toBe(true);
+  });
+
+  it('принимает комбинацию нескольких фильтров', () => {
+    const body = {
+      pagination: { number: 1, size: 20 },
+      sorting: { direction: 'asc' as const, column: 'createdAt' },
+      filter: {
+        status: 'created',
+        reportType: 'LSOZ',
+        format: 'TXT',
+        branchIds: ['550e8400-e29b-41d4-a716-446655440001'],
+      },
+    };
+    const result = getTasksRequestSchema.safeParse(body);
+    expect(result.success).toBe(true);
+  });
+
+  it('принимает запрос без фильтров (filter опционален)', () => {
+    const body = {
+      pagination: { number: 1, size: 20 },
+      sorting: { direction: 'asc' as const, column: 'createdAt' },
     };
     const result = getTasksRequestSchema.safeParse(body);
     expect(result.success).toBe(true);

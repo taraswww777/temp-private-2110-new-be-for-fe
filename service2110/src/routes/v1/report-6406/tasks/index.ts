@@ -59,7 +59,7 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Report 6406 - Tasks'],
       summary: 'Получить список заданий (пагинация, сортировка, фильтрация)',
-      description: 'Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems. Фильтр по пакету: column=packageId, value=<packageId> — задания в указанном пакете; column=packageId, value=null — задания без пакета. Фильтр по филиалам: column=branchIds, value=<uuid1,uuid2,uuid3> — задания, связанные с указанными филиалами (UUID разделены запятой).',
+      description: 'Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально, объект с заранее определённой структурой). Ответ: items, totalItems. Фильтр — объект с опциональными полями: packageId (UUID или null для заданий без пакета), branchIds (массив UUID), branchName, status, reportType, format, source, createdBy, periodStart (YYYY-MM-DD), periodEnd (YYYY-MM-DD), createdAt (ISO 8601), updatedAt (ISO 8601). Можно комбинировать несколько фильтров одновременно.',
       body: getTasksRequestSchema,
       response: {
         200: tasksListResponseSchema,

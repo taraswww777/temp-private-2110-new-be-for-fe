@@ -810,40 +810,66 @@
             "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
           "filter": {
-            "description": "Фильтры для списка заданий",
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "column": {
+            "description": "Фильтры для списка заданий (объект с опциональными полями)",
+            "type": "object",
+            "properties": {
+              "packageId": {
+                "description": "ID пакета (null — задания без пакета)",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "branchIds": {
+                "description": "Массив идентификаторов филиалов",
+                "type": "array",
+                "items": {
                   "type": "string",
-                  "enum": [
-                    "packageId",
-                    "branchIds",
-                    "branchName",
-                    "status",
-                    "reportType",
-                    "format",
-                    "source",
-                    "createdBy",
-                    "periodStart",
-                    "periodEnd",
-                    "createdAt",
-                    "updatedAt"
-                  ],
-                  "description": "Колонка для фильтрации"
-                },
-                "value": {
-                  "type": "string",
-                  "description": "Значение (статус — enum, даты — YYYY-MM-DD, дата-время — ISO 8601)"
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                 }
               },
-              "required": [
-                "column",
-                "value"
-              ],
-              "additionalProperties": false
-            }
+              "branchName": {
+                "description": "Название филиала",
+                "type": "string"
+              },
+              "status": {
+                "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+              },
+              "reportType": {
+                "$ref": "#/components/schemas/ReportTypeEnumSchema"
+              },
+              "format": {
+                "$ref": "#/components/schemas/FileFormatEnumSchema"
+              },
+              "source": {
+                "description": "Источник данных",
+                "type": "string"
+              },
+              "createdBy": {
+                "description": "ФИО создателя задания",
+                "type": "string"
+              },
+              "periodStart": {
+                "$ref": "#/components/schemas/DateSchema"
+              },
+              "periodEnd": {
+                "$ref": "#/components/schemas/DateSchema"
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/DateTimeSchema"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/DateTimeSchema"
+              }
+            },
+            "additionalProperties": false
           }
         },
         "required": [
@@ -2665,7 +2691,7 @@
         "tags": [
           "Report 6406 - Tasks"
         ],
-        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems. Фильтр по пакету: column=packageId, value=<packageId> — задания в указанном пакете; column=packageId, value=null — задания без пакета. Фильтр по филиалам: column=branchIds, value=<uuid1,uuid2,uuid3> — задания, связанные с указанными филиалами (UUID разделены запятой).",
+        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально, объект с заранее определённой структурой). Ответ: items, totalItems. Фильтр — объект с опциональными полями: packageId (UUID или null для заданий без пакета), branchIds (массив UUID), branchName, status, reportType, format, source, createdBy, periodStart (YYYY-MM-DD), periodEnd (YYYY-MM-DD), createdAt (ISO 8601), updatedAt (ISO 8601). Можно комбинировать несколько фильтров одновременно.",
         "requestBody": {
           "content": {
             "application/json": {
