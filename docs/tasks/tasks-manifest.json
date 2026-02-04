@@ -260,6 +260,15 @@
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
       "branch": "feature/TASK-029-department-field-multiple-selection"
+    },
+    {
+      "id": "TASK-030",
+      "title": "Поддержка множественных branchId в service2110",
+      "status": "backlog",
+      "file": "TASK-030-service2110-multiple-branchId-support.md",
+      "createdDate": "2026-02-04T00:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
