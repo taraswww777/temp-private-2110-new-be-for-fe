@@ -388,10 +388,20 @@
         "type": "object",
         "properties": {
           "branchId": {
+            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)",
             "type": "string",
             "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала"
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "branchIds": {
+            "description": "Массив идентификаторов филиалов",
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
           },
           "periodStart": {
             "$ref": "#/components/schemas/DateSchema"
@@ -425,7 +435,6 @@
           }
         },
         "required": [
-          "branchId",
           "periodStart",
           "periodEnd",
           "format",
@@ -454,11 +463,27 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала"
+            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+          },
+          "branchIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "description": "Массив идентификаторов филиалов"
           },
           "branchName": {
             "type": "string",
-            "description": "Название филиала"
+            "description": "Название филиала (название первого филиала)"
+          },
+          "branchNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Массив названий филиалов"
           },
           "periodStart": {
             "$ref": "#/components/schemas/DateSchema"
@@ -598,7 +623,9 @@
           "createdAt",
           "createdBy",
           "branchId",
+          "branchIds",
           "branchName",
+          "branchNames",
           "periodStart",
           "periodEnd",
           "accountMask",
@@ -643,11 +670,27 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала"
+            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+          },
+          "branchIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "description": "Массив идентификаторов филиалов"
           },
           "branchName": {
             "type": "string",
-            "description": "Название филиала"
+            "description": "Название филиала (название первого филиала)"
+          },
+          "branchNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Массив названий филиалов"
           },
           "periodStart": {
             "$ref": "#/components/schemas/DateSchema"
@@ -707,7 +750,9 @@
           "createdAt",
           "createdBy",
           "branchId",
+          "branchIds",
           "branchName",
+          "branchNames",
           "periodStart",
           "periodEnd",
           "status",
@@ -774,7 +819,7 @@
                   "type": "string",
                   "enum": [
                     "packageId",
-                    "branchId",
+                    "branchIds",
                     "branchName",
                     "status",
                     "reportType",
@@ -852,11 +897,27 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала"
+            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+          },
+          "branchIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "description": "Массив идентификаторов филиалов"
           },
           "branchName": {
             "type": "string",
-            "description": "Название филиала"
+            "description": "Название филиала (название первого филиала)"
+          },
+          "branchNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Массив названий филиалов"
           },
           "periodStart": {
             "$ref": "#/components/schemas/DateSchema"
@@ -1021,7 +1082,9 @@
           "createdAt",
           "createdBy",
           "branchId",
+          "branchIds",
           "branchName",
+          "branchNames",
           "periodStart",
           "periodEnd",
           "accountMask",
@@ -1067,11 +1130,27 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала"
+            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+          },
+          "branchIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "description": "Массив идентификаторов филиалов"
           },
           "branchName": {
             "type": "string",
-            "description": "Название филиала"
+            "description": "Название филиала (название первого филиала)"
+          },
+          "branchNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Массив названий филиалов"
           },
           "periodStart": {
             "$ref": "#/components/schemas/DateSchema"
@@ -1244,7 +1323,9 @@
           "createdAt",
           "createdBy",
           "branchId",
+          "branchIds",
           "branchName",
+          "branchNames",
           "periodStart",
           "periodEnd",
           "accountMask",
@@ -1817,11 +1898,27 @@
                   "type": "string",
                   "format": "uuid",
                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                  "description": "Идентификатор филиала"
+                  "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+                },
+                "branchIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "description": "Массив идентификаторов филиалов"
                 },
                 "branchName": {
                   "type": "string",
-                  "description": "Название филиала"
+                  "description": "Название филиала (название первого филиала)"
+                },
+                "branchNames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Массив названий филиалов"
                 },
                 "periodStart": {
                   "$ref": "#/components/schemas/DateSchema"
@@ -1884,7 +1981,9 @@
                 "createdAt",
                 "createdBy",
                 "branchId",
+                "branchIds",
                 "branchName",
+                "branchNames",
                 "periodStart",
                 "periodEnd",
                 "status",
@@ -2487,7 +2586,7 @@
         }
       }
     },
-    "/api/v1/report-6406/tasks/": {
+    "/api/v1/report-6406/tasks": {
       "post": {
         "summary": "Создать новое задание на построение отчёта",
         "tags": [
@@ -2566,7 +2665,7 @@
         "tags": [
           "Report 6406 - Tasks"
         ],
-        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems. Фильтр по пакету: column=packageId, value=<packageId> — задания в указанном пакете; column=packageId, value=null — задания без пакета.",
+        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems. Фильтр по пакету: column=packageId, value=<packageId> — задания в указанном пакете; column=packageId, value=null — задания без пакета. Фильтр по филиалам: column=branchIds, value=<uuid1,uuid2,uuid3> — задания, связанные с указанными филиалами (UUID разделены запятой).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2985,7 +3084,7 @@
         }
       }
     },
-    "/api/v1/report-6406/packages/": {
+    "/api/v1/report-6406/packages": {
       "post": {
         "summary": "Создать новый пакет",
         "tags": [

@@ -31,6 +31,36 @@ describe('GetTasksRequestSchema / filter packageId', () => {
     const result = getTasksRequestSchema.safeParse(body);
     expect(result.success).toBe(true);
   });
+
+  it('принимает фильтр branchIds с одним UUID', () => {
+    const body = {
+      pagination: { number: 1, size: 20 },
+      sorting: { direction: 'asc' as const, column: 'createdAt' },
+      filter: [
+        {
+          column: 'branchIds',
+          value: '550e8400-e29b-41d4-a716-446655440001',
+        },
+      ],
+    };
+    const result = getTasksRequestSchema.safeParse(body);
+    expect(result.success).toBe(true);
+  });
+
+  it('принимает фильтр branchIds с несколькими UUID (разделены запятой)', () => {
+    const body = {
+      pagination: { number: 1, size: 20 },
+      sorting: { direction: 'asc' as const, column: 'createdAt' },
+      filter: [
+        {
+          column: 'branchIds',
+          value: '550e8400-e29b-41d4-a716-446655440001,550e8400-e29b-41d4-a716-446655440002,550e8400-e29b-41d4-a716-446655440003',
+        },
+      ],
+    };
+    const result = getTasksRequestSchema.safeParse(body);
+    expect(result.success).toBe(true);
+  });
 });
 
 describe('TaskListItemSchema / packageIds', () => {
@@ -40,7 +70,9 @@ describe('TaskListItemSchema / packageIds', () => {
       createdAt: '2026-01-30T12:00:00.000Z',
       createdBy: 'Test',
       branchId: '550e8400-e29b-41d4-a716-446655440001',
+      branchIds: ['550e8400-e29b-41d4-a716-446655440001'],
       branchName: 'Branch 1',
+      branchNames: ['Branch 1'],
       periodStart: '2026-01-01',
       periodEnd: '2026-01-31',
       status: 'created',
@@ -66,7 +98,9 @@ describe('TaskListItemSchema / packageIds', () => {
       createdAt: '2026-01-30T12:00:00.000Z',
       createdBy: 'Test',
       branchId: '550e8400-e29b-41d4-a716-446655440001',
+      branchIds: ['550e8400-e29b-41d4-a716-446655440001'],
       branchName: 'Branch 1',
+      branchNames: ['Branch 1'],
       periodStart: '2026-01-01',
       periodEnd: '2026-01-31',
       status: 'created',

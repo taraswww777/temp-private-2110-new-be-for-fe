@@ -4,6 +4,7 @@ import {
   report6406PackageTasks, 
   report6406Packages,
   report6406TaskStatusHistory,
+  report6406TaskBranches,
   branches,
   TaskStatus,
 } from '../../db/schema/index.js';
@@ -31,24 +32,35 @@ export class TasksService {
    * Создать новое задание
    */
   async createTask(input: CreateTaskInput, createdBy: string): Promise<TaskDetails> {
-    // Получить название филиала
-    const [branch] = await db
-      .select()
-      .from(branches)
-      .where(eq(branches.id, input.branchId))
-      .limit(1);
-
-    if (!branch) {
-      throw new Error(`Branch with id ${input.branchId} not found`);
+    // Определить массив филиалов: используем branchIds если есть, иначе branchId
+    const branchIds = input.branchIds || (input.branchId ? [input.branchId] : []);
+    
+    if (branchIds.length === 0) {
+      throw new Error('At least one branchId must be provided');
     }
 
-    // Используем транзакцию для создания задания и записи в историю
+    // Получить информацию о филиалах
+    const branchList = await db
+      .select()
+      .from(branches)
+      .where(inArray(branches.id, branchIds));
+
+    if (branchList.length !== branchIds.length) {
+      const foundIds = branchList.map(b => b.id);
+      const missingIds = branchIds.filter(id => !foundIds.includes(id));
+      throw new Error(`Branches with ids ${missingIds.join(', ')} not found`);
+    }
+
+    // Первый филиал используется как основной для обратной совместимости
+    const primaryBranch = branchList[0];
+
+    // Используем транзакцию для создания задания, связи с филиалами и записи в историю
     return await db.transaction(async (trx) => {
       const [task] = await trx
         .insert(report6406Tasks)
         .values({
-          branchId: input.branchId,
-          branchName: branch.name,
+          branchId: primaryBranch.id,
+          branchName: primaryBranch.name,
           periodStart: input.periodStart,
           periodEnd: input.periodEnd,
           accountMask: input.accountMask || null,
@@ -63,6 +75,14 @@ export class TasksService {
         })
         .returning();
 
+      // Создать связи с филиалами
+      await trx.insert(report6406TaskBranches).values(
+        branchList.map(branch => ({
+          taskId: task.id,
+          branchId: branch.id,
+        }))
+      );
+
       // Добавить запись в историю статусов
       await trx.insert(report6406TaskStatusHistory).values({
         taskId: task.id,
@@ -73,8 +93,7 @@ export class TasksService {
         comment: 'Task created',
       });
 
-      const created = this.formatTask(task);
-      return this.getTaskById(created.id);
+      return this.getTaskById(task.id);
     });
   }
 
@@ -152,9 +171,39 @@ export class TasksService {
       taskIdToPackageIds.set(link.taskId, arr);
     }
 
+    // Подгрузка branchIds для заданий списка (связь many-to-many)
+    const branchLinks =
+      taskIds.length > 0
+        ? await db
+            .select({
+              taskId: report6406TaskBranches.taskId,
+              branchId: report6406TaskBranches.branchId,
+              branchName: branches.name,
+            })
+            .from(report6406TaskBranches)
+            .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
+            .where(inArray(report6406TaskBranches.taskId, taskIds))
+        : [];
+    const taskIdToBranchIds = new Map<string, string[]>();
+    const taskIdToBranchNames = new Map<string, string[]>();
+    for (const link of branchLinks) {
+      const ids = taskIdToBranchIds.get(link.taskId) ?? [];
+      ids.push(link.branchId);
+      taskIdToBranchIds.set(link.taskId, ids);
+      
+      const names = taskIdToBranchNames.get(link.taskId) ?? [];
+      names.push(link.branchName);
+      taskIdToBranchNames.set(link.taskId, names);
+    }
+
     return {
       items: tasks.map((task) =>
-        this.formatTaskListItem(task, taskIdToPackageIds.get(task.id) ?? []),
+        this.formatTaskListItem(
+          task, 
+          taskIdToPackageIds.get(task.id) ?? [],
+          taskIdToBranchIds.get(task.id) ?? [task.branchId],
+          taskIdToBranchNames.get(task.id) ?? [task.branchName],
+        ),
       ),
       totalItems: count,
     };
@@ -231,6 +280,28 @@ export class TasksService {
         continue;
       }
 
+      // Фильтр по филиалам: задания, связанные с указанными филиалами (связь many-to-many через report_6406_task_branches)
+      // Значение может быть одним UUID или несколькими UUID, разделенными запятой
+      if (f.column === 'branchIds') {
+        const branchIds = f.value.split(',').map(id => id.trim()).filter(id => id.length > 0);
+        if (branchIds.length > 0) {
+          conditions.push(
+            exists(
+              db
+                .select({ one: sql`1` })
+                .from(report6406TaskBranches)
+                .where(
+                  and(
+                    eq(report6406TaskBranches.taskId, report6406Tasks.id),
+                    inArray(report6406TaskBranches.branchId, branchIds),
+                  ),
+                ),
+            ),
+          );
+        }
+        continue;
+      }
+
       const col = stringColumns[f.column];
       if (col) {
         // По умолчанию используется равенство
@@ -278,7 +349,18 @@ export class TasksService {
       .innerJoin(report6406Packages, eq(report6406PackageTasks.packageId, report6406Packages.id))
       .where(eq(report6406PackageTasks.taskId, id));
 
-    return this.formatTaskDetails(task, packagesList);
+    // Получить филиалы, связанные с заданием
+    const taskBranches = await db
+      .select({
+        branchId: report6406TaskBranches.branchId,
+        branchName: branches.name,
+      })
+      .from(report6406TaskBranches)
+      .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
+      .where(eq(report6406TaskBranches.taskId, id))
+      .orderBy(asc(branches.name));
+
+    return this.formatTaskDetails(task, packagesList, taskBranches);
   }
 
   /**
@@ -551,15 +633,35 @@ export class TasksService {
   /**
    * Форматирование задания для API
    */
-  private formatTask(task: typeof report6406Tasks.$inferSelect): Task {
+  private async formatTask(task: typeof report6406Tasks.$inferSelect): Promise<Task> {
     const permissions = getStatusPermissions(task.status as TaskStatus);
+    
+    // Получить филиалы, связанные с заданием
+    const taskBranches = await db
+      .select({
+        branchId: report6406TaskBranches.branchId,
+        branchName: branches.name,
+      })
+      .from(report6406TaskBranches)
+      .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
+      .where(eq(report6406TaskBranches.taskId, task.id))
+      .orderBy(asc(branches.name));
+
+    const branchIds = taskBranches.length > 0 
+      ? taskBranches.map(b => b.branchId)
+      : [task.branchId];
+    const branchNames = taskBranches.length > 0
+      ? taskBranches.map(b => b.branchName)
+      : [task.branchName];
     
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
       createdBy: task.createdBy ?? '',
       branchId: task.branchId,
+      branchIds,
       branchName: task.branchName,
+      branchNames,
       periodStart: task.periodStart,
       periodEnd: task.periodEnd,
       accountMask: task.accountMask,
@@ -590,14 +692,25 @@ export class TasksService {
   private formatTaskDetails(
     task: typeof report6406Tasks.$inferSelect,
     packagesList: Array<{ id: string; name: string; addedAt: Date }>,
+    taskBranches: Array<{ branchId: string; branchName: string }> = [],
   ): TaskDetails {
     const permissions = getStatusPermissions(task.status as TaskStatus);
+    
+    const branchIds = taskBranches.length > 0 
+      ? taskBranches.map(b => b.branchId)
+      : [task.branchId];
+    const branchNames = taskBranches.length > 0
+      ? taskBranches.map(b => b.branchName)
+      : [task.branchName];
+    
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
       createdBy: task.createdBy ?? '',
       branchId: task.branchId,
+      branchIds,
       branchName: task.branchName,
+      branchNames,
       periodStart: task.periodStart,
       periodEnd: task.periodEnd,
       accountMask: task.accountMask,
@@ -633,6 +746,8 @@ export class TasksService {
   private formatTaskListItem(
     task: typeof report6406Tasks.$inferSelect,
     packageIds: string[] = [],
+    branchIds: string[] = [task.branchId],
+    branchNames: string[] = [task.branchName],
   ) {
     const permissions = getStatusPermissions(task.status as TaskStatus);
     return {
@@ -640,7 +755,9 @@ export class TasksService {
       createdAt: task.createdAt.toISOString(),
       createdBy: task.createdBy ?? '',
       branchId: task.branchId,
+      branchIds,
       branchName: task.branchName,
+      branchNames,
       periodStart: task.periodStart,
       periodEnd: task.periodEnd,
       status: task.status as TaskStatus,

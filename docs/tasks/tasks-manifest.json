@@ -255,7 +255,7 @@
     {
       "id": "TASK-029",
       "title": "Преобразование DepartmentField в компонент с множественным выбором",
-      "status": "in-progress",
+      "status": "completed",
       "file": "TASK-029-department-field-multiple-selection.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
@@ -264,17 +264,26 @@
     {
       "id": "TASK-030",
       "title": "Поддержка множественных branchId в service2110",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-030-service2110-multiple-branchId-support.md",
       "createdDate": "2026-02-04T00:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-02-04T00:00:00Z",
+      "branch": "feature/TASK-030-service2110-multiple-branchId-support"
     },
     {
       "id": "TASK-031",
       "title": "Добавление эндпоинта справочника счетов первого и второго порядка",
       "status": "backlog",
       "file": "TASK-031-add-accounts-reference-endpoint.md",
+      "createdDate": "2026-02-04T00:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-032",
+      "title": "Составление и документирование статусной модели задания на формирование отчета",
+      "status": "backlog",
+      "file": "TASK-032-status-model-documentation.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
       "branch": null
