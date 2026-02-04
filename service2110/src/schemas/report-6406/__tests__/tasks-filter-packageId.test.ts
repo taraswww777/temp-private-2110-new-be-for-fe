@@ -2,14 +2,13 @@ import { describe, it, expect } from 'vitest';
 import { getTasksRequestSchema, taskListItemSchema } from '../tasks.schema.js';
 
 describe('GetTasksRequestSchema / filter packageId', () => {
-  it('принимает фильтр packageId notEquals (задания, доступные для добавления в пакет)', () => {
+  it('принимает фильтр packageId (задания в указанном пакете)', () => {
     const body = {
       pagination: { number: 1, size: 20 },
       sorting: { direction: 'desc' as const, column: 'createdAt' },
       filter: [
         {
           column: 'packageId',
-          operator: 'notEquals' as const,
           value: 'a1b2c3d4-e5f6-4789-a012-345678901234',
         },
       ],
@@ -18,14 +17,13 @@ describe('GetTasksRequestSchema / filter packageId', () => {
     expect(result.success).toBe(true);
   });
 
-  it('принимает фильтр packageId equals null (задания без пакета)', () => {
+  it('принимает фильтр packageId null (задания без пакета)', () => {
     const body = {
       pagination: { number: 1, size: 20 },
       sorting: { direction: 'asc' as const, column: 'branchId' },
       filter: [
         {
           column: 'packageId',
-          operator: 'equals' as const,
           value: 'null',
         },
       ],
@@ -41,7 +39,7 @@ describe('TaskListItemSchema / packageIds', () => {
       id: 'a1b2c3d4-e5f6-4789-a012-345678901234',
       createdAt: '2026-01-30T12:00:00.000Z',
       createdBy: 'Test',
-      branchId: 'br1',
+      branchId: '550e8400-e29b-41d4-a716-446655440001',
       branchName: 'Branch 1',
       periodStart: '2026-01-01',
       periodEnd: '2026-01-31',
@@ -67,7 +65,7 @@ describe('TaskListItemSchema / packageIds', () => {
       id: 'a1b2c3d4-e5f6-4789-a012-345678901234',
       createdAt: '2026-01-30T12:00:00.000Z',
       createdBy: 'Test',
-      branchId: 'br1',
+      branchId: '550e8400-e29b-41d4-a716-446655440001',
       branchName: 'Branch 1',
       periodStart: '2026-01-01',
       periodEnd: '2026-01-31',

@@ -200,17 +200,6 @@
             "type": "string",
             "description": "Колонка для фильтрации"
           },
-          "operator": {
-            "type": "string",
-            "enum": [
-              "equals",
-              "notEquals",
-              "contains",
-              "greaterThan",
-              "lessThan"
-            ],
-            "description": "Оператор сравнения"
-          },
           "value": {
             "type": "string",
             "description": "Значение для фильтрации"
@@ -218,7 +207,6 @@
         },
         "required": [
           "column",
-          "operator",
           "value"
         ],
         "additionalProperties": false,
@@ -289,6 +277,8 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Идентификатор филиала"
           },
           "code": {
@@ -399,6 +389,8 @@
         "properties": {
           "branchId": {
             "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Идентификатор филиала"
           },
           "periodStart": {
@@ -460,6 +452,8 @@
           },
           "branchId": {
             "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Идентификатор филиала"
           },
           "branchName": {
@@ -647,6 +641,8 @@
           },
           "branchId": {
             "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Идентификатор филиала"
           },
           "branchName": {
@@ -792,17 +788,6 @@
                   ],
                   "description": "Колонка для фильтрации"
                 },
-                "operator": {
-                  "type": "string",
-                  "enum": [
-                    "equals",
-                    "notEquals",
-                    "contains",
-                    "greaterThan",
-                    "lessThan"
-                  ],
-                  "description": "Оператор сравнения"
-                },
                 "value": {
                   "type": "string",
                   "description": "Значение (статус — enum, даты — YYYY-MM-DD, дата-время — ISO 8601)"
@@ -810,7 +795,6 @@
               },
               "required": [
                 "column",
-                "operator",
                 "value"
               ],
               "additionalProperties": false
@@ -866,6 +850,8 @@
           },
           "branchId": {
             "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Идентификатор филиала"
           },
           "branchName": {
@@ -1079,6 +1065,8 @@
           },
           "branchId": {
             "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Идентификатор филиала"
           },
           "branchName": {
@@ -1827,6 +1815,8 @@
                 },
                 "branchId": {
                   "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
                   "description": "Идентификатор филиала"
                 },
                 "branchName": {
@@ -2154,7 +2144,9 @@
                 "description": "Список идентификаторов филиалов для фильтрации",
                 "type": "array",
                 "items": {
-                  "type": "string"
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                 }
               },
               "reportTypes": {
@@ -2574,7 +2566,7 @@
         "tags": [
           "Report 6406 - Tasks"
         ],
-        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems. Фильтр по пакету: column=packageId, operator=notEquals, value=<packageId> — задания, доступные для добавления в пакет; column=packageId, operator=equals, value=null — задания без пакета.",
+        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems. Фильтр по пакету: column=packageId, value=<packageId> — задания в указанном пакете; column=packageId, value=null — задания без пакета.",
         "requestBody": {
           "content": {
             "application/json": {

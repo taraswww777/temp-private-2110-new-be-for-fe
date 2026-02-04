@@ -92,7 +92,6 @@ export type HttpError = z.infer<typeof httpErrorSchema>;
  */
 export const filterSchema = z.object({
   column: z.string().describe('Колонка для фильтрации'),
-  operator: z.enum(['equals', 'notEquals', 'contains', 'greaterThan', 'lessThan']).describe('Оператор сравнения'),
   value: z.string().describe('Значение для фильтрации'),
 });
 

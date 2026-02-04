@@ -200,104 +200,54 @@ export class TasksService {
       // Фильтр по пакету: задания в/не в пакете (связь many-to-many через report_6406_package_tasks)
       if (f.column === 'packageId') {
         const valueNull = f.value.toLowerCase() === 'null';
-        if (f.operator === 'equals') {
-          if (valueNull) {
-            // Задания, не входящие ни в один пакет
-            conditions.push(
-              not(
-                exists(
-                  db
-                    .select({ one: sql`1` })
-                    .from(report6406PackageTasks)
-                    .where(eq(report6406PackageTasks.taskId, report6406Tasks.id)),
-                ),
-              ),
-            );
-          } else {
-            // Задания, входящие в пакет с указанным ID
-            conditions.push(
-              exists(
-                db
-                  .select({ one: sql`1` })
-                  .from(report6406PackageTasks)
-                  .where(
-                    and(
-                      eq(report6406PackageTasks.taskId, report6406Tasks.id),
-                      eq(report6406PackageTasks.packageId, f.value),
-                    ),
-                  ),
-              ),
-            );
-          }
-        } else if (f.operator === 'notEquals') {
-          if (valueNull) {
-            // Задания, входящие хотя бы в один пакет
-            conditions.push(
+        if (valueNull) {
+          // Задания, не входящие ни в один пакет
+          conditions.push(
+            not(
               exists(
                 db
                   .select({ one: sql`1` })
                   .from(report6406PackageTasks)
                   .where(eq(report6406PackageTasks.taskId, report6406Tasks.id)),
               ),
-            );
-          } else {
-            // Задания, не входящие в указанный пакет (доступны для добавления в этот пакет)
-            conditions.push(
-              not(
-                exists(
-                  db
-                    .select({ one: sql`1` })
-                    .from(report6406PackageTasks)
-                    .where(
-                      and(
-                        eq(report6406PackageTasks.taskId, report6406Tasks.id),
-                        eq(report6406PackageTasks.packageId, f.value),
-                      ),
-                    ),
+            ),
+          );
+        } else {
+          // Задания, входящие в пакет с указанным ID
+          conditions.push(
+            exists(
+              db
+                .select({ one: sql`1` })
+                .from(report6406PackageTasks)
+                .where(
+                  and(
+                    eq(report6406PackageTasks.taskId, report6406Tasks.id),
+                    eq(report6406PackageTasks.packageId, f.value),
+                  ),
                 ),
-              ),
-            );
-          }
+            ),
+          );
         }
         continue;
       }
 
       const col = stringColumns[f.column];
       if (col) {
-        if (f.operator === 'equals') {
-          conditions.push(eq(col, f.value));
-        } else if (f.operator === 'notEquals') {
-          conditions.push(ne(col, f.value));
-        } else if (f.operator === 'contains') {
-          conditions.push(sql`${col}::text ILIKE ${'%' + f.value + '%'}` as ReturnType<typeof eq>);
-        }
+        // По умолчанию используется равенство
+        conditions.push(eq(col, f.value));
         continue;
       }
       const dateCol = dateColumns[f.column];
       if (dateCol) {
-        if (f.operator === 'equals') {
-          conditions.push(eq(dateCol, f.value));
-        } else if (f.operator === 'notEquals') {
-          conditions.push(ne(dateCol, f.value));
-        } else if (f.operator === 'greaterThan') {
-          conditions.push(sql`${dateCol} > ${f.value}` as ReturnType<typeof eq>);
-        } else if (f.operator === 'lessThan') {
-          conditions.push(sql`${dateCol} < ${f.value}` as ReturnType<typeof eq>);
-        }
+        // По умолчанию используется равенство
+        conditions.push(eq(dateCol, f.value));
         continue;
       }
       const dtCol = dateTimeColumns[f.column];
       if (dtCol) {
+        // По умолчанию используется равенство
         const d = new Date(f.value);
-        if (f.operator === 'equals') {
-          conditions.push(eq(dtCol, d));
-        } else if (f.operator === 'notEquals') {
-          conditions.push(ne(dtCol, d));
-        } else if (f.operator === 'greaterThan') {
-          conditions.push(gte(dtCol, d));
-        } else if (f.operator === 'lessThan') {
-          conditions.push(lte(dtCol, d));
-        }
+        conditions.push(eq(dtCol, d));
       }
     }
     return conditions;

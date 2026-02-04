@@ -629,7 +629,7 @@ export async function buildApp() {
   // Регистрация маршрутов
   await app.register(routes);
 
-  // Хук для сохранения swagger.json после старта
+  // Хук для сохранения service2110.json после старта
   app.addHook('onReady', async () => {
     const swaggerJson = app.swagger();
     
@@ -756,7 +756,7 @@ export async function buildApp() {
       }
     }
     
-    const swaggerPath = join(process.cwd(), 'docs', 'swagger', 'swagger.json');
+    const swaggerPath = join(process.cwd(), 'docs', 'swagger', 'service2110.json');
     writeFileSync(swaggerPath, JSON.stringify(swaggerJson, null, 2));
     app.log.info(`Swagger JSON saved to ${swaggerPath}`);
   });

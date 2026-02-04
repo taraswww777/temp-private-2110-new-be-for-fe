@@ -147,38 +147,38 @@
     {
       "id": "TASK-017",
       "title": "Спека service2110 и скрипт причёсывания (update2)",
-      "status": "planned",
+      "status": "completed",
       "file": "TASK-017-fe-ui-api2-spec-and-update.md",
       "createdDate": "2026-01-30T20:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-02-01T00:00:00Z",
+      "branch": "feature/TASK-017-fe-ui-api2-spec-and-update"
     },
     {
       "id": "TASK-018",
       "title": "apiClient2 и полная цепочка api:fullUpdate2",
-      "status": "planned",
+      "status": "completed",
       "file": "TASK-018-fe-ui-apiClient2-fullUpdate2.md",
       "createdDate": "2026-01-30T20:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-02-01T00:00:00Z",
+      "branch": "feature/TASK-018-fe-ui-apiClient2-fullUpdate2"
     },
     {
       "id": "TASK-019",
       "title": "apiMock2 и generateMockData2",
-      "status": "planned",
+      "status": "completed",
       "file": "TASK-019-fe-ui-apiMock2-generateMockData2.md",
       "createdDate": "2026-01-30T20:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-02-01T00:00:00Z",
+      "branch": "feature/TASK-019-fe-ui-apiMock2-generateMockData2"
     },
     {
       "id": "TASK-020",
       "title": "Рефакторинг FE — стор для ветки AppRouter, текущий стор без изменений",
-      "status": "planned",
+      "status": "in_progress",
       "file": "TASK-020-fe-refactor-store-appRouter.md",
       "createdDate": "2026-01-30T21:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": "feature/TASK-020-fe-refactor-store-appRouter"
     },
     {
       "id": "TASK-021",
@@ -206,6 +206,33 @@
       "createdDate": "2026-02-01T00:00:00Z",
       "completedDate": "2026-02-01T00:00:00Z",
       "branch": "feature/temp-private-2110"
+    },
+    {
+      "id": "TASK-024",
+      "title": "Рефакторинг модулей ветки AppRouter (Report6406, ReportTemplate, ReportsMenu)",
+      "status": "planned",
+      "file": "TASK-024-fe-refactor-modules-appRouter.md",
+      "createdDate": "2026-02-01T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-025",
+      "title": "BasePageTemplate — отображение diskSpaces из сырых данных BE, утилита formatByteSize",
+      "status": "planned",
+      "file": "TASK-025-base-page-template-disk-space-format.md",
+      "createdDate": "2026-02-03T00:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-026",
+      "title": "Форма «Создать отчёт» — обязательные поля и валидация до отправки",
+      "status": "planned",
+      "file": "TASK-026-create-report-form-validation.md",
+      "createdDate": "2026-02-03T00:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
