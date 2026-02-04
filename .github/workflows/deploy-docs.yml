@@ -32,7 +32,7 @@ jobs:
       - name: Create docs directory
         run: |
           mkdir -p _site
-          cp service2110/docs/swagger/swagger.json _site/swagger.json
+          cp service2110/docs/swagger/service2110.json _site/swagger.json
       
       - name: Generate Swagger HTML
         run: |
