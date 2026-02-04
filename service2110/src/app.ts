@@ -732,11 +732,15 @@ export async function buildApp() {
     // Обрабатываем все пути и их методы
     if (swaggerJson.paths && typeof swaggerJson.paths === 'object') {
       const paths = swaggerJson.paths as Record<string, unknown>;
+      const newPaths: Record<string, unknown> = {};
       
       for (const [path, pathItem] of Object.entries(paths)) {
         if (!pathItem || typeof pathItem !== 'object') {
           continue;
         }
+        
+        // Убираем концевые слеши из путей (кроме корневого пути)
+        const normalizedPath = path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path;
         
         const item = pathItem as Record<string, unknown>;
         
@@ -753,7 +757,13 @@ export async function buildApp() {
             op.parameters = replaceSchemaInParameters(op.parameters);
           }
         }
+        
+        // Сохраняем путь с нормализованным именем
+        newPaths[normalizedPath] = pathItem;
       }
+      
+      // Заменяем paths на нормализованные (используем as any для обхода строгой типизации)
+      (swaggerJson as any).paths = newPaths;
     }
     
     const swaggerPath = join(process.cwd(), 'docs', 'swagger', 'service2110.json');
