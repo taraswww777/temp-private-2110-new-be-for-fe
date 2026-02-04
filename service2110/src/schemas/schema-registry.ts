@@ -13,6 +13,7 @@ import {
   sortOrderSchema,
   healthResponseSchema,
   httpErrorWithInstanceSchema,
+  uuidSchema,
 } from './common.schema.js';
 import {
   createTaskSchema,
@@ -81,6 +82,7 @@ export const schemaRegistry = new Map<string, unknown>([
   ['FilterDto', filterSchema],
   ['DateSchema', dateSchema],
   ['DateTimeSchema', dateTimeSchema],
+  ['UuidSchema', uuidSchema],
   ['FileFormatEnumSchema', fileFormatSchema],
   ['ReportTypeEnumSchema', reportTypeSchema],
   ['ReportTaskStatusEnumSchema', reportTaskStatusSchema],

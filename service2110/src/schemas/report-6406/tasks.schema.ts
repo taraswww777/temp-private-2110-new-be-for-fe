@@ -253,26 +253,6 @@ export const taskListSortColumnSchema = z.enum([
 ]);
 export type TaskListSortColumn = z.infer<typeof taskListSortColumnSchema>;
 
-/**
- * Допустимые колонки для фильтрации списка заданий (детерминированный набор).
- * packageId — фильтр по пакету (value: UUID или "null"); даты — YYYY-MM-DD; дата-время — ISO 8601; статус — enum.
- * branchIds — фильтр по филиалам (value: UUID, разделенные запятой, например "uuid1,uuid2,uuid3").
- */
-export const taskListFilterColumnSchema = z.enum([
-  'packageId',
-  'branchIds',
-  'branchName',
-  'status',
-  'reportType',
-  'format',
-  'source',
-  'createdBy',
-  'periodStart',
-  'periodEnd',
-  'createdAt',
-  'updatedAt',
-]);
-export type TaskListFilterColumn = z.infer<typeof taskListFilterColumnSchema>;
 
 /** Схема сортировки для списка заданий (колонка — enum) */
 export const tasksListSortingSchema = z.object({
@@ -280,11 +260,26 @@ export const tasksListSortingSchema = z.object({
   column: taskListSortColumnSchema.describe('Колонка для сортировки'),
 });
 
-/** Схема одного фильтра для списка заданий (колонка — enum) */
-export const taskListFilterItemSchema = z.object({
-  column: taskListFilterColumnSchema.describe('Колонка для фильтрации'),
-  value: z.string().describe('Значение (статус — enum, даты — YYYY-MM-DD, дата-время — ISO 8601)'),
-});
+/**
+ * Схема фильтров для списка заданий (объект с заранее определённой структурой)
+ * Все поля опциональны, можно комбинировать несколько фильтров одновременно
+ */
+export const tasksListFilterSchema = z.object({
+  packageId: z.string().uuid().nullable().optional().describe('ID пакета (null — задания без пакета)'),
+  branchIds: z.array(z.string().uuid()).optional().describe('Массив идентификаторов филиалов'),
+  branchName: z.string().optional().describe('Название филиала'),
+  status: reportTaskStatusSchema.optional().describe('Статус задания'),
+  reportType: reportTypeSchema.optional().describe('Тип отчёта'),
+  format: fileFormatSchema.optional().describe('Формат файла'),
+  source: z.string().optional().describe('Источник данных'),
+  createdBy: z.string().optional().describe('ФИО создателя задания'),
+  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
+  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
+  createdAt: z.string().datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
+  updatedAt: z.string().datetime().optional().describe('Дата и время обновления (формат: ISO 8601)'),
+}).optional();
+
+export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
 
 /**
  * Схема тела запроса POST /api/v1/report-6406/tasks/list (пагинация, сортировка, фильтрация)
@@ -292,7 +287,7 @@ export const taskListFilterItemSchema = z.object({
 export const getTasksRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
-  filter: z.array(taskListFilterItemSchema).optional().describe('Фильтры для списка заданий'),
+  filter: tasksListFilterSchema.describe('Фильтры для списка заданий (объект с опциональными полями)'),
 });
 
 export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;

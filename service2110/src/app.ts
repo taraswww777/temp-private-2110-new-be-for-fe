@@ -210,6 +210,16 @@ export async function buildApp() {
           };
           
           // Функция для рекурсивной замены вложенных объектов на $ref ссылки
+          // Функция для проверки, является ли схема UUID паттерном
+          const isUuidPattern = (schema: Record<string, unknown>): boolean => {
+            return (
+              schema.type === 'string' &&
+              schema.format === 'uuid' &&
+              typeof schema.pattern === 'string' &&
+              schema.pattern.includes('0-9a-fA-F')
+            );
+          };
+
           const replaceNestedSchemas = (jsonSchema: unknown, registeredSchemas: Record<string, unknown>): unknown => {
             if (!jsonSchema || typeof jsonSchema !== 'object') {
               return jsonSchema;
@@ -219,6 +229,13 @@ export async function buildApp() {
             
             if (schema.$ref) {
               return schema;
+            }
+            
+            // Заменяем UUID паттерны на ссылку на UuidSchema (кроме самой UuidSchema)
+            if (isUuidPattern(schema) && (schema.title as string) !== 'UuidSchema') {
+              return {
+                $ref: '#/components/schemas/UuidSchema'
+              };
             }
             
             // Сначала рекурсивно обрабатываем вложенные объекты
@@ -269,7 +286,7 @@ export async function buildApp() {
           const componentsRecord = components as Record<string, unknown>;
           const componentNames = Object.keys(componentsRecord);
           
-          const simpleTypes = ['DateSchema', 'DateTimeSchema'];
+          const simpleTypes = ['DateSchema', 'DateTimeSchema', 'UuidSchema'];
           const enumTypes = ['FileFormatEnumSchema', 'ReportTypeEnumSchema', 'ReportTaskStatusEnumSchema', 'CurrencyEnumSchema', 'SortOrderEnumSchema'];
           const objectTypes = componentNames.filter(name => !simpleTypes.includes(name) && !enumTypes.includes(name));
           
@@ -397,6 +414,16 @@ export async function buildApp() {
         return normalized1 === normalized2;
       };
       
+      // Функция для проверки, является ли схема UUID паттерном
+      const isUuidPattern = (schema: Record<string, unknown>): boolean => {
+        return (
+          schema.type === 'string' &&
+          schema.format === 'uuid' &&
+          typeof schema.pattern === 'string' &&
+          schema.pattern.includes('0-9a-fA-F')
+        );
+      };
+
       // Функция для рекурсивной замены вложенных объектов на $ref ссылки
       const replaceNestedSchemas = (jsonSchema: unknown): unknown => {
         if (!jsonSchema || typeof jsonSchema !== 'object') {
@@ -408,6 +435,13 @@ export async function buildApp() {
         // Если это уже ссылка, пропускаем
         if (schema.$ref) {
           return schema;
+        }
+        
+        // Заменяем UUID паттерны на ссылку на UuidSchema
+        if (isUuidPattern(schema)) {
+          return {
+            $ref: '#/components/schemas/UuidSchema'
+          };
         }
         
         // Сначала рекурсивно обрабатываем вложенные объекты

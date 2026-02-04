@@ -13,6 +13,7 @@ import {
   sortOrderSchema,
   healthResponseSchema,
   httpErrorWithInstanceSchema,
+  uuidSchema,
 } from './common.schema.js';
 import {
   createTaskSchema,
@@ -105,6 +106,7 @@ export function getOpenApiComponents() {
     FilterDto: zodToJsonSchema(filterSchema, 'FilterDto'),
     DateSchema: zodToJsonSchema(dateSchema, 'DateSchema'),
     DateTimeSchema: zodToJsonSchema(dateTimeSchema, 'DateTimeSchema'),
+    UuidSchema: zodToJsonSchema(uuidSchema, 'UuidSchema'),
     FileFormatEnumSchema: zodToJsonSchema(fileFormatSchema, 'FileFormatEnumSchema'),
     ReportTypeEnumSchema: zodToJsonSchema(reportTypeSchema, 'ReportTypeEnumSchema'),
     ReportTaskStatusEnumSchema: zodToJsonSchema(reportTaskStatusSchema, 'ReportTaskStatusEnumSchema'),

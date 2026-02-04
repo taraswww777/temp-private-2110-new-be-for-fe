@@ -214,113 +214,97 @@ export class TasksService {
    * Поддержка фильтра packageId: задания в/не в указанном пакете (связь через report_6406_package_tasks).
    */
   private buildFilterConditions(filter: GetTasksRequest['filter']) {
-    if (!filter?.length) return [];
+    if (!filter) return [];
 
-    type StringCol =
-      | typeof report6406Tasks.branchId
-      | typeof report6406Tasks.branchName
-      | typeof report6406Tasks.status
-      | typeof report6406Tasks.reportType
-      | typeof report6406Tasks.format
-      | typeof report6406Tasks.source
-      | typeof report6406Tasks.createdBy;
-    type DateCol = typeof report6406Tasks.periodStart | typeof report6406Tasks.periodEnd;
-    type DateTimeCol = typeof report6406Tasks.createdAt | typeof report6406Tasks.updatedAt;
     const conditions: Array<ReturnType<typeof eq> | ReturnType<typeof sql>> = [];
-    const stringColumns: Record<string, StringCol> = {
-      branchId: report6406Tasks.branchId,
-      branchName: report6406Tasks.branchName,
-      status: report6406Tasks.status,
-      reportType: report6406Tasks.reportType,
-      format: report6406Tasks.format,
-      source: report6406Tasks.source,
-      createdBy: report6406Tasks.createdBy,
-    };
-    const dateColumns: Record<string, DateCol> = {
-      periodStart: report6406Tasks.periodStart,
-      periodEnd: report6406Tasks.periodEnd,
-    };
-    const dateTimeColumns: Record<string, DateTimeCol> = {
-      createdAt: report6406Tasks.createdAt,
-      updatedAt: report6406Tasks.updatedAt,
-    };
 
-    for (const f of filter) {
-      // Фильтр по пакету: задания в/не в пакете (связь many-to-many через report_6406_package_tasks)
-      if (f.column === 'packageId') {
-        const valueNull = f.value.toLowerCase() === 'null';
-        if (valueNull) {
-          // Задания, не входящие ни в один пакет
-          conditions.push(
-            not(
-              exists(
-                db
-                  .select({ one: sql`1` })
-                  .from(report6406PackageTasks)
-                  .where(eq(report6406PackageTasks.taskId, report6406Tasks.id)),
-              ),
-            ),
-          );
-        } else {
-          // Задания, входящие в пакет с указанным ID
-          conditions.push(
+    // Фильтр по пакету: задания в/не в пакете (связь many-to-many через report_6406_package_tasks)
+    if (filter.packageId !== undefined) {
+      if (filter.packageId === null) {
+        // Задания, не входящие ни в один пакет
+        conditions.push(
+          not(
             exists(
               db
                 .select({ one: sql`1` })
                 .from(report6406PackageTasks)
-                .where(
-                  and(
-                    eq(report6406PackageTasks.taskId, report6406Tasks.id),
-                    eq(report6406PackageTasks.packageId, f.value),
-                  ),
-                ),
+                .where(eq(report6406PackageTasks.taskId, report6406Tasks.id)),
             ),
-          );
-        }
-        continue;
-      }
-
-      // Фильтр по филиалам: задания, связанные с указанными филиалами (связь many-to-many через report_6406_task_branches)
-      // Значение может быть одним UUID или несколькими UUID, разделенными запятой
-      if (f.column === 'branchIds') {
-        const branchIds = f.value.split(',').map(id => id.trim()).filter(id => id.length > 0);
-        if (branchIds.length > 0) {
-          conditions.push(
-            exists(
-              db
-                .select({ one: sql`1` })
-                .from(report6406TaskBranches)
-                .where(
-                  and(
-                    eq(report6406TaskBranches.taskId, report6406Tasks.id),
-                    inArray(report6406TaskBranches.branchId, branchIds),
-                  ),
+          ),
+        );
+      } else {
+        // Задания, входящие в пакет с указанным ID
+        conditions.push(
+          exists(
+            db
+              .select({ one: sql`1` })
+              .from(report6406PackageTasks)
+              .where(
+                and(
+                  eq(report6406PackageTasks.taskId, report6406Tasks.id),
+                  eq(report6406PackageTasks.packageId, filter.packageId),
                 ),
-            ),
-          );
-        }
-        continue;
-      }
-
-      const col = stringColumns[f.column];
-      if (col) {
-        // По умолчанию используется равенство
-        conditions.push(eq(col, f.value));
-        continue;
-      }
-      const dateCol = dateColumns[f.column];
-      if (dateCol) {
-        // По умолчанию используется равенство
-        conditions.push(eq(dateCol, f.value));
-        continue;
-      }
-      const dtCol = dateTimeColumns[f.column];
-      if (dtCol) {
-        // По умолчанию используется равенство
-        const d = new Date(f.value);
-        conditions.push(eq(dtCol, d));
+              ),
+          ),
+        );
       }
     }
+
+    // Фильтр по филиалам: задания, связанные с указанными филиалами (связь many-to-many через report_6406_task_branches)
+    if (filter.branchIds !== undefined && filter.branchIds.length > 0) {
+      conditions.push(
+        exists(
+          db
+            .select({ one: sql`1` })
+            .from(report6406TaskBranches)
+            .where(
+              and(
+                eq(report6406TaskBranches.taskId, report6406Tasks.id),
+                inArray(report6406TaskBranches.branchId, filter.branchIds),
+              ),
+            ),
+        ),
+      );
+    }
+
+    // Фильтры по строковым полям
+    if (filter.branchName !== undefined) {
+      conditions.push(eq(report6406Tasks.branchName, filter.branchName));
+    }
+    if (filter.status !== undefined) {
+      conditions.push(eq(report6406Tasks.status, filter.status));
+    }
+    if (filter.reportType !== undefined) {
+      conditions.push(eq(report6406Tasks.reportType, filter.reportType));
+    }
+    if (filter.format !== undefined) {
+      conditions.push(eq(report6406Tasks.format, filter.format));
+    }
+    if (filter.source !== undefined) {
+      conditions.push(eq(report6406Tasks.source, filter.source));
+    }
+    if (filter.createdBy !== undefined) {
+      conditions.push(eq(report6406Tasks.createdBy, filter.createdBy));
+    }
+
+    // Фильтры по датам (YYYY-MM-DD)
+    if (filter.periodStart !== undefined) {
+      conditions.push(eq(report6406Tasks.periodStart, filter.periodStart));
+    }
+    if (filter.periodEnd !== undefined) {
+      conditions.push(eq(report6406Tasks.periodEnd, filter.periodEnd));
+    }
+
+    // Фильтры по дате-времени (ISO 8601)
+    if (filter.createdAt !== undefined) {
+      const d = new Date(filter.createdAt);
+      conditions.push(eq(report6406Tasks.createdAt, d));
+    }
+    if (filter.updatedAt !== undefined) {
+      const d = new Date(filter.updatedAt);
+      conditions.push(eq(report6406Tasks.updatedAt, d));
+    }
+
     return conditions;
   }
 

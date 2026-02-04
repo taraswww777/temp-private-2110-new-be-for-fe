@@ -24,6 +24,13 @@
         "description": "Дата и время в формате ISO 8601",
         "title": "DateTimeSchema"
       },
+      "UuidSchema": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+        "description": "UUID в формате RFC 4122",
+        "title": "UuidSchema"
+      },
       "FileFormatEnumSchema": {
         "type": "string",
         "enum": [
@@ -276,10 +283,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "code": {
             "type": "string",
@@ -388,19 +392,14 @@
         "type": "object",
         "properties": {
           "branchId": {
-            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)",
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "branchIds": {
             "description": "Массив идентификаторов филиалов",
             "minItems": 1,
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             }
           },
           "periodStart": {
@@ -447,10 +446,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Уникальный идентификатор задания"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "createdAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -460,17 +456,12 @@
             "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "branchIds": {
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "description": "Массив идентификаторов филиалов"
           },
@@ -654,10 +645,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Уникальный идентификатор задания"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "createdAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -667,17 +655,12 @@
             "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)"
           },
           "branchId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "branchIds": {
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "description": "Массив идентификаторов филиалов"
           },
@@ -738,9 +721,7 @@
           "packageIds": {
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "description": "ID пакетов, в которые входит задание (пустой массив = не в пакете)"
           }
@@ -810,40 +791,62 @@
             "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
           "filter": {
-            "description": "Фильтры для списка заданий",
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "column": {
-                  "type": "string",
-                  "enum": [
-                    "packageId",
-                    "branchIds",
-                    "branchName",
-                    "status",
-                    "reportType",
-                    "format",
-                    "source",
-                    "createdBy",
-                    "periodStart",
-                    "periodEnd",
-                    "createdAt",
-                    "updatedAt"
-                  ],
-                  "description": "Колонка для фильтрации"
-                },
-                "value": {
-                  "type": "string",
-                  "description": "Значение (статус — enum, даты — YYYY-MM-DD, дата-время — ISO 8601)"
+            "description": "Фильтры для списка заданий (объект с опциональными полями)",
+            "type": "object",
+            "properties": {
+              "packageId": {
+                "description": "ID пакета (null — задания без пакета)",
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/UuidSchema"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "branchIds": {
+                "description": "Массив идентификаторов филиалов",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UuidSchema"
                 }
               },
-              "required": [
-                "column",
-                "value"
-              ],
-              "additionalProperties": false
-            }
+              "branchName": {
+                "description": "Название филиала",
+                "type": "string"
+              },
+              "status": {
+                "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+              },
+              "reportType": {
+                "$ref": "#/components/schemas/ReportTypeEnumSchema"
+              },
+              "format": {
+                "$ref": "#/components/schemas/FileFormatEnumSchema"
+              },
+              "source": {
+                "description": "Источник данных",
+                "type": "string"
+              },
+              "createdBy": {
+                "description": "ФИО создателя задания",
+                "type": "string"
+              },
+              "periodStart": {
+                "$ref": "#/components/schemas/DateSchema"
+              },
+              "periodEnd": {
+                "$ref": "#/components/schemas/DateSchema"
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/DateTimeSchema"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/DateTimeSchema"
+              }
+            },
+            "additionalProperties": false
           }
         },
         "required": [
@@ -881,10 +884,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Уникальный идентификатор задания"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "createdAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -894,17 +894,12 @@
             "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "branchIds": {
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "description": "Массив идентификаторов филиалов"
           },
@@ -1057,9 +1052,7 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "name": {
                   "type": "string"
@@ -1114,10 +1107,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Уникальный идентификатор задания"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "createdAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -1127,17 +1117,12 @@
             "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "branchIds": {
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "description": "Массив идентификаторов филиалов"
           },
@@ -1297,9 +1282,7 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "name": {
                   "type": "string"
@@ -1371,9 +1354,7 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "success": {
                   "type": "boolean"
@@ -1417,9 +1398,7 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "success": {
                   "type": "boolean"
@@ -1469,9 +1448,7 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "status": {
                   "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
@@ -1494,9 +1471,7 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "reason": {
                   "type": "string"
@@ -1523,9 +1498,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "status": {
             "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
@@ -1599,9 +1572,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "fileName": {
             "type": "string"
@@ -1680,9 +1651,7 @@
         "type": "object",
         "properties": {
           "taskId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "files": {
             "type": "array",
@@ -1706,9 +1675,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "status": {
             "type": "string",
@@ -1774,10 +1741,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Уникальный идентификатор пакета"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "name": {
             "type": "string",
@@ -1834,10 +1798,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Уникальный идентификатор пакета"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "name": {
             "type": "string",
@@ -1882,10 +1843,7 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                  "description": "Уникальный идентификатор задания"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "createdAt": {
                   "$ref": "#/components/schemas/DateTimeSchema"
@@ -1895,17 +1853,12 @@
                   "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)"
                 },
                 "branchId": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                  "description": "Идентификатор филиала (устаревшее поле, используйте branchIds)"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "branchIds": {
                   "type": "array",
                   "items": {
-                    "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    "$ref": "#/components/schemas/UuidSchema"
                   },
                   "description": "Массив идентификаторов филиалов"
                 },
@@ -1966,9 +1919,7 @@
                 "packageIds": {
                   "type": "array",
                   "items": {
-                    "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    "$ref": "#/components/schemas/UuidSchema"
                   },
                   "description": "ID пакетов, в которые входит задание (пустой массив = не в пакете)"
                 },
@@ -2058,9 +2009,7 @@
               "type": "object",
               "properties": {
                 "packageId": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "success": {
                   "type": "boolean"
@@ -2089,9 +2038,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "name": {
             "type": "string"
@@ -2132,9 +2079,7 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "reason": {
                   "type": "string"
@@ -2176,9 +2121,7 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 },
                 "success": {
                   "type": "boolean"
@@ -2207,9 +2150,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "lastCopiedToTfrAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -2243,9 +2184,7 @@
                 "description": "Список идентификаторов филиалов для фильтрации",
                 "type": "array",
                 "items": {
-                  "type": "string",
-                  "format": "uuid",
-                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  "$ref": "#/components/schemas/UuidSchema"
                 }
               },
               "reportTypes": {
@@ -2317,10 +2256,7 @@
         "type": "object",
         "properties": {
           "exportId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Идентификатор экспорта"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "status": {
             "type": "string",
@@ -2630,9 +2566,7 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "$ref": "#/components/schemas/UuidSchema"
                     }
                   }
                 },
@@ -2665,7 +2599,7 @@
         "tags": [
           "Report 6406 - Tasks"
         ],
-        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально). Ответ: items, totalItems. Фильтр по пакету: column=packageId, value=<packageId> — задания в указанном пакете; column=packageId, value=null — задания без пакета. Фильтр по филиалам: column=branchIds, value=<uuid1,uuid2,uuid3> — задания, связанные с указанными филиалами (UUID разделены запятой).",
+        "description": "Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально, объект с заранее определённой структурой). Ответ: items, totalItems. Фильтр — объект с опциональными полями: packageId (UUID или null для заданий без пакета), branchIds (массив UUID), branchName, status, reportType, format, source, createdBy, periodStart (YYYY-MM-DD), periodEnd (YYYY-MM-DD), createdAt (ISO 8601), updatedAt (ISO 8601). Можно комбинировать несколько фильтров одновременно.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2698,9 +2632,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "id",
@@ -2738,9 +2670,7 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "$ref": "#/components/schemas/UuidSchema"
                     }
                   }
                 },
@@ -2784,9 +2714,7 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "$ref": "#/components/schemas/UuidSchema"
                     }
                   }
                 },
@@ -2857,9 +2785,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "id",
@@ -2954,9 +2880,7 @@
           },
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "id",
@@ -2987,9 +2911,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "taskId",
@@ -2997,9 +2919,7 @@
           },
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "fileId",
@@ -3203,9 +3123,7 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "$ref": "#/components/schemas/UuidSchema"
                     }
                   }
                 },
@@ -3288,9 +3206,7 @@
           },
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "id",
@@ -3327,9 +3243,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "id",
@@ -3366,9 +3280,7 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "$ref": "#/components/schemas/UuidSchema"
                     }
                   }
                 },
@@ -3384,9 +3296,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "packageId",
@@ -3422,9 +3332,7 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      "$ref": "#/components/schemas/UuidSchema"
                     }
                   }
                 },
@@ -3440,9 +3348,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "packageId",
@@ -3472,9 +3378,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "packageId",
