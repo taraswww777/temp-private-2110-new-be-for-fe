@@ -296,6 +296,15 @@
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
       "branch": null
+    },
+    {
+      "id": "TASK-034",
+      "title": "Добавление мануала по работе со скриптами API и моков",
+      "status": "backlog",
+      "file": "TASK-034-scripts-manual.md",
+      "createdDate": "2026-02-04T00:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
