@@ -287,6 +287,15 @@
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
       "branch": null
+    },
+    {
+      "id": "TASK-033",
+      "title": "Улучшение навигации в React Router — решение проблемы с относительными путями",
+      "status": "backlog",
+      "file": "TASK-033-react-router-navigation-improvement.md",
+      "createdDate": "2026-02-04T00:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
