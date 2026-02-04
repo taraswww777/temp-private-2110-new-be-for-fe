@@ -280,21 +280,25 @@ export class TasksService {
         continue;
       }
 
-      // Фильтр по филиалу: задания, связанные с указанным филиалом (связь many-to-many через report_6406_task_branches)
-      if (f.column === 'branchId') {
-        conditions.push(
-          exists(
-            db
-              .select({ one: sql`1` })
-              .from(report6406TaskBranches)
-              .where(
-                and(
-                  eq(report6406TaskBranches.taskId, report6406Tasks.id),
-                  eq(report6406TaskBranches.branchId, f.value),
+      // Фильтр по филиалам: задания, связанные с указанными филиалами (связь many-to-many через report_6406_task_branches)
+      // Значение может быть одним UUID или несколькими UUID, разделенными запятой
+      if (f.column === 'branchIds') {
+        const branchIds = f.value.split(',').map(id => id.trim()).filter(id => id.length > 0);
+        if (branchIds.length > 0) {
+          conditions.push(
+            exists(
+              db
+                .select({ one: sql`1` })
+                .from(report6406TaskBranches)
+                .where(
+                  and(
+                    eq(report6406TaskBranches.taskId, report6406Tasks.id),
+                    inArray(report6406TaskBranches.branchId, branchIds),
+                  ),
                 ),
-              ),
-          ),
-        );
+            ),
+          );
+        }
         continue;
       }
 

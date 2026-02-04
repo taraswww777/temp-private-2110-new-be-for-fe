@@ -762,7 +762,8 @@ export async function buildApp() {
         newPaths[normalizedPath] = pathItem;
       }
       
-      // Заменяем paths на нормализованные (используем as any для обхода строгой типизации)
+      // Заменяем paths на нормализованные
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (swaggerJson as any).paths = newPaths;
     }
     

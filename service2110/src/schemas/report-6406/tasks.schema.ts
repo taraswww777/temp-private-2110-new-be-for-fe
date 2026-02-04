@@ -256,10 +256,11 @@ export type TaskListSortColumn = z.infer<typeof taskListSortColumnSchema>;
 /**
  * Допустимые колонки для фильтрации списка заданий (детерминированный набор).
  * packageId — фильтр по пакету (value: UUID или "null"); даты — YYYY-MM-DD; дата-время — ISO 8601; статус — enum.
+ * branchIds — фильтр по филиалам (value: UUID, разделенные запятой, например "uuid1,uuid2,uuid3").
  */
 export const taskListFilterColumnSchema = z.enum([
   'packageId',
-  'branchId',
+  'branchIds',
   'branchName',
   'status',
   'reportType',
