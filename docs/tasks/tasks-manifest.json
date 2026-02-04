@@ -255,11 +255,11 @@
     {
       "id": "TASK-029",
       "title": "Преобразование DepartmentField в компонент с множественным выбором",
-      "status": "backlog",
+      "status": "in-progress",
       "file": "TASK-029-department-field-multiple-selection.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": "feature/TASK-029-department-field-multiple-selection"
     }
   ]
 }
