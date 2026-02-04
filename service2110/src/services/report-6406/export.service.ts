@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
 import { db } from '../../db/index.js';
-import { report6406Tasks } from '../../db/schema/index.js';
-import { and, inArray, gte, lte, desc, asc } from 'drizzle-orm';
+import { report6406Tasks, report6406TaskBranches } from '../../db/schema/index.js';
+import { and, inArray, gte, lte, desc, asc, exists, eq, sql } from 'drizzle-orm';
 import type {
   ExportTasksRequest,
   ExportTasksResponse,
@@ -27,7 +27,20 @@ export class ExportService {
       }
 
       if (filters.branchIds && filters.branchIds.length > 0) {
-        conditions.push(inArray(report6406Tasks.branchId, filters.branchIds));
+        // Фильтрация по множественным branchId через таблицу связи
+        conditions.push(
+          exists(
+            db
+              .select({ one: sql`1` })
+              .from(report6406TaskBranches)
+              .where(
+                and(
+                  eq(report6406TaskBranches.taskId, report6406Tasks.id),
+                  inArray(report6406TaskBranches.branchId, filters.branchIds),
+                ),
+              ),
+          ),
+        );
       }
 
       if (filters.reportTypes && filters.reportTypes.length > 0) {

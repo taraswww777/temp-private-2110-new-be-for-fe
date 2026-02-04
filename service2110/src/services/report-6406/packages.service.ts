@@ -1,8 +1,10 @@
 import { db } from '../../db/index.js';
-import {
-  report6406Packages,
-  report6406PackageTasks,
+import { 
+  report6406Packages, 
+  report6406PackageTasks, 
   report6406Tasks,
+  report6406TaskBranches,
+  branches,
   TaskStatus,
 } from '../../db/schema/index.js';
 import { eq, sql, desc, asc, like, and, inArray } from 'drizzle-orm';
@@ -171,16 +173,45 @@ export class PackagesService {
       taskIdToPackageIds.set(link.taskId, arr);
     }
 
+    // Подгрузка branchIds для заданий (связь many-to-many через report_6406_task_branches)
+    const branchLinks =
+      taskIds.length > 0
+        ? await db
+            .select({
+              taskId: report6406TaskBranches.taskId,
+              branchId: report6406TaskBranches.branchId,
+              branchName: branches.name,
+            })
+            .from(report6406TaskBranches)
+            .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
+            .where(inArray(report6406TaskBranches.taskId, taskIds))
+        : [];
+    const taskIdToBranchIds = new Map<string, string[]>();
+    const taskIdToBranchNames = new Map<string, string[]>();
+    for (const link of branchLinks) {
+      const ids = taskIdToBranchIds.get(link.taskId) ?? [];
+      ids.push(link.branchId);
+      taskIdToBranchIds.set(link.taskId, ids);
+      
+      const names = taskIdToBranchNames.get(link.taskId) ?? [];
+      names.push(link.branchName);
+      taskIdToBranchNames.set(link.taskId, names);
+    }
+
     return {
       ...this.formatPackage(pkg),
       tasks: tasks.map((task) => {
         const permissions = getStatusPermissions(task.status as TaskStatus);
+        const taskBranchIds = taskIdToBranchIds.get(task.id) ?? [task.branchId];
+        const taskBranchNames = taskIdToBranchNames.get(task.id) ?? [task.branchName];
         return {
           id: task.id,
           createdAt: task.createdAt.toISOString(),
           createdBy: task.createdBy ?? '',
           branchId: task.branchId,
+          branchIds: taskBranchIds,
           branchName: task.branchName,
+          branchNames: taskBranchNames,
           periodStart: task.periodStart,
           periodEnd: task.periodEnd,
           status: task.status as TaskStatus,
