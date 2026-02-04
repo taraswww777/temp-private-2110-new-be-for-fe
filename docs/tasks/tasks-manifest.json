@@ -278,6 +278,15 @@
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
       "branch": null
+    },
+    {
+      "id": "TASK-032",
+      "title": "Составление и документирование статусной модели задания на формирование отчета",
+      "status": "backlog",
+      "file": "TASK-032-status-model-documentation.md",
+      "createdDate": "2026-02-04T00:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
