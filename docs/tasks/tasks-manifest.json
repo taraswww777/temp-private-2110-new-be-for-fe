@@ -251,6 +251,15 @@
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": "2026-02-04T00:00:00Z",
       "branch": "feature/TASK-028-add-task-status-history-mocks"
+    },
+    {
+      "id": "TASK-029",
+      "title": "Преобразование DepartmentField в компонент с множественным выбором",
+      "status": "backlog",
+      "file": "TASK-029-department-field-multiple-selection.md",
+      "createdDate": "2026-02-04T00:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
