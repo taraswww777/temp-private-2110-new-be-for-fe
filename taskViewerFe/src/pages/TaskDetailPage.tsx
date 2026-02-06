@@ -9,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { tasksApi } from '@/api/tasks.api';

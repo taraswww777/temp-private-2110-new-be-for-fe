@@ -42,10 +42,13 @@ const priorityOrder: Record<TaskPriority, number> = {
   low: 1,
 };
 
+const defaultStatusFilter: TaskStatus[] = ['backlog', 'planned', 'in-progress', 'cancelled'];
+const defaultPriorityFilter: TaskPriority[] = ['critical', 'high', 'medium', 'low'];
+
 export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all');
-  const [priorityFilter, setPriorityFilter] = useState<TaskPriority | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<TaskStatus[]>(defaultStatusFilter);
+  const [priorityFilter, setPriorityFilter] = useState<TaskPriority[]>(defaultPriorityFilter);
   const [sortBy, setSortBy] = useState<'id' | 'createdDate' | 'status' | 'priority'>('id');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // По умолчанию в обратном порядке
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,13 +68,13 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
     }
 
     // Фильтрация по статусу
-    if (statusFilter !== 'all') {
-      result = result.filter((task) => task.status === statusFilter);
+    if (statusFilter.length > 0) {
+      result = result.filter((task) => statusFilter.includes(task.status));
     }
 
     // Фильтрация по приоритету
-    if (priorityFilter !== 'all') {
-      result = result.filter((task) => task.priority === priorityFilter);
+    if (priorityFilter.length > 0) {
+      result = result.filter((task) => priorityFilter.includes(task.priority));
     }
 
     // Сортировка
