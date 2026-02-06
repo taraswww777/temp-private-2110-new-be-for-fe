@@ -24,6 +24,28 @@ npm run dev
 npm run build
 ```
 
+## Storybook (UI Kit)
+
+В проекте настроен [Storybook](https://storybook.js.org/) для изолированной разработки и просмотра UI-компонентов из `src/uiKit/`.
+
+**Запуск в режиме разработки:**
+
+```bash
+npm run storybook
+```
+
+Storybook будет доступен по адресу: http://localhost:6006
+
+**Сборка статического Storybook:**
+
+```bash
+npm run build-storybook
+```
+
+Собранные файлы по умолчанию попадают в каталог `storybook-static/`. В боковой панели сториз сгруппированы по категориям: **Формы** (Input, Label, Select, MultiSelect), **Обратная связь** (Badge, Button, Skeleton, Alert), **Контейнеры** (Card, Separator), **Overlay** (Dialog, Popover).
+
+Перед первым запуском убедитесь, что зависимости установлены: `npm install`.
+
 ## Функциональность
 
 ### Список задач

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Button } from '@/components/ui/button';
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -9,16 +9,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
+  Input,
+  Label,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/uiKit';
 import type { Task, TaskStatus, TaskPriority, UpdateTaskMetaInput } from '@/types/task.types';
 
 interface TaskEditDialogProps {
@@ -125,7 +123,7 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
           <Button variant="outline" onClick={() => setOpen(false)}>
             Отмена
           </Button>
-          <Button onClick={handleSave} disabled={saving}>
+          <Button variant="primary" onClick={handleSave} disabled={saving}>
             {saving ? 'Сохранение...' : 'Сохранить'}
           </Button>
         </DialogFooter>

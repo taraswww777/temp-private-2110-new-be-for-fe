@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/uiKit';
 import type { TaskPriority } from '@/types/task.types';
 
 const priorityConfig: Record<TaskPriority, { label: string; variant: 'default' | 'secondary' | 'outline' | 'destructive' }> = {

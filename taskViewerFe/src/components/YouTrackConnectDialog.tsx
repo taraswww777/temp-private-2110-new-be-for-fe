@@ -1,22 +1,20 @@
 import { useState, useEffect } from 'react';
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import {
+  Input,
+  Label,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/uiKit';
 import { youtrackApi } from '@/api/youtrack.api';
 import type { YouTrackTemplate } from '@/types/youtrack.types';
 import { toast } from 'sonner';
@@ -239,6 +237,7 @@ export function YouTrackConnectDialog({
           </Button>
           {activeTab === 'create' && (
             <Button
+              variant="primary"
               onClick={handleCreate}
               disabled={loading || templatesLoading || templates.length === 0}
             >
@@ -246,7 +245,7 @@ export function YouTrackConnectDialog({
             </Button>
           )}
           {activeTab === 'link' && (
-            <Button onClick={handleLink} disabled={loading || !linkIssueId.trim()}>
+            <Button variant="primary" onClick={handleLink} disabled={loading || !linkIssueId.trim()}>
               {linkLoading ? 'Связывание...' : 'Связать'}
             </Button>
           )}

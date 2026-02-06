@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+  Input,
+  Label,
+} from '@/uiKit';
 import { TemplatePreview } from './TemplatePreview';
 import type { YouTrackTemplate, CreateYouTrackTemplateInput } from '@/types/youtrack.types';
 
@@ -190,6 +190,7 @@ export function TemplateFormDialog({
             Отмена
           </Button>
           <Button
+            variant="primary"
             onClick={handleSave}
             disabled={
               saving ||

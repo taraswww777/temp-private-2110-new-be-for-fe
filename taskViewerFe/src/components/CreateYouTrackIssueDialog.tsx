@@ -1,21 +1,19 @@
 import { useState, useEffect } from 'react';
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import {
+  Label,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/uiKit';
 import { youtrackApi } from '@/api/youtrack.api';
 import type { YouTrackTemplate } from '@/types/youtrack.types';
 import { toast } from 'sonner';
@@ -129,6 +127,7 @@ export function CreateYouTrackIssueDialog({
             Отмена
           </Button>
           <Button
+            variant="primary"
             onClick={handleCreate}
             disabled={loading || templatesLoading || templates.length === 0}
           >
