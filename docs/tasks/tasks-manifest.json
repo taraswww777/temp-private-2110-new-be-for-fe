@@ -343,21 +343,21 @@
     {
       "id": "TASK-035",
       "title": "Интеграция Task Viewer Backend с YouTrack",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-035-youtrack-integration-backend.md",
       "createdDate": "2026-02-06T10:00:00Z",
-      "completedDate": null,
-      "branch": null,
+      "completedDate": "2026-02-06T00:00:00Z",
+      "branch": "feature/TASK-035-youtrack-integration-backend",
       "priority": "medium"
     },
     {
       "id": "TASK-036",
       "title": "Интеграция Task Viewer Frontend с YouTrack",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-036-youtrack-integration-frontend.md",
       "createdDate": "2026-02-06T10:00:00Z",
-      "completedDate": null,
-      "branch": null,
+      "completedDate": "2026-02-06T00:00:00Z",
+      "branch": "feature/TASK-035-youtrack-integration-backend",
       "priority": "medium"
     },
     {
@@ -538,6 +538,36 @@
       "createdDate": "2026-02-06T15:00:00Z",
       "completedDate": "2026-02-06T16:00:00Z",
       "branch": "feature/TASK-054-add-task-priorities",
+      "priority": "medium"
+    },
+    {
+      "id": "TASK-055",
+      "title": "Storybook и UI Kit в Task Viewer (taskViewerFe)",
+      "status": "backlog",
+      "file": "TASK-055-storybook-ui-kit-taskviewer-fe.md",
+      "createdDate": "2026-02-06T16:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium"
+    },
+    {
+      "id": "TASK-056",
+      "title": "Поддержка тёмной темы в Task Viewer (taskViewerFe)",
+      "status": "backlog",
+      "file": "TASK-056-dark-theme-support-taskviewer-fe.md",
+      "createdDate": "2026-02-06T16:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium"
+    },
+    {
+      "id": "TASK-057",
+      "title": "Доработки интеграции YouTrack (TASK-035 / TASK-036)",
+      "status": "backlog",
+      "file": "TASK-057-youtrack-integration-follow-up.md",
+      "createdDate": "2026-02-06T18:00:00Z",
+      "completedDate": null,
+      "branch": null,
       "priority": "medium"
     }
   ]

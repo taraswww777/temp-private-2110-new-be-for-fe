@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/select';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
+import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
+import { PageHeader } from '@/components/PageHeader';
 import { tasksApi } from '@/api/tasks.api';
 import { ApiError } from '@/api/apiError';
 import type { TaskDetail, UpdateTaskMetaInput, TaskStatus, TaskPriority } from '@/types/task.types';
@@ -125,81 +127,84 @@ export function TaskDetailPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <Link to="/">
-          <Button variant="outline">← Назад к списку</Button>
-        </Link>
-        <TaskEditDialog task={task} onSave={handleSave} />
-      </div>
+      <PageHeader actions={<TaskEditDialog task={task} onSave={handleSave} />} />
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="space-y-2">
-              <CardTitle className="text-3xl">{task.title}</CardTitle>
-              <div className="flex items-center gap-4 flex-wrap">
-                <CardDescription className="text-lg font-mono">{task.id}</CardDescription>
-                <div className="flex items-center gap-2">
-                  <Select
-                    value={task.status}
-                    onValueChange={(value) => handleStatusChange(value as TaskStatus)}
-                  >
-                    <SelectTrigger className="w-[160px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="backlog">📋 Бэклог</SelectItem>
-                      <SelectItem value="planned">📅 Запланировано</SelectItem>
-                      <SelectItem value="in-progress">⏳ В работе</SelectItem>
-                      <SelectItem value="completed">✅ Выполнено</SelectItem>
-                      <SelectItem value="cancelled">❌ Отменено</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value={task.priority}
-                    onValueChange={(value) => handlePriorityChange(value as TaskPriority)}
-                    disabled={task.status === 'completed'}
-                  >
-                    <SelectTrigger className="w-[160px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="critical">🔴 Критический</SelectItem>
-                      <SelectItem value="high">🟠 Высокий</SelectItem>
-                      <SelectItem value="medium">🔵 Средний</SelectItem>
-                      <SelectItem value="low">⚪ Низкий</SelectItem>
-                    </SelectContent>
-                  </Select>
+      <Card className="overflow-hidden">
+        <div className="flex flex-col lg:flex-row">
+          <div className="flex-1 min-w-0">
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <CardTitle className="text-3xl">{task.title}</CardTitle>
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <CardDescription className="text-lg font-mono">{task.id}</CardDescription>
+                    <div className="flex items-center gap-2">
+                      <Select
+                        value={task.status}
+                        onValueChange={(value) => handleStatusChange(value as TaskStatus)}
+                      >
+                        <SelectTrigger className="w-[160px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="backlog">📋 Бэклог</SelectItem>
+                          <SelectItem value="planned">📅 Запланировано</SelectItem>
+                          <SelectItem value="in-progress">⏳ В работе</SelectItem>
+                          <SelectItem value="completed">✅ Выполнено</SelectItem>
+                          <SelectItem value="cancelled">❌ Отменено</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select
+                        value={task.priority}
+                        onValueChange={(value) => handlePriorityChange(value as TaskPriority)}
+                        disabled={task.status === 'completed'}
+                      >
+                        <SelectTrigger className="w-[160px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="critical">🔴 Критический</SelectItem>
+                          <SelectItem value="high">🟠 Высокий</SelectItem>
+                          <SelectItem value="medium">🔵 Средний</SelectItem>
+                          <SelectItem value="low">⚪ Низкий</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-semibold">Дата создания:</span> {formatDate(task.createdDate)}
+                </div>
+                <div>
+                  <span className="font-semibold">Дата завершения:</span> {formatDate(task.completedDate)}
+                </div>
+                <div>
+                  <span className="font-semibold">Ветка:</span>{' '}
+                  <code className="text-sm bg-muted px-2 py-1 rounded">{task.branch || '—'}</code>
+                </div>
+                <div>
+                  <span className="font-semibold">Файл:</span>{' '}
+                  <code className="text-sm bg-muted px-2 py-1 rounded">{task.file}</code>
+                </div>
+              </div>
+            </CardContent>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="font-semibold">Дата создания:</span> {formatDate(task.createdDate)}
-            </div>
-            <div>
-              <span className="font-semibold">Дата завершения:</span> {formatDate(task.completedDate)}
-            </div>
-            <div>
-              <span className="font-semibold">Ветка:</span>{' '}
-              <code className="text-sm bg-muted px-2 py-1 rounded">{task.branch || '—'}</code>
-            </div>
-            <div>
-              <span className="font-semibold">Файл:</span>{' '}
-              <code className="text-sm bg-muted px-2 py-1 rounded">{task.file}</code>
-            </div>
-          </div>
-        </CardContent>
+          <aside className="CardRightBar w-full lg:w-[min(360px,100%)] lg:min-w-[280px] lg:border-l lg:border-border lg:bg-muted/30 p-4 lg:p-6 flex flex-col">
+            <YouTrackLinkCard
+              taskId={task.id}
+              initialIssueIds={task.youtrackIssueIds}
+              onLinksUpdated={fetchTask}
+            />
+          </aside>
+        </div>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Описание задачи</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <Card className="overflow-hidden">
+        <CardContent className="min-w-0 overflow-hidden pt-6 pl-0">
           <MarkdownViewer content={task.content} />
         </CardContent>
       </Card>

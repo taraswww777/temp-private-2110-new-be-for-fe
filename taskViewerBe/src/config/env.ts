@@ -6,6 +6,10 @@ const envSchema = z.object({
   HOST: z.string().default('localhost'),
   CORS_ORIGIN: z.string().default('http://localhost:5173'),
   TASKS_DIR: z.string().default('../docs/tasks'),
+  // YouTrack настройки (опциональные)
+  YOUTRACK_URL: z.string().url().optional(),
+  YOUTRACK_TOKEN: z.string().optional(),
+  YOUTRACK_PROJECT_ID: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

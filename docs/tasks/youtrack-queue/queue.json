@@ -1,0 +1,15 @@
+{
+  "operations": [
+    {
+      "id": "5666cef7-39b1-425c-a66b-67462c128dbe",
+      "status": "pending",
+      "createdAt": "2026-02-06T17:28:40.444Z",
+      "attempts": 0,
+      "type": "create_issue",
+      "data": {
+        "taskId": "TASK-053",
+        "templateId": "default"
+      }
+    }
+  ]
+}

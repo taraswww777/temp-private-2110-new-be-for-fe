@@ -13,6 +13,7 @@ export const taskSchema = z.object({
   createdDate: z.string().nullable(),
   completedDate: z.string().nullable(),
   branch: z.string().nullable(),
+  youtrackIssueIds: z.array(z.string()).optional(), // Опциональное поле для связей с YouTrack
 });
 
 export const taskManifestSchema = z.object({
