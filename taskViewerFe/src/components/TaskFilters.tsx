@@ -26,16 +26,16 @@ export function TaskFilters({
   onPriorityFilterChange,
 }: TaskFiltersProps) {
   return (
-    <div className="flex gap-4 mb-6 flex-wrap">
+    <div className="flex gap-4 mb-6">
       <Input
         placeholder="Поиск по названию или ID..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
-        className="max-w-sm"
+        className="flex-grow"
       />
 
       <Select value={statusFilter} onValueChange={onStatusFilterChange}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="flex-grow">
           <SelectValue placeholder="Все статусы" />
         </SelectTrigger>
         <SelectContent>
@@ -49,7 +49,7 @@ export function TaskFilters({
       </Select>
 
       <Select value={priorityFilter} onValueChange={onPriorityFilterChange}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="flex-grow">
           <SelectValue placeholder="Все приоритеты" />
         </SelectTrigger>
         <SelectContent>
