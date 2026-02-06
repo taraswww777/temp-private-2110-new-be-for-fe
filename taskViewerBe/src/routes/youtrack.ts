@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+import { env } from '../config/env.js';
 import { youtrackApiService } from '../services/youtrack-api.service.js';
 import { templatesService } from '../services/templates.service.js';
 import { youtrackLinksService } from '../services/youtrack-links.service.js';
@@ -642,6 +643,27 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         }
         throw error;
       }
+    }
+  );
+
+  // GET /api/youtrack/config - базовый URL YouTrack для ссылок на задачи
+  server.get(
+    '/youtrack/config',
+    {
+      schema: {
+        description: 'Получить конфигурацию YouTrack (базовый URL для ссылок)',
+        response: {
+          200: z.object({
+            baseUrl: z.string().nullable(),
+          }),
+        },
+      },
+    },
+    async (_request, reply) => {
+      const baseUrl = env.YOUTRACK_URL
+        ? env.YOUTRACK_URL.replace(/\/$/, '')
+        : null;
+      return reply.send({ baseUrl });
     }
   );
 

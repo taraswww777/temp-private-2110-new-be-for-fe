@@ -8,9 +8,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { TaskFilters } from './TaskFilters';
+import { YouTrackConnectDialog } from './YouTrackConnectDialog';
 import { tasksApi } from '@/api/tasks.api';
+import { youtrackApi } from '@/api/youtrack.api';
 import type { Task, TaskStatus, TaskPriority } from '@/types/task.types';
+import type { YouTrackQueueStatus } from '@/types/youtrack.types';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { toast } from 'sonner';
@@ -45,6 +49,66 @@ const priorityOrder: Record<TaskPriority, number> = {
 
 const defaultStatusFilter: TaskStatus[] = ['backlog', 'planned', 'in-progress', 'cancelled'];
 const defaultPriorityFilter: TaskPriority[] = ['critical', 'high', 'medium', 'low'];
+
+function TaskListYouTrackCell({
+  task,
+  youtrackBaseUrl,
+  getTaskQueueFlags,
+  onOpenConnect,
+}: {
+  task: Task;
+  youtrackBaseUrl: string | null;
+  getTaskQueueFlags: (taskId: string) => { createIssue: boolean; linkIssue: boolean };
+  onOpenConnect: () => void;
+}) {
+  const flags = getTaskQueueFlags(task.id);
+  const inQueue = flags.createIssue || flags.linkIssue;
+  const issueIds = task.youtrackIssueIds ?? [];
+
+  if (inQueue) {
+    return (
+      <Badge variant="outline" className="gap-1 border-amber-500/50 text-amber-600 dark:text-amber-500 text-xs w-fit">
+        <span aria-hidden>⏳</span> В очереди
+      </Badge>
+    );
+  }
+
+  if (issueIds.length > 0) {
+    return (
+      <span className="flex flex-wrap items-center gap-1.5 text-xs">
+        {issueIds.map((id) => {
+          const href = youtrackBaseUrl ? `${youtrackBaseUrl}/issue/${id}` : undefined;
+          return href ? (
+            <a
+              key={id}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline font-mono"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {id}
+            </a>
+          ) : (
+            <span key={id} className="font-mono text-muted-foreground">{id}</span>
+          );
+        })}
+      </span>
+    );
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="h-7 text-xs w-fit"
+      onClick={(e) => { e.preventDefault(); onOpenConnect(); }}
+      title="Связать с YouTrack"
+    >
+      Связать с YT
+    </Button>
+  );
+}
 
 export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -94,6 +158,16 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(getSortOrderFromUrl);
   const [currentPage, setCurrentPage] = useState(getPageFromUrl);
   const [pageSize, setPageSize] = useState(getPageSizeFromUrl);
+  const [queueStatus, setQueueStatus] = useState<YouTrackQueueStatus | null>(null);
+  const [youtrackBaseUrl, setYoutrackBaseUrl] = useState<string | null>(null);
+  const [connectDialogTaskId, setConnectDialogTaskId] = useState<string | null>(null);
+
+  useEffect(() => {
+    youtrackApi.getConfig().then((c) => setYoutrackBaseUrl(c.baseUrl)).catch(() => setYoutrackBaseUrl(null));
+  }, []);
+  useEffect(() => {
+    youtrackApi.getQueueStatus().then(setQueueStatus).catch(() => setQueueStatus(null));
+  }, [connectDialogTaskId]);
 
   // Синхронизация с URL при изменении параметров
   const updateUrlParams = (
@@ -360,6 +434,22 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
     setCurrentPage(1);
   };
 
+  const getTaskQueueFlags = (taskId: string) => {
+    if (!queueStatus?.operations) return { createIssue: false, linkIssue: false };
+    const pending = queueStatus.operations.filter(
+      (op) => op.status === 'pending' && op.data?.taskId === taskId
+    );
+    return {
+      createIssue: pending.some((op) => op.type === 'create_issue'),
+      linkIssue: pending.some((op) => op.type === 'link_issue'),
+    };
+  };
+
+  const handleYouTrackSuccess = () => {
+    onTaskUpdate();
+    youtrackApi.getQueueStatus().then(setQueueStatus).catch(() => setQueueStatus(null));
+  };
+
   return (
     <div>
       <TaskFilters
@@ -422,6 +512,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                 </div>
               </th>
               <th className="h-12 px-4 text-left align-middle font-medium">Ветка</th>
+              <th className="h-12 px-4 text-left align-middle font-medium">YouTrack</th>
               <th className="h-12 px-4 text-left align-middle font-medium">Действия</th>
             </tr>
           </thead>
@@ -472,6 +563,14 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                 </td>
                 <td className="p-4 align-middle">{formatDate(task.createdDate)}</td>
                 <td className="p-4 align-middle font-mono text-sm">{task.branch || '—'}</td>
+                <td className="p-4 align-middle">
+                  <TaskListYouTrackCell
+                    task={task}
+                    youtrackBaseUrl={youtrackBaseUrl}
+                    getTaskQueueFlags={getTaskQueueFlags}
+                    onOpenConnect={() => setConnectDialogTaskId(task.id)}
+                  />
+                </td>
                 <td className="p-4 align-middle">
                   <Link to={`/tasks/${task.id}`}>
                     <Button variant="outline" size="sm">
@@ -576,6 +675,20 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
             </Button>
           </div>
         </div>
+      )}
+
+      {connectDialogTaskId && (
+        <YouTrackConnectDialog
+          open={!!connectDialogTaskId}
+          onOpenChange={(open) => !open && setConnectDialogTaskId(null)}
+          taskId={connectDialogTaskId}
+          existingIssueIds={tasks.find((t) => t.id === connectDialogTaskId)?.youtrackIssueIds ?? []}
+          onSuccess={() => {
+            setConnectDialogTaskId(null);
+            handleYouTrackSuccess();
+          }}
+          initialTab="create"
+        />
       )}
     </div>
   );

@@ -5,8 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { youtrackApi } from '@/api/youtrack.api';
 import type { TaskYouTrackLinks } from '@/types/youtrack.types';
 import { toast } from 'sonner';
-import { CreateYouTrackIssueDialog } from './CreateYouTrackIssueDialog';
-import { LinkYouTrackIssueDialog } from './LinkYouTrackIssueDialog';
+import { YouTrackConnectDialog } from './YouTrackConnectDialog';
+import type { YouTrackConnectTab } from './YouTrackConnectDialog';
 
 interface YouTrackLinkCardProps {
   taskId: string;
@@ -17,8 +17,8 @@ interface YouTrackLinkCardProps {
 export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: YouTrackLinkCardProps) {
   const [links, setLinks] = useState<TaskYouTrackLinks | null>(null);
   const [loading, setLoading] = useState(true);
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [linkDialogOpen, setLinkDialogOpen] = useState(false);
+  const [connectDialogOpen, setConnectDialogOpen] = useState(false);
+  const [connectDialogTab, setConnectDialogTab] = useState<YouTrackConnectTab>('create');
   const [queueStatus, setQueueStatus] = useState<{ createIssue: boolean; linkIssue: boolean }>({
     createIssue: false,
     linkIssue: false,
@@ -68,16 +68,15 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
     }
   };
 
-  const handleCreateSuccess = () => {
-    setCreateDialogOpen(false);
+  const handleConnectSuccess = () => {
+    setConnectDialogOpen(false);
     fetchLinks();
     onLinksUpdated?.();
   };
 
-  const handleLinkSuccess = () => {
-    setLinkDialogOpen(false);
-    fetchLinks();
-    onLinksUpdated?.();
+  const openConnectDialog = (tab: YouTrackConnectTab = 'create') => {
+    setConnectDialogTab(tab);
+    setConnectDialogOpen(true);
   };
 
   const openInYouTrack = (url: string) => {
@@ -124,23 +123,13 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
           )}
           {!hasLinks ? (
             <div className="space-y-3">
-              <div className="flex flex-col gap-2">
-                <Button
-                  onClick={() => setCreateDialogOpen(true)}
-                  disabled={queueStatus.createIssue}
-                  title={queueStatus.createIssue ? 'Операция уже в очереди' : undefined}
-                >
-                  Создать задачу в YouTrack
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setLinkDialogOpen(true)}
-                  disabled={queueStatus.createIssue || queueStatus.linkIssue}
-                  title={queueStatus.createIssue || queueStatus.linkIssue ? 'Операция уже в очереди' : undefined}
-                >
-                  Связать с существующей задачей
-                </Button>
-              </div>
+              <Button
+                onClick={() => openConnectDialog('create')}
+                disabled={queueStatus.createIssue || queueStatus.linkIssue}
+                title={queueStatus.createIssue || queueStatus.linkIssue ? 'Операция уже в очереди' : undefined}
+              >
+                Связать с YT
+              </Button>
             </div>
           ) : (
             <div className="space-y-3">
@@ -171,7 +160,7 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => setLinkDialogOpen(true)}
+                      onClick={() => openConnectDialog('link')}
                       disabled={queueStatus.createIssue || queueStatus.linkIssue}
                       title={queueStatus.createIssue || queueStatus.linkIssue ? 'Операция уже в очереди' : undefined}
                     >
@@ -224,7 +213,7 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => setLinkDialogOpen(true)}
+                    onClick={() => openConnectDialog('link')}
                     className="w-full"
                     disabled={queueStatus.createIssue || queueStatus.linkIssue}
                     title={queueStatus.createIssue || queueStatus.linkIssue ? 'Операция уже в очереди' : undefined}
@@ -238,19 +227,13 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
         </CardContent>
       </Card>
 
-      <CreateYouTrackIssueDialog
-        open={createDialogOpen}
-        onOpenChange={setCreateDialogOpen}
-        taskId={taskId}
-        onSuccess={handleCreateSuccess}
-      />
-
-      <LinkYouTrackIssueDialog
-        open={linkDialogOpen}
-        onOpenChange={setLinkDialogOpen}
+      <YouTrackConnectDialog
+        open={connectDialogOpen}
+        onOpenChange={setConnectDialogOpen}
         taskId={taskId}
         existingIssueIds={issueIds}
-        onSuccess={handleLinkSuccess}
+        onSuccess={handleConnectSuccess}
+        initialTab={connectDialogTab}
       />
     </>
   );

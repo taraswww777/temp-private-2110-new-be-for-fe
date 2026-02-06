@@ -173,6 +173,17 @@ export const youtrackApi = {
   },
 
   /**
+   * Получить конфигурацию YouTrack (базовый URL для ссылок на задачи)
+   */
+  async getConfig(): Promise<{ baseUrl: string | null }> {
+    const response = await fetch(`${API_BASE_URL}/youtrack/config`);
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
    * Получить статус очереди операций YouTrack
    */
   async getQueueStatus(): Promise<YouTrackQueueStatus> {
