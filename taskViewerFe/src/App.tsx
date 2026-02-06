@@ -8,11 +8,11 @@ export function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-background">
         <header className="border-b">
-          <div className="container mx-auto px-4 py-4">
+          <div className="container mx-auto px-4 py-2">
             <h1 className="text-2xl font-bold">Task Viewer</h1>
           </div>
         </header>
-        <main className="container mx-auto px-4 py-8">
+        <main className="container mx-auto px-4 py-4">
           <Routes>
             <Route path="/" element={<TasksListPage />} />
             <Route path="/tasks/:id" element={<TaskDetailPage />} />

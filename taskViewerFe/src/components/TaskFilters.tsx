@@ -1,48 +1,63 @@
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import type { TaskStatus } from '@/types/task.types';
+import { MultiSelect } from '@/components/ui/multi-select';
+import type { TaskStatus, TaskPriority } from '@/types/task.types';
 
 interface TaskFiltersProps {
   search: string;
-  statusFilter: TaskStatus | 'all';
+  statusFilter: TaskStatus[];
+  priorityFilter: TaskPriority[];
   onSearchChange: (value: string) => void;
-  onStatusFilterChange: (value: TaskStatus | 'all') => void;
+  onStatusFilterChange: (statuses: TaskStatus[]) => void;
+  onPriorityFilterChange: (priorities: TaskPriority[]) => void;
 }
 
 export function TaskFilters({
   search,
   statusFilter,
+  priorityFilter,
   onSearchChange,
   onStatusFilterChange,
+  onPriorityFilterChange,
 }: TaskFiltersProps) {
+  const statusOptions = [
+    { label: '📋 Бэклог', value: 'backlog' },
+    { label: '📅 Запланировано', value: 'planned' },
+    { label: '⏳ В работе', value: 'in-progress' },
+    { label: '✅ Выполнено', value: 'completed' },
+    { label: '❌ Отменено', value: 'cancelled' },
+  ];
+
+  const priorityOptions = [
+    { label: '🔴 Критический', value: 'critical' },
+    { label: '🟠 Высокий', value: 'high' },
+    { label: '🔵 Средний', value: 'medium' },
+    { label: '⚪ Низкий', value: 'low' },
+  ];
+
   return (
-    <div className="flex gap-4 mb-6 flex-wrap">
+    <div className="flex gap-4 mb-6">
       <Input
         placeholder="Поиск по названию или ID..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
-        className="max-w-sm"
+        className="flex-grow"
       />
 
-      <Select value={statusFilter} onValueChange={onStatusFilterChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Все статусы" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Все статусы</SelectItem>
-          <SelectItem value="backlog">📋 Бэклог</SelectItem>
-          <SelectItem value="planned">📅 Запланировано</SelectItem>
-          <SelectItem value="in-progress">⏳ В работе</SelectItem>
-          <SelectItem value="completed">✅ Выполнено</SelectItem>
-          <SelectItem value="cancelled">❌ Отменено</SelectItem>
-        </SelectContent>
-      </Select>
+      <MultiSelect
+        options={statusOptions}
+        selected={statusFilter}
+        onChange={(selected) => onStatusFilterChange(selected as TaskStatus[])}
+        placeholder="Все статусы"
+        className="flex-grow"
+      />
+
+      <MultiSelect
+        options={priorityOptions}
+        selected={priorityFilter}
+        onChange={(selected) => onPriorityFilterChange(selected as TaskPriority[])}
+        placeholder="Все приоритеты"
+        className="flex-grow"
+      />
     </div>
   );
 }

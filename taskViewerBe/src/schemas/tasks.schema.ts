@@ -2,10 +2,13 @@ import { z } from 'zod';
 
 export const taskStatusEnum = z.enum(['backlog', 'planned', 'in-progress', 'completed', 'cancelled']);
 
+export const taskPriorityEnum = z.enum(['low', 'medium', 'high', 'critical']);
+
 export const taskSchema = z.object({
   id: z.string(),
   title: z.string(),
   status: taskStatusEnum,
+  priority: taskPriorityEnum.default('medium'),
   file: z.string(),
   createdDate: z.string().nullable(),
   completedDate: z.string().nullable(),
@@ -19,6 +22,7 @@ export const taskManifestSchema = z.object({
 export const updateTaskMetaSchema = z.object({
   title: z.string().optional(),
   status: taskStatusEnum.optional(),
+  priority: taskPriorityEnum.optional(),
   createdDate: z.string().nullable().optional(),
   completedDate: z.string().nullable().optional(),
   branch: z.string().nullable().optional(),

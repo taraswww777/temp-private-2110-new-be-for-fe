@@ -14,7 +14,11 @@ export const tasksService = {
   async getAllTasks(): Promise<Task[]> {
     const content = await readFile(MANIFEST_PATH, 'utf-8');
     const manifest: TaskManifest = JSON.parse(content);
-    return manifest.tasks;
+    // Обеспечиваем обратную совместимость: добавляем priority по умолчанию, если его нет
+    return manifest.tasks.map(task => ({
+      ...task,
+      priority: task.priority || 'medium',
+    }));
   },
 
   /**
@@ -33,6 +37,7 @@ export const tasksService = {
 
     return {
       ...task,
+      priority: task.priority || 'medium', // Обеспечиваем обратную совместимость
       content,
     };
   },
@@ -50,15 +55,19 @@ export const tasksService = {
     }
 
     // Обновляем только переданные поля
-    manifest.tasks[taskIndex] = {
+    const updatedTask = {
       ...manifest.tasks[taskIndex],
       ...updates,
+      // Обеспечиваем, что priority всегда присутствует
+      priority: updates.priority || manifest.tasks[taskIndex].priority || 'medium',
     };
+
+    manifest.tasks[taskIndex] = updatedTask;
 
     // Сохраняем обратно в файл
     await writeFile(MANIFEST_PATH, JSON.stringify(manifest, null, 2), 'utf-8');
 
-    return manifest.tasks[taskIndex];
+    return updatedTask;
   },
 
   /**

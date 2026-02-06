@@ -2,14 +2,21 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TaskStatusBadge } from '@/components/TaskStatusBadge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { tasksApi } from '@/api/tasks.api';
 import { ApiError } from '@/api/apiError';
-import type { TaskDetail, UpdateTaskMetaInput } from '@/types/task.types';
+import type { TaskDetail, UpdateTaskMetaInput, TaskStatus, TaskPriority } from '@/types/task.types';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { toast } from 'sonner';
 
 export function TaskDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -41,6 +48,28 @@ export function TaskDetailPage() {
     if (!id) return;
     await tasksApi.updateTaskMeta(id, updates);
     await fetchTask();
+  };
+
+  const handleStatusChange = async (newStatus: TaskStatus) => {
+    if (!id) return;
+    try {
+      await tasksApi.updateTaskMeta(id, { status: newStatus });
+      await fetchTask();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось обновить статус';
+      toast.error(message);
+    }
+  };
+
+  const handlePriorityChange = async (newPriority: TaskPriority) => {
+    if (!id) return;
+    try {
+      await tasksApi.updateTaskMeta(id, { priority: newPriority });
+      await fetchTask();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось обновить приоритет';
+      toast.error(message);
+    }
   };
 
   const formatDate = (dateString: string | null) => {
@@ -108,9 +137,42 @@ export function TaskDetailPage() {
           <div className="flex items-start justify-between">
             <div className="space-y-2">
               <CardTitle className="text-3xl">{task.title}</CardTitle>
-              <CardDescription className="text-lg font-mono">{task.id}</CardDescription>
+              <div className="flex items-center gap-4 flex-wrap">
+                <CardDescription className="text-lg font-mono">{task.id}</CardDescription>
+                <div className="flex items-center gap-2">
+                  <Select
+                    value={task.status}
+                    onValueChange={(value) => handleStatusChange(value as TaskStatus)}
+                  >
+                    <SelectTrigger className="w-[160px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="backlog">📋 Бэклог</SelectItem>
+                      <SelectItem value="planned">📅 Запланировано</SelectItem>
+                      <SelectItem value="in-progress">⏳ В работе</SelectItem>
+                      <SelectItem value="completed">✅ Выполнено</SelectItem>
+                      <SelectItem value="cancelled">❌ Отменено</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select
+                    value={task.priority}
+                    onValueChange={(value) => handlePriorityChange(value as TaskPriority)}
+                    disabled={task.status === 'completed'}
+                  >
+                    <SelectTrigger className="w-[160px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="critical">🔴 Критический</SelectItem>
+                      <SelectItem value="high">🟠 Высокий</SelectItem>
+                      <SelectItem value="medium">🔵 Средний</SelectItem>
+                      <SelectItem value="low">⚪ Низкий</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </div>
-            <TaskStatusBadge status={task.status} />
           </div>
         </CardHeader>
         <CardContent className="space-y-4">

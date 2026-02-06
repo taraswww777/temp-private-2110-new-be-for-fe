@@ -7,7 +7,8 @@
       "file": "TASK-001-init-repository.md",
       "createdDate": null,
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-002",
@@ -16,7 +17,8 @@
       "file": "TASK-002-init-be-project.md",
       "createdDate": "2026-01-27T10:00:00Z",
       "completedDate": "2026-01-28T00:00:00Z",
-      "branch": "feature/TASK-002-init-be-project"
+      "branch": "feature/TASK-002-init-be-project",
+      "priority": "medium"
     },
     {
       "id": "TASK-003",
@@ -25,7 +27,8 @@
       "file": "TASK-003-implement-6406-report-api.md",
       "createdDate": "2026-01-28T00:00:00Z",
       "completedDate": "2026-01-28T15:00:00Z",
-      "branch": "feature/TASK-003-implement-6406-report-api"
+      "branch": "feature/TASK-003-implement-6406-report-api",
+      "priority": "medium"
     },
     {
       "id": "TASK-004",
@@ -34,7 +37,8 @@
       "file": "TASK-004-create-task-viewer.md",
       "createdDate": "2026-01-28T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-005",
@@ -43,7 +47,8 @@
       "file": "TASK-005-extend-6406-api-universal-report.md",
       "createdDate": "2026-01-28T14:00:00Z",
       "completedDate": "2026-01-29T00:00:00Z",
-      "branch": "feature/TASK-005-extend-6406-api"
+      "branch": "feature/TASK-005-extend-6406-api",
+      "priority": "medium"
     },
     {
       "id": "TASK-006",
@@ -52,7 +57,8 @@
       "file": "TASK-006-fix-swagger-schemas-display.md",
       "createdDate": "2026-01-28T16:00:00Z",
       "completedDate": "2026-01-29T10:00:00Z",
-      "branch": "feature/TASK-006-fix-swagger-schemas"
+      "branch": "feature/TASK-006-fix-swagger-schemas",
+      "priority": "medium"
     },
     {
       "id": "TASK-007",
@@ -61,7 +67,8 @@
       "file": "TASK-007-refactor-api-structure.md",
       "createdDate": "2026-01-29T00:00:00Z",
       "completedDate": "2026-01-29T12:00:00Z",
-      "branch": "feature/TASK-007-refactor-api"
+      "branch": "feature/TASK-007-refactor-api",
+      "priority": "medium"
     },
     {
       "id": "TASK-008",
@@ -70,7 +77,8 @@
       "file": "TASK-008-standardize-size-storage-and-api.md",
       "createdDate": "2026-01-29T14:00:00Z",
       "completedDate": "2026-01-29T18:00:00Z",
-      "branch": "task-008-standardize-size-storage-and-api"
+      "branch": "task-008-standardize-size-storage-and-api",
+      "priority": "medium"
     },
     {
       "id": "TASK-009",
@@ -79,7 +87,8 @@
       "file": "TASK-009-setup-github-actions-and-pages.md",
       "createdDate": "2026-01-29T16:00:00Z",
       "completedDate": "2026-01-29T20:00:00Z",
-      "branch": "feature/TASK-009-setup-github-actions"
+      "branch": "feature/TASK-009-setup-github-actions",
+      "priority": "medium"
     },
     {
       "id": "TASK-010",
@@ -88,7 +97,8 @@
       "file": "TASK-010-review-api-6406.md",
       "createdDate": "2026-01-30T10:00:00Z",
       "completedDate": "2026-01-30T12:00:00Z",
-      "branch": "feature/TASK-010-review-api-6406-part1"
+      "branch": "feature/TASK-010-review-api-6406-part1",
+      "priority": "medium"
     },
     {
       "id": "TASK-011",
@@ -97,7 +107,8 @@
       "file": "TASK-011-review-api-6406-part2.md",
       "createdDate": "2026-01-30T10:00:00Z",
       "completedDate": "2026-01-30T12:00:00Z",
-      "branch": "feature/TASK-011-review-api-6406-part2"
+      "branch": "feature/TASK-011-review-api-6406-part2",
+      "priority": "medium"
     },
     {
       "id": "TASK-012",
@@ -106,7 +117,8 @@
       "file": "TASK-012-review-api-6406-part3.md",
       "createdDate": "2026-01-30T10:00:00Z",
       "completedDate": "2026-01-30T12:00:00Z",
-      "branch": "feature/TASK-012-review-api-6406-part3"
+      "branch": "feature/TASK-012-review-api-6406-part3",
+      "priority": "medium"
     },
     {
       "id": "TASK-013",
@@ -115,7 +127,8 @@
       "file": "TASK-013-add-available-tasks-for-package.md",
       "createdDate": "2026-01-30T11:00:00Z",
       "completedDate": "2026-01-30T12:30:00Z",
-      "branch": "feature/TASK-013-available-tasks-for-package"
+      "branch": "feature/TASK-013-available-tasks-for-package",
+      "priority": "medium"
     },
     {
       "id": "TASK-014",
@@ -124,7 +137,8 @@
       "file": "TASK-014-api-6406-review-remarks.md",
       "createdDate": "2026-01-30T12:00:00Z",
       "completedDate": "2026-01-30T14:00:00Z",
-      "branch": "feature/TASK-014-api-6406-review-remarks"
+      "branch": "feature/TASK-014-api-6406-review-remarks",
+      "priority": "medium"
     },
     {
       "id": "TASK-015",
@@ -133,7 +147,8 @@
       "file": "TASK-015-api-6406-follow-up.md",
       "createdDate": "2026-01-30T14:00:00Z",
       "completedDate": "2026-01-30T15:00:00Z",
-      "branch": "feature/TASK-015-api-6406-follow-up"
+      "branch": "feature/TASK-015-api-6406-follow-up",
+      "priority": "medium"
     },
     {
       "id": "TASK-016",
@@ -142,7 +157,8 @@
       "file": "TASK-016-storage-volume-response-array.md",
       "createdDate": "2026-01-30T16:00:00Z",
       "completedDate": "2026-01-30T18:00:00Z",
-      "branch": "feature/TASK-016-storage-volume-array"
+      "branch": "feature/TASK-016-storage-volume-array",
+      "priority": "medium"
     },
     {
       "id": "TASK-017",
@@ -151,7 +167,8 @@
       "file": "TASK-017-fe-ui-api2-spec-and-update.md",
       "createdDate": "2026-01-30T20:00:00Z",
       "completedDate": "2026-02-01T00:00:00Z",
-      "branch": "feature/TASK-017-fe-ui-api2-spec-and-update"
+      "branch": "feature/TASK-017-fe-ui-api2-spec-and-update",
+      "priority": "medium"
     },
     {
       "id": "TASK-018",
@@ -160,7 +177,8 @@
       "file": "TASK-018-fe-ui-apiClient2-fullUpdate2.md",
       "createdDate": "2026-01-30T20:00:00Z",
       "completedDate": "2026-02-01T00:00:00Z",
-      "branch": "feature/TASK-018-fe-ui-apiClient2-fullUpdate2"
+      "branch": "feature/TASK-018-fe-ui-apiClient2-fullUpdate2",
+      "priority": "medium"
     },
     {
       "id": "TASK-019",
@@ -169,7 +187,8 @@
       "file": "TASK-019-fe-ui-apiMock2-generateMockData2.md",
       "createdDate": "2026-01-30T20:00:00Z",
       "completedDate": "2026-02-01T00:00:00Z",
-      "branch": "feature/TASK-019-fe-ui-apiMock2-generateMockData2"
+      "branch": "feature/TASK-019-fe-ui-apiMock2-generateMockData2",
+      "priority": "medium"
     },
     {
       "id": "TASK-020",
@@ -178,7 +197,8 @@
       "file": "TASK-020-fe-refactor-store-appRouter.md",
       "createdDate": "2026-01-30T21:00:00Z",
       "completedDate": null,
-      "branch": "feature/TASK-020-fe-refactor-store-appRouter"
+      "branch": "feature/TASK-020-fe-refactor-store-appRouter",
+      "priority": "medium"
     },
     {
       "id": "TASK-021",
@@ -187,7 +207,8 @@
       "file": "TASK-021-automation-script-ai-tasks-runner.md",
       "createdDate": "2026-01-30T22:00:00Z",
       "completedDate": "2026-02-01T00:00:00Z",
-      "branch": "feature/temp-private-2110"
+      "branch": "feature/temp-private-2110",
+      "priority": "medium"
     },
     {
       "id": "TASK-022",
@@ -196,7 +217,8 @@
       "file": "TASK-022-informative-validation-errors-task-viewer.md",
       "createdDate": "2026-02-01T00:00:00Z",
       "completedDate": "2026-02-01T00:00:00Z",
-      "branch": "feature/temp-private-2110"
+      "branch": "feature/temp-private-2110",
+      "priority": "medium"
     },
     {
       "id": "TASK-023",
@@ -205,7 +227,8 @@
       "file": "TASK-023-task-status-planned-task-viewer.md",
       "createdDate": "2026-02-01T00:00:00Z",
       "completedDate": "2026-02-01T00:00:00Z",
-      "branch": "feature/temp-private-2110"
+      "branch": "feature/temp-private-2110",
+      "priority": "medium"
     },
     {
       "id": "TASK-024",
@@ -214,7 +237,8 @@
       "file": "TASK-024-fe-refactor-modules-appRouter.md",
       "createdDate": "2026-02-01T12:00:00Z",
       "completedDate": null,
-      "branch": "feature/TASK-024-fe-refactor-modules-appRouter"
+      "branch": "feature/TASK-024-fe-refactor-modules-appRouter",
+      "priority": "medium"
     },
     {
       "id": "TASK-025",
@@ -223,7 +247,8 @@
       "file": "TASK-025-base-page-template-disk-space-format.md",
       "createdDate": "2026-02-03T00:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-026",
@@ -232,7 +257,8 @@
       "file": "TASK-026-create-report-form-validation.md",
       "createdDate": "2026-02-03T00:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-027",
@@ -241,7 +267,8 @@
       "file": "TASK-027-add-task-status-history-endpoint.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": "2026-02-04T00:00:00Z",
-      "branch": "feature/TASK-027-add-task-status-history-endpoint"
+      "branch": "feature/TASK-027-add-task-status-history-endpoint",
+      "priority": "medium"
     },
     {
       "id": "TASK-028",
@@ -250,7 +277,8 @@
       "file": "TASK-028-add-task-status-history-mocks.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": "2026-02-04T00:00:00Z",
-      "branch": "feature/TASK-028-add-task-status-history-mocks"
+      "branch": "feature/TASK-028-add-task-status-history-mocks",
+      "priority": "medium"
     },
     {
       "id": "TASK-029",
@@ -259,7 +287,8 @@
       "file": "TASK-029-department-field-multiple-selection.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
-      "branch": "feature/TASK-029-department-field-multiple-selection"
+      "branch": "feature/TASK-029-department-field-multiple-selection",
+      "priority": "medium"
     },
     {
       "id": "TASK-030",
@@ -268,7 +297,8 @@
       "file": "TASK-030-service2110-multiple-branchId-support.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": "2026-02-04T00:00:00Z",
-      "branch": "feature/TASK-030-service2110-multiple-branchId-support"
+      "branch": "feature/TASK-030-service2110-multiple-branchId-support",
+      "priority": "medium"
     },
     {
       "id": "TASK-031",
@@ -277,7 +307,8 @@
       "file": "TASK-031-add-accounts-reference-endpoint.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-032",
@@ -286,7 +317,8 @@
       "file": "TASK-032-status-model-documentation.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-033",
@@ -295,7 +327,8 @@
       "file": "TASK-033-react-router-navigation-improvement.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-034",
@@ -304,7 +337,8 @@
       "file": "TASK-034-scripts-manual.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-035",
@@ -313,7 +347,8 @@
       "file": "TASK-035-youtrack-integration-backend.md",
       "createdDate": "2026-02-06T10:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-036",
@@ -322,7 +357,8 @@
       "file": "TASK-036-youtrack-integration-frontend.md",
       "createdDate": "2026-02-06T10:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-037",
@@ -331,7 +367,8 @@
       "file": "TASK-037-history-status-report-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-038",
@@ -340,7 +377,8 @@
       "file": "TASK-038-improve-mock-data-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-039",
@@ -349,7 +387,8 @@
       "file": "TASK-039-refactor-package-details-endpoint.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-040",
@@ -358,7 +397,8 @@
       "file": "TASK-040-storage-volume-code-field.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-041",
@@ -367,7 +407,8 @@
       "file": "TASK-041-restore-tabs-report-detail.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-042",
@@ -376,7 +417,8 @@
       "file": "TASK-042-rename-packet-entities-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-043",
@@ -385,7 +427,8 @@
       "file": "TASK-043-api-contract-feedback-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-044",
@@ -394,7 +437,8 @@
       "file": "TASK-044-universal-report-file-list-improvements.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-045",
@@ -403,7 +447,8 @@
       "file": "TASK-045-package-unique-name-validation.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-046",
@@ -412,7 +457,8 @@
       "file": "TASK-046-package-status-history-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-047",
@@ -421,7 +467,8 @@
       "file": "TASK-047-package-details-improvements-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-048",
@@ -430,7 +477,8 @@
       "file": "TASK-048-package-list-copying-improvements-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-049",
@@ -439,7 +487,8 @@
       "file": "TASK-049-add-task-to-packages-ui-mockups.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-050",
@@ -448,7 +497,8 @@
       "file": "TASK-050-tfr-page-sorting-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-051",
@@ -457,7 +507,8 @@
       "file": "TASK-051-refactor-readme-remove-duplication.md",
       "createdDate": "2026-02-06T14:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-052",
@@ -466,7 +517,8 @@
       "file": "TASK-052-improve-mock-generate-script.md",
       "createdDate": "2026-02-06T14:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-053",
@@ -475,16 +527,18 @@
       "file": "TASK-053-update-run-app-documentation.md",
       "createdDate": "2026-02-06T14:00:00Z",
       "completedDate": null,
-      "branch": null
+      "branch": null,
+      "priority": "medium"
     },
     {
       "id": "TASK-054",
       "title": "Добавление приоритетов задач в манифест и интерфейс",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-054-add-task-priorities.md",
       "createdDate": "2026-02-06T15:00:00Z",
-      "completedDate": null,
-      "branch": null
+      "completedDate": "2026-02-06T16:00:00Z",
+      "branch": "feature/TASK-054-add-task-priorities",
+      "priority": "medium"
     }
   ]
 }

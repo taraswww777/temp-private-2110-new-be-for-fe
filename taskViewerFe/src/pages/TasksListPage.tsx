@@ -50,16 +50,18 @@ export function TasksListPage() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Задачи проекта</CardTitle>
-        <CardDescription>
-          Всего задач: {tasks.length}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <TaskList tasks={tasks} onTaskUpdate={refetch} />
-      </CardContent>
-    </Card>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle>Задачи проекта</CardTitle>
+            <CardDescription>
+              Всего задач: {tasks.length}
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <TaskList tasks={tasks} onTaskUpdate={refetch} />
+        </CardContent>
+      </Card>
   );
 }
