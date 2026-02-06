@@ -539,6 +539,16 @@
       "completedDate": "2026-02-06T16:00:00Z",
       "branch": "feature/TASK-054-add-task-priorities",
       "priority": "medium"
+    },
+    {
+      "id": "TASK-055",
+      "title": "Storybook и UI Kit в Task Viewer (taskViewerFe)",
+      "status": "backlog",
+      "file": "TASK-055-storybook-ui-kit-taskviewer-fe.md",
+      "createdDate": "2026-02-06T16:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium"
     }
   ]
 }
