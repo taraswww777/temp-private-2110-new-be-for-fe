@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
+import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
 import { tasksApi } from '@/api/tasks.api';
 import { ApiError } from '@/api/apiError';
 import type { TaskDetail, UpdateTaskMetaInput, TaskStatus, TaskPriority } from '@/types/task.types';
@@ -203,6 +204,12 @@ export function TaskDetailPage() {
           <MarkdownViewer content={task.content} />
         </CardContent>
       </Card>
+
+      <YouTrackLinkCard
+        taskId={task.id}
+        initialIssueIds={task.youtrackIssueIds}
+        onLinksUpdated={fetchTask}
+      />
     </div>
   );
 }
