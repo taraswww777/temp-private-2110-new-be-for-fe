@@ -5,6 +5,8 @@ import { youtrackApiService } from '../services/youtrack-api.service.js';
 import { templatesService } from '../services/templates.service.js';
 import { youtrackLinksService } from '../services/youtrack-links.service.js';
 import { tasksService } from '../services/tasks.service.js';
+import { youtrackQueueService } from '../services/youtrack-queue.service.js';
+import { youtrackProcessorService } from '../services/youtrack-processor.service.js';
 import type { YouTrackTemplate } from '../types/template.types.js';
 
 export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
@@ -22,14 +24,24 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           customFields: z.record(z.string(), z.unknown()).optional(),
         }),
         response: {
-          200: z.object({
-            localTaskId: z.string(),
-            youtrackIssueId: z.string(),
-            youtrackIssueUrl: z.string(),
-            youtrackIssueIds: z.array(z.string()),
-          }),
+          200: z.union([
+            z.object({
+              localTaskId: z.string(),
+              youtrackIssueId: z.string(),
+              youtrackIssueUrl: z.string(),
+              youtrackIssueIds: z.array(z.string()),
+            }),
+            z.object({
+              localTaskId: z.string(),
+              youtrackIssueId: z.string(),
+              youtrackIssueUrl: z.string(),
+              youtrackIssueIds: z.array(z.string()),
+              queued: z.literal(true),
+              operationId: z.string(),
+            }),
+          ]),
           404: z.object({ message: z.string() }),
-          400: z.object({ message: z.string(), code: z.string().optional() }),
+          400: z.object({ message: z.string() }),
         },
       },
     },
@@ -40,6 +52,28 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
       const localTask = await tasksService.getTaskById(taskId);
       if (!localTask) {
         return reply.status(404).send({ message: `Task with id "${taskId}" not found` });
+      }
+
+      // Проверяем доступность YouTrack
+      if (!youtrackProcessorService.isYouTrackAvailable()) {
+        // Добавляем операцию в очередь
+        const operation = await youtrackQueueService.enqueue({
+          type: 'create_issue',
+          data: {
+            taskId,
+            templateId,
+            customFields,
+          },
+        });
+
+        return reply.send({
+          localTaskId: taskId,
+          youtrackIssueId: '', // Будет заполнено после выполнения
+          youtrackIssueUrl: '',
+          youtrackIssueIds: localTask.youtrackIssueIds || [],
+          queued: true,
+          operationId: operation.id,
+        });
       }
 
       try {
@@ -105,6 +139,28 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         });
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        
+        // Если ошибка связана с недоступностью YouTrack, добавляем в очередь
+        if (errorMessage.includes('not configured') || errorMessage.includes('Failed to connect')) {
+          const operation = await youtrackQueueService.enqueue({
+            type: 'create_issue',
+            data: {
+              taskId,
+              templateId,
+              customFields,
+            },
+          });
+
+          return reply.send({
+            localTaskId: taskId,
+            youtrackIssueId: '',
+            youtrackIssueUrl: '',
+            youtrackIssueIds: localTask.youtrackIssueIds || [],
+            queued: true,
+            operationId: operation.id,
+          });
+        }
+
         return reply.status(400).send({
           message: `Failed to create YouTrack issue: ${errorMessage}`,
         });
@@ -125,20 +181,51 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           youtrackIssueId: z.string(),
         }),
         response: {
-          200: z.object({
-            localTaskId: z.string(),
-            youtrackIssueId: z.string(),
-            youtrackIssueUrl: z.string(),
-            youtrackIssueIds: z.array(z.string()),
-          }),
+          200: z.union([
+            z.object({
+              localTaskId: z.string(),
+              youtrackIssueId: z.string(),
+              youtrackIssueUrl: z.string(),
+              youtrackIssueIds: z.array(z.string()),
+            }),
+            z.object({
+              localTaskId: z.string(),
+              youtrackIssueId: z.string(),
+              youtrackIssueUrl: z.string(),
+              youtrackIssueIds: z.array(z.string()),
+              queued: z.literal(true),
+              operationId: z.string(),
+            }),
+          ]),
           404: z.object({ message: z.string() }),
-          400: z.object({ message: z.string(), code: z.string().optional() }),
+          400: z.object({ message: z.string() }),
         },
       },
     },
     async (request, reply) => {
       const { taskId } = request.params;
       const { youtrackIssueId } = request.body;
+
+      // Проверяем доступность YouTrack
+      if (!youtrackProcessorService.isYouTrackAvailable()) {
+        // Добавляем операцию в очередь
+        const operation = await youtrackQueueService.enqueue({
+          type: 'link_issue',
+          data: {
+            taskId,
+            youtrackIssueId,
+          },
+        });
+
+        return reply.send({
+          localTaskId: taskId,
+          youtrackIssueId,
+          youtrackIssueUrl: '',
+          youtrackIssueIds: [],
+          queued: true,
+          operationId: operation.id,
+        });
+      }
 
       try {
         // Проверяем существование задачи в YouTrack
@@ -163,6 +250,26 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           if (error.message.includes('already exists')) {
             return reply.status(400).send({
               message: error.message,
+            });
+          }
+          
+          // Если ошибка связана с недоступностью YouTrack, добавляем в очередь
+          if (error.message.includes('not configured') || error.message.includes('Failed to connect')) {
+            const operation = await youtrackQueueService.enqueue({
+              type: 'link_issue',
+              data: {
+                taskId,
+                youtrackIssueId,
+              },
+            });
+
+            return reply.send({
+              localTaskId: taskId,
+              youtrackIssueId,
+              youtrackIssueUrl: '',
+              youtrackIssueIds: [],
+              queued: true,
+              operationId: operation.id,
             });
           }
         }
@@ -266,17 +373,46 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           youtrackIssueId: z.string(),
         }),
         response: {
-          200: z.object({
-            localTaskId: z.string(),
-            removedIssueId: z.string(),
-            youtrackIssueIds: z.array(z.string()),
-          }),
+          200: z.union([
+            z.object({
+              localTaskId: z.string(),
+              removedIssueId: z.string(),
+              youtrackIssueIds: z.array(z.string()),
+            }),
+            z.object({
+              localTaskId: z.string(),
+              removedIssueId: z.string(),
+              youtrackIssueIds: z.array(z.string()),
+              queued: z.literal(true),
+              operationId: z.string(),
+            }),
+          ]),
           404: z.object({ message: z.string() }),
         },
       },
     },
     async (request, reply) => {
       const { taskId, youtrackIssueId } = request.params;
+
+      // Проверяем доступность YouTrack
+      if (!youtrackProcessorService.isYouTrackAvailable()) {
+        // Добавляем операцию в очередь
+        const operation = await youtrackQueueService.enqueue({
+          type: 'unlink_issue',
+          data: {
+            taskId,
+            youtrackIssueId,
+          },
+        });
+
+        return reply.send({
+          localTaskId: taskId,
+          removedIssueId: youtrackIssueId,
+          youtrackIssueIds: [],
+          queued: true,
+          operationId: operation.id,
+        });
+      }
 
       try {
         const updatedTask = await youtrackLinksService.removeLink(taskId, youtrackIssueId);
@@ -287,8 +423,29 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           youtrackIssueIds: updatedTask.youtrackIssueIds || [],
         });
       } catch (error) {
-        if (error instanceof Error && error.message.includes('not found')) {
-          return reply.status(404).send({ message: error.message });
+        if (error instanceof Error) {
+          if (error.message.includes('not found')) {
+            return reply.status(404).send({ message: error.message });
+          }
+          
+          // Если ошибка связана с недоступностью YouTrack, добавляем в очередь
+          if (error.message.includes('not configured') || error.message.includes('Failed to connect')) {
+            const operation = await youtrackQueueService.enqueue({
+              type: 'unlink_issue',
+              data: {
+                taskId,
+                youtrackIssueId,
+              },
+            });
+
+            return reply.send({
+              localTaskId: taskId,
+              removedIssueId: youtrackIssueId,
+              youtrackIssueIds: [],
+              queued: true,
+              operationId: operation.id,
+            });
+          }
         }
         throw error;
       }
@@ -386,7 +543,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             descriptionTemplate: z.string(),
             customFields: z.record(z.string(), z.unknown()).optional(),
           }),
-          400: z.object({ message: z.string(), code: z.string().optional() }),
+          400: z.object({ message: z.string() }),
         },
       },
     },
@@ -397,7 +554,6 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
       } catch (error) {
         return reply.status(400).send({
           message: error instanceof Error ? error.message : 'Unknown error',
-          code: 'TEMPLATE_ERROR',
         });
       }
     }
@@ -437,7 +593,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             customFields: z.record(z.string(), z.unknown()).optional(),
           }),
           404: z.object({ message: z.string() }),
-          400: z.object({ message: z.string(), code: z.string().optional() }),
+          400: z.object({ message: z.string() }),
         },
       },
     },
@@ -455,7 +611,6 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         }
         return reply.status(400).send({
           message: error instanceof Error ? error.message : 'Unknown error',
-          code: 'TEMPLATE_ERROR',
         });
       }
     }
@@ -487,6 +642,81 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         }
         throw error;
       }
+    }
+  );
+
+  // GET /api/youtrack/queue - получить статус очереди
+  server.get(
+    '/youtrack/queue',
+    {
+      schema: {
+        description: 'Получить статус очереди операций YouTrack',
+        response: {
+          200: z.object({
+            pending: z.number(),
+            processing: z.number(),
+            completed: z.number(),
+            failed: z.number(),
+            operations: z.array(z.object({
+              id: z.string(),
+              type: z.string(),
+              status: z.string(),
+              createdAt: z.string(),
+              attempts: z.number(),
+            })),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const operations = await youtrackQueueService.getAllOperations();
+      
+      const stats = {
+        pending: operations.filter(op => op.status === 'pending').length,
+        processing: operations.filter(op => op.status === 'processing').length,
+        completed: operations.filter(op => op.status === 'completed').length,
+        failed: operations.filter(op => op.status === 'failed').length,
+        operations: operations.map(op => ({
+          id: op.id,
+          type: op.type,
+          status: op.status,
+          createdAt: op.createdAt,
+          attempts: op.attempts,
+        })),
+      };
+
+      return reply.send(stats);
+    }
+  );
+
+  // POST /api/youtrack/queue/process - обработать очередь вручную
+  server.post(
+    '/youtrack/queue/process',
+    {
+      schema: {
+        description: 'Обработать все pending операции из очереди',
+        response: {
+          200: z.object({
+            processed: z.number(),
+            failed: z.number(),
+            errors: z.array(z.object({
+              operationId: z.string(),
+              error: z.string(),
+            })),
+          }),
+          400: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      if (!youtrackProcessorService.isYouTrackAvailable()) {
+        return reply.status(400).send({
+          message: 'YouTrack is not configured',
+        });
+      }
+
+      const result = await youtrackProcessorService.processPendingOperations();
+      return reply.send(result);
     }
   );
 };
