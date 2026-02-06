@@ -1,7 +1,9 @@
 # TASK-034: Добавление мануала по работе со скриптами API и моков
 
 **Статус**: ✅ Завершено  
-**Ветка**: `feature/TASK-034-scripts-manual`
+**Ветка**: `feature/TASK-034-scripts-manual` (или текущая по репозиторию)
+
+Задача выполнена. Итоговые уточнения зафиксированы в разделе [Выявленные уточнения (итог выполнения)](#выявленные-уточнения-итог-выполнения).
 
 ---
 
@@ -14,12 +16,9 @@
 ## Контекст
 
 В проекте существует множество скриптов для работы с API и моками:
-- `api:fullUpdate` / `api:fullUpdate2` — полное обновление API
-- `api:item:*:update` — обновление Swagger JSON
-- `api:item:*:gen` — генерация TypeScript клиента
-- `api:item:*:fix` — исправление сгенерированного клиента
-- `api:item:*:gen_fix` — генерация и исправление
-- `generateMockData` / `generateMockData2` — генерация мок данных
+- `api:update` / `api:update:legacy` — полное обновление API (текущий / legacy)
+- `api:service2110:*`, `api:reportService:*` — update, gen, fix, genAndFix, fullUpdate по сервисам
+- `mock:generate` / `mock:generate:legacy` / `mock:generate:api2` — генерация мок данных
 
 Разобраться в назначении каждого скрипта и последовательности их вызова непросто. Необходимо создать понятный мануал с примерами кейсов использования.
 
@@ -52,26 +51,26 @@
    **Кейс 1: Изменение DTO сущности в Swagger и обновление клиента**
    - Описание: Backend изменил структуру DTO в Swagger
    - Шаги:
-     1. Запустить `api:item:apiService2110:update` для обновления Swagger JSON
-     2. Запустить `api:item:apiService2110:gen_fix` для генерации нового клиента
+     1. Запустить `api:service2110:update` для обновления Swagger JSON
+     2. Запустить `api:service2110:gen_fix` для генерации нового клиента
      3. Проверить изменения в `apiClient2/api/service2110/models/`
      4. Обновить код, использующий измененные типы
-     5. При необходимости перегенерировать моки: `generateMockData2`
+     5. При необходимости перегенерировать моки: `mock:generate:api2`
 
    **Кейс 2: Добавление нового эндпоинта в Swagger**
    - Описание: Backend добавил новый эндпоинт в Swagger
    - Шаги:
-     1. Запустить `api:fullUpdate2` (update + gen_fix)
+     1. Запустить `api:update` (update + gen_fix)
      2. Проверить новый сервис/метод в `apiClient2/api/service2110/services/`
      3. Использовать новый метод в коде
      4. Добавить handler для моков в `webpackConfigs/devServer/handlers/api2/`
-     5. Перегенерировать моки: `generateMockData2`
+     5. Перегенерировать моки: `mock:generate:api2`
 
    **Кейс 3: Изменение структуры мок данных**
    - Описание: Нужно изменить структуру генерируемых моков
    - Шаги:
      1. Изменить генератор в `scripts/generateMockData2/generators/`
-     2. Запустить `generateMockData2`
+     2. Запустить `mock:generate:api2`
      3. Проверить изменения в `apiMock2/generated/`
 
    **Кейс 4: Добавление предопределенных мок данных**
@@ -79,22 +78,22 @@
    - Шаги:
      1. Открыть `apiMock2/predefined.ts`
      2. Добавить данные в соответствующий раздел (например, `predefined.tasksList`)
-     3. Запустить `generateMockData2` (предопределенные данные будут объединены с сгенерированными)
+     3. Запустить `mock:generate:api2` (предопределенные данные будут объединены с сгенерированными)
      4. Проверить результат в `apiMock2/generated/`
 
    **Кейс 5: Полное обновление API после изменений в Backend**
    - Описание: Backend обновил Swagger, нужно синхронизировать фронтенд
    - Шаги:
-     1. Запустить `api:fullUpdate2` (обновит Swagger, сгенерирует клиент, исправит его)
+     1. Запустить `api:update` (обновит Swagger, сгенерирует клиент, исправит его)
      2. Проверить breaking changes в типах
      3. Обновить код, использующий измененные типы
      4. Обновить генераторы моков при необходимости
-     5. Перегенерировать моки: `generateMockData2`
+     5. Перегенерировать моки: `mock:generate:api2`
 
    **Кейс 6: Исправление ошибок в сгенерированном клиенте**
    - Описание: После генерации клиента возникли ошибки типов или импортов
    - Шаги:
-     1. Запустить `api:item:apiService2110:fix` для применения исправлений
+     1. Запустить `api:service2110:fix` для применения исправлений
      2. Если ошибки остались, проверить скрипт `scripts/swagger/fixClientApi/fixClientApi2.ts`
      3. При необходимости добавить новые исправления в скрипт
 
@@ -102,12 +101,13 @@
 
 | Скрипт | Назначение | Когда использовать |
 |--------|------------|-------------------|
-| `api:fullUpdate2` | Полное обновление API2 (update + gen + fix) | После изменений в Swagger Backend |
-| `api:item:apiService2110:update` | Обновление Swagger JSON из удаленного источника | Когда нужно только обновить Swagger |
-| `api:item:apiService2110:gen` | Генерация TypeScript клиента из Swagger | После обновления Swagger JSON |
-| `api:item:apiService2110:fix` | Исправление сгенерированного клиента | После генерации клиента |
-| `api:item:apiService2110:api:gen_fix` | Генерация и исправление (gen + fix) | После обновления Swagger |
-| `generateMockData2` | Генерация мок данных для API2 | После изменения типов или генераторов |
+| `api:update` | Полное обновление API2 (update + gen + fix) | После изменений в Swagger Backend |
+| `api:service2110:update` | Обновление Swagger JSON из удаленного источника | Когда нужно только обновить Swagger |
+| `api:service2110:gen` | Генерация TypeScript клиента из Swagger | После обновления Swagger JSON |
+| `api:service2110:fix` | Исправление сгенерированного клиента | После генерации клиента |
+| `api:service2110:genAndFix` | Генерация и исправление (gen + fix) | После обновления Swagger |
+| `mock:generate` | Генерация всех мок данных (legacy + API2) | Перед build, в CI |
+| `mock:generate:api2` | Генерация мок данных для API2 | После изменения типов или генераторов |
 
 6. **Описать структуру файлов и папок:**
    - `docs/apiDocs/service2110.json` — Swagger спецификация
@@ -131,12 +131,13 @@
 
 ---
 
-## Область изменений
+## Область изменений (фактически выполнено)
 
-| Файл | Описание |
+| Путь | Описание |
 |------|----------|
-| `docs/scripts-manual.md` | Новый документ с мануалом по скриптам |
-| `temp-private-2110/README.md` | Добавление ссылки на мануал (опционально) |
+| `temp-private-2110/docs/development/` | Подпапка с документацией: README.md, run-app.md, 01–05, predefined-mocks-*.md |
+| `temp-private-2110/README.md` | Введение и содержание со ссылками на docs/development/ |
+| `temp-private-2110/scripts/.../defaultMockData/README.md` | Краткая ссылка на docs/development/predefined-mocks-*.md |
 
 ---
 
@@ -189,9 +190,10 @@
    - `apiReportService` — старый API (legacy)
    - `apiService2110` — новый API (используется в AppRouter ветке)
 
-2. **Разница между generateMockData и generateMockData2:**
-   - `generateMockData` — генерация моков для старого API
-   - `generateMockData2` — генерация моков для нового API2
+2. **Разница между mock:generate:legacy и mock:generate:api2:**
+   - `mock:generate:legacy` — генерация моков для старого API
+   - `mock:generate:api2` — генерация моков для нового API2
+   - `mock:generate` — оба (для build/CI)
 
 3. **Предопределенные данные:**
    - Данные из `apiMock2/predefined.ts` имеют приоритет над сгенерированными
@@ -203,10 +205,53 @@
 
 ---
 
+## Выявленные уточнения (итог выполнения)
+
+В ходе выполнения задачи зафиксированы и внедрены следующие уточнения.
+
+### Именование npm-скриптов
+
+- **Моки:** `mock:generate` (оба контура), `mock:generate:legacy`, `mock:generate:api2` — вместо `generateMockData` / `generateMockData2` / `generateMockData:all`.
+- **API:** `api:update`, `api:update:legacy`, `api:service2110:*`, `api:reportService:*` — вместо `api:fullUpdate`, `api:item:apiService2110:*` и т.д. Формат: `api:<сервис>:<операция>`.
+
+### Сборка (build)
+
+- В начале `build` выполняется `mock:generate`, затем `checks` и `build:prod`, чтобы в CI были актуальные generatedMockData.
+
+### Размещение документации
+
+- Вся документация по разработке собрана в подпапке **`temp-private-2110/docs/development/`** (а не в одном файле `docs/scripts-manual.md`):
+  - **README.md** — оглавление и ссылки на разделы
+  - **run-app.md** — запуск приложения (установка, start, start:mock, build, .npmrc)
+  - **01-use-cases.md** — кейсы использования и таблица скриптов
+  - **02-api-client-generation.md** — подробности генерации API2
+  - **03-legacy-api-generation.md** — подробности генерации Legacy API
+  - **04-predefined-mocks-legacy.md**, **05-predefined-mocks-api2.md** — короткие ссылки на полные разделы
+  - **predefined-mocks-legacy.md**, **predefined-mocks-api2.md** — полное описание предопределённых моков
+- Корневой **README.md** проекта выступает как введение и содержание со ссылками на `docs/development/`.
+
+### Кейс «Добавление нового сервиса в API2»
+
+- После добавления скриптов нового сервиса необходимо **дополнить скрипт `api:update`** в `package.json`: добавить в цепочку вызов `npm run api:<имяСервиса>:fullUpdate`, чтобы полное обновление API одной командой затрагивало и новый сервис.
+
+### Предопределённые моки (defaultMockData)
+
+- Используются **именованные экспорты** (`export const`), не default. Описание и примеры — в `docs/development/predefined-mocks-legacy.md` и `predefined-mocks-api2.md`.
+- Файлы в `scripts/generateMockData/defaultMockData/` (legacy) и `scripts/generateMockData2/defaultMockData/` (API2). Локальные README в этих папках содержат только ссылку на соответствующую страницу в `docs/development/`.
+
+### Структура моков в проекте
+
+- **API2:** `webpackConfigs/devServer/api2/` — `handlers/`, `generatedMockData/`, `routesApi2.ts`. Генератор: `scripts/generateMockData2/`.
+- **Legacy:** `webpackConfigs/devServer/api/` — `handlers/`, `generatedMockData/`, `routesApi.ts`. Генератор: `scripts/generateMockData/`.
+- Отдельные папки `apiMock2`, `mockData` не используются; сгенерированные JSON лежат в `api/generatedMockData/` и `api2/generatedMockData/` (в .gitignore, в папках есть .gitkeep).
+
+---
+
 ## Связанные задачи и артефакты
 
-- Скрипты обновления: `temp-private-2110/scripts/run/`
-- Генераторы моков: `temp-private-2110/scripts/generateMockData2/`
-- API клиенты: `temp-private-2110/apiClient2/`
-- Мок данные: `temp-private-2110/apiMock2/`
-- Swagger спецификации: `temp-private-2110/docs/apiDocs/`
+- Скрипты запуска: `temp-private-2110/scripts/run/`
+- Генераторы моков: `temp-private-2110/scripts/generateMockData2/`, `temp-private-2110/scripts/generateMockData/`
+- API клиенты: `temp-private-2110/apiClient2/`, `temp-private-2110/apiClient/`
+- Моки (handlers, generatedMockData): `temp-private-2110/webpackConfigs/devServer/api/`, `temp-private-2110/webpackConfigs/devServer/api2/`
+- Документация по разработке: `temp-private-2110/docs/development/`
+- Swagger: `temp-private-2110/docs/apiDocs/`

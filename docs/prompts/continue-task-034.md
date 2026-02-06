@@ -32,11 +32,10 @@
 - ✅ **Актуализация мануала:** убраны apiMock2, mockData, старый handlers/api; добавлены api/, defaultMockData для legacy, именованные экспорты, config.defaultPageSize, .gitkeep, пути и кейсы под текущую структуру
 
 ### 2. Реорганизация скриптов в package.json
-- ✅ `api:fullUpdate` теперь обновляет все актуальные API клиенты (`apiService2110`)
-- ✅ Добавлен `api:fullUpdateLegacy` для устаревшего `apiReportService`
-- ✅ `api:fullUpdate2` переименован в `api:item:apiService2110:fullUpdate`
-- ✅ `api:fullUpdate:apiReportService` переименован в `api:item:apiReportService:fullUpdate`
-- ✅ `api:item:*:api:gen_fix` переименован в `api:item:*:genAndFix`
+- ✅ `api:update` — полное обновление текущего API (вызывает `api:service2110:fullUpdate`)
+- ✅ `api:update:legacy` — полное обновление legacy API (`api:reportService:fullUpdate`)
+- ✅ Скрипты по сервисам: `api:service2110:*` (update, gen, fix, genAndFix, fullUpdate), `api:reportService:*`
+- ✅ Скрипты API: формат `api:<service>:<operation>` (api:update, api:service2110:*, api:reportService:*)
 - ✅ Скрипты отсортированы семантически (общие → конкретные сервисы)
 
 ### 3. Реорганизация структуры мок-данных для API2
@@ -64,19 +63,21 @@
 ```json
 {
   "scripts": {
-    "generateMockData2": "tsx scripts/run/runGenerateMockData2.ts",
-    "api:fullUpdate": "npm run api:item:apiService2110:fullUpdate",
-    "api:fullUpdateLegacy": "npm run api:item:apiReportService:fullUpdate",
-    "api:item:apiService2110:fullUpdate": "npm run api:item:apiService2110:update && npm run api:item:apiService2110:genAndFix",
-    "api:item:apiReportService:fullUpdate": "npm run api:item:apiReportService:update && npm run api:item:apiReportService:genAndFix",
-    "api:item:apiService2110:update": "tsx scripts/run/runUpdateSwaggerApiService2110.ts",
-    "api:item:apiService2110:gen": "openapi --input ./docs/apiDocs/service2110.json --output ./apiClient2/api/service2110 --useOptions --client axios --exportCore false --indent 2",
-    "api:item:apiService2110:fix": "tsx scripts/run/runFixSwaggerApiService2110.ts",
-    "api:item:apiService2110:genAndFix": "npm run api:item:apiService2110:gen && npm run api:item:apiService2110:fix",
-    "api:item:apiReportService:update": "tsx scripts/run/runUpdateSwaggerApiReportService.ts",
-    "api:item:apiReportService:gen": "openapi --input ./docs/apiDocs/reportService.json --output ./apiClient/api/reportService --useOptions --client axios --exportCore false --indent 2",
-    "api:item:apiReportService:fix": "tsx scripts/run/runFixSwaggerApiReportService.ts",
-    "api:item:apiReportService:genAndFix": "npm run api:item:apiReportService:gen && npm run api:item:apiReportService:fix"
+    "mock:generate": "npm run mock:generate:legacy && npm run mock:generate:api2",
+    "mock:generate:legacy": "tsx scripts/run/runGenerateMockData.ts",
+    "mock:generate:api2": "tsx scripts/run/runGenerateMockData2.ts",
+    "api:update": "npm run api:service2110:fullUpdate",
+    "api:update:legacy": "npm run api:reportService:fullUpdate",
+    "api:service2110:fullUpdate": "npm run api:service2110:update && npm run api:service2110:genAndFix",
+    "api:service2110:update": "tsx scripts/run/runUpdateSwaggerApiService2110.ts",
+    "api:service2110:gen": "openapi --input ./docs/apiDocs/service2110.json --output ./apiClient2/api/service2110 --useOptions --client axios --exportCore false --indent 2",
+    "api:service2110:fix": "tsx scripts/run/runFixSwaggerApiService2110.ts",
+    "api:service2110:genAndFix": "npm run api:service2110:gen && npm run api:service2110:fix",
+    "api:reportService:fullUpdate": "npm run api:reportService:update && npm run api:reportService:genAndFix",
+    "api:reportService:update": "tsx scripts/run/runUpdateSwaggerApiReportService.ts",
+    "api:reportService:gen": "openapi --input ./docs/apiDocs/reportService.json --output ./apiClient/api/reportService --useOptions --client axios --exportCore false --indent 2",
+    "api:reportService:fix": "tsx scripts/run/runFixSwaggerApiReportService.ts",
+    "api:reportService:genAndFix": "npm run api:reportService:gen && npm run api:reportService:fix"
   }
 }
 ```
@@ -137,7 +138,7 @@ temp-private-2110/
 
 ### Именование скриптов
 
-Формат: `api:item:<serviceName>:<operation>`
+Формат: `api:<service>:<operation>` (например `api:service2110:update`, `api:reportService:genAndFix`)
 
 - `update` — обновление Swagger JSON
 - `gen` — генерация TypeScript клиента
@@ -156,7 +157,7 @@ temp-private-2110/
 
 ### 3. Генерация и моки
 - [ ] По необходимости: правки в `config.ts` (defaultPageSize и др.) для API2
-- [ ] Проверка: `npm run generateMockData` и `npm run generateMockData2`, работа handlers в dev
+- [ ] Проверка: `npm run mock:generate:legacy`, `npm run mock:generate:api2` (или `npm run mock:generate`), работа handlers в dev
 
 ## Важные детали
 
@@ -197,7 +198,7 @@ temp-private-2110/
 
 ## Следующие шаги (если требуется доработка)
 
-1. При изменении DTO/эндпоинтов — при необходимости обновить генераторы и defaultMockData, затем перезапустить `generateMockData` / `generateMockData2`.
+1. При изменении DTO/эндпоинтов — при необходимости обновить генераторы и defaultMockData, затем перезапустить `mock:generate:legacy` / `mock:generate:api2` или `mock:generate`.
 2. Держать мануал в актуальном состоянии при любых изменениях путей или скриптов.
 
 ## Важные файлы для изучения
