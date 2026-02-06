@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import {
   Select,
   SelectContent,
@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 interface TaskListProps {
   tasks: Task[];
   onTaskUpdate: () => void;
+  onTaskChange?: (taskId: string, updates: Partial<Task>) => void;
 }
 
 const SortIcon = ({ 
@@ -45,14 +46,154 @@ const priorityOrder: Record<TaskPriority, number> = {
 const defaultStatusFilter: TaskStatus[] = ['backlog', 'planned', 'in-progress', 'cancelled'];
 const defaultPriorityFilter: TaskPriority[] = ['critical', 'high', 'medium', 'low'];
 
-export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<TaskStatus[]>(defaultStatusFilter);
-  const [priorityFilter, setPriorityFilter] = useState<TaskPriority[]>(defaultPriorityFilter);
-  const [sortBy, setSortBy] = useState<'id' | 'createdDate' | 'status' | 'priority'>('id');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // По умолчанию в обратном порядке
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const isUpdatingFromUrl = useRef(false);
+
+  // Чтение параметров из URL
+  const getSearchFromUrl = () => searchParams.get('search') || '';
+  const getStatusFilterFromUrl = (): TaskStatus[] => {
+    const statusParam = searchParams.get('status');
+    if (!statusParam) return defaultStatusFilter;
+    return statusParam.split(',').filter((s): s is TaskStatus => 
+      ['backlog', 'planned', 'in-progress', 'completed', 'cancelled'].includes(s)
+    );
+  };
+  const getPriorityFilterFromUrl = (): TaskPriority[] => {
+    const priorityParam = searchParams.get('priority');
+    if (!priorityParam) return defaultPriorityFilter;
+    return priorityParam.split(',').filter((p): p is TaskPriority => 
+      ['critical', 'high', 'medium', 'low'].includes(p)
+    );
+  };
+  const getPageFromUrl = () => {
+    const page = searchParams.get('page');
+    return page ? parseInt(page, 10) : 1;
+  };
+  const getPageSizeFromUrl = () => {
+    const size = searchParams.get('pageSize');
+    return size ? parseInt(size, 10) : 10;
+  };
+  const getSortByFromUrl = (): 'id' | 'createdDate' | 'status' | 'priority' => {
+    const sort = searchParams.get('sortBy');
+    if (sort && ['id', 'createdDate', 'status', 'priority'].includes(sort)) {
+      return sort as 'id' | 'createdDate' | 'status' | 'priority';
+    }
+    return 'id';
+  };
+  const getSortOrderFromUrl = (): 'asc' | 'desc' => {
+    const order = searchParams.get('sortOrder');
+    return order === 'asc' ? 'asc' : 'desc';
+  };
+
+  const [search, setSearch] = useState(getSearchFromUrl);
+  const [statusFilter, setStatusFilter] = useState<TaskStatus[]>(getStatusFilterFromUrl);
+  const [priorityFilter, setPriorityFilter] = useState<TaskPriority[]>(getPriorityFilterFromUrl);
+  const [sortBy, setSortBy] = useState<'id' | 'createdDate' | 'status' | 'priority'>(getSortByFromUrl);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(getSortOrderFromUrl);
+  const [currentPage, setCurrentPage] = useState(getPageFromUrl);
+  const [pageSize, setPageSize] = useState(getPageSizeFromUrl);
+
+  // Синхронизация с URL при изменении параметров
+  const updateUrlParams = (
+    updates: {
+      search?: string;
+      status?: TaskStatus[];
+      priority?: TaskPriority[];
+      page?: number;
+      pageSize?: number;
+      sortBy?: 'id' | 'createdDate' | 'status' | 'priority';
+      sortOrder?: 'asc' | 'desc';
+    }
+  ) => {
+    const newParams = new URLSearchParams(searchParams);
+
+    if (updates.search !== undefined) {
+      if (updates.search) {
+        newParams.set('search', updates.search);
+      } else {
+        newParams.delete('search');
+      }
+    }
+
+    if (updates.status !== undefined) {
+      if (updates.status.length > 0 && JSON.stringify(updates.status.sort()) !== JSON.stringify(defaultStatusFilter.sort())) {
+        newParams.set('status', updates.status.join(','));
+      } else {
+        newParams.delete('status');
+      }
+    }
+
+    if (updates.priority !== undefined) {
+      if (updates.priority.length > 0 && JSON.stringify(updates.priority.sort()) !== JSON.stringify(defaultPriorityFilter.sort())) {
+        newParams.set('priority', updates.priority.join(','));
+      } else {
+        newParams.delete('priority');
+      }
+    }
+
+    if (updates.page !== undefined) {
+      if (updates.page > 1) {
+        newParams.set('page', updates.page.toString());
+      } else {
+        newParams.delete('page');
+      }
+    }
+
+    if (updates.pageSize !== undefined) {
+      if (updates.pageSize !== 10) {
+        newParams.set('pageSize', updates.pageSize.toString());
+      } else {
+        newParams.delete('pageSize');
+      }
+    }
+
+    if (updates.sortBy !== undefined) {
+      if (updates.sortBy !== 'id') {
+        newParams.set('sortBy', updates.sortBy);
+      } else {
+        newParams.delete('sortBy');
+      }
+    }
+
+    if (updates.sortOrder !== undefined) {
+      if (updates.sortOrder !== 'desc') {
+        newParams.set('sortOrder', updates.sortOrder);
+      } else {
+        newParams.delete('sortOrder');
+      }
+    }
+
+    isUpdatingFromUrl.current = true;
+    navigate(`?${newParams.toString()}`, { replace: true });
+  };
+
+  // Инициализация из URL при первой загрузке и при изменении URL (например, кнопка "Назад")
+  useEffect(() => {
+    if (isUpdatingFromUrl.current) {
+      isUpdatingFromUrl.current = false;
+      return;
+    }
+
+    const urlSearch = getSearchFromUrl();
+    const urlStatus = getStatusFilterFromUrl();
+    const urlPriority = getPriorityFilterFromUrl();
+    const urlPage = getPageFromUrl();
+    const urlPageSize = getPageSizeFromUrl();
+    const urlSortBy = getSortByFromUrl();
+    const urlSortOrder = getSortOrderFromUrl();
+
+    // Обновляем состояние только если значения изменились
+    if (urlSearch !== search) setSearch(urlSearch);
+    if (JSON.stringify(urlStatus.sort()) !== JSON.stringify(statusFilter.sort())) setStatusFilter(urlStatus);
+    if (JSON.stringify(urlPriority.sort()) !== JSON.stringify(priorityFilter.sort())) setPriorityFilter(urlPriority);
+    if (urlPage !== currentPage) setCurrentPage(urlPage);
+    if (urlPageSize !== pageSize) setPageSize(urlPageSize);
+    if (urlSortBy !== sortBy) setSortBy(urlSortBy);
+    if (urlSortOrder !== sortOrder) setSortOrder(urlSortOrder);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const filteredAndSortedTasks = useMemo(() => {
     let result = [...tasks];
@@ -119,10 +260,48 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
     setCurrentPage(1);
   };
 
+  // Синхронизация состояния с URL (объединено в один useEffect для оптимизации)
+  useEffect(() => {
+    // Проверяем, нужно ли обновлять URL
+    const urlSearch = getSearchFromUrl();
+    const urlStatus = getStatusFilterFromUrl();
+    const urlPriority = getPriorityFilterFromUrl();
+    const urlPage = getPageFromUrl();
+    const urlPageSize = getPageSizeFromUrl();
+    const urlSortBy = getSortByFromUrl();
+    const urlSortOrder = getSortOrderFromUrl();
+
+    // Обновляем URL только если состояние отличается от URL
+    const needsUpdate = 
+      search !== urlSearch ||
+      JSON.stringify(statusFilter.sort()) !== JSON.stringify(urlStatus.sort()) ||
+      JSON.stringify(priorityFilter.sort()) !== JSON.stringify(urlPriority.sort()) ||
+      currentPage !== urlPage ||
+      pageSize !== urlPageSize ||
+      sortBy !== urlSortBy ||
+      sortOrder !== urlSortOrder;
+
+    if (needsUpdate) {
+      updateUrlParams({
+        search,
+        status: statusFilter,
+        priority: priorityFilter,
+        page: currentPage,
+        pageSize,
+        sortBy,
+        sortOrder,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, statusFilter, priorityFilter, currentPage, pageSize, sortBy, sortOrder]);
+
   const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
     try {
-      await tasksApi.updateTaskMeta(taskId, { status: newStatus });
-      onTaskUpdate();
+      const updatedTask = await tasksApi.updateTaskMeta(taskId, { status: newStatus });
+      // Обновляем локальное состояние задачи без запроса к API
+      if (onTaskChange) {
+        onTaskChange(taskId, { status: newStatus });
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Не удалось обновить статус';
       toast.error(message);
@@ -131,8 +310,11 @@ export function TaskList({ tasks, onTaskUpdate }: TaskListProps) {
 
   const handlePriorityChange = async (taskId: string, newPriority: TaskPriority) => {
     try {
-      await tasksApi.updateTaskMeta(taskId, { priority: newPriority });
-      onTaskUpdate();
+      const updatedTask = await tasksApi.updateTaskMeta(taskId, { priority: newPriority });
+      // Обновляем локальное состояние задачи без запроса к API
+      if (onTaskChange) {
+        onTaskChange(taskId, { priority: newPriority });
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Не удалось обновить приоритет';
       toast.error(message);

@@ -20,9 +20,17 @@ export function useTasks() {
     }
   };
 
+  const updateTask = (taskId: string, updates: Partial<Task>) => {
+    setTasks(prevTasks => 
+      prevTasks.map(task => 
+        task.id === taskId ? { ...task, ...updates } : task
+      )
+    );
+  };
+
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  return { tasks, loading, error, refetch: fetchTasks };
+  return { tasks, loading, error, refetch: fetchTasks, updateTask };
 }

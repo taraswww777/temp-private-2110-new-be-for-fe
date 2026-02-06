@@ -5,7 +5,7 @@ import { useTasks } from '@/hooks/useTasks';
 import { ApiError } from '@/api/apiError';
 
 export function TasksListPage() {
-  const { tasks, loading, error, refetch } = useTasks();
+  const { tasks, loading, error, refetch, updateTask } = useTasks();
 
   if (loading) {
     return (
@@ -60,7 +60,11 @@ export function TasksListPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <TaskList tasks={tasks} onTaskUpdate={refetch} />
+          <TaskList 
+            tasks={tasks} 
+            onTaskUpdate={refetch}
+            onTaskChange={updateTask}
+          />
         </CardContent>
       </Card>
   );
