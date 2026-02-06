@@ -75,23 +75,23 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
   };
 
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-6 min-w-0">
       {/* Навигация по заголовкам */}
       {headings.length > 0 && (
-        <Card className="w-64 p-4 sticky top-4 h-fit max-h-[calc(100vh-2rem)] overflow-y-auto">
-          <h3 className="font-semibold mb-3">Содержание</h3>
-          <Separator className="mb-3" />
-          <nav className="space-y-1">
+        <Card className="w-72 shrink-0 p-5 sticky top-4 h-fit max-h-[calc(100vh-2rem)] overflow-y-auto">
+          <h3 className="text-base font-semibold mb-4">Содержание</h3>
+          <Separator className="mb-4" />
+          <nav className="space-y-1.5">
             {headings.map((heading) => (
               <button
                 key={heading.id}
                 onClick={() => scrollToHeading(heading.id)}
-                className={`block w-full text-left text-sm py-1 px-2 rounded transition-colors ${
+                className={`block w-full text-left text-base py-2 px-3 rounded-md transition-colors ${
                   activeHeading === heading.id
                     ? 'bg-primary text-primary-foreground'
                     : 'hover:bg-muted'
                 }`}
-                style={{ paddingLeft: `${(heading.level - 1) * 0.75}rem` }}
+                style={{ paddingLeft: `${(heading.level - 1) * 1}rem` }}
               >
                 {heading.text}
               </button>
@@ -101,7 +101,7 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
       )}
 
       {/* Контент markdown */}
-      <div className="flex-1 prose prose-slate dark:prose-invert max-w-none">
+      <div className="min-w-0 flex-1 prose prose-slate dark:prose-invert max-w-none break-words prose-pre:overflow-x-auto prose-pre:max-w-full prose-table:block prose-table:overflow-x-auto">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
