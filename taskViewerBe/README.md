@@ -16,6 +16,18 @@ npm install
 cp .env.example .env
 ```
 
+### YouTrack интеграция (опционально)
+
+Для работы с YouTrack интеграцией необходимо настроить следующие переменные окружения:
+
+```env
+YOUTRACK_URL=http://dvuaod-00app001.innodev.local:8080
+YOUTRACK_TOKEN=<permanent-token>
+YOUTRACK_PROJECT_ID=<project-id>  # Опционально
+```
+
+Если `YOUTRACK_PROJECT_ID` не указан, будет использован первый доступный проект из YouTrack.
+
 ## Запуск
 
 Dev режим с hot-reload:
@@ -93,12 +105,93 @@ npm start
 }
 ```
 
+## YouTrack интеграция
+
+### POST /api/youtrack/tasks
+Создать задачу в YouTrack на основе локальной задачи
+
+**Body:**
+```json
+{
+  "taskId": "TASK-035",
+  "templateId": "default",
+  "customFields": {
+    "Priority": "Show-stopper"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "localTaskId": "TASK-035",
+  "youtrackIssueId": "PROJ-123",
+  "youtrackIssueUrl": "http://dvuaod-00app001.innodev.local:8080/issue/PROJ-123",
+  "youtrackIssueIds": ["PROJ-123"]
+}
+```
+
+### POST /api/youtrack/tasks/:taskId/link
+Связать локальную задачу с существующей задачей в YouTrack
+
+**Body:**
+```json
+{
+  "youtrackIssueId": "PROJ-123"
+}
+```
+
+### GET /api/youtrack/tasks/:taskId
+Получить информацию о всех связях локальной задачи с YouTrack
+
+**Query параметры:**
+- `includeDetails` (опционально): `true` для получения детальной информации из YouTrack
+
+**Response:**
+```json
+{
+  "localTaskId": "TASK-035",
+  "youtrackIssueIds": ["PROJ-123"],
+  "links": [
+    {
+      "youtrackIssueId": "PROJ-123",
+      "youtrackIssueUrl": "http://dvuaod-00app001.innodev.local:8080/issue/PROJ-123",
+      "youtrackData": {
+        "summary": "Название задачи",
+        "state": "Open",
+        "priority": "Show-stopper"
+      }
+    }
+  ]
+}
+```
+
+### DELETE /api/youtrack/tasks/:taskId/link/:youtrackIssueId
+Удалить связь локальной задачи с задачей в YouTrack
+
+### Управление шаблонами
+
+- `GET /api/youtrack/templates` - получить все шаблоны
+- `GET /api/youtrack/templates/:templateId` - получить шаблон по ID
+- `POST /api/youtrack/templates` - создать шаблон
+- `PUT /api/youtrack/templates/:templateId` - обновить шаблон
+- `DELETE /api/youtrack/templates/:templateId` - удалить шаблон
+
+Шаблоны хранятся в `docs/tasks/youtrack-templates/` и поддерживают переменные:
+- `{{taskId}}` - ID локальной задачи
+- `{{title}}` - Название локальной задачи
+- `{{content}}` - Содержимое markdown файла задачи
+- `{{status}}` - Статус локальной задачи
+- `{{branch}}` - Git ветка задачи
+
 ## Особенности
 
 - Изменение статуса задачи обновляет как `tasks-manifest.json`, так и соответствующий `.md` файл
 - Все данные хранятся в файловой системе (папка `docs/tasks`)
 - Валидация запросов через Zod
 - CORS настроен для работы с frontend (по умолчанию `http://localhost:5173`)
+- Интеграция с YouTrack для автоматического создания задач и управления связями
+- Система шаблонов для создания задач в YouTrack
 
 ## Технологии
 

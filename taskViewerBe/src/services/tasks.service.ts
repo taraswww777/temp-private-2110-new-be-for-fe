@@ -18,6 +18,7 @@ export const tasksService = {
     return manifest.tasks.map(task => ({
       ...task,
       priority: task.priority || 'medium',
+      youtrackIssueIds: task.youtrackIssueIds || undefined, // Сохраняем массив или undefined
     }));
   },
 
@@ -38,6 +39,7 @@ export const tasksService = {
     return {
       ...task,
       priority: task.priority || 'medium', // Обеспечиваем обратную совместимость
+      youtrackIssueIds: task.youtrackIssueIds || undefined,
       content,
     };
   },

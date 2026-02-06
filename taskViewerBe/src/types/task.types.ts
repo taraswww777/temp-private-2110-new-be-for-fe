@@ -7,6 +7,7 @@ export interface Task {
   createdDate: string | null;
   completedDate: string | null;
   branch: string | null;
+  youtrackIssueIds?: string[]; // Опциональное поле для связей с YouTrack
 }
 
 export interface TaskManifest {
