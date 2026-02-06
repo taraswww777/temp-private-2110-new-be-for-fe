@@ -30,7 +30,6 @@ export function LinkYouTrackIssueDialog({
 }: LinkYouTrackIssueDialogProps) {
   const [issueId, setIssueId] = useState('');
   const [loading, setLoading] = useState(false);
-  const [validating, setValidating] = useState(false);
 
   const validateIssueId = (id: string): boolean => {
     // Простая валидация формата: должен содержать дефис и буквы/цифры

@@ -111,7 +111,7 @@ function TaskListYouTrackCell({
 }
 
 export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const isUpdatingFromUrl = useRef(false);
 
@@ -371,7 +371,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
 
   const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
     try {
-      const updatedTask = await tasksApi.updateTaskMeta(taskId, { status: newStatus });
+      await tasksApi.updateTaskMeta(taskId, { status: newStatus });
       // Обновляем локальное состояние задачи без запроса к API
       if (onTaskChange) {
         onTaskChange(taskId, { status: newStatus });
@@ -384,7 +384,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
 
   const handlePriorityChange = async (taskId: string, newPriority: TaskPriority) => {
     try {
-      const updatedTask = await tasksApi.updateTaskMeta(taskId, { priority: newPriority });
+      await tasksApi.updateTaskMeta(taskId, { priority: newPriority });
       // Обновляем локальное состояние задачи без запроса к API
       if (onTaskChange) {
         onTaskChange(taskId, { priority: newPriority });

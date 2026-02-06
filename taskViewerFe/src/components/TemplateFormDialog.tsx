@@ -72,9 +72,6 @@ export function TemplateFormDialog({
       setSaving(true);
       await onSave(formData);
       onOpenChange(false);
-    } catch (error) {
-      // Ошибка обрабатывается в родительском компоненте
-      throw error;
     } finally {
       setSaving(false);
     }

@@ -94,7 +94,7 @@ export const youtrackApi = {
   /**
    * Получить информацию о задаче из YouTrack
    */
-  async getIssueInfo(youtrackIssueId: string): Promise<YouTrackIssueInfo> {
+  async getIssueInfo(_youtrackIssueId: string): Promise<YouTrackIssueInfo> {
     // Используем getIssueLinks с includeDetails для получения информации
     // Но нам нужен taskId, поэтому лучше использовать прямой запрос к YouTrack API через бэкенд
     // Пока используем getIssueLinks, но это не оптимально
