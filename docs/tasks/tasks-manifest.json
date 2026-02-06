@@ -403,7 +403,7 @@
     {
       "id": "TASK-041",
       "title": "Восстановление табов на детальной странице отчёта",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-041-restore-tabs-report-detail.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
