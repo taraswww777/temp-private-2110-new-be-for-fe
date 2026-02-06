@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Skeleton,
+} from '@/uiKit';
 import { youtrackApi } from '@/api/youtrack.api';
 import type { YouTrackQueueStatus, QueueOperationItem } from '@/types/youtrack.types';
 import { PageHeader } from '@/components/PageHeader';
@@ -104,8 +111,8 @@ export function YouTrackQueuePage() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="h-12 w-full bg-muted animate-pulse rounded" />
-        <div className="h-64 w-full bg-muted animate-pulse rounded" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-64 w-full" />
       </div>
     );
   }

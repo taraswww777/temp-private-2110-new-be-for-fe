@@ -1,5 +1,13 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Alert,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Skeleton,
+} from '@/uiKit';
 import { TaskList } from '@/components/TaskList';
 import { useTasks } from '@/hooks/useTasks';
 import { ApiError } from '@/api/apiError';
@@ -10,8 +18,8 @@ export function TasksListPage() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="h-12 w-full bg-muted animate-pulse rounded" />
-        <div className="h-64 w-full bg-muted animate-pulse rounded" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-64 w-full" />
       </div>
     );
   }
@@ -20,32 +28,17 @@ export function TasksListPage() {
     const isApiError = error instanceof ApiError;
     const details = isApiError ? error.details : [];
     return (
-      <Card className="border-destructive/50 bg-destructive/5">
-        <CardHeader>
-          <CardTitle className="text-destructive">Ошибка загрузки задач</CardTitle>
-          <CardDescription className="text-destructive/90 whitespace-pre-wrap">
-            {error.message}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {details.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Детали валидации:</p>
-              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                {details.map((d, i) => (
-                  <li key={i}>
-                    <span className="font-mono text-foreground">{d.path}</span>: {d.message}
-                    {d.expectedValues?.length ? ` (допустимые: ${d.expectedValues.join(', ')})` : ''}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+      <Alert
+        variant="destructive"
+        title="Ошибка загрузки задач"
+        description={error.message}
+        details={details}
+        action={
           <Button variant="outline" onClick={() => refetch()}>
             Повторить запрос
           </Button>
-        </CardContent>
-      </Card>
+        }
+      />
     );
   }
 

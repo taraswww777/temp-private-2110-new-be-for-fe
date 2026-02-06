@@ -543,7 +543,7 @@
     {
       "id": "TASK-055",
       "title": "Storybook и UI Kit в Task Viewer (taskViewerFe)",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-055-storybook-ui-kit-taskviewer-fe.md",
       "createdDate": "2026-02-06T16:00:00Z",
       "completedDate": null,

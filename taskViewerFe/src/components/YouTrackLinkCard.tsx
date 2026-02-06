@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@/uiKit';
 import { youtrackApi } from '@/api/youtrack.api';
 import type { TaskYouTrackLinks } from '@/types/youtrack.types';
 import { toast } from 'sonner';

@@ -1,5 +1,4 @@
-import { Input } from '@/components/ui/input';
-import { MultiSelect } from '@/components/ui/multi-select';
+import { Input, MultiSelect } from '@/uiKit';
 import type { TaskStatus, TaskPriority } from '@/types/task.types';
 
 interface TaskFiltersProps {

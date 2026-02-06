@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+  Input,
+  Label,
+} from '@/uiKit';
 import { youtrackApi } from '@/api/youtrack.api';
 import { toast } from 'sonner';
 
@@ -118,7 +118,7 @@ export function LinkYouTrackIssueDialog({
           <Button variant="outline" onClick={() => handleOpenChange(false)} disabled={loading}>
             Отмена
           </Button>
-          <Button onClick={handleLink} disabled={loading || !issueId.trim()}>
+          <Button variant="primary" onClick={handleLink} disabled={loading || !issueId.trim()}>
             {loading ? 'Связывание...' : 'Связать'}
           </Button>
         </DialogFooter>

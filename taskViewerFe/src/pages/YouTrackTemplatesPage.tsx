@@ -1,19 +1,24 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TemplateFormDialog } from '@/components/TemplateFormDialog';
-import { TemplatePreview } from '@/components/TemplatePreview';
-import { youtrackApi } from '@/api/youtrack.api';
-import type { YouTrackTemplate, CreateYouTrackTemplateInput } from '@/types/youtrack.types';
-import { toast } from 'sonner';
 import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+  Skeleton,
+} from '@/uiKit';
+import { TemplateFormDialog } from '@/components/TemplateFormDialog';
+import { TemplatePreview } from '@/components/TemplatePreview';
+import { youtrackApi } from '@/api/youtrack.api';
+import type { YouTrackTemplate, CreateYouTrackTemplateInput } from '@/types/youtrack.types';
+import { toast } from 'sonner';
 import { PageHeader } from '@/components/PageHeader';
 
 export function YouTrackTemplatesPage() {
@@ -113,8 +118,8 @@ export function YouTrackTemplatesPage() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="h-32 w-full bg-muted animate-pulse rounded" />
-        <div className="h-96 w-full bg-muted animate-pulse rounded" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-96 w-full" />
       </div>
     );
   }
@@ -124,14 +129,14 @@ export function YouTrackTemplatesPage() {
       <PageHeader
         title="Шаблоны YouTrack"
         subtitle="Управление шаблонами для создания задач в YouTrack"
-        actions={<Button onClick={handleCreate}>Создать шаблон</Button>}
+        actions={<Button variant="primary" onClick={handleCreate}>Создать шаблон</Button>}
       />
 
       {templates.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
             <p className="text-muted-foreground mb-4">Шаблоны не найдены</p>
-            <Button onClick={handleCreate}>Создать первый шаблон</Button>
+            <Button variant="primary" onClick={handleCreate}>Создать первый шаблон</Button>
           </CardContent>
         </Card>
       ) : (
@@ -160,7 +165,7 @@ export function YouTrackTemplatesPage() {
                     </Button>
                     <Button
                       size="sm"
-                      variant="destructive"
+                      variant="danger"
                       onClick={() => handleDelete(template.id)}
                     >
                       Удалить
@@ -252,7 +257,7 @@ export function YouTrackTemplatesPage() {
             >
               Отмена
             </Button>
-            <Button variant="destructive" onClick={confirmDelete} disabled={deleting}>
+            <Button variant="danger" onClick={confirmDelete} disabled={deleting}>
               {deleting ? 'Удаление...' : 'Удалить'}
             </Button>
           </DialogFooter>

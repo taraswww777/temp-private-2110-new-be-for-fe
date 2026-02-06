@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
+  Alert,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+  Skeleton,
+} from '@/uiKit';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
@@ -82,8 +88,8 @@ export function TaskDetailPage() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="h-32 w-full bg-muted animate-pulse rounded" />
-        <div className="h-96 w-full bg-muted animate-pulse rounded" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-96 w-full" />
       </div>
     );
   }
@@ -92,36 +98,19 @@ export function TaskDetailPage() {
     const isApiError = error instanceof ApiError;
     const details = isApiError ? error.details : [];
     return (
-      <Card className="border-destructive/50 bg-destructive/5">
-        <CardHeader>
-          <CardTitle className="text-destructive">
-            {error ? 'Ошибка загрузки задачи' : 'Задача не найдена'}
-          </CardTitle>
-          <CardDescription className="text-destructive/90 whitespace-pre-wrap">
-            {error?.message ?? 'Задача не найдена'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {details.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Детали валидации:</p>
-              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                {details.map((d, i) => (
-                  <li key={i}>
-                    <span className="font-mono text-foreground">{d.path}</span>: {d.message}
-                    {d.expectedValues?.length ? ` (допустимые: ${d.expectedValues.join(', ')})` : ''}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {error && (
+      <Alert
+        variant="destructive"
+        title={error ? 'Ошибка загрузки задачи' : 'Задача не найдена'}
+        description={error?.message ?? 'Задача не найдена'}
+        details={details}
+        action={
+          error ? (
             <Button variant="outline" onClick={() => fetchTask()}>
               Повторить запрос
             </Button>
-          )}
-        </CardContent>
-      </Card>
+          ) : undefined
+        }
+      />
     );
   }
 

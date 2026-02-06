@@ -1,14 +1,14 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import {
+  Badge,
+  Button,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+} from '@/uiKit';
 import { TaskFilters } from './TaskFilters';
 import { YouTrackConnectDialog } from './YouTrackConnectDialog';
 import { tasksApi } from '@/api/tasks.api';
@@ -646,7 +646,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                 return (
                   <Button
                     key={pageNum}
-                    variant={currentPage === pageNum ? 'default' : 'outline'}
+                    variant={currentPage === pageNum ? 'primary' : 'outline'}
                     size="sm"
                     onClick={() => handlePageChange(pageNum)}
                     className="min-w-[40px]"

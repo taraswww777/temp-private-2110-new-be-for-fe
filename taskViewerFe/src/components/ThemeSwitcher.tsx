@@ -4,7 +4,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/uiKit';
 import { useTheme } from '@/contexts/ThemeContext';
 import type { ThemePreference } from '@/lib/theme';
 
