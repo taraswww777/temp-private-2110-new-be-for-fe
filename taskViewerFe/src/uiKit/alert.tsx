@@ -29,7 +29,7 @@ export interface AlertDetailsItem {
 }
 
 export interface AlertProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>,
     VariantProps<typeof alertVariants> {
   /** Заголовок */
   title: React.ReactNode

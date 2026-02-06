@@ -53,38 +53,47 @@ export const Default: Story = {
 }
 
 export const WithSelection: Story = {
-  render: function WithSelection() {
-    const [selected, setSelected] = React.useState<string[]>(['react', 'vue'])
+  args: {
+    options: defaultOptions,
+    selected: ['react', 'vue'],
+    onChange: () => {},
+  },
+  render: function WithSelection(args) {
+    const [selected, setSelected] = React.useState<string[]>(args.selected)
     return (
       <div className="w-[280px]">
         <MultiSelect
-          options={defaultOptions}
+          {...args}
           selected={selected}
           onChange={setSelected}
-          placeholder="Выберите технологии..."
         />
       </div>
     )
   },
 }
 
+const manyOptionsList = [
+  { label: 'Опция 1', value: '1' },
+  { label: 'Опция 2', value: '2' },
+  { label: 'Опция 3', value: '3' },
+  { label: 'Опция 4', value: '4' },
+  { label: 'Опция 5', value: '5' },
+]
+
 export const ManyOptions: Story = {
-  render: function ManyOptions() {
-    const options = [
-      { label: 'Опция 1', value: '1' },
-      { label: 'Опция 2', value: '2' },
-      { label: 'Опция 3', value: '3' },
-      { label: 'Опция 4', value: '4' },
-      { label: 'Опция 5', value: '5' },
-    ]
-    const [selected, setSelected] = React.useState<string[]>([])
+  args: {
+    options: manyOptionsList,
+    selected: [],
+    onChange: () => {},
+  },
+  render: function ManyOptions(args) {
+    const [selected, setSelected] = React.useState<string[]>(args.selected)
     return (
       <div className="w-[280px]">
         <MultiSelect
-          options={options}
+          {...args}
           selected={selected}
           onChange={setSelected}
-          placeholder="Выберите несколько..."
         />
       </div>
     )
