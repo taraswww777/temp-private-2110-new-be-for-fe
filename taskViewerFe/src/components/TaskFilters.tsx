@@ -6,20 +6,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { TaskStatus } from '@/types/task.types';
+import type { TaskStatus, TaskPriority } from '@/types/task.types';
 
 interface TaskFiltersProps {
   search: string;
   statusFilter: TaskStatus | 'all';
+  priorityFilter: TaskPriority | 'all';
   onSearchChange: (value: string) => void;
   onStatusFilterChange: (value: TaskStatus | 'all') => void;
+  onPriorityFilterChange: (value: TaskPriority | 'all') => void;
 }
 
 export function TaskFilters({
   search,
   statusFilter,
+  priorityFilter,
   onSearchChange,
   onStatusFilterChange,
+  onPriorityFilterChange,
 }: TaskFiltersProps) {
   return (
     <div className="flex gap-4 mb-6 flex-wrap">
@@ -41,6 +45,19 @@ export function TaskFilters({
           <SelectItem value="in-progress">⏳ В работе</SelectItem>
           <SelectItem value="completed">✅ Выполнено</SelectItem>
           <SelectItem value="cancelled">❌ Отменено</SelectItem>
+        </SelectContent>
+      </Select>
+
+      <Select value={priorityFilter} onValueChange={onPriorityFilterChange}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Все приоритеты" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Все приоритеты</SelectItem>
+          <SelectItem value="critical">🔴 Критический</SelectItem>
+          <SelectItem value="high">🟠 Высокий</SelectItem>
+          <SelectItem value="medium">🔵 Средний</SelectItem>
+          <SelectItem value="low">⚪ Низкий</SelectItem>
         </SelectContent>
       </Select>
     </div>

@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { Task, TaskStatus, UpdateTaskMetaInput } from '@/types/task.types';
+import type { Task, TaskStatus, TaskPriority, UpdateTaskMetaInput } from '@/types/task.types';
 
 interface TaskEditDialogProps {
   task: Task;
@@ -31,6 +31,7 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
   const [formData, setFormData] = useState<UpdateTaskMetaInput>({
     title: task.title,
     status: task.status,
+    priority: task.priority,
     branch: task.branch,
     createdDate: task.createdDate,
   });
@@ -87,6 +88,26 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
                 <SelectItem value="in-progress">⏳ В работе</SelectItem>
                 <SelectItem value="completed">✅ Выполнено</SelectItem>
                 <SelectItem value="cancelled">❌ Отменено</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="priority">Приоритет</Label>
+            <Select
+              value={formData.priority}
+              onValueChange={(value) =>
+                setFormData({ ...formData, priority: value as TaskPriority })
+              }
+              disabled={task.status === 'completed'}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="critical">🔴 Критический</SelectItem>
+                <SelectItem value="high">🟠 Высокий</SelectItem>
+                <SelectItem value="medium">🔵 Средний</SelectItem>
+                <SelectItem value="low">⚪ Низкий</SelectItem>
               </SelectContent>
             </Select>
           </div>
