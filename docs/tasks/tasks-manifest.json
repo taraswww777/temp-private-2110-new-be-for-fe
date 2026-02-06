@@ -343,21 +343,21 @@
     {
       "id": "TASK-035",
       "title": "Интеграция Task Viewer Backend с YouTrack",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-035-youtrack-integration-backend.md",
       "createdDate": "2026-02-06T10:00:00Z",
-      "completedDate": null,
-      "branch": null,
+      "completedDate": "2026-02-06T00:00:00Z",
+      "branch": "feature/TASK-035-youtrack-integration-backend",
       "priority": "medium"
     },
     {
       "id": "TASK-036",
       "title": "Интеграция Task Viewer Frontend с YouTrack",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-036-youtrack-integration-frontend.md",
       "createdDate": "2026-02-06T10:00:00Z",
-      "completedDate": null,
-      "branch": null,
+      "completedDate": "2026-02-06T00:00:00Z",
+      "branch": "feature/TASK-035-youtrack-integration-backend",
       "priority": "medium"
     },
     {
