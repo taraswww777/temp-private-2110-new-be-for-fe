@@ -57,6 +57,39 @@ export interface CreateYouTrackTemplateInput {
 
 export type UpdateYouTrackTemplateInput = Partial<CreateYouTrackTemplateInput>;
 
+/** Данные операции очереди (связываемая задача и др.) */
+export interface QueueOperationItemData {
+  taskId: string;
+  templateId?: string;
+  youtrackIssueId?: string;
+}
+
+/** Элемент очереди операций YouTrack (краткий вид с API) */
+export interface QueueOperationItem {
+  id: string;
+  type: string;
+  status: string;
+  createdAt: string;
+  attempts: number;
+  data?: QueueOperationItemData;
+}
+
+/** Ответ GET /api/youtrack/queue */
+export interface YouTrackQueueStatus {
+  pending: number;
+  processing: number;
+  completed: number;
+  failed: number;
+  operations: QueueOperationItem[];
+}
+
+/** Ответ POST /api/youtrack/queue/process */
+export interface YouTrackQueueProcessResult {
+  processed: number;
+  failed: number;
+  errors: Array<{ operationId: string; error: string }>;
+}
+
 export interface CreateIssueResponse {
   localTaskId: string;
   youtrackIssueId: string;

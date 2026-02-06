@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TemplateFormDialog } from '@/components/TemplateFormDialog';
@@ -15,6 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { PageHeader } from '@/components/PageHeader';
 
 export function YouTrackTemplatesPage() {
   const [templates, setTemplates] = useState<YouTrackTemplate[]>([]);
@@ -121,20 +121,11 @@ export function YouTrackTemplatesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Шаблоны YouTrack</h1>
-          <p className="text-muted-foreground mt-2">
-            Управление шаблонами для создания задач в YouTrack
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Link to="/">
-            <Button variant="outline">← Назад к списку</Button>
-          </Link>
-          <Button onClick={handleCreate}>Создать шаблон</Button>
-        </div>
-      </div>
+      <PageHeader
+        title="Шаблоны YouTrack"
+        subtitle="Управление шаблонами для создания задач в YouTrack"
+        actions={<Button onClick={handleCreate}>Создать шаблон</Button>}
+      />
 
       {templates.length === 0 ? (
         <Card>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -12,6 +12,7 @@ import {
 import { TaskEditDialog } from '@/components/TaskEditDialog';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
+import { PageHeader } from '@/components/PageHeader';
 import { tasksApi } from '@/api/tasks.api';
 import { ApiError } from '@/api/apiError';
 import type { TaskDetail, UpdateTaskMetaInput, TaskStatus, TaskPriority } from '@/types/task.types';
@@ -126,12 +127,7 @@ export function TaskDetailPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <Link to="/">
-          <Button variant="outline">← Назад к списку</Button>
-        </Link>
-        <TaskEditDialog task={task} onSave={handleSave} />
-      </div>
+      <PageHeader actions={<TaskEditDialog task={task} onSave={handleSave} />} />
 
       <Card className="overflow-hidden">
         <div className="flex flex-col lg:flex-row">

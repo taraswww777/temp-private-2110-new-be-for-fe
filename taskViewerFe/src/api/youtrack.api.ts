@@ -8,6 +8,8 @@ import type {
   LinkIssueResponse,
   UnlinkIssueResponse,
   YouTrackIssueInfo,
+  YouTrackQueueStatus,
+  YouTrackQueueProcessResult,
 } from '@/types/youtrack.types';
 
 // Используем относительный путь - Vite dev server проксирует на http://localhost:3001
@@ -168,5 +170,29 @@ export const youtrackApi = {
     if (!response.ok) {
       throw await ApiError.fromResponse(response);
     }
+  },
+
+  /**
+   * Получить статус очереди операций YouTrack
+   */
+  async getQueueStatus(): Promise<YouTrackQueueStatus> {
+    const response = await fetch(`${API_BASE_URL}/youtrack/queue`);
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Запустить обработку очереди вручную
+   */
+  async processQueue(): Promise<YouTrackQueueProcessResult> {
+    const response = await fetch(`${API_BASE_URL}/youtrack/queue/process`, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
   },
 };

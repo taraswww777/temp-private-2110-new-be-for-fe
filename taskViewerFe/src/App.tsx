@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { TasksListPage } from '@/pages/TasksListPage';
 import { TaskDetailPage } from '@/pages/TaskDetailPage';
 import { YouTrackTemplatesPage } from '@/pages/YouTrackTemplatesPage';
+import { YouTrackQueuePage } from '@/pages/YouTrackQueuePage';
 import { Toaster } from 'sonner';
 
 export function App() {
@@ -22,6 +23,12 @@ export function App() {
                 >
                   Шаблоны YouTrack
                 </Link>
+                <Link
+                  to="/youtrack/queue"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                  Очередь YouTrack
+                </Link>
               </nav>
             </div>
           </div>
@@ -31,6 +38,7 @@ export function App() {
             <Route path="/" element={<TasksListPage />} />
             <Route path="/tasks/:id" element={<TaskDetailPage />} />
             <Route path="/youtrack/templates" element={<YouTrackTemplatesPage />} />
+            <Route path="/youtrack/queue" element={<YouTrackQueuePage />} />
           </Routes>
         </main>
       </div>

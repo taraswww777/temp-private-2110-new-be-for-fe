@@ -663,6 +663,11 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
               status: z.string(),
               createdAt: z.string(),
               attempts: z.number(),
+              data: z.object({
+                taskId: z.string(),
+                templateId: z.string().optional(),
+                youtrackIssueId: z.string().optional(),
+              }).optional(),
             })),
           }),
         },
@@ -682,6 +687,11 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           status: op.status,
           createdAt: op.createdAt,
           attempts: op.attempts,
+          data: op.data ? {
+            taskId: op.data.taskId,
+            ...('templateId' in op.data && op.data.templateId != null && { templateId: op.data.templateId }),
+            ...('youtrackIssueId' in op.data && op.data.youtrackIssueId != null && { youtrackIssueId: op.data.youtrackIssueId }),
+          } : undefined,
         })),
       };
 
