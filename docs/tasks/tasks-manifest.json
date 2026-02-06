@@ -323,6 +323,168 @@
       "createdDate": "2026-02-06T10:00:00Z",
       "completedDate": null,
       "branch": null
+    },
+    {
+      "id": "TASK-037",
+      "title": "История статусов отчета - получение данных с Backend",
+      "status": "backlog",
+      "file": "TASK-037-history-status-report-backend.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-038",
+      "title": "Улучшение мок данных для Backend",
+      "status": "backlog",
+      "file": "TASK-038-improve-mock-data-backend.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-039",
+      "title": "Рефакторинг endpoint получения деталей пакета",
+      "status": "backlog",
+      "file": "TASK-039-refactor-package-details-endpoint.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-040",
+      "title": "Добавление поля code в DTO хранилища и отображение ТФР только на странице ТФР",
+      "status": "backlog",
+      "file": "TASK-040-storage-volume-code-field.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-041",
+      "title": "Восстановление табов на детальной странице отчёта",
+      "status": "backlog",
+      "file": "TASK-041-restore-tabs-report-detail.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-042",
+      "title": "Переименование сущностей связанных с Пакетами на Backend (packet)",
+      "status": "backlog",
+      "file": "TASK-042-rename-packet-entities-backend.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-043",
+      "title": "Обратная связь по API контракту от Backend",
+      "status": "backlog",
+      "file": "TASK-043-api-contract-feedback-backend.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-044",
+      "title": "Улучшения формы \"Список файлов\" в универсальном отчёте",
+      "status": "backlog",
+      "file": "TASK-044-universal-report-file-list-improvements.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-045",
+      "title": "Валидация уникальности наименования пакета",
+      "status": "backlog",
+      "file": "TASK-045-package-unique-name-validation.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-046",
+      "title": "История статусов пакета - Backend",
+      "status": "backlog",
+      "file": "TASK-046-package-status-history-backend.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-047",
+      "title": "Улучшения детализации пакета - Backend",
+      "status": "backlog",
+      "file": "TASK-047-package-details-improvements-backend.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-048",
+      "title": "Улучшения списка пакетов - работа с копированием (Backend)",
+      "status": "backlog",
+      "file": "TASK-048-package-list-copying-improvements-backend.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-049",
+      "title": "Добавление задания в пакеты - макеты UI",
+      "status": "backlog",
+      "file": "TASK-049-add-task-to-packages-ui-mockups.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-050",
+      "title": "Сортировка по размеру пакета на странице ТФР - Backend",
+      "status": "backlog",
+      "file": "TASK-050-tfr-page-sorting-backend.md",
+      "createdDate": "2026-02-06T12:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-051",
+      "title": "Рефакторинг README.md - удаление дублирования",
+      "status": "backlog",
+      "file": "TASK-051-refactor-readme-remove-duplication.md",
+      "createdDate": "2026-02-06T14:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-052",
+      "title": "Улучшение скрипта mock:generate для автоматического вызова при разработке",
+      "status": "backlog",
+      "file": "TASK-052-improve-mock-generate-script.md",
+      "createdDate": "2026-02-06T14:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-053",
+      "title": "Обновление документации run-app.md",
+      "status": "backlog",
+      "file": "TASK-053-update-run-app-documentation.md",
+      "createdDate": "2026-02-06T14:00:00Z",
+      "completedDate": null,
+      "branch": null
+    },
+    {
+      "id": "TASK-054",
+      "title": "Добавление приоритетов задач в манифест и интерфейс",
+      "status": "backlog",
+      "file": "TASK-054-add-task-priorities.md",
+      "createdDate": "2026-02-06T15:00:00Z",
+      "completedDate": null,
+      "branch": null
     }
   ]
 }
