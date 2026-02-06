@@ -553,12 +553,12 @@
     {
       "id": "TASK-056",
       "title": "Поддержка тёмной темы в Task Viewer (taskViewerFe)",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-056-dark-theme-support-taskviewer-fe.md",
       "createdDate": "2026-02-06T16:00:00Z",
-      "completedDate": null,
-      "branch": null,
-      "priority": "medium"
+      "completedDate": "2026-02-06T00:00:00Z",
+      "branch": "feature/TASK-056-dark-theme-support-taskviewer-fe",
+      "priority": "low"
     },
     {
       "id": "TASK-057",
