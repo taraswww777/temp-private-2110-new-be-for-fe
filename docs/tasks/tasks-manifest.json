@@ -408,7 +408,7 @@
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "critical"
     },
     {
       "id": "TASK-042",
