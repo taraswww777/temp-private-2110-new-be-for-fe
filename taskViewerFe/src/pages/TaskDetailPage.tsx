@@ -204,10 +204,7 @@ export function TaskDetailPage() {
       </Card>
 
       <Card className="overflow-hidden">
-        <CardHeader>
-          <CardTitle>Описание задачи</CardTitle>
-        </CardHeader>
-        <CardContent className="min-w-0 overflow-hidden">
+        <CardContent className="min-w-0 overflow-hidden pt-6 pl-0">
           <MarkdownViewer content={task.content} />
         </CardContent>
       </Card>

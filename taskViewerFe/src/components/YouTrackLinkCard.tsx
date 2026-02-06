@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { youtrackApi } from '@/api/youtrack.api';
 import type { TaskYouTrackLinks } from '@/types/youtrack.types';
 import { toast } from 'sonner';
@@ -18,12 +19,30 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
   const [loading, setLoading] = useState(true);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [linkDialogOpen, setLinkDialogOpen] = useState(false);
+  const [queueStatus, setQueueStatus] = useState<{ createIssue: boolean; linkIssue: boolean }>({
+    createIssue: false,
+    linkIssue: false,
+  });
 
   const fetchLinks = async () => {
     try {
       setLoading(true);
-      const data = await youtrackApi.getIssueLinks(taskId, true);
-      setLinks(data);
+      const [linksData, queueData] = await Promise.all([
+        youtrackApi.getIssueLinks(taskId, true),
+        youtrackApi.getQueueStatus().catch(() => null),
+      ]);
+      setLinks(linksData);
+      if (queueData?.operations) {
+        const pendingForTask = queueData.operations.filter(
+          (op) => op.status === 'pending' && op.data?.taskId === taskId
+        );
+        setQueueStatus({
+          createIssue: pendingForTask.some((op) => op.type === 'create_issue'),
+          linkIssue: pendingForTask.some((op) => op.type === 'link_issue'),
+        });
+      } else {
+        setQueueStatus({ createIssue: false, linkIssue: false });
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Не удалось загрузить связи';
       toast.error(message);
@@ -80,6 +99,7 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
 
   const issueIds = links?.youtrackIssueIds || initialIssueIds || [];
   const hasLinks = issueIds.length > 0;
+  const inQueue = queueStatus.createIssue || queueStatus.linkIssue;
 
   return (
     <>
@@ -88,14 +108,36 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
           <CardTitle>🔗 YouTrack</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          {(inQueue || !hasLinks) && (
+            <div className="flex flex-wrap items-center gap-2">
+              {inQueue && (
+                <Badge variant="outline" className="gap-1 border-amber-500/50 text-amber-600 dark:text-amber-500">
+                  <span aria-hidden>⏳</span> В очереди
+                </Badge>
+              )}
+              {!hasLinks && (
+                <Badge variant="secondary" className="gap-1 font-normal">
+                  <span aria-hidden>○</span> Не связана
+                </Badge>
+              )}
+            </div>
+          )}
           {!hasLinks ? (
             <div className="space-y-3">
-              <CardDescription>Задача не связана</CardDescription>
               <div className="flex flex-col gap-2">
-                <Button onClick={() => setCreateDialogOpen(true)}>
+                <Button
+                  onClick={() => setCreateDialogOpen(true)}
+                  disabled={queueStatus.createIssue}
+                  title={queueStatus.createIssue ? 'Операция уже в очереди' : undefined}
+                >
                   Создать задачу в YouTrack
                 </Button>
-                <Button variant="outline" onClick={() => setLinkDialogOpen(true)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setLinkDialogOpen(true)}
+                  disabled={queueStatus.createIssue || queueStatus.linkIssue}
+                  title={queueStatus.createIssue || queueStatus.linkIssue ? 'Операция уже в очереди' : undefined}
+                >
                   Связать с существующей задачей
                 </Button>
               </div>
@@ -130,6 +172,8 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
                       size="sm"
                       variant="outline"
                       onClick={() => setLinkDialogOpen(true)}
+                      disabled={queueStatus.createIssue || queueStatus.linkIssue}
+                      title={queueStatus.createIssue || queueStatus.linkIssue ? 'Операция уже в очереди' : undefined}
                     >
                       Связать ещё одну задачу
                     </Button>
@@ -182,6 +226,8 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
                     variant="outline"
                     onClick={() => setLinkDialogOpen(true)}
                     className="w-full"
+                    disabled={queueStatus.createIssue || queueStatus.linkIssue}
+                    title={queueStatus.createIssue || queueStatus.linkIssue ? 'Операция уже в очереди' : undefined}
                   >
                     Связать ещё одну задачу
                   </Button>

@@ -79,8 +79,6 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
       {/* Навигация по заголовкам */}
       {headings.length > 0 && (
         <Card className="w-72 shrink-0 p-5 sticky top-4 h-fit max-h-[calc(100vh-2rem)] overflow-y-auto">
-          <h3 className="text-base font-semibold mb-4">Содержание</h3>
-          <Separator className="mb-4" />
           <nav className="space-y-1.5">
             {headings.map((heading) => (
               <button
