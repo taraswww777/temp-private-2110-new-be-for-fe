@@ -32,7 +32,9 @@ export const youtrackLinksService = {
     }
 
     const task = manifest.tasks[taskIndex];
-    const existingIds = task.youtrackIssueIds || [];
+    const existingIds = (task.youtrackIssueIds || []).filter(
+      (id): id is string => typeof id === 'string' && id.length > 0
+    );
 
     // Проверка на дублирование
     if (existingIds.includes(youtrackIssueId)) {
@@ -70,7 +72,9 @@ export const youtrackLinksService = {
     }
 
     const task = manifest.tasks[taskIndex];
-    const existingIds = task.youtrackIssueIds || [];
+    const existingIds = (task.youtrackIssueIds || []).filter(
+      (id): id is string => typeof id === 'string' && id.length > 0
+    );
 
     // Проверка существования связи
     if (!existingIds.includes(youtrackIssueId)) {
@@ -105,6 +109,9 @@ export const youtrackLinksService = {
       throw new Error(`Task with id "${taskId}" not found`);
     }
 
-    return task.youtrackIssueIds || [];
+    const ids = (task.youtrackIssueIds || []).filter(
+      (id): id is string => typeof id === 'string' && id.length > 0
+    );
+    return ids;
   },
 };

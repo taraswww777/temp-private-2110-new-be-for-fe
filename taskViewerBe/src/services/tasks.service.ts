@@ -7,6 +7,13 @@ import type { UpdateTaskMetaInput } from '../schemas/tasks.schema.js';
 const TASKS_DIR = resolve(process.cwd(), env.TASKS_DIR);
 const MANIFEST_PATH = join(TASKS_DIR, 'tasks-manifest.json');
 
+/** Оставляет только валидные строковые ID (отсекает null/undefined из манифеста). */
+function normalizeYoutrackIssueIds(ids: unknown[] | undefined): string[] | undefined {
+  if (!ids || !Array.isArray(ids)) return undefined;
+  const filtered = ids.filter((id): id is string => typeof id === 'string' && id.length > 0);
+  return filtered.length > 0 ? filtered : undefined;
+}
+
 export const tasksService = {
   /**
    * Получить все задачи из манифеста
@@ -18,7 +25,7 @@ export const tasksService = {
     return manifest.tasks.map(task => ({
       ...task,
       priority: task.priority || 'medium',
-      youtrackIssueIds: task.youtrackIssueIds || undefined, // Сохраняем массив или undefined
+      youtrackIssueIds: normalizeYoutrackIssueIds(task.youtrackIssueIds),
     }));
   },
 
@@ -39,7 +46,7 @@ export const tasksService = {
     return {
       ...task,
       priority: task.priority || 'medium', // Обеспечиваем обратную совместимость
-      youtrackIssueIds: task.youtrackIssueIds || undefined,
+      youtrackIssueIds: normalizeYoutrackIssueIds(task.youtrackIssueIds),
       content,
     };
   },

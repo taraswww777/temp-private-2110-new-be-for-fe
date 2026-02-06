@@ -3,8 +3,9 @@
   "name": "Шаблон по умолчанию",
   "description": "Базовый шаблон для создания задач",
   "projectId": "0-0",
+  "parentIssueId": "VTB-515",
   "summaryTemplate": "{{title}}",
-  "descriptionTemplate": "{{content}}\n\n**Локальная задача:** {{taskId}}",
+  "descriptionTemplate": "{{content}}",
   "customFields": {
     "Priority": {
       "$type": "SingleEnumIssueCustomField",

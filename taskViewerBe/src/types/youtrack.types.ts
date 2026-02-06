@@ -44,5 +44,6 @@ export interface YouTrackCreateIssueRequest {
 
 export interface YouTrackCreateIssueResponse {
   id: string;
-  idReadable: string;
+  /** Может отсутствовать в ответе API — тогда используем id */
+  idReadable?: string;
 }

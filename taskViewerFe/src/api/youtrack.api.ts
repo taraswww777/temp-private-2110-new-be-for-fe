@@ -15,6 +15,16 @@ import type {
 // Используем относительный путь - Vite dev server проксирует на http://localhost:3001
 const API_BASE_URL = '/api';
 
+/**
+ * Собрать ссылку на задачу YouTrack по базовому URL (из env/API) и номеру задачи.
+ * baseUrl приходит из GET /api/youtrack/config (читает YOUTRACK_URL из env на бэкенде).
+ */
+export function buildYouTrackIssueUrl(baseUrl: string | null, issueId: string): string | null {
+  if (!baseUrl || !issueId) return null;
+  const base = baseUrl.replace(/\/$/, '');
+  return `${base}/issue/${encodeURIComponent(issueId)}`;
+}
+
 export const youtrackApi = {
   /**
    * Создать задачу в YouTrack

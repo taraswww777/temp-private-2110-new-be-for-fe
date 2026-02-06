@@ -12,7 +12,7 @@ import {
 import { TaskFilters } from './TaskFilters';
 import { YouTrackConnectDialog } from './YouTrackConnectDialog';
 import { tasksApi } from '@/api/tasks.api';
-import { youtrackApi } from '@/api/youtrack.api';
+import { youtrackApi, buildYouTrackIssueUrl } from '@/api/youtrack.api';
 import type { Task, TaskStatus, TaskPriority } from '@/types/task.types';
 import type { YouTrackQueueStatus } from '@/types/youtrack.types';
 import { format } from 'date-fns';
@@ -77,7 +77,7 @@ function TaskListYouTrackCell({
     return (
       <span className="flex flex-wrap items-center gap-1.5 text-xs">
         {issueIds.map((id) => {
-          const href = youtrackBaseUrl ? `${youtrackBaseUrl}/issue/${id}` : undefined;
+          const href = buildYouTrackIssueUrl(youtrackBaseUrl, id);
           return href ? (
             <a
               key={id}

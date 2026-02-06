@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@/uiKit';
-import { youtrackApi } from '@/api/youtrack.api';
+import { youtrackApi, buildYouTrackIssueUrl } from '@/api/youtrack.api';
 import type { TaskYouTrackLinks } from '@/types/youtrack.types';
 import { toast } from 'sonner';
 import { YouTrackConnectDialog } from './YouTrackConnectDialog';
@@ -15,12 +15,17 @@ interface YouTrackLinkCardProps {
 export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: YouTrackLinkCardProps) {
   const [links, setLinks] = useState<TaskYouTrackLinks | null>(null);
   const [loading, setLoading] = useState(true);
+  const [youtrackBaseUrl, setYoutrackBaseUrl] = useState<string | null>(null);
   const [connectDialogOpen, setConnectDialogOpen] = useState(false);
   const [connectDialogTab, setConnectDialogTab] = useState<YouTrackConnectTab>('create');
   const [queueStatus, setQueueStatus] = useState<{ createIssue: boolean; linkIssue: boolean }>({
     createIssue: false,
     linkIssue: false,
   });
+
+  useEffect(() => {
+    youtrackApi.getConfig().then((c) => setYoutrackBaseUrl(c.baseUrl)).catch(() => setYoutrackBaseUrl(null));
+  }, []);
 
   const fetchLinks = async () => {
     try {
@@ -77,10 +82,6 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
     setConnectDialogOpen(true);
   };
 
-  const openInYouTrack = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
-  };
-
   if (loading) {
     return (
       <Card>
@@ -134,20 +135,24 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
               {issueIds.length === 1 ? (
                 <div className="space-y-2">
                   <div className="text-sm">
-                    <span className="font-semibold">Задача:</span> {issueIds[0]}
+                    <span className="font-semibold">Задача:</span>{' '}
+                    {(() => {
+                      const url = buildYouTrackIssueUrl(youtrackBaseUrl, issueIds[0]);
+                      return url ? (
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary underline underline-offset-2 hover:no-underline"
+                        >
+                          {issueIds[0]}
+                        </a>
+                      ) : (
+                        issueIds[0]
+                      );
+                    })()}
                   </div>
                   <div className="flex gap-2 flex-wrap">
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        const link = links?.links.find((l) => l.youtrackIssueId === issueIds[0]);
-                        if (link) {
-                          openInYouTrack(link.youtrackIssueUrl);
-                        }
-                      }}
-                    >
-                      Открыть в YouTrack
-                    </Button>
                     <Button
                       size="sm"
                       variant="outline"
@@ -175,13 +180,29 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
                         youtrackIssueUrl: '',
                         youtrackData: undefined,
                       }))
-                  ).map((link) => (
+                  ).map((link) => {
+                    const issueUrl = buildYouTrackIssueUrl(youtrackBaseUrl, link.youtrackIssueId);
+                    return (
                     <div
                       key={link.youtrackIssueId}
                       className="flex items-center justify-between border-b pb-2 last:border-0 last:pb-0"
                     >
                       <div className="space-y-1">
-                        <div className="text-sm font-medium">• {link.youtrackIssueId}</div>
+                        <div className="text-sm font-medium">
+                          •{' '}
+                          {issueUrl ? (
+                            <a
+                              href={issueUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary underline underline-offset-2 hover:no-underline"
+                            >
+                              {link.youtrackIssueId}
+                            </a>
+                          ) : (
+                            link.youtrackIssueId
+                          )}
+                        </div>
                         {link.youtrackData && (
                           <div className="text-xs text-muted-foreground">
                             {link.youtrackData.summary}
@@ -189,15 +210,6 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
                         )}
                       </div>
                       <div className="flex gap-2">
-                        {link.youtrackIssueUrl && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => openInYouTrack(link.youtrackIssueUrl)}
-                          >
-                            Открыть
-                          </Button>
-                        )}
                         <Button
                           size="sm"
                           variant="ghost"
@@ -207,7 +219,8 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
                         </Button>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                   <Button
                     size="sm"
                     variant="outline"

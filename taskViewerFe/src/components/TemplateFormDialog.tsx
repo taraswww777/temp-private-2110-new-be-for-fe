@@ -31,6 +31,7 @@ export function TemplateFormDialog({
     name: '',
     description: '',
     projectId: '',
+    parentIssueId: '',
     summaryTemplate: '',
     descriptionTemplate: '',
     customFields: {},
@@ -45,6 +46,7 @@ export function TemplateFormDialog({
           name: template.name,
           description: template.description || '',
           projectId: template.projectId,
+          parentIssueId: template.parentIssueId || '',
           summaryTemplate: template.summaryTemplate,
           descriptionTemplate: template.descriptionTemplate,
           customFields: template.customFields || {},
@@ -55,6 +57,7 @@ export function TemplateFormDialog({
           name: '',
           description: '',
           projectId: '',
+          parentIssueId: '',
           summaryTemplate: '',
           descriptionTemplate: '',
           customFields: {},
@@ -98,28 +101,35 @@ export function TemplateFormDialog({
         </DialogHeader>
 
         <div className="grid gap-6 py-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="id">
-                ID шаблона {template && <span className="text-muted-foreground">(readonly)</span>}
+          {template && (
+            <div className="flex items-center gap-2 text-sm">
+              <Label htmlFor="id" className="text-muted-foreground shrink-0">
+                ID шаблона (readonly):
               </Label>
+              <span id="id" className="font-mono bg-muted px-2 py-1 rounded">
+                {formData.id}
+              </span>
+            </div>
+          )}
+          {!template && (
+            <div className="grid gap-2">
+              <Label htmlFor="id">ID шаблона</Label>
               <Input
                 id="id"
                 value={formData.id}
                 onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                disabled={!!template}
                 placeholder="default"
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="name">Название</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Шаблон по умолчанию"
-              />
-            </div>
+          )}
+          <div className="grid gap-2">
+            <Label htmlFor="name">Название</Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Шаблон по умолчанию"
+            />
           </div>
 
           <div className="grid gap-2">
@@ -142,6 +152,19 @@ export function TemplateFormDialog({
             />
             <p className="text-xs text-muted-foreground">
               ID проекта в YouTrack. Используйте "0-0" для автоматического определения.
+            </p>
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="parentIssueId">Родительская задача (YouTrack)</Label>
+            <Input
+              id="parentIssueId"
+              value={formData.parentIssueId ?? ''}
+              onChange={(e) => setFormData({ ...formData, parentIssueId: e.target.value })}
+              placeholder="VTB-100"
+            />
+            <p className="text-xs text-muted-foreground">
+              Номер задачи в YouTrack (idReadable). Если указано, новая задача создаётся как подзадача этой.
             </p>
           </div>
 
@@ -177,6 +200,7 @@ export function TemplateFormDialog({
               name: formData.name || 'Preview',
               description: formData.description,
               projectId: formData.projectId || '0-0',
+              parentIssueId: formData.parentIssueId || undefined,
               summaryTemplate: formData.summaryTemplate,
               descriptionTemplate: formData.descriptionTemplate,
               customFields: formData.customFields,
