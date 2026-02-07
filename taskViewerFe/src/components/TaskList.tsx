@@ -15,7 +15,7 @@ import {
 } from '@/uiKit';
 import { TaskFilters } from './TaskFilters';
 import { YouTrackConnectDialog } from './YouTrackConnectDialog';
-import { TagBadge } from './TagBadge';
+import { TagBadge } from '@/uiKit';
 import { tasksApi } from '@/api/tasks.api';
 import { youtrackApi, buildYouTrackIssueUrl } from '@/api/youtrack.api';
 import type { Task, TaskStatus, TaskPriority } from '@/types/task.types';
@@ -137,31 +137,74 @@ function TaskListYouTrackCell({
   );
 }
 
+/** Теги, отсортированные по последнему использованию (по макс. createdDate задачи с этим тегом) */
+function useTagsSortedByLastUsed(allTasks: Task[]): string[] {
+  return useMemo(() => {
+    const tagToLastUsed = new Map<string, string>();
+    for (const t of allTasks) {
+      const date = t.createdDate ?? '';
+      for (const tag of t.tags ?? []) {
+        if (!tagToLastUsed.has(tag) || date > tagToLastUsed.get(tag)!) {
+          tagToLastUsed.set(tag, date);
+        }
+      }
+    }
+    return [...tagToLastUsed.entries()]
+      .sort((a, b) => (b[1] > a[1] ? 1 : b[1] < a[1] ? -1 : 0))
+      .map(([tag]) => tag);
+  }, [allTasks]);
+}
+
 function TaskListTagsCell({
   task,
+  allTasks,
   tagMetadata,
   onTaskUpdate,
+  onTaskChange,
 }: {
   task: Task;
+  allTasks: Task[];
   tagMetadata: Record<string, { color?: string }>;
   onTaskUpdate: () => void;
+  onTaskChange?: (taskId: string, updates: Partial<Task>) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [newTagInput, setNewTagInput] = useState('');
   const [saving, setSaving] = useState(false);
+  const [dropdownFocusedIndex, setDropdownFocusedIndex] = useState(-1);
+  const inputRef = useRef<HTMLInputElement>(null);
   const currentTags = task.tags ?? [];
+  const tagsByLastUsed = useTagsSortedByLastUsed(allTasks);
 
-  const handleAddTag = async () => {
-    const tag = newTagInput.trim();
-    if (!tag || currentTags.includes(tag)) {
-      setNewTagInput('');
-      return;
-    }
+  const trimmedInput = newTagInput.trim();
+  const canAddNew = trimmedInput.length > 0 && !currentTags.includes(trimmedInput);
+  const filteredSuggestions = useMemo(() => {
+    const excludeSelected = tagsByLastUsed.filter((tag) => !currentTags.includes(tag));
+    if (!trimmedInput) return excludeSelected;
+    const lower = trimmedInput.toLowerCase();
+    return excludeSelected.filter((tag) => tag.toLowerCase().includes(lower));
+  }, [tagsByLastUsed, trimmedInput, currentTags]);
+  const exactMatch = trimmedInput && filteredSuggestions.some((t) => t.toLowerCase() === trimmedInput.toLowerCase());
+  const showAddNew = canAddNew && !exactMatch;
+  const options: Array<{ type: 'add'; label: string } | { type: 'tag'; tag: string }> = [
+    ...(showAddNew ? [{ type: 'add' as const, label: trimmedInput }] : []),
+    ...filteredSuggestions.map((tag) => ({ type: 'tag' as const, tag })),
+  ];
+  const optionCount = options.length;
+
+  const addTag = async (tag: string) => {
+    if (!tag || currentTags.includes(tag)) return;
+    const nextTags = [...currentTags, tag];
     setSaving(true);
     try {
-      await tasksApi.updateTaskMeta(task.id, { tags: [...currentTags, tag] });
+      await tasksApi.updateTaskMeta(task.id, { tags: nextTags });
       setNewTagInput('');
-      onTaskUpdate();
+      setDropdownFocusedIndex(-1);
+      if (onTaskChange) {
+        onTaskChange(task.id, { tags: nextTags });
+      } else {
+        onTaskUpdate();
+      }
       toast.success('Тег добавлен');
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Не удалось добавить тег');
@@ -170,17 +213,72 @@ function TaskListTagsCell({
     }
   };
 
+  const handleAddTag = () => {
+    const tag = trimmedInput;
+    if (!tag || currentTags.includes(tag)) {
+      setNewTagInput('');
+      return;
+    }
+    addTag(tag);
+  };
+
   const handleRemoveTag = async (tagToRemove: string) => {
     const next = currentTags.filter((t) => t !== tagToRemove);
     setSaving(true);
     try {
       await tasksApi.updateTaskMeta(task.id, { tags: next });
-      onTaskUpdate();
+      if (onTaskChange) {
+        onTaskChange(task.id, { tags: next });
+      } else {
+        onTaskUpdate();
+      }
       toast.success('Тег удалён');
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Не удалось удалить тег');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSelectOption = (index: number) => {
+    if (index < 0 || index >= optionCount) return;
+    const opt = options[index];
+    if (opt.type === 'add') {
+      addTag(opt.label);
+    } else {
+      addTag(opt.tag);
+    }
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent) => {
+    if (optionCount === 0) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleAddTag();
+      }
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setDropdownFocusedIndex((i) => (i < optionCount - 1 ? i + 1 : 0));
+      return;
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setDropdownFocusedIndex((i) => (i <= 0 ? optionCount - 1 : i - 1));
+      return;
+    }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (dropdownFocusedIndex >= 0) {
+        handleSelectOption(dropdownFocusedIndex);
+      } else {
+        handleAddTag();
+      }
+      return;
+    }
+    if (e.key === 'Escape') {
+      setDropdownFocusedIndex(-1);
     }
   };
 
@@ -227,27 +325,73 @@ function TaskListTagsCell({
               />
             ))}
           </div>
-          <div className="flex gap-2">
-            <Input
-              placeholder="Добавить тег..."
-              value={newTagInput}
-              onChange={(e) => setNewTagInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  handleAddTag();
-                }
-              }}
-              disabled={saving}
-              className="flex-1 min-w-0 h-8 text-sm"
-            />
+          <div className="relative flex gap-2">
+            <div className="flex-1 min-w-0 relative">
+              <Input
+                ref={inputRef}
+                placeholder="Введите или выберите тег..."
+                value={newTagInput}
+                onChange={(e) => {
+                  setNewTagInput(e.target.value);
+                  setDropdownFocusedIndex(-1);
+                }}
+                onFocus={() => setDropdownFocusedIndex(-1)}
+                onKeyDown={handleInputKeyDown}
+                disabled={saving}
+                className="h-8 text-sm pr-2"
+              />
+              {(newTagInput !== '' || filteredSuggestions.length > 0) && (
+                <div
+                  className="absolute top-full left-0 right-0 z-10 mt-1 max-h-48 overflow-auto rounded-md border bg-popover text-popover-foreground shadow-md"
+                  role="listbox"
+                >
+                  {optionCount === 0 ? (
+                    <div className="px-3 py-2 text-sm text-muted-foreground">
+                      Нет подходящих тегов. Введите название и нажмите Enter или «Добавить».
+                    </div>
+                  ) : (
+                    options.map((opt, index) => {
+                      const isAdd = opt.type === 'add';
+                      const isSelected = index === dropdownFocusedIndex;
+                      return (
+                        <button
+                          key={isAdd ? `add-${opt.label}` : opt.tag}
+                          type="button"
+                          role="option"
+                          aria-selected={isSelected}
+                          className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors ${
+                            isSelected ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/80'
+                          } ${isAdd ? 'text-primary font-medium' : ''}`}
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => handleSelectOption(index)}
+                          onMouseEnter={() => setDropdownFocusedIndex(index)}
+                        >
+                          {isAdd ? (
+                            <>+ Добавить «{opt.label}»</>
+                          ) : (
+                            <TagBadge
+                              tag={opt.tag}
+                              colorKey={tagMetadata[opt.tag]?.color}
+                              className="text-xs"
+                            />
+                          )}
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+              )}
+            </div>
             <Button
               type="button"
               variant="outline"
               size="sm"
               className="h-8 shrink-0"
-              onClick={(e) => { e.stopPropagation(); handleAddTag(); }}
-              disabled={!newTagInput.trim() || saving}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddTag();
+              }}
+              disabled={!trimmedInput || currentTags.includes(trimmedInput) || saving}
             >
               Добавить
             </Button>
@@ -728,8 +872,10 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                 <td className="p-4 align-middle">
                   <TaskListTagsCell
                     task={task}
+                    allTasks={tasks}
                     tagMetadata={tagMetadata}
                     onTaskUpdate={onTaskUpdate}
+                    onTaskChange={onTaskChange}
                   />
                 </td>
                 <td className="p-4 align-middle font-mono text-sm">{task.branch || '—'}</td>

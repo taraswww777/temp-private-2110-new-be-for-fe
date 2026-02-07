@@ -17,7 +17,7 @@ import {
   Skeleton,
 } from '@/uiKit';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
-import { TagBadge } from '@/components/TagBadge';
+import { TagBadge } from '@/uiKit';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
 import { PageHeader } from '@/components/PageHeader';

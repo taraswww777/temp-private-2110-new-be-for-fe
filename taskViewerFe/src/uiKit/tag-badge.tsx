@@ -1,7 +1,9 @@
 import { cn } from '@/lib/utils';
-import { getTagBadgeClassName } from '@/lib/tag-colors';
+import { getTagBadgeClassName } from './tag-colors';
 
-interface TagBadgeProps {
+export { getTagBadgeClassName } from './tag-colors';
+
+export interface TagBadgeProps {
   tag: string;
   colorKey?: string;
   onRemove?: () => void;
@@ -11,7 +13,7 @@ interface TagBadgeProps {
 
 export function TagBadge({ tag, colorKey, onRemove, disabled, className }: TagBadgeProps) {
   const baseClass =
-    'inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-normal whitespace-nowrap';
+    'inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-extrabold whitespace-nowrap';
   const colorClass = getTagBadgeClassName(colorKey);
 
   return (

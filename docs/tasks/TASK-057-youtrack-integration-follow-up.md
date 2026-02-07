@@ -291,7 +291,7 @@
 - Отображение тегов в списке задач (колонка «Теги», Badge) и на детальной странице; редактирование тегов (добавление/удаление, PATCH).
 - Страница управления тегами `TaskTagsPage` (роут `/tasks/tags`): сводка по тегам, переименование, выбор цвета, «В чёрный список».
 - Страница чёрного списка `YouTrackTagsBlacklistPage` (роут `/youtrack/tags/blacklist`), навигация в шапке, методы youtrack.api: getTagsBlacklist, updateTagsBlacklist, addTagToBlacklist, removeTagFromBlacklist.
-- Цвета тегов: `lib/tag-colors.ts` (палитра без промежуточных оттенков: 100/800/400 — светлая тема, 600/100/500 — тёмная; slate, rose, sky для серый/красный/синий), компонент `TagBadge`, выбор цвета в виде стилизованных тегов в Select.
+- Цвета тегов и компонент тега в uiKit: `taskViewerFe/src/uiKit/tag-colors.ts` (TAG_COLOR_OPTIONS, getTagBadgeClassName), `taskViewerFe/src/uiKit/tag-badge.tsx` (TagBadge); экспорт из `@/uiKit`. Палитра: серый + радуга (7 цветов), стиль Metro (плоский фон, белый/чёрный текст). Выбор цвета на странице тегов — в виде стилизованных тегов в Select. Для TagBadge добавлена стори в Storybook (UI Kit / Обратная связь / TagBadge).
 - Константа `IS_DEV` в `env.ts` (капсом); в режиме разработки Select не закрывается при клике снаружи (удобно инспектировать выпадающий список в DevTools).
 - Действие «Просмотр» в таблице задач перенесено в начало строки, оформлено как ссылка-иконка (глаз); колонки «Статус» и «Приоритет» сужены (140px).
 
@@ -311,6 +311,9 @@
 - Теги по умолчанию отображаются серым (тот же стиль, что вариант «Серый» в палитре).
 - Палитра цветов: без промежуточных оттенков — только 100/800/400 (светлая тема) и 600/100/500 (тёмная); использованы семейства slate (серый), rose (красный), sky (синий) для отличия от прежней палитры. Ключи цветов (gray, red, blue, …) сохранены для совместимости с бэкендом.
 - Выбор цвета в Select на странице тегов: пункты и выбранное значение отображаются как стилизованные теги с названием цвета (Серый, Красный, …), а не словом «тег».
+- **Теги с ID, источник истины:** метаданные тегов хранятся в `docs/tasks/tags-metadata.json` (формат: id → { name, color }); в манифесте задач — только `tagIds`. Поддерживается миграция со старого формата (теги как массив строк); переименование тега только в метаданных (id не меняется).
+- **Компонент тега в uiKit:** компонент `TagBadge` и палитра (TAG_COLOR_OPTIONS, getTagBadgeClassName) вынесены в `taskViewerFe/src/uiKit/`: файлы `tag-badge.tsx`, `tag-colors.ts`; экспорт из `@/uiKit`. Использование: TaskList, TaskDetailPage, TaskTagsPage импортируют TagBadge и при необходимости TAG_COLOR_OPTIONS/getTagBadgeClassName из `@/uiKit`.
+- **Storybook для компонента тега:** добавлена стори `tag-badge.stories.tsx` в uiKit (раздел «UI Kit / Обратная связь / TagBadge»): Default, WithoutColor, WithRemove, WithRemoveDisabled, AllColors, AllColorsWithRemove.
 
 ### Select (uiKit) и скролл
 

@@ -35,3 +35,5 @@ export {
 } from './select'
 export { Separator } from './separator'
 export { Skeleton } from './skeleton'
+export { TAG_COLOR_OPTIONS, getTagBadgeClassName } from './tag-colors'
+export { TagBadge, type TagBadgeProps } from './tag-badge'

@@ -25,8 +25,7 @@ import {
 import { tasksApi } from '@/api/tasks.api';
 import { youtrackApi } from '@/api/youtrack.api';
 import { PageHeader } from '@/components/PageHeader';
-import { TagBadge } from '@/components/TagBadge';
-import { TAG_COLOR_OPTIONS, getTagBadgeClassName } from '@/lib/tag-colors';
+import { TagBadge, TAG_COLOR_OPTIONS, getTagBadgeClassName } from '@/uiKit';
 import { cn } from '@/lib/utils';
 import type { Task } from '@/types/task.types';
 import { toast } from 'sonner';
@@ -55,6 +54,7 @@ export function TaskTagsPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [blacklist, setBlacklist] = useState<string[]>([]);
   const [tagMetadata, setTagMetadata] = useState<Record<string, { color?: string }>>({});
+  const [tagsWithId, setTagsWithId] = useState<Array<{ id: string; name: string; color?: string }>>([]);
   const [loading, setLoading] = useState(true);
   const [addingToBlacklist, setAddingToBlacklist] = useState<string | null>(null);
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
@@ -62,13 +62,28 @@ export function TaskTagsPage() {
   const [newTagName, setNewTagName] = useState('');
   const [renameSaving, setRenameSaving] = useState(false);
   const [colorSaving, setColorSaving] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [tagToDelete, setTagToDelete] = useState<string | null>(null);
+  const [deleteSaving, setDeleteSaving] = useState(false);
+  const [createTagName, setCreateTagName] = useState('');
+  const [createTagColor, setCreateTagColor] = useState<string>('');
+  const [createSaving, setCreateSaving] = useState(false);
 
+  const taskStatsByTag = useMemo(() => aggregateTagsByTask(tasks), [tasks]);
+
+  /** Все теги из источника истины + статистика по задачам (в т.ч. теги с 0 задач) */
   const tagsWithStats = useMemo(() => {
-    const map = aggregateTagsByTask(tasks);
-    return Array.from(map.entries())
-      .map(([tag, { count, taskIds }]) => ({ tag, count, taskIds }))
-      .sort((a, b) => b.count - a.count);
-  }, [tasks]);
+    const map = taskStatsByTag;
+    const list =
+      tagsWithId.length > 0
+        ? tagsWithId.map((t) => ({
+            tag: t.name,
+            count: map.get(t.name)?.count ?? 0,
+            taskIds: map.get(t.name)?.taskIds ?? [],
+          }))
+        : Array.from(map.entries()).map(([tag, { count, taskIds }]) => ({ tag, count, taskIds }));
+    return list.sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+  }, [tagsWithId, taskStatsByTag]);
 
   const loadData = async () => {
     try {
@@ -81,6 +96,7 @@ export function TaskTagsPage() {
       setTasks(tasksData);
       setBlacklist(blacklistData.blacklist);
       setTagMetadata(metadataData.tags);
+      setTagsWithId(metadataData.tagsWithId ?? []);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Не удалось загрузить данные';
       toast.error(message);
@@ -150,6 +166,67 @@ export function TaskTagsPage() {
     }
   };
 
+  const handleOpenDelete = (tag: string) => {
+    setTagToDelete(tag);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteSubmit = async () => {
+    if (!tagToDelete) return;
+    const name = tagToDelete;
+    setDeleteSaving(true);
+    try {
+      const { updated } = await tasksApi.removeTagFromAllTasks(name);
+      toast.success(`Тег «${name}» удалён из ${updated} ${updated === 1 ? 'задачи' : 'задач'}`);
+      setDeleteDialogOpen(false);
+      setTagToDelete(null);
+      setTagsWithId((prev) => prev.filter((t) => t.name !== name));
+      setTagMetadata((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+      setTasks((prev) =>
+        prev.map((task) => ({
+          ...task,
+          tags: (task.tags ?? []).filter((t) => t !== name),
+        }))
+      );
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось удалить тег';
+      toast.error(message);
+    } finally {
+      setDeleteSaving(false);
+    }
+  };
+
+  const handleCreateTag = async () => {
+    const name = createTagName.trim();
+    if (!name) {
+      toast.error('Введите имя тега');
+      return;
+    }
+    setCreateSaving(true);
+    try {
+      const created = await tasksApi.createTag(name, createTagColor || undefined);
+      toast.success(`Тег «${name}» создан`);
+      setCreateTagName('');
+      setCreateTagColor('');
+      setTagsWithId((prev) =>
+        prev.some((t) => t.name === created.name) ? prev : [...prev, { id: created.id, name: created.name, color: created.color }]
+      );
+      setTagMetadata((prev) => ({
+        ...prev,
+        [created.name]: created.color ? { color: created.color } : {},
+      }));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось создать тег';
+      toast.error(message);
+    } finally {
+      setCreateSaving(false);
+    }
+  };
+
   const blacklistSet = useMemo(() => new Set(blacklist.map((t) => t.toLowerCase())), [blacklist]);
 
   if (loading) {
@@ -178,6 +255,63 @@ export function TaskTagsPage() {
           Чёрный список тегов YouTrack →
         </Link>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Создать тег</CardTitle>
+          <CardDescription>
+            Новый тег будет добавлен в источник истины. Его можно будет назначить задачам в таблице или на детальной странице.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-end gap-4">
+          <div className="space-y-2 min-w-[200px]">
+            <Label htmlFor="create-tag-name">Имя тега</Label>
+            <Input
+              id="create-tag-name"
+              value={createTagName}
+              onChange={(e) => setCreateTagName(e.target.value)}
+              placeholder="Например: bug"
+              disabled={createSaving}
+              onKeyDown={(e) => e.key === 'Enter' && handleCreateTag()}
+            />
+          </div>
+          <div className="space-y-2 w-[180px]">
+            <Label htmlFor="create-tag-color">Цвет (необязательно)</Label>
+            <Select
+              value={createTagColor || 'none'}
+              onValueChange={(v) => setCreateTagColor(v === 'none' ? '' : v)}
+              disabled={createSaving}
+            >
+              <SelectTrigger id="create-tag-color">
+                <SelectValue placeholder="Без цвета" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">
+                  <span className="text-muted-foreground">Без цвета</span>
+                </SelectItem>
+                {TAG_COLOR_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    <span
+                      className={cn(
+                        'inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-extrabold',
+                        getTagBadgeClassName(opt.value)
+                      )}
+                    >
+                      {opt.label}
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <Button
+            onClick={handleCreateTag}
+            disabled={createSaving || !createTagName.trim()}
+          >
+            {createSaving ? 'Создание…' : 'Создать тег'}
+          </Button>
+        </CardContent>
+      </Card>
 
       {tagsWithStats.length === 0 ? (
         <Card>
@@ -289,6 +423,14 @@ export function TaskTagsPage() {
                       {inBlacklist && (
                         <span className="text-xs text-muted-foreground">В чёрном списке</span>
                       )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => handleOpenDelete(tag)}
+                      >
+                        Удалить
+                      </Button>
                     </div>
                   </li>
                 );
@@ -326,6 +468,29 @@ export function TaskTagsPage() {
               disabled={renameSaving || !newTagName.trim() || newTagName.trim() === editTag}
             >
               {renameSaving ? 'Сохранение…' : 'Переименовать'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Удалить тег</DialogTitle>
+            <DialogDescription>
+              Тег «{tagToDelete}» будет удалён из всех задач. Метаданные тега (цвет) также будут удалены. Это действие нельзя отменить.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)} disabled={deleteSaving}>
+              Отмена
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteSubmit}
+              disabled={deleteSaving}
+            >
+              {deleteSaving ? 'Удаление…' : 'Удалить'}
             </Button>
           </DialogFooter>
         </DialogContent>

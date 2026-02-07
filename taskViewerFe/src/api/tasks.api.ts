@@ -40,9 +40,25 @@ export const tasksApi = {
    */
   async getTagsMetadata(): Promise<{
     tags: Record<string, { color?: string }>;
+    tagsWithId?: Array<{ id: string; name: string; color?: string }>;
     predefinedColors: string[];
   }> {
     const response = await fetch(`${API_BASE_URL}/tasks/tags/metadata`);
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Создать новый тег (добавить в источник истины; без привязки к задаче)
+   */
+  async createTag(name: string, color?: string): Promise<{ id: string; name: string; color?: string }> {
+    const response = await fetch(`${API_BASE_URL}/tasks/tags`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name.trim(), color: color || undefined }),
+    });
     if (!response.ok) {
       throw await ApiError.fromResponse(response);
     }
@@ -76,6 +92,20 @@ export const tasksApi = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ oldTag, newTag }),
     });
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Удалить тег из всех задач
+   */
+  async removeTagFromAllTasks(tag: string): Promise<{ updated: number }> {
+    const response = await fetch(
+      `${API_BASE_URL}/tasks/tags/${encodeURIComponent(tag)}`,
+      { method: 'DELETE' }
+    );
     if (!response.ok) {
       throw await ApiError.fromResponse(response);
     }
