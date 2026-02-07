@@ -590,6 +590,19 @@
       "tags": [
         "private"
       ]
+    },
+    {
+      "id": "TASK-058",
+      "title": "Вертикальный скролл в выпадающем списке Select (uiKit)",
+      "status": "backlog",
+      "file": "TASK-058-select-vertical-scroll.md",
+      "createdDate": "2026-02-07T12:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "low",
+      "tags": [
+        "private"
+      ]
     }
   ]
 }
