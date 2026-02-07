@@ -1,23 +1,23 @@
 /**
- * Предустановленные цвета тегов — контрастные, хорошо различимые (Tailwind-классы и подпись).
+ * Палитра тегов без промежуточных оттенков: только 100/800/400 (светлая) и 600/100/500 (тёмная).
  */
 export const TAG_COLOR_OPTIONS: { value: string; label: string; className: string }[] = [
-  { value: 'gray', label: 'Серый', className: 'bg-gray-300 text-gray-900 dark:bg-gray-600 dark:text-gray-100 border-gray-400 dark:border-gray-500' },
-  { value: 'red', label: 'Красный', className: 'bg-red-300 text-red-950 dark:bg-red-700 dark:text-red-100 border-red-500 dark:border-red-600' },
-  { value: 'orange', label: 'Оранжевый', className: 'bg-orange-300 text-orange-950 dark:bg-orange-700 dark:text-orange-100 border-orange-500 dark:border-orange-600' },
-  { value: 'amber', label: 'Янтарный', className: 'bg-amber-300 text-amber-950 dark:bg-amber-600 dark:text-amber-100 border-amber-500 dark:border-amber-600' },
-  { value: 'yellow', label: 'Жёлтый', className: 'bg-yellow-300 text-yellow-950 dark:bg-yellow-600 dark:text-yellow-100 border-yellow-500 dark:border-yellow-600' },
-  { value: 'lime', label: 'Лайм', className: 'bg-lime-300 text-lime-950 dark:bg-lime-600 dark:text-lime-100 border-lime-500 dark:border-lime-600' },
-  { value: 'green', label: 'Зелёный', className: 'bg-green-300 text-green-950 dark:bg-green-700 dark:text-green-100 border-green-500 dark:border-green-600' },
-  { value: 'emerald', label: 'Изумрудный', className: 'bg-emerald-400 text-emerald-950 dark:bg-emerald-600 dark:text-emerald-100 border-emerald-600 dark:border-emerald-500' },
-  { value: 'teal', label: 'Бирюзовый', className: 'bg-teal-300 text-teal-950 dark:bg-teal-600 dark:text-teal-100 border-teal-500 dark:border-teal-500' },
-  { value: 'cyan', label: 'Циан', className: 'bg-cyan-300 text-cyan-950 dark:bg-cyan-600 dark:text-cyan-100 border-cyan-500 dark:border-cyan-500' },
-  { value: 'blue', label: 'Синий', className: 'bg-blue-300 text-blue-950 dark:bg-blue-700 dark:text-blue-100 border-blue-500 dark:border-blue-600' },
-  { value: 'indigo', label: 'Индиго', className: 'bg-indigo-300 text-indigo-950 dark:bg-indigo-600 dark:text-indigo-100 border-indigo-500 dark:border-indigo-500' },
-  { value: 'violet', label: 'Фиолетовый', className: 'bg-violet-300 text-violet-950 dark:bg-violet-600 dark:text-violet-100 border-violet-500 dark:border-violet-500' },
-  { value: 'purple', label: 'Пурпурный', className: 'bg-purple-300 text-purple-950 dark:bg-purple-600 dark:text-purple-100 border-purple-500 dark:border-purple-500' },
-  { value: 'fuchsia', label: 'Фуксия', className: 'bg-fuchsia-300 text-fuchsia-950 dark:bg-fuchsia-600 dark:text-fuchsia-100 border-fuchsia-500 dark:border-fuchsia-500' },
-  { value: 'pink', label: 'Розовый', className: 'bg-pink-300 text-pink-950 dark:bg-pink-600 dark:text-pink-100 border-pink-500 dark:border-pink-500' },
+  { value: 'gray', label: 'Серый', className: 'bg-slate-100 text-slate-800 dark:bg-slate-600 dark:text-slate-100 border-slate-400 dark:border-slate-500' },
+  { value: 'red', label: 'Красный', className: 'bg-rose-100 text-rose-800 dark:bg-rose-600 dark:text-rose-100 border-rose-400 dark:border-rose-500' },
+  { value: 'orange', label: 'Оранжевый', className: 'bg-orange-100 text-orange-800 dark:bg-orange-600 dark:text-orange-100 border-orange-400 dark:border-orange-500' },
+  { value: 'amber', label: 'Янтарный', className: 'bg-amber-100 text-amber-800 dark:bg-amber-600 dark:text-amber-100 border-amber-400 dark:border-amber-500' },
+  { value: 'yellow', label: 'Жёлтый', className: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-100 border-yellow-400 dark:border-yellow-500' },
+  { value: 'lime', label: 'Лайм', className: 'bg-lime-100 text-lime-800 dark:bg-lime-600 dark:text-lime-100 border-lime-400 dark:border-lime-500' },
+  { value: 'green', label: 'Зелёный', className: 'bg-green-100 text-green-800 dark:bg-green-600 dark:text-green-100 border-green-400 dark:border-green-500' },
+  { value: 'emerald', label: 'Изумрудный', className: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-600 dark:text-emerald-100 border-emerald-400 dark:border-emerald-500' },
+  { value: 'teal', label: 'Бирюзовый', className: 'bg-teal-100 text-teal-800 dark:bg-teal-600 dark:text-teal-100 border-teal-400 dark:border-teal-500' },
+  { value: 'cyan', label: 'Циан', className: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-600 dark:text-cyan-100 border-cyan-400 dark:border-cyan-500' },
+  { value: 'blue', label: 'Синий', className: 'bg-sky-100 text-sky-800 dark:bg-sky-600 dark:text-sky-100 border-sky-400 dark:border-sky-500' },
+  { value: 'indigo', label: 'Индиго', className: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-100 border-indigo-400 dark:border-indigo-500' },
+  { value: 'violet', label: 'Фиолетовый', className: 'bg-violet-100 text-violet-800 dark:bg-violet-600 dark:text-violet-100 border-violet-400 dark:border-violet-500' },
+  { value: 'purple', label: 'Пурпурный', className: 'bg-purple-100 text-purple-800 dark:bg-purple-600 dark:text-purple-100 border-purple-400 dark:border-purple-500' },
+  { value: 'fuchsia', label: 'Фуксия', className: 'bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-600 dark:text-fuchsia-100 border-fuchsia-400 dark:border-fuchsia-500' },
+  { value: 'pink', label: 'Розовый', className: 'bg-pink-100 text-pink-800 dark:bg-pink-600 dark:text-pink-100 border-pink-400 dark:border-pink-500' },
 ];
 
 const COLOR_CLASS_MAP = Object.fromEntries(
