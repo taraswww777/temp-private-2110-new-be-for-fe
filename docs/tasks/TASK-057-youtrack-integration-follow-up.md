@@ -1,6 +1,6 @@
 # TASK-057: Доработки интеграции YouTrack (TASK-035 / TASK-036)
 
-**Статус**: ✅ Выполнено  
+**Статус**: ⏳ Не завершено (см. уточнение от 2026-02-07 — многие критерии приёмки не реализованы)  
 **Ветка**: `feature/TASK-057-youtrack-integration-follow-up` (или текущая ветка YouTrack)
 
 ---
@@ -262,6 +262,42 @@
 
 11. **Форма редактирования шаблона**  
     Поле «ID шаблона» при редактировании — в одну строку вверху (readonly, текст, не input). Поле «Название» — на всю ширину формы.
+
+---
+
+## Уточнение: проверка реализации (2026-02-07)
+
+При проверке кода выявлено: в `tasks-manifest.json` задача помечена как выполненная, но многие критерии приёмки **не реализованы**. Ниже — перечень того, что осталось не сделанным (для последующей доработки).
+
+### Backend (taskViewerBe) — не сделано
+
+- Unit-тесты для youtrack-api, templates, youtrack-links, youtrack-queue, youtrack-processor (в taskViewerBe нет `*.test.ts`).
+- Endpoint `GET /api/youtrack/issues/:youtrackIssueId` для предпросмотра задачи при связывании.
+- При постановке операции link в очередь в ответе возвращаются актуальные `youtrackIssueIds` задачи (сейчас при `queued: true` отдаётся `youtrackIssueIds: []`).
+- Счётчик `attempts` в очереди увеличивать только при ошибке/повторной попытке, не при успешном `completed` (в `youtrack-queue.service.ts` сейчас `attempts` увеличивается при каждом вызове `updateOperationStatus`).
+- Поле `tags` (массив строк) в схеме задачи в манифесте и в типах (Zod, TypeScript).
+- Сервис и конфигурационный файл для чёрного списка тегов (`docs/tasks/youtrack-tags-blacklist.json`).
+- API для управления чёрным списком: GET/POST/PUT/DELETE `/api/youtrack/tags/blacklist`.
+- Фильтрация тегов по чёрному списку при создании задачи в YouTrack и передача отфильтрованных тегов в YouTrack.
+- Поддержка поля `tags` в `PATCH /api/tasks/:id` (схема и сервис).
+
+### Frontend (taskViewerFe) — не сделано
+
+- Предпросмотр задачи YouTrack во вкладке «Связать с существующей» (запрос по ID, блок summary/state/priority).
+- Предпросмотр шаблона во вкладке «Создать задачу в YouTrack» (компонент типа TemplatePreview с переменными текущей задачи).
+- Опциональное переопределение кастомных полей (приоритет, исполнитель) при создании задачи; передача `customFields` в `createIssue`.
+- Реализация `getIssueInfo(youtrackIssueId)` в API-клиенте через новый endpoint (сейчас метод бросает ошибку).
+- Удаление неиспользуемого компонента `CreateYouTrackIssueDialog.tsx`.
+- Отображение тегов в списке задач и на детальной странице (Badge/Pill).
+- Редактирование тегов на детальной странице задачи (добавление/удаление, сохранение через PATCH).
+- Страница управления чёрным списком тегов `YouTrackTagsBlacklistPage` (роут `/youtrack/tags/blacklist`).
+- Методы в API-клиенте: getTagsBlacklist, updateTagsBlacklist, addTagToBlacklist, removeTagFromBlacklist.
+- Навигация на страницу чёрного списка в меню/шапке (рядом с «Шаблоны YouTrack» и «Очередь YouTrack»).
+
+### Уже реализовано (на момент проверки)
+
+- Бэкенд: создание задачи в YouTrack с учётом `customFields`, постановка в очередь при недоступности YT, связывание/отвязка, получение связей с `includeDetails`.
+- Фронт: единый `YouTrackConnectDialog` с вкладками «Создать» и «Связать», страницы шаблонов и очереди, вызовы create/link.
 
 ---
 
