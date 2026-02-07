@@ -3,6 +3,10 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import {
   Badge,
   Button,
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Select,
   SelectContent,
   SelectItem,
@@ -130,6 +134,127 @@ function TaskListYouTrackCell({
     >
       Связать с YT
     </Button>
+  );
+}
+
+function TaskListTagsCell({
+  task,
+  tagMetadata,
+  onTaskUpdate,
+}: {
+  task: Task;
+  tagMetadata: Record<string, { color?: string }>;
+  onTaskUpdate: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [newTagInput, setNewTagInput] = useState('');
+  const [saving, setSaving] = useState(false);
+  const currentTags = task.tags ?? [];
+
+  const handleAddTag = async () => {
+    const tag = newTagInput.trim();
+    if (!tag || currentTags.includes(tag)) {
+      setNewTagInput('');
+      return;
+    }
+    setSaving(true);
+    try {
+      await tasksApi.updateTaskMeta(task.id, { tags: [...currentTags, tag] });
+      setNewTagInput('');
+      onTaskUpdate();
+      toast.success('Тег добавлен');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Не удалось добавить тег');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleRemoveTag = async (tagToRemove: string) => {
+    const next = currentTags.filter((t) => t !== tagToRemove);
+    setSaving(true);
+    try {
+      await tasksApi.updateTaskMeta(task.id, { tags: next });
+      onTaskUpdate();
+      toast.success('Тег удалён');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Не удалось удалить тег');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const trigger = (
+    <button
+      type="button"
+      onClick={(e) => e.stopPropagation()}
+      className="w-full text-left p-1 -m-1 rounded hover:bg-muted/80 transition-colors min-h-[28px] flex flex-wrap items-center gap-1"
+      title="Нажмите, чтобы изменить теги"
+    >
+      {currentTags.length > 0 ? (
+        currentTags.map((tag) => (
+          <TagBadge
+            key={tag}
+            tag={tag}
+            colorKey={tagMetadata[tag]?.color}
+            className="text-xs"
+          />
+        ))
+      ) : (
+        <span className="text-muted-foreground text-xs">—</span>
+      )}
+      <span className="text-muted-foreground/60 text-xs ml-0.5" aria-hidden>✎</span>
+    </button>
+  );
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+        {trigger}
+      </PopoverTrigger>
+      <PopoverContent className="w-72 p-3" align="start" onClick={(e) => e.stopPropagation()}>
+        <div className="space-y-3">
+          <div className="text-sm font-medium text-muted-foreground">Теги задачи {task.id}</div>
+          <div className="flex flex-wrap gap-1.5">
+            {currentTags.map((tag) => (
+              <TagBadge
+                key={tag}
+                tag={tag}
+                colorKey={tagMetadata[tag]?.color}
+                onRemove={() => handleRemoveTag(tag)}
+                disabled={saving}
+                className="text-xs"
+              />
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Добавить тег..."
+              value={newTagInput}
+              onChange={(e) => setNewTagInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddTag();
+                }
+              }}
+              disabled={saving}
+              className="flex-1 min-w-0 h-8 text-sm"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 shrink-0"
+              onClick={(e) => { e.stopPropagation(); handleAddTag(); }}
+              disabled={!newTagInput.trim() || saving}
+            >
+              Добавить
+            </Button>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }
 
@@ -601,20 +726,11 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                 </td>
                 <td className="p-4 align-middle">{formatDate(task.createdDate)}</td>
                 <td className="p-4 align-middle">
-                  {task.tags && task.tags.length > 0 ? (
-                    <span className="flex flex-wrap gap-1">
-                      {task.tags.map((tag) => (
-                        <TagBadge
-                          key={tag}
-                          tag={tag}
-                          colorKey={tagMetadata[tag]?.color}
-                          className="text-xs"
-                        />
-                      ))}
-                    </span>
-                  ) : (
-                    <span className="text-muted-foreground text-xs">—</span>
-                  )}
+                  <TaskListTagsCell
+                    task={task}
+                    tagMetadata={tagMetadata}
+                    onTaskUpdate={onTaskUpdate}
+                  />
                 </td>
                 <td className="p-4 align-middle font-mono text-sm">{task.branch || '—'}</td>
                 <td className="p-4 align-middle">
@@ -733,7 +849,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
           taskPreview={(() => {
             const t = tasks.find((x) => x.id === connectDialogTaskId);
             return t
-              ? { title: t.title, content: t.content ?? '', status: t.status, branch: t.branch ?? null }
+              ? { title: t.title, content: '', status: t.status, branch: t.branch ?? null }
               : undefined;
           })()}
           onSuccess={() => {
