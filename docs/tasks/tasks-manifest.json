@@ -478,7 +478,10 @@
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "youtrackIssueIds": [
+        "VTB-543"
+      ]
     },
     {
       "id": "TASK-049",
@@ -488,7 +491,10 @@
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "youtrackIssueIds": [
+        "VTB-541"
+      ]
     },
     {
       "id": "TASK-050",
@@ -498,7 +504,10 @@
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "youtrackIssueIds": [
+        "VTB-542"
+      ]
     },
     {
       "id": "TASK-051",
@@ -508,7 +517,10 @@
       "createdDate": "2026-02-06T14:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "youtrackIssueIds": [
+        "VTB-540"
+      ]
     },
     {
       "id": "TASK-052",
@@ -518,7 +530,10 @@
       "createdDate": "2026-02-06T14:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "youtrackIssueIds": [
+        "VTB-539"
+      ]
     },
     {
       "id": "TASK-053",
@@ -528,7 +543,10 @@
       "createdDate": "2026-02-06T14:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "youtrackIssueIds": [
+        "VTB-538"
+      ]
     },
     {
       "id": "TASK-054",
@@ -563,11 +581,11 @@
     {
       "id": "TASK-057",
       "title": "Доработки интеграции YouTrack (TASK-035 / TASK-036)",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-057-youtrack-integration-follow-up.md",
       "createdDate": "2026-02-06T18:00:00Z",
-      "completedDate": null,
-      "branch": null,
+      "completedDate": "2026-02-07",
+      "branch": "feature/TASK-057",
       "priority": "medium"
     }
   ]

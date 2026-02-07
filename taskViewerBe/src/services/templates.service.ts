@@ -8,12 +8,27 @@ import { z } from 'zod';
 const TASKS_DIR = resolve(process.cwd(), env.TASKS_DIR);
 const TEMPLATES_DIR = join(TASKS_DIR, 'youtrack-templates');
 
+/** Убрать из заголовка префикс вида "TASK-053: " перед отправкой в YT */
+function cleanTitleForYoutrack(title: string): string {
+  return title.replace(/^\s*[A-Z]+-\d+:\s*/i, '').trim();
+}
+
+/** Оставить только контент после первой строки "---" (до неё обычно идут Статус, Ветки и дублирование названия) */
+function cleanContentForYoutrack(content: string): string {
+  if (!content || typeof content !== 'string') return '';
+  const lines = content.split(/\r?\n/);
+  const idx = lines.findIndex((line) => line.trim() === '---');
+  if (idx === -1) return content.trim();
+  return lines.slice(idx + 1).join('\n').trim();
+}
+
 // Схема валидации шаблона
 const templateSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string().optional(),
   projectId: z.string(),
+  parentIssueId: z.string().optional(),
   summaryTemplate: z.string(),
   descriptionTemplate: z.string(),
   customFields: z.record(z.string(), z.object({
@@ -212,16 +227,21 @@ export const templatesService = {
       };
     }>;
     projectId: string;
+    parentIssueId?: string;
   }> {
     const template = await this.getTemplate(templateId);
     if (!template) {
       throw new Error(`Template "${templateId}" not found`);
     }
 
-    const summary = this.applyTemplateVariables(template.summaryTemplate, variables);
-    const description = this.applyTemplateVariables(template.descriptionTemplate, variables);
+    const cleanedVariables: TemplateVariables = {
+      ...variables,
+      title: cleanTitleForYoutrack(variables.title),
+      content: cleanContentForYoutrack(variables.content),
+    };
+    const summary = this.applyTemplateVariables(template.summaryTemplate, cleanedVariables);
+    const description = this.applyTemplateVariables(template.descriptionTemplate, cleanedVariables);
 
-    // Преобразуем customFields из объекта в массив
     const customFields = template.customFields
       ? Object.entries(template.customFields).map(([name, field]) => ({
           name,
@@ -235,6 +255,7 @@ export const templatesService = {
       description,
       customFields,
       projectId: template.projectId,
+      parentIssueId: template.parentIssueId?.trim() || undefined,
     };
   },
 };

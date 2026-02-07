@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/uiKit';
-import { youtrackApi } from '@/api/youtrack.api';
+import { youtrackApi, buildYouTrackIssueUrl } from '@/api/youtrack.api';
 import type { YouTrackTemplate } from '@/types/youtrack.types';
 import { toast } from 'sonner';
 
@@ -70,8 +70,10 @@ export function CreateYouTrackIssueDialog({
         toast.success(`Задача добавлена в очередь. Операция: ${result.operationId}`);
       } else {
         toast.success(`Задача ${result.youtrackIssueId} создана в YouTrack`);
-        if (result.youtrackIssueUrl) {
-          window.open(result.youtrackIssueUrl, '_blank', 'noopener,noreferrer');
+        const config = await youtrackApi.getConfig();
+        const url = buildYouTrackIssueUrl(config.baseUrl, result.youtrackIssueId);
+        if (url) {
+          window.open(url, '_blank', 'noopener,noreferrer');
         }
       }
       

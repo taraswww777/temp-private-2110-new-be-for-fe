@@ -9,17 +9,16 @@ import type {
   LinkIssueOperation,
   UnlinkIssueOperation,
 } from '../types/queue.types.js';
-import { env } from '../config/env.js';
-
 /**
  * Сервис для обработки очереди операций YouTrack
  */
 export const youtrackProcessorService = {
   /**
-   * Проверить доступность YouTrack
+   * Проверить доступность YouTrack (конфиг задан и YT не в режиме недоступности).
+   * При false создание/связи сразу в очередь, запросы на YT не шлём.
    */
   isYouTrackAvailable(): boolean {
-    return !!(env.YOUTRACK_URL && env.YOUTRACK_TOKEN);
+    return youtrackApiService.isConfigured() && !youtrackApiService.isUnavailable();
   },
 
   /**
@@ -90,13 +89,13 @@ export const youtrackProcessorService = {
       throw new Error(`Task with id "${taskId}" not found`);
     }
 
-    // Применяем шаблон
+    // Применяем шаблон (в YT не подставляем номер задачи и ветку)
     const templateData = await templatesService.applyTemplateToTask(templateId, {
-      taskId: localTask.id,
+      taskId: '',
       title: localTask.title,
       content: localTask.content,
       status: localTask.status,
-      branch: localTask.branch,
+      branch: '',
     });
 
     // Получаем project ID
@@ -130,7 +129,6 @@ export const youtrackProcessorService = {
         })
       : templateData.customFields;
 
-    // Создаем задачу в YouTrack
     const createdIssue = await youtrackApiService.createIssue({
       project: { id: projectId },
       summary: templateData.summary,
@@ -138,13 +136,24 @@ export const youtrackProcessorService = {
       customFields: finalCustomFields,
     });
 
-    // Добавляем связь
-    await youtrackLinksService.addLink(taskId, createdIssue.idReadable);
+    const issueId = createdIssue.idReadable ?? createdIssue.id;
 
-    // Сохраняем результат
+    if (templateData.parentIssueId) {
+      try {
+        await youtrackApiService.applyCommand(
+          [issueId],
+          `subtask of ${templateData.parentIssueId}`
+        );
+      } catch (err) {
+        console.error('Failed to link as subtask:', err);
+      }
+    }
+
+    await youtrackLinksService.addLink(taskId, issueId);
+
     operation.result = {
-      youtrackIssueId: createdIssue.idReadable,
-      youtrackIssueUrl: youtrackApiService.getIssueUrl(createdIssue.idReadable),
+      youtrackIssueId: issueId,
+      youtrackIssueUrl: youtrackApiService.getIssueUrl(issueId),
     };
   },
 

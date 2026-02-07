@@ -7,6 +7,8 @@ export interface YouTrackTemplate {
   name: string;
   description?: string;
   projectId: string;
+  /** Родительская задача в YouTrack (idReadable, например VTB-100). Если задано, новая задача создаётся как подзадача. */
+  parentIssueId?: string;
   summaryTemplate: string;
   descriptionTemplate: string;
   customFields?: Record<string, {

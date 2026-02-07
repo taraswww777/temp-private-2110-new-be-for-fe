@@ -78,13 +78,13 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       try {
-        // Применяем шаблон
+        // Применяем шаблон (в YT не подставляем номер задачи и ветку)
         const templateData = await templatesService.applyTemplateToTask(templateId, {
-          taskId: localTask.id,
+          taskId: '',
           title: localTask.title,
           content: localTask.content,
           status: localTask.status,
-          branch: localTask.branch,
+          branch: '',
         });
 
         // Получаем project ID
@@ -129,20 +129,41 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           customFields: finalCustomFields,
         });
 
-        // Добавляем связь
-        const updatedTask = await youtrackLinksService.addLink(taskId, createdIssue.idReadable);
+        const issueId = createdIssue.idReadable ?? createdIssue.id;
+
+        // Привязка к родительской задаче (подзадача)
+        if (templateData.parentIssueId) {
+          try {
+            await youtrackApiService.applyCommand(
+              [issueId],
+              `subtask of ${templateData.parentIssueId}`
+            );
+          } catch (err) {
+            console.error('Failed to link as subtask:', err);
+          }
+        }
+
+        const updatedTask = await youtrackLinksService.addLink(taskId, issueId);
+
+        const youtrackIssueIds = (updatedTask.youtrackIssueIds || []).filter(
+          (id): id is string => typeof id === 'string' && id.length > 0
+        );
 
         return reply.send({
           localTaskId: taskId,
-          youtrackIssueId: createdIssue.idReadable,
-          youtrackIssueUrl: youtrackApiService.getIssueUrl(createdIssue.idReadable),
-          youtrackIssueIds: updatedTask.youtrackIssueIds || [],
+          youtrackIssueId: issueId,
+          youtrackIssueUrl: youtrackApiService.getIssueUrl(issueId),
+          youtrackIssueIds,
         });
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         
-        // Если ошибка связана с недоступностью YouTrack, добавляем в очередь
-        if (errorMessage.includes('not configured') || errorMessage.includes('Failed to connect')) {
+        // Если ошибка связана с недоступностью YouTrack, добавляем в очередь (не слать запросы, режим без YT)
+        if (
+          errorMessage.includes('not configured') ||
+          errorMessage.includes('Failed to connect') ||
+          errorMessage.includes('temporarily unavailable')
+        ) {
           const operation = await youtrackQueueService.enqueue({
             type: 'create_issue',
             data: {
@@ -254,8 +275,12 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             });
           }
           
-          // Если ошибка связана с недоступностью YouTrack, добавляем в очередь
-          if (error.message.includes('not configured') || error.message.includes('Failed to connect')) {
+          // Если ошибка связана с недоступностью YouTrack, добавляем в очередь (режим без YT)
+          if (
+            error.message.includes('not configured') ||
+            error.message.includes('Failed to connect') ||
+            error.message.includes('temporarily unavailable')
+          ) {
             const operation = await youtrackQueueService.enqueue({
               type: 'link_issue',
               data: {
@@ -299,7 +324,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             youtrackIssueIds: z.array(z.string()),
             links: z.array(z.object({
               youtrackIssueId: z.string(),
-              youtrackIssueUrl: z.string(),
+              youtrackIssueUrl: z.string().optional(),
               youtrackData: z.object({
                 summary: z.string(),
                 state: z.string().optional(),
@@ -318,29 +343,30 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
 
       try {
         const youtrackIssueIds = await youtrackLinksService.getLinks(taskId);
+        const ytAvailable = youtrackProcessorService.isYouTrackAvailable();
 
         const links = await Promise.all(
           youtrackIssueIds.map(async (issueId) => {
-            const link = {
+            const link: {
+              youtrackIssueId: string;
+              youtrackIssueUrl?: string;
+              youtrackData?: { summary: string; state?: string; priority?: string };
+            } = {
               youtrackIssueId: issueId,
-              youtrackIssueUrl: youtrackApiService.getIssueUrl(issueId),
-              youtrackData: undefined as {
-                summary: string;
-                state?: string;
-                priority?: string;
-              } | undefined,
             };
 
-            if (includeDetails) {
+            if (ytAvailable && includeDetails) {
               try {
-                const issue = await youtrackApiService.getIssue(issueId);
+                const issue = await youtrackApiService.getIssue(
+                  issueId,
+                  'summary,state(name),priority(name)'
+                );
                 link.youtrackData = {
-                  summary: issue.summary,
+                  summary: issue.summary ?? '',
                   state: issue.state?.name,
                   priority: issue.priority?.name,
                 };
               } catch (error) {
-                // Если не удалось получить детали, просто пропускаем их
                 console.error(`Failed to get details for issue ${issueId}:`, error);
               }
             }
@@ -465,6 +491,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             name: z.string(),
             description: z.string().optional(),
             projectId: z.string(),
+            parentIssueId: z.string().optional(),
             summaryTemplate: z.string(),
             descriptionTemplate: z.string(),
             customFields: z.record(z.string(), z.unknown()).optional(),
@@ -493,6 +520,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             name: z.string(),
             description: z.string().optional(),
             projectId: z.string(),
+            parentIssueId: z.string().optional(),
             summaryTemplate: z.string(),
             descriptionTemplate: z.string(),
             customFields: z.record(z.string(), z.unknown()).optional(),
@@ -524,6 +552,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           name: z.string(),
           description: z.string().optional(),
           projectId: z.string(),
+          parentIssueId: z.string().optional(),
           summaryTemplate: z.string(),
           descriptionTemplate: z.string(),
           customFields: z.record(z.string(), z.object({
@@ -540,6 +569,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             name: z.string(),
             description: z.string().optional(),
             projectId: z.string(),
+            parentIssueId: z.string().optional(),
             summaryTemplate: z.string(),
             descriptionTemplate: z.string(),
             customFields: z.record(z.string(), z.unknown()).optional(),
@@ -573,6 +603,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           name: z.string().optional(),
           description: z.string().optional(),
           projectId: z.string().optional(),
+          parentIssueId: z.string().optional(),
           summaryTemplate: z.string().optional(),
           descriptionTemplate: z.string().optional(),
           customFields: z.record(z.string(), z.object({
@@ -589,6 +620,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             name: z.string(),
             description: z.string().optional(),
             projectId: z.string(),
+            parentIssueId: z.string().optional(),
             summaryTemplate: z.string(),
             descriptionTemplate: z.string(),
             customFields: z.record(z.string(), z.unknown()).optional(),

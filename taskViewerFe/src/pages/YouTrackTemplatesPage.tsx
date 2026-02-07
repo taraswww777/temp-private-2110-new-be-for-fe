@@ -16,7 +16,7 @@ import {
 } from '@/uiKit';
 import { TemplateFormDialog } from '@/components/TemplateFormDialog';
 import { TemplatePreview } from '@/components/TemplatePreview';
-import { youtrackApi } from '@/api/youtrack.api';
+import { youtrackApi, buildYouTrackIssueUrl } from '@/api/youtrack.api';
 import type { YouTrackTemplate, CreateYouTrackTemplateInput } from '@/types/youtrack.types';
 import { toast } from 'sonner';
 import { PageHeader } from '@/components/PageHeader';
@@ -31,6 +31,11 @@ export function YouTrackTemplatesPage() {
   const [previewTemplate, setPreviewTemplate] = useState<YouTrackTemplate | null>(null);
   const [deletingTemplateId, setDeletingTemplateId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [youtrackBaseUrl, setYoutrackBaseUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    youtrackApi.getConfig().then((c) => setYoutrackBaseUrl(c.baseUrl)).catch(() => setYoutrackBaseUrl(null));
+  }, []);
 
   const fetchTemplates = async () => {
     try {
@@ -178,6 +183,25 @@ export function YouTrackTemplatesPage() {
                   <div>
                     <span className="font-semibold">ID проекта:</span>{' '}
                     <code className="bg-muted px-2 py-1 rounded">{template.projectId}</code>
+                  </div>
+                  <div>
+                    <span className="font-semibold">Родительская задача:</span>{' '}
+                    {template.parentIssueId ? (
+                      buildYouTrackIssueUrl(youtrackBaseUrl, template.parentIssueId) ? (
+                        <a
+                          href={buildYouTrackIssueUrl(youtrackBaseUrl, template.parentIssueId)!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary underline underline-offset-2 hover:no-underline font-mono"
+                        >
+                          {template.parentIssueId}
+                        </a>
+                      ) : (
+                        <code className="bg-muted px-2 py-1 rounded">{template.parentIssueId}</code>
+                      )
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
                   </div>
                   <div>
                     <span className="font-semibold">Custom Fields:</span>{' '}

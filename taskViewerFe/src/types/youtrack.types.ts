@@ -4,8 +4,8 @@
 
 export interface YouTrackIssueLink {
   localTaskId: string;
-  youtrackIssueId: string; // Readable ID (например, "PROJ-123")
-  youtrackIssueUrl: string;
+  youtrackIssueId: string; // Readable ID (например, "PROJ-123") — по нему и baseUrl из env собирается ссылка на фронте
+  youtrackIssueUrl?: string; // опционально, фронт строит URL из baseUrl + youtrackIssueId
   youtrackData?: YouTrackIssueInfo;
 }
 
@@ -28,6 +28,8 @@ export interface YouTrackTemplate {
   name: string;
   description?: string;
   projectId: string;
+  /** Родительская задача в YouTrack (idReadable, например VTB-100). Новая задача создаётся как подзадача. */
+  parentIssueId?: string;
   summaryTemplate: string;
   descriptionTemplate: string;
   customFields?: Record<string, {
@@ -44,6 +46,7 @@ export interface CreateYouTrackTemplateInput {
   name: string;
   description?: string;
   projectId: string;
+  parentIssueId?: string;
   summaryTemplate: string;
   descriptionTemplate: string;
   customFields?: Record<string, {
