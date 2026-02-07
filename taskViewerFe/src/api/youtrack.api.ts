@@ -216,4 +216,59 @@ export const youtrackApi = {
     }
     return response.json();
   },
+
+  /**
+   * Получить чёрный список тегов (теги из списка не отправляются в YouTrack)
+   */
+  async getTagsBlacklist(): Promise<{ blacklist: string[] }> {
+    const response = await fetch(`${API_BASE_URL}/youtrack/tags/blacklist`);
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Обновить чёрный список тегов (полная замена)
+   */
+  async updateTagsBlacklist(blacklist: string[]): Promise<{ blacklist: string[] }> {
+    const response = await fetch(`${API_BASE_URL}/youtrack/tags/blacklist`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ blacklist }),
+    });
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Добавить тег в чёрный список
+   */
+  async addTagToBlacklist(tag: string): Promise<{ blacklist: string[] }> {
+    const response = await fetch(`${API_BASE_URL}/youtrack/tags/blacklist`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tag }),
+    });
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Удалить тег из чёрного списка
+   */
+  async removeTagFromBlacklist(tag: string): Promise<{ blacklist: string[] }> {
+    const response = await fetch(
+      `${API_BASE_URL}/youtrack/tags/blacklist/${encodeURIComponent(tag)}`,
+      { method: 'DELETE' }
+    );
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
 };

@@ -14,6 +14,13 @@ function normalizeYoutrackIssueIds(ids: unknown[] | undefined): string[] | undef
   return filtered.length > 0 ? filtered : undefined;
 }
 
+/** Нормализация тегов — только непустые строки. */
+function normalizeTags(tags: unknown[] | undefined): string[] | undefined {
+  if (!tags || !Array.isArray(tags)) return undefined;
+  const filtered = tags.filter((t): t is string => typeof t === 'string' && t.trim().length > 0);
+  return filtered.length > 0 ? filtered : undefined;
+}
+
 export const tasksService = {
   /**
    * Получить все задачи из манифеста
@@ -26,6 +33,7 @@ export const tasksService = {
       ...task,
       priority: task.priority || 'medium',
       youtrackIssueIds: normalizeYoutrackIssueIds(task.youtrackIssueIds),
+      tags: normalizeTags(task.tags),
     }));
   },
 
@@ -45,8 +53,9 @@ export const tasksService = {
 
     return {
       ...task,
-      priority: task.priority || 'medium', // Обеспечиваем обратную совместимость
+      priority: task.priority || 'medium',
       youtrackIssueIds: normalizeYoutrackIssueIds(task.youtrackIssueIds),
+      tags: normalizeTags(task.tags),
       content,
     };
   },
@@ -104,5 +113,35 @@ export const tasksService = {
     );
 
     await writeFile(mdPath, content, 'utf-8');
+  },
+
+  /**
+   * Переименовать тег во всех задачах (в манифесте).
+   */
+  async renameTagInAllTasks(oldTag: string, newTag: string): Promise<number> {
+    const oldTrimmed = oldTag.trim();
+    const newTrimmed = newTag.trim();
+    if (!oldTrimmed || !newTrimmed || oldTrimmed === newTrimmed) {
+      return 0;
+    }
+
+    const content = await readFile(MANIFEST_PATH, 'utf-8');
+    const manifest: TaskManifest = JSON.parse(content);
+    let updated = 0;
+
+    for (let i = 0; i < manifest.tasks.length; i++) {
+      const task = manifest.tasks[i];
+      const tags = Array.isArray(task.tags) ? [...task.tags] : [];
+      const idx = tags.findIndex((t) => String(t).trim() === oldTrimmed);
+      if (idx === -1) continue;
+      tags[idx] = newTrimmed;
+      manifest.tasks[i] = { ...task, tags };
+      updated++;
+    }
+
+    if (updated > 0) {
+      await writeFile(MANIFEST_PATH, JSON.stringify(manifest, null, 2), 'utf-8');
+    }
+    return updated;
   },
 };

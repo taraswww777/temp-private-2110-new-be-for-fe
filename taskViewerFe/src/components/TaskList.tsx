@@ -11,6 +11,7 @@ import {
 } from '@/uiKit';
 import { TaskFilters } from './TaskFilters';
 import { YouTrackConnectDialog } from './YouTrackConnectDialog';
+import { TagBadge } from './TagBadge';
 import { tasksApi } from '@/api/tasks.api';
 import { youtrackApi, buildYouTrackIssueUrl } from '@/api/youtrack.api';
 import type { Task, TaskStatus, TaskPriority } from '@/types/task.types';
@@ -46,6 +47,28 @@ const priorityOrder: Record<TaskPriority, number> = {
   medium: 2,
   low: 1,
 };
+
+/** Иконка глаза для ссылки «Просмотр задачи» */
+function EyeIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
 
 const defaultStatusFilter: TaskStatus[] = ['backlog', 'planned', 'in-progress', 'cancelled'];
 const defaultPriorityFilter: TaskPriority[] = ['critical', 'high', 'medium', 'low'];
@@ -161,9 +184,13 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
   const [queueStatus, setQueueStatus] = useState<YouTrackQueueStatus | null>(null);
   const [youtrackBaseUrl, setYoutrackBaseUrl] = useState<string | null>(null);
   const [connectDialogTaskId, setConnectDialogTaskId] = useState<string | null>(null);
+  const [tagMetadata, setTagMetadata] = useState<Record<string, { color?: string }>>({});
 
   useEffect(() => {
     youtrackApi.getConfig().then((c) => setYoutrackBaseUrl(c.baseUrl)).catch(() => setYoutrackBaseUrl(null));
+  }, []);
+  useEffect(() => {
+    tasksApi.getTagsMetadata().then((d) => setTagMetadata(d.tags)).catch(() => setTagMetadata({}));
   }, []);
   useEffect(() => {
     youtrackApi.getQueueStatus().then(setQueueStatus).catch(() => setQueueStatus(null));
@@ -474,6 +501,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
         <table className="w-full caption-bottom text-sm">
           <thead className="[&_tr]:border-b">
             <tr className="border-b transition-colors hover:bg-muted/50">
+              <th className="h-12 px-2 text-left align-middle font-medium w-10" aria-label="Просмотр" />
               <th 
                 className="h-12 px-4 text-left align-middle font-medium cursor-pointer select-none hover:bg-muted/30 w-24"
                 onClick={() => handleColumnSort('id')}
@@ -511,14 +539,24 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                   <SortIcon column="createdDate" sortBy={sortBy} sortOrder={sortOrder} />
                 </div>
               </th>
+              <th className="h-12 px-4 text-left align-middle font-medium">Теги</th>
               <th className="h-12 px-4 text-left align-middle font-medium">Ветка</th>
               <th className="h-12 px-4 text-left align-middle font-medium">YouTrack</th>
-              <th className="h-12 px-4 text-left align-middle font-medium">Действия</th>
             </tr>
           </thead>
           <tbody className="[&_tr:last-child]:border-0">
             {paginatedTasks.map((task) => (
               <tr key={task.id} className="border-b transition-colors hover:bg-muted/50">
+                <td className="p-2 align-middle w-10">
+                  <Link
+                    to={`/tasks/${task.id}`}
+                    className="inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                    title="Просмотр задачи"
+                    aria-label={`Просмотр задачи ${task.id}`}
+                  >
+                    <EyeIcon />
+                  </Link>
+                </td>
                 <td 
                   className="p-4 align-middle font-mono cursor-pointer hover:bg-accent/50 select-none transition-colors w-24"
                   onClick={(e) => handleCopyId(task.id, e)}
@@ -532,11 +570,11 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                     value={task.status}
                     onValueChange={(value) => handleStatusChange(task.id, value as TaskStatus)}
                   >
-                    <SelectTrigger className="w-[160px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="backlog">📋 Бэклог</SelectItem>
+<SelectTrigger className="w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="backlog">📋 Бэклог</SelectItem>
                       <SelectItem value="planned">📅 Запланировано</SelectItem>
                       <SelectItem value="in-progress">⏳ В работе</SelectItem>
                       <SelectItem value="completed">✅ Выполнено</SelectItem>
@@ -550,11 +588,11 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                     onValueChange={(value) => handlePriorityChange(task.id, value as TaskPriority)}
                     disabled={task.status === 'completed'}
                   >
-                    <SelectTrigger className="w-[160px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="critical">🔴 Критический</SelectItem>
+<SelectTrigger className="w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="critical">🔴 Критический</SelectItem>
                       <SelectItem value="high">🟠 Высокий</SelectItem>
                       <SelectItem value="medium">🔵 Средний</SelectItem>
                       <SelectItem value="low">⚪ Низкий</SelectItem>
@@ -562,6 +600,22 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                   </Select>
                 </td>
                 <td className="p-4 align-middle">{formatDate(task.createdDate)}</td>
+                <td className="p-4 align-middle">
+                  {task.tags && task.tags.length > 0 ? (
+                    <span className="flex flex-wrap gap-1">
+                      {task.tags.map((tag) => (
+                        <TagBadge
+                          key={tag}
+                          tag={tag}
+                          colorKey={tagMetadata[tag]?.color}
+                          className="text-xs"
+                        />
+                      ))}
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground text-xs">—</span>
+                  )}
+                </td>
                 <td className="p-4 align-middle font-mono text-sm">{task.branch || '—'}</td>
                 <td className="p-4 align-middle">
                   <TaskListYouTrackCell
@@ -570,13 +624,6 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                     getTaskQueueFlags={getTaskQueueFlags}
                     onOpenConnect={() => setConnectDialogTaskId(task.id)}
                   />
-                </td>
-                <td className="p-4 align-middle">
-                  <Link to={`/tasks/${task.id}`}>
-                    <Button variant="outline" size="sm">
-                      Просмотр
-                    </Button>
-                  </Link>
                 </td>
               </tr>
             ))}

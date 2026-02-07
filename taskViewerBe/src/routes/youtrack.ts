@@ -8,6 +8,7 @@ import { youtrackLinksService } from '../services/youtrack-links.service.js';
 import { tasksService } from '../services/tasks.service.js';
 import { youtrackQueueService } from '../services/youtrack-queue.service.js';
 import { youtrackProcessorService } from '../services/youtrack-processor.service.js';
+import { tagsBlacklistService } from '../services/tags-blacklist.service.js';
 import type { YouTrackTemplate } from '../types/template.types.js';
 
 export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
@@ -92,6 +93,10 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           ? await youtrackApiService.getProjectId()
           : templateData.projectId;
 
+        // Фильтруем теги по чёрному списку (теги из чёрного списка не отправляем в YouTrack)
+        const taskTags = localTask.tags ?? [];
+        const tagsForYouTrack = await tagsBlacklistService.filterTagsForYouTrack(taskTags);
+
         // Применяем переопределения customFields, если есть
         const finalCustomFields = customFields
           ? Object.entries(customFields).map(([name, value]) => {
@@ -121,11 +126,17 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             })
           : templateData.customFields;
 
+        // Добавляем отфильтрованные теги в описание (если есть)
+        const descriptionWithTags =
+          tagsForYouTrack.length > 0
+            ? `${templateData.description || ''}\n\nТеги: ${tagsForYouTrack.join(', ')}`
+            : templateData.description;
+
         // Создаем задачу в YouTrack
         const createdIssue = await youtrackApiService.createIssue({
           project: { id: projectId },
           summary: templateData.summary,
-          description: templateData.description,
+          description: descriptionWithTags,
           customFields: finalCustomFields,
         });
 
@@ -675,6 +686,94 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         }
         throw error;
       }
+    }
+  );
+
+  // GET /api/youtrack/tags/blacklist - получить чёрный список тегов
+  server.get(
+    '/youtrack/tags/blacklist',
+    {
+      schema: {
+        description: 'Получить чёрный список тегов (теги из списка не отправляются в YouTrack)',
+        response: {
+          200: z.object({
+            blacklist: z.array(z.string()),
+          }),
+        },
+      },
+    },
+    async (_request, reply) => {
+      const blacklist = await tagsBlacklistService.getBlacklist();
+      return reply.send({ blacklist });
+    }
+  );
+
+  // POST /api/youtrack/tags/blacklist - полная замена чёрного списка
+  server.post(
+    '/youtrack/tags/blacklist',
+    {
+      schema: {
+        description: 'Обновить чёрный список тегов (полная замена)',
+        body: z.object({
+          blacklist: z.array(z.string()),
+        }),
+        response: {
+          200: z.object({
+            blacklist: z.array(z.string()),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { blacklist } = request.body;
+      const updated = await tagsBlacklistService.setBlacklist(blacklist);
+      return reply.send({ blacklist: updated });
+    }
+  );
+
+  // PUT /api/youtrack/tags/blacklist - добавить тег в чёрный список
+  server.put(
+    '/youtrack/tags/blacklist',
+    {
+      schema: {
+        description: 'Добавить тег в чёрный список (если его ещё нет)',
+        body: z.object({
+          tag: z.string(),
+        }),
+        response: {
+          200: z.object({
+            blacklist: z.array(z.string()),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { tag } = request.body;
+      const blacklist = await tagsBlacklistService.addTag(tag);
+      return reply.send({ blacklist });
+    }
+  );
+
+  // DELETE /api/youtrack/tags/blacklist/:tag - удалить тег из чёрного списка
+  server.delete(
+    '/youtrack/tags/blacklist/:tag',
+    {
+      schema: {
+        description: 'Удалить тег из чёрного списка',
+        params: z.object({
+          tag: z.string(),
+        }),
+        response: {
+          200: z.object({
+            blacklist: z.array(z.string()),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { tag } = request.params;
+      const blacklist = await tagsBlacklistService.removeTag(decodeURIComponent(tag));
+      return reply.send({ blacklist });
     }
   );
 

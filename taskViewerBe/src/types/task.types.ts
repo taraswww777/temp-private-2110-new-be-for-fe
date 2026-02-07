@@ -8,6 +8,7 @@ export interface Task {
   completedDate: string | null;
   branch: string | null;
   youtrackIssueIds?: string[]; // Опциональное поле для связей с YouTrack
+  tags?: string[]; // Теги задачи (при отправке в YouTrack фильтруются по чёрному списку)
 }
 
 export interface TaskManifest {
