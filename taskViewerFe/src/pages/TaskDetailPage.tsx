@@ -275,6 +275,12 @@ export function TaskDetailPage() {
             <YouTrackLinkCard
               taskId={task.id}
               initialIssueIds={task.youtrackIssueIds}
+              taskPreview={{
+                title: task.title,
+                content: task.content ?? '',
+                status: task.status,
+                branch: task.branch ?? null,
+              }}
               onLinksUpdated={fetchTask}
             />
           </aside>

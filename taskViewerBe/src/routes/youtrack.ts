@@ -239,6 +239,15 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
       const { taskId } = request.params;
       const { youtrackIssueId } = request.body;
 
+      // Получаем текущие связи задачи (для ответа при постановке в очередь)
+      const localTask = await tasksService.getTaskById(taskId);
+      if (!localTask) {
+        return reply.status(404).send({ message: `Task with id "${taskId}" not found` });
+      }
+      const currentIssueIds = (localTask.youtrackIssueIds || []).filter(
+        (id): id is string => typeof id === 'string' && id.length > 0
+      );
+
       // Проверяем доступность YouTrack
       if (!youtrackProcessorService.isYouTrackAvailable()) {
         // Добавляем операцию в очередь
@@ -254,7 +263,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           localTaskId: taskId,
           youtrackIssueId,
           youtrackIssueUrl: '',
-          youtrackIssueIds: [],
+          youtrackIssueIds: currentIssueIds,
           queued: true,
           operationId: operation.id,
         });
@@ -304,7 +313,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
               localTaskId: taskId,
               youtrackIssueId,
               youtrackIssueUrl: '',
-              youtrackIssueIds: [],
+              youtrackIssueIds: currentIssueIds,
               queued: true,
               operationId: operation.id,
             });
@@ -312,6 +321,59 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         }
         return reply.status(400).send({
           message: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    }
+  );
+
+  // GET /api/youtrack/issues/:youtrackIssueId - предпросмотр задачи YouTrack (для диалога связывания)
+  server.get(
+    '/youtrack/issues/:youtrackIssueId',
+    {
+      schema: {
+        description: 'Получить информацию о задаче YouTrack для предпросмотра',
+        params: z.object({
+          youtrackIssueId: z.string(),
+        }),
+        response: {
+          200: z.object({
+            idReadable: z.string(),
+            summary: z.string(),
+            state: z.string().optional(),
+            priority: z.string().optional(),
+          }),
+          404: z.object({ message: z.string() }),
+          503: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { youtrackIssueId } = request.params;
+
+      if (!youtrackProcessorService.isYouTrackAvailable()) {
+        return reply.status(503).send({
+          message: 'YouTrack is not configured or temporarily unavailable.',
+        });
+      }
+
+      try {
+        const issue = await youtrackApiService.getIssue(
+          youtrackIssueId,
+          'idReadable,summary,state(name),priority(name)'
+        );
+        return reply.send({
+          idReadable: issue.idReadable ?? issue.id,
+          summary: issue.summary ?? '',
+          state: issue.state?.name,
+          priority: issue.priority?.name,
+        });
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : '';
+        if (msg.includes('404') || msg.includes('not found')) {
+          return reply.status(404).send({ message: msg || 'Issue not found' });
+        }
+        return reply.status(503).send({
+          message: msg || 'YouTrack is temporarily unavailable.',
         });
       }
     }
@@ -432,6 +494,14 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
     async (request, reply) => {
       const { taskId, youtrackIssueId } = request.params;
 
+      const localTask = await tasksService.getTaskById(taskId);
+      if (!localTask) {
+        return reply.status(404).send({ message: `Task with id "${taskId}" not found` });
+      }
+      const currentIssueIds = (localTask.youtrackIssueIds || []).filter(
+        (id): id is string => typeof id === 'string' && id.length > 0
+      );
+
       // Проверяем доступность YouTrack
       if (!youtrackProcessorService.isYouTrackAvailable()) {
         // Добавляем операцию в очередь
@@ -446,7 +516,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         return reply.send({
           localTaskId: taskId,
           removedIssueId: youtrackIssueId,
-          youtrackIssueIds: [],
+          youtrackIssueIds: currentIssueIds,
           queued: true,
           operationId: operation.id,
         });
@@ -467,7 +537,11 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           }
           
           // Если ошибка связана с недоступностью YouTrack, добавляем в очередь
-          if (error.message.includes('not configured') || error.message.includes('Failed to connect')) {
+          if (
+            error.message.includes('not configured') ||
+            error.message.includes('Failed to connect') ||
+            error.message.includes('temporarily unavailable')
+          ) {
             const operation = await youtrackQueueService.enqueue({
               type: 'unlink_issue',
               data: {
@@ -479,7 +553,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             return reply.send({
               localTaskId: taskId,
               removedIssueId: youtrackIssueId,
-              youtrackIssueIds: [],
+              youtrackIssueIds: currentIssueIds,
               queued: true,
               operationId: operation.id,
             });

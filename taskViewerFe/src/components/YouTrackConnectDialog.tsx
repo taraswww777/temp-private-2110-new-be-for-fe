@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Button,
   Dialog,
@@ -16,17 +16,28 @@ import {
   SelectValue,
 } from '@/uiKit';
 import { youtrackApi, buildYouTrackIssueUrl } from '@/api/youtrack.api';
-import type { YouTrackTemplate } from '@/types/youtrack.types';
+import { TemplatePreview } from '@/components/TemplatePreview';
+import type { YouTrackTemplate, YouTrackIssueInfo } from '@/types/youtrack.types';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 export type YouTrackConnectTab = 'create' | 'link';
+
+/** Данные задачи для предпросмотра шаблона (как будет выглядеть задача в YouTrack) */
+export interface TaskPreviewData {
+  title: string;
+  content: string;
+  status?: string;
+  branch?: string | null;
+}
 
 interface YouTrackConnectDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   taskId: string;
   existingIssueIds?: string[];
+  /** Данные задачи для предпросмотра шаблона (если не переданы — предпросмотр с плейсхолдерами) */
+  taskPreview?: TaskPreviewData;
   onSuccess?: () => void;
   /** С какой вкладки открыть (по умолчанию — создать задачу) */
   initialTab?: YouTrackConnectTab;
@@ -37,6 +48,7 @@ export function YouTrackConnectDialog({
   onOpenChange,
   taskId,
   existingIssueIds = [],
+  taskPreview,
   onSuccess,
   initialTab = 'create',
 }: YouTrackConnectDialogProps) {
@@ -47,15 +59,26 @@ export function YouTrackConnectDialog({
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>('default');
   const [createLoading, setCreateLoading] = useState(false);
   const [templatesLoading, setTemplatesLoading] = useState(true);
+  const [overridePriority, setOverridePriority] = useState('');
+  const [overrideAssignee, setOverrideAssignee] = useState('');
 
   // Link tab state
   const [linkIssueId, setLinkIssueId] = useState('');
   const [linkLoading, setLinkLoading] = useState(false);
+  const [linkPreview, setLinkPreview] = useState<YouTrackIssueInfo | null>(null);
+  const [linkPreviewLoading, setLinkPreviewLoading] = useState(false);
+  const [linkPreviewError, setLinkPreviewError] = useState<string | null>(null);
+  const [ytBaseUrl, setYtBaseUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (open) {
       setActiveTab(initialTab);
       setLinkIssueId('');
+      setLinkPreview(null);
+      setLinkPreviewError(null);
+      setOverridePriority('');
+      setOverrideAssignee('');
+      youtrackApi.getConfig().then((c) => setYtBaseUrl(c.baseUrl));
     }
   }, [open, initialTab]);
 
@@ -87,10 +110,78 @@ export function YouTrackConnectDialog({
   const validateIssueId = (id: string): boolean =>
     /^[A-Z0-9]+-[0-9]+$/i.test(id.trim());
 
+  // Предпросмотр задачи YouTrack при вводе ID (с задержкой)
+  const trimmedLinkId = linkIssueId.trim();
+  const linkIdValidForPreview =
+    trimmedLinkId.length > 0 &&
+    validateIssueId(trimmedLinkId) &&
+    !existingIssueIds.includes(trimmedLinkId);
+
+  const linkPreviewCancelledRef = useRef(false);
+  useEffect(() => {
+    if (!linkIdValidForPreview) {
+      setLinkPreview(null);
+      setLinkPreviewError(null);
+      return;
+    }
+    linkPreviewCancelledRef.current = false;
+    setLinkPreviewLoading(true);
+    setLinkPreviewError(null);
+    const t = setTimeout(() => {
+      youtrackApi
+        .getIssueInfo(trimmedLinkId)
+        .then((info) => {
+          if (!linkPreviewCancelledRef.current) {
+            setLinkPreview(info);
+            setLinkPreviewError(null);
+          }
+        })
+        .catch((err) => {
+          if (!linkPreviewCancelledRef.current) {
+            setLinkPreview(null);
+            setLinkPreviewError(err instanceof Error ? err.message : 'Не удалось загрузить задачу');
+          }
+        })
+        .finally(() => {
+          if (!linkPreviewCancelledRef.current) setLinkPreviewLoading(false);
+        });
+    }, 400);
+    return () => {
+      clearTimeout(t);
+      linkPreviewCancelledRef.current = true;
+    };
+  }, [trimmedLinkId, linkIdValidForPreview]);
+
+  const selectedTemplate = templates.find((t) => t.id === selectedTemplateId);
+  const createPreviewVariables = {
+    taskId: taskPreview ? '' : taskId,
+    title: taskPreview?.title ?? '',
+    content: taskPreview?.content ?? '',
+    status: taskPreview?.status ?? '',
+    branch: taskPreview?.branch ?? '',
+  };
+
   const handleCreate = async () => {
     try {
       setCreateLoading(true);
-      const result = await youtrackApi.createIssue(taskId, selectedTemplateId);
+      const customFields: Record<string, unknown> = {};
+      if (overridePriority.trim()) {
+        customFields['Priority'] = {
+          $type: 'SingleEnumIssueCustomField',
+          value: { name: overridePriority.trim() },
+        };
+      }
+      if (overrideAssignee.trim()) {
+        customFields['Assignee'] = {
+          $type: 'SingleUserIssueCustomField',
+          value: { login: overrideAssignee.trim() },
+        };
+      }
+      const result = await youtrackApi.createIssue(
+        taskId,
+        selectedTemplateId,
+        Object.keys(customFields).length > 0 ? customFields : undefined
+      );
       if (result.queued) {
         toast.success(`Задача добавлена в очередь. Операция: ${result.operationId}`);
       } else {
@@ -184,7 +275,7 @@ export function YouTrackConnectDialog({
         </div>
 
         {activeTab === 'create' && (
-          <div className="space-y-4 py-4">
+          <div className="space-y-4 py-4 max-h-[70vh] overflow-y-auto">
             <div className="space-y-2">
               <Label htmlFor="template">Шаблон</Label>
               {templatesLoading ? (
@@ -209,6 +300,47 @@ export function YouTrackConnectDialog({
                 </Select>
               )}
             </div>
+            {selectedTemplate && (
+              <>
+                <TemplatePreview
+                  template={selectedTemplate}
+                  variables={createPreviewVariables}
+                />
+                <div className="space-y-2 pt-2 border-t">
+                  <div className="text-sm font-medium text-muted-foreground">
+                    Переопределение полей (опционально)
+                  </div>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    <div className="space-y-1">
+                      <Label htmlFor="override-priority" className="text-xs">
+                        Приоритет
+                      </Label>
+                      <Input
+                        id="override-priority"
+                        placeholder="Например: High"
+                        value={overridePriority}
+                        onChange={(e) => setOverridePriority(e.target.value)}
+                        disabled={createLoading}
+                        className="h-8"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="override-assignee" className="text-xs">
+                        Исполнитель (логин)
+                      </Label>
+                      <Input
+                        id="override-assignee"
+                        placeholder="Логин в YouTrack"
+                        value={overrideAssignee}
+                        onChange={(e) => setOverrideAssignee(e.target.value)}
+                        disabled={createLoading}
+                        className="h-8"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
 
@@ -230,6 +362,36 @@ export function YouTrackConnectDialog({
                 Формат: PROJ-123 (буквы, дефис, цифры)
               </p>
             </div>
+            {linkPreviewLoading && (
+              <div className="text-sm text-muted-foreground">Загрузка информации о задаче...</div>
+            )}
+            {linkPreviewError && !linkPreviewLoading && (
+              <div className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                {linkPreviewError}
+              </div>
+            )}
+            {linkPreview && !linkPreviewLoading && (
+              <div className="rounded-md border bg-muted/50 px-3 py-3 text-sm">
+                <div className="font-medium text-foreground">
+                  {linkPreview.idReadable ?? trimmedLinkId}
+                </div>
+                <div className="mt-1 text-foreground">{linkPreview.summary}</div>
+                <div className="mt-2 flex flex-wrap gap-2 text-muted-foreground">
+                  {linkPreview.state && <span>Статус: {linkPreview.state}</span>}
+                  {linkPreview.priority && <span>Приоритет: {linkPreview.priority}</span>}
+                </div>
+                {ytBaseUrl && (
+                  <a
+                    href={buildYouTrackIssueUrl(ytBaseUrl, linkPreview.idReadable ?? trimmedLinkId) ?? '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block text-primary underline hover:no-underline"
+                  >
+                    Открыть в YouTrack
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         )}
 

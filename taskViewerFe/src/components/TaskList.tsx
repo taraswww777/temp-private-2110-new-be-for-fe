@@ -730,6 +730,12 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
           onOpenChange={(open) => !open && setConnectDialogTaskId(null)}
           taskId={connectDialogTaskId}
           existingIssueIds={tasks.find((t) => t.id === connectDialogTaskId)?.youtrackIssueIds ?? []}
+          taskPreview={(() => {
+            const t = tasks.find((x) => x.id === connectDialogTaskId);
+            return t
+              ? { title: t.title, content: t.content ?? '', status: t.status, branch: t.branch ?? null }
+              : undefined;
+          })()}
           onSuccess={() => {
             setConnectDialogTaskId(null);
             handleYouTrackSuccess();

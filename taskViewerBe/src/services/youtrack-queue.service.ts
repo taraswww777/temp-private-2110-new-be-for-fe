@@ -119,7 +119,10 @@ export const youtrackQueueService = {
 
     operation.status = status;
     operation.lastAttemptAt = new Date().toISOString();
-    operation.attempts += 1;
+    // Увеличиваем attempts только при ошибке или повторной попытке (pending), не при completed/processing
+    if (status === 'failed' || status === 'pending') {
+      operation.attempts += 1;
+    }
 
     if (error) {
       operation.error = error;

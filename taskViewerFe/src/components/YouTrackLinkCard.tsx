@@ -6,13 +6,22 @@ import { toast } from 'sonner';
 import { YouTrackConnectDialog } from './YouTrackConnectDialog';
 import type { YouTrackConnectTab } from './YouTrackConnectDialog';
 
+interface TaskPreviewData {
+  title: string;
+  content: string;
+  status?: string;
+  branch?: string | null;
+}
+
 interface YouTrackLinkCardProps {
   taskId: string;
   initialIssueIds?: string[];
+  /** Данные задачи для предпросмотра шаблона в диалоге создания */
+  taskPreview?: TaskPreviewData;
   onLinksUpdated?: () => void;
 }
 
-export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: YouTrackLinkCardProps) {
+export function YouTrackLinkCard({ taskId, initialIssueIds, taskPreview, onLinksUpdated }: YouTrackLinkCardProps) {
   const [links, setLinks] = useState<TaskYouTrackLinks | null>(null);
   const [loading, setLoading] = useState(true);
   const [youtrackBaseUrl, setYoutrackBaseUrl] = useState<string | null>(null);
@@ -243,6 +252,7 @@ export function YouTrackLinkCard({ taskId, initialIssueIds, onLinksUpdated }: Yo
         onOpenChange={setConnectDialogOpen}
         taskId={taskId}
         existingIssueIds={issueIds}
+        taskPreview={taskPreview}
         onSuccess={handleConnectSuccess}
         initialTab={connectDialogTab}
       />
