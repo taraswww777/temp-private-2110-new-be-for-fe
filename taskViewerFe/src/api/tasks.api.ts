@@ -1,7 +1,7 @@
 import { ApiError } from '@/api/apiError';
 import type { Task, TaskDetail, UpdateTaskMetaInput } from '@/types/task.types';
 
-// Используем относительный путь - Vite dev server проксирует на http://localhost:3001
+// Используем относительный путь - Vite dev server проксирует на http://localhost:3002
 const API_BASE_URL = '/api';
 
 export const tasksApi = {

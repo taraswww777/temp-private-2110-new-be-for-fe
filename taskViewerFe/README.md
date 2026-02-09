@@ -74,5 +74,5 @@ npm run build-storybook
 
 ## Примечания
 
-- Убедитесь, что backend приложение (taskViewerBe) запущено на http://localhost:3001
+- Убедитесь, что backend приложение (taskViewerBe) запущено на http://localhost:3002
 - Если необходимо изменить адрес API, измените константу `API_BASE_URL` в файле `src/api/tasks.api.ts`

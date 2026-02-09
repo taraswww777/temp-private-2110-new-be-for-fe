@@ -12,7 +12,7 @@ import type {
   YouTrackQueueProcessResult,
 } from '@/types/youtrack.types';
 
-// Используем относительный путь - Vite dev server проксирует на http://localhost:3001
+// Используем относительный путь - Vite dev server проксирует на http://localhost:3002
 const API_BASE_URL = '/api';
 
 /**

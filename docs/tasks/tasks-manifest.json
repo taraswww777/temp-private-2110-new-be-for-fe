@@ -458,7 +458,10 @@
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+      ]
     },
     {
       "id": "TASK-047",
@@ -468,7 +471,10 @@
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+      ]
     },
     {
       "id": "TASK-048",
@@ -536,7 +542,8 @@
         "VTB-539"
       ],
       "tagIds": [
-        "2579ec4b-e9a4-4347-addc-6e9097e8b51d"
+        "2579ec4b-e9a4-4347-addc-6e9097e8b51d",
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
       ]
     },
     {
@@ -552,7 +559,8 @@
         "VTB-538"
       ],
       "tagIds": [
-        "2579ec4b-e9a4-4347-addc-6e9097e8b51d"
+        "2579ec4b-e9a4-4347-addc-6e9097e8b51d",
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
       ]
     },
     {
