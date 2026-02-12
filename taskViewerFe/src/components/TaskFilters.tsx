@@ -1,22 +1,30 @@
-import { InputField, MultiSelectField } from '@/uiKit';
+import { InputField, MultiSelectField, TagBadge } from '@/uiKit';
 import type { TaskStatus, TaskPriority } from '@/types/task.types';
 
 interface TaskFiltersProps {
   search: string;
   statusFilter: TaskStatus[];
   priorityFilter: TaskPriority[];
+  tagsFilter: string[];
   onSearchChange: (value: string) => void;
   onStatusFilterChange: (statuses: TaskStatus[]) => void;
   onPriorityFilterChange: (priorities: TaskPriority[]) => void;
+  onTagsFilterChange: (tags: string[]) => void;
+  availableTags: string[];
+  tagMetadata: Record<string, { color?: string }>;
 }
 
 export function TaskFilters({
   search,
   statusFilter,
   priorityFilter,
+  tagsFilter,
   onSearchChange,
   onStatusFilterChange,
   onPriorityFilterChange,
+  onTagsFilterChange,
+  availableTags,
+  tagMetadata,
 }: TaskFiltersProps) {
   const statusOptions = [
     { label: '📋 Бэклог', value: 'backlog' },
@@ -33,6 +41,11 @@ export function TaskFilters({
     { label: '⚪ Низкий', value: 'low' },
   ];
 
+  const tagsOptions = availableTags.map((tag) => ({
+    label: tag,
+    value: tag,
+  }));
+
   return (
     <div className="flex gap-4 mb-6">
       <InputField
@@ -40,6 +53,8 @@ export function TaskFilters({
         placeholder="По названию или ID..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
+        onClear={() => onSearchChange('')}
+        showClearButton={true}
         className="flex-grow"
       />
 
@@ -49,6 +64,7 @@ export function TaskFilters({
         selected={statusFilter}
         onChange={(selected) => onStatusFilterChange(selected as TaskStatus[])}
         placeholder="Все статусы"
+        showClearButton={true}
         className="flex-grow"
       />
 
@@ -58,7 +74,33 @@ export function TaskFilters({
         selected={priorityFilter}
         onChange={(selected) => onPriorityFilterChange(selected as TaskPriority[])}
         placeholder="Все приоритеты"
+        showClearButton={true}
         className="flex-grow"
+      />
+
+      <MultiSelectField
+        label="Теги"
+        options={tagsOptions}
+        selected={tagsFilter}
+        onChange={(selected) => onTagsFilterChange(selected)}
+        placeholder="Все теги"
+        showClearButton={true}
+        className="flex-grow"
+        renderOption={(option) => (
+          <TagBadge 
+            tag={option.label} 
+            colorKey={tagMetadata[option.value]?.color} 
+            className="text-xs" 
+          />
+        )}
+        renderValue={(option, onRemove) => (
+          <TagBadge
+            tag={option.label}
+            colorKey={tagMetadata[option.value]?.color}
+            onRemove={onRemove}
+            className="text-xs"
+          />
+        )}
       />
     </div>
   );

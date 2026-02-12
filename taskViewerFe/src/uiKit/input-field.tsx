@@ -10,17 +10,27 @@ export interface InputFieldProps
   className?: string
   /** Дополнительный текст под полем (подсказка, описание) */
   description?: React.ReactNode
+  /** Показывать ли кнопку очистки (появляется когда есть значение) */
+  showClearButton?: boolean
+  /** Обработчик очистки (если не указан, используется onChange с пустой строкой) */
+  onClear?: () => void
 }
 
 const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
-  ({ label, id: idProp, className, description, ...props }, ref) => {
+  ({ label, id: idProp, className, description, showClearButton, onClear, ...props }, ref) => {
     const generatedId = React.useId()
     const id = idProp ?? generatedId
 
     return (
       <div className={cn("flex flex-col gap-1.5", className)}>
         <Label htmlFor={id}>{label}</Label>
-        <Input ref={ref} id={id} {...props} />
+        <Input 
+          ref={ref} 
+          id={id} 
+          showClearButton={showClearButton}
+          onClear={onClear}
+          {...props} 
+        />
         {description && (
           <p className="text-xs text-muted-foreground">{description}</p>
         )}
