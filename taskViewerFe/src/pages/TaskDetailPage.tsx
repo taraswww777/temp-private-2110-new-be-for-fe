@@ -136,6 +136,19 @@ export function TaskDetailPage() {
     return format(new Date(dateString), 'dd MMMM yyyy', { locale: ru });
   };
 
+  const handleCopyId = async (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    try {
+      await navigator.clipboard.writeText(id);
+      toast.success(`ID "${id}" скопирован в буфер обмена`);
+    } catch (err) {
+      console.error('Failed to copy ID:', err);
+      toast.error('Не удалось скопировать ID');
+    }
+  };
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -177,7 +190,13 @@ export function TaskDetailPage() {
                 <div className="space-y-2">
                   <CardTitle className="text-3xl">{task.title}</CardTitle>
                   <div className="flex items-center gap-4 flex-wrap">
-                    <CardDescription className="text-lg font-mono">{task.id}</CardDescription>
+                    <CardDescription 
+                      className="text-lg font-mono cursor-pointer hover:bg-accent/50 select-none transition-colors px-2 py-1 rounded"
+                      onClick={(e) => handleCopyId(task.id, e)}
+                      title="Нажмите, чтобы скопировать ID"
+                    >
+                      {task.id}
+                    </CardDescription>
                     <div className="flex items-center gap-2">
                       <Select
                         value={task.status}
@@ -209,6 +228,23 @@ export function TaskDetailPage() {
                           <SelectItem value="low">⚪ Низкий</SelectItem>
                         </SelectContent>
                       </Select>
+                      <Select
+                        value={currentProject || '__none__'}
+                        onValueChange={(value) => handleProjectChange(value === '__none__' ? null : value)}
+                        disabled={projectSaving}
+                      >
+                        <SelectTrigger className="w-[160px]">
+                          <SelectValue placeholder="Без проекта" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="__none__">Без проекта</SelectItem>
+                          {projects.map((project) => (
+                            <SelectItem key={project.id} value={project.name}>
+                              {project.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>
@@ -232,27 +268,7 @@ export function TaskDetailPage() {
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t space-y-4">
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium">Проект</label>
-                  <Select
-                    value={currentProject || '__none__'}
-                    onValueChange={(value) => handleProjectChange(value === '__none__' ? null : value)}
-                    disabled={projectSaving}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Без проекта" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="__none__">Без проекта</SelectItem>
-                      {projects.map((project) => (
-                        <SelectItem key={project.id} value={project.name}>
-                          {project.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="mt-4 pt-4 border-t">
                 <TaskTagsEditor
                   tags={currentTags}
                   onTagsChange={handleTagsChange}
