@@ -701,7 +701,7 @@
     {
       "id": "TASK-060",
       "title": "Создание и редактирование задач с Markdown редактором",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-060-create-edit-tasks-with-md-editor.md",
       "createdDate": "2026-02-12T00:00:00Z",
       "completedDate": null,
