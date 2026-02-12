@@ -718,6 +718,17 @@
       "branch": null,
       "priority": "medium",
       "projectId": "taskviewer-project-id"
+    },
+    {
+      "id": "TASK-062",
+      "title": "Фильтрация задач по тегам в списке задач",
+      "status": "backlog",
+      "file": "TASK-062-filter-tasks-by-tags.md",
+      "createdDate": "2026-02-12T00:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium",
+      "projectId": "taskviewer-project-id"
     }
   ]
 }
