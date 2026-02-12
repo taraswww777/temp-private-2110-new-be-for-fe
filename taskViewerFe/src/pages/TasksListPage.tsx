@@ -28,6 +28,11 @@ export function TasksListPage() {
   const filteredTasks = useMemo(() => {
     if (!selectedProject) return tasks;
     
+    // Если выбран вариант "Без проекта"
+    if (selectedProject === '__no_project__') {
+      return tasks.filter((task) => !task.project);
+    }
+    
     // Находим имя проекта по ID
     const selectedProjectObj = projects.find((p) => p.id === selectedProject);
     if (!selectedProjectObj) {
@@ -81,7 +86,7 @@ export function TasksListPage() {
             tasks={filteredTasks} 
             onTaskUpdate={refetch}
             onTaskChange={updateTask}
-            showProjectColumn={!selectedProject}
+            showProjectColumn={!selectedProject || selectedProject === '__no_project__'}
             projects={projects}
           />
         </CardContent>

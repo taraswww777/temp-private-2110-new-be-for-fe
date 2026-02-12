@@ -31,13 +31,15 @@ export function ProjectSelector() {
     }
   };
 
-  const selectedProjectName = selectedProject
-    ? projects.find((p) => p.id === selectedProject)?.name || selectedProject
-    : null;
+  const getDisplayValue = () => {
+    if (!selectedProject) return '__none__';
+    if (selectedProject === '__no_project__') return '__no_project__';
+    return selectedProject;
+  };
 
   return (
     <Select
-      value={selectedProject || '__none__'}
+      value={getDisplayValue()}
       onValueChange={handleChange}
       disabled={loading}
     >
@@ -46,6 +48,7 @@ export function ProjectSelector() {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="__none__">Все проекты</SelectItem>
+        <SelectItem value="__no_project__">Без проекта</SelectItem>
         {projects.map((project) => (
           <SelectItem key={project.id} value={project.id}>
             {project.name}

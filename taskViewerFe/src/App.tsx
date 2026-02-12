@@ -85,11 +85,11 @@ function AppContent() {
 export function App() {
   return (
     <ThemeProvider>
-      <ProjectProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <ProjectProvider>
           <AppContent />
-        </BrowserRouter>
-      </ProjectProvider>
+        </ProjectProvider>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
