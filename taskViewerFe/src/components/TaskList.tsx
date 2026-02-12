@@ -276,6 +276,11 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
       ['critical', 'high', 'medium', 'low'].includes(p)
     );
   };
+  const getTagsFilterFromUrl = (): string[] => {
+    const tagsParam = searchParams.get('tags');
+    if (!tagsParam) return [];
+    return tagsParam.split(',').filter((t) => t.trim().length > 0);
+  };
   const getPageFromUrl = () => {
     const page = searchParams.get('page');
     return page ? parseInt(page, 10) : 1;
@@ -299,6 +304,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
   const [search, setSearch] = useState(getSearchFromUrl);
   const [statusFilter, setStatusFilter] = useState<TaskStatus[]>(getStatusFilterFromUrl);
   const [priorityFilter, setPriorityFilter] = useState<TaskPriority[]>(getPriorityFilterFromUrl);
+  const [tagsFilter, setTagsFilter] = useState<string[]>(getTagsFilterFromUrl);
   const [sortBy, setSortBy] = useState<'id' | 'createdDate' | 'status' | 'priority'>(getSortByFromUrl);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(getSortOrderFromUrl);
   const [currentPage, setCurrentPage] = useState(getPageFromUrl);
@@ -307,6 +313,9 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
   const [youtrackBaseUrl, setYoutrackBaseUrl] = useState<string | null>(null);
   const [connectDialogTaskId, setConnectDialogTaskId] = useState<string | null>(null);
   const [tagMetadata, setTagMetadata] = useState<Record<string, { color?: string }>>({});
+
+  // Получаем список всех доступных тегов из задач
+  const availableTags = useTagsSortedByLastUsed(tasks);
 
   useEffect(() => {
     youtrackApi.getConfig().then((c) => setYoutrackBaseUrl(c.baseUrl)).catch(() => setYoutrackBaseUrl(null));
@@ -324,6 +333,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
       search?: string;
       status?: TaskStatus[];
       priority?: TaskPriority[];
+      tags?: string[];
       page?: number;
       pageSize?: number;
       sortBy?: 'id' | 'createdDate' | 'status' | 'priority';
@@ -353,6 +363,14 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
         newParams.set('priority', updates.priority.join(','));
       } else {
         newParams.delete('priority');
+      }
+    }
+
+    if (updates.tags !== undefined) {
+      if (updates.tags.length > 0) {
+        newParams.set('tags', updates.tags.join(','));
+      } else {
+        newParams.delete('tags');
       }
     }
 
@@ -402,6 +420,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
     const urlSearch = getSearchFromUrl();
     const urlStatus = getStatusFilterFromUrl();
     const urlPriority = getPriorityFilterFromUrl();
+    const urlTags = getTagsFilterFromUrl();
     const urlPage = getPageFromUrl();
     const urlPageSize = getPageSizeFromUrl();
     const urlSortBy = getSortByFromUrl();
@@ -411,6 +430,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
     if (urlSearch !== search) setSearch(urlSearch);
     if (JSON.stringify(urlStatus.sort()) !== JSON.stringify(statusFilter.sort())) setStatusFilter(urlStatus);
     if (JSON.stringify(urlPriority.sort()) !== JSON.stringify(priorityFilter.sort())) setPriorityFilter(urlPriority);
+    if (JSON.stringify(urlTags.sort()) !== JSON.stringify(tagsFilter.sort())) setTagsFilter(urlTags);
     if (urlPage !== currentPage) setCurrentPage(urlPage);
     if (urlPageSize !== pageSize) setPageSize(urlPageSize);
     if (urlSortBy !== sortBy) setSortBy(urlSortBy);
@@ -439,6 +459,14 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
     // Фильтрация по приоритету
     if (priorityFilter.length > 0) {
       result = result.filter((task) => priorityFilter.includes(task.priority));
+    }
+
+    // Фильтрация по тегам (OR логика: задача должна содержать хотя бы один из выбранных тегов)
+    if (tagsFilter.length > 0) {
+      result = result.filter((task) => {
+        const taskTags = task.tags ?? [];
+        return tagsFilter.some((filterTag) => taskTags.includes(filterTag));
+      });
     }
 
     // Сортировка
@@ -470,7 +498,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
     });
 
     return result;
-  }, [tasks, search, statusFilter, priorityFilter, sortBy, sortOrder]);
+  }, [tasks, search, statusFilter, priorityFilter, tagsFilter, sortBy, sortOrder]);
 
   // Пагинация
   const totalPages = Math.ceil(filteredAndSortedTasks.length / pageSize);
@@ -489,6 +517,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
     const urlSearch = getSearchFromUrl();
     const urlStatus = getStatusFilterFromUrl();
     const urlPriority = getPriorityFilterFromUrl();
+    const urlTags = getTagsFilterFromUrl();
     const urlPage = getPageFromUrl();
     const urlPageSize = getPageSizeFromUrl();
     const urlSortBy = getSortByFromUrl();
@@ -499,6 +528,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
       search !== urlSearch ||
       JSON.stringify(statusFilter.sort()) !== JSON.stringify(urlStatus.sort()) ||
       JSON.stringify(priorityFilter.sort()) !== JSON.stringify(urlPriority.sort()) ||
+      JSON.stringify(tagsFilter.sort()) !== JSON.stringify(urlTags.sort()) ||
       currentPage !== urlPage ||
       pageSize !== urlPageSize ||
       sortBy !== urlSortBy ||
@@ -509,6 +539,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
         search,
         status: statusFilter,
         priority: priorityFilter,
+        tags: tagsFilter,
         page: currentPage,
         pageSize,
         sortBy,
@@ -516,7 +547,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, statusFilter, priorityFilter, currentPage, pageSize, sortBy, sortOrder]);
+  }, [search, statusFilter, priorityFilter, tagsFilter, currentPage, pageSize, sortBy, sortOrder]);
 
   const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
     try {
@@ -619,6 +650,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
         search={search}
         statusFilter={statusFilter}
         priorityFilter={priorityFilter}
+        tagsFilter={tagsFilter}
         onSearchChange={(value) => {
           setSearch(value);
           handleFilterChange();
@@ -631,6 +663,12 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
           setPriorityFilter(value);
           handleFilterChange();
         }}
+        onTagsFilterChange={(value) => {
+          setTagsFilter(value);
+          handleFilterChange();
+        }}
+        availableTags={availableTags}
+        tagMetadata={tagMetadata}
       />
 
       <div className="overflow-x-auto">

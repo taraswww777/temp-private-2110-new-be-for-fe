@@ -13,6 +13,10 @@ interface MultiSelectProps {
   onChange: (selected: string[]) => void
   placeholder?: string
   className?: string
+  /** Кастомный рендер опции в выпадающем списке */
+  renderOption?: (option: MultiSelectOption) => React.ReactNode
+  /** Кастомный рендер выбранного значения (бейдж) */
+  renderValue?: (option: MultiSelectOption, onRemove: () => void) => React.ReactNode
 }
 
 export function MultiSelect({
@@ -21,6 +25,8 @@ export function MultiSelect({
   onChange,
   placeholder = "Выберите...",
   className,
+  renderOption,
+  renderValue,
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false)
 
@@ -63,6 +69,19 @@ export function MultiSelect({
             ) : selected.length <= 2 ? (
               selected.map((item) => {
                 const option = options.find((opt) => opt.value === item)
+                if (!option) return null
+                
+                if (renderValue) {
+                  return (
+                    <div key={item} onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }}>
+                      {renderValue(option, () => handleUnselect(item))}
+                    </div>
+                  )
+                }
+                
                 return (
                   <Badge
                     variant="secondary"
@@ -74,7 +93,7 @@ export function MultiSelect({
                       handleUnselect(item)
                     }}
                   >
-                    {option?.label}
+                    {option.label}
                     <button
                       className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                       onKeyDown={(e) => {
@@ -139,7 +158,7 @@ export function MultiSelect({
                     >
                       <span className="text-xs">✓</span>
                     </div>
-                    <span>{option.label}</span>
+                    {renderOption ? renderOption(option) : <span>{option.label}</span>}
                   </div>
                 </div>
               )
