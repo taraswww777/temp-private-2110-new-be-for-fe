@@ -3,6 +3,7 @@ import { youtrackQueueService } from './youtrack-queue.service.js';
 import { templatesService } from './templates.service.js';
 import { youtrackLinksService } from './youtrack-links.service.js';
 import { tasksService } from './tasks.service.js';
+import { tagsBlacklistService } from './tags-blacklist.service.js';
 import type {
   QueueOperation,
   CreateIssueOperation,
@@ -129,10 +130,17 @@ export const youtrackProcessorService = {
         })
       : templateData.customFields;
 
+    const taskTags = localTask.tags ?? [];
+    const tagsForYouTrack = await tagsBlacklistService.filterTagsForYouTrack(taskTags);
+    const descriptionWithTags =
+      tagsForYouTrack.length > 0
+        ? `${templateData.description || ''}\n\nТеги: ${tagsForYouTrack.join(', ')}`
+        : templateData.description;
+
     const createdIssue = await youtrackApiService.createIssue({
       project: { id: projectId },
       summary: templateData.summary,
-      description: templateData.description,
+      description: descriptionWithTags,
       customFields: finalCustomFields,
     });
 

@@ -8,6 +8,7 @@ import { youtrackLinksService } from '../services/youtrack-links.service.js';
 import { tasksService } from '../services/tasks.service.js';
 import { youtrackQueueService } from '../services/youtrack-queue.service.js';
 import { youtrackProcessorService } from '../services/youtrack-processor.service.js';
+import { tagsBlacklistService } from '../services/tags-blacklist.service.js';
 import type { YouTrackTemplate } from '../types/template.types.js';
 
 export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
@@ -92,6 +93,10 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           ? await youtrackApiService.getProjectId()
           : templateData.projectId;
 
+        // Фильтруем теги по чёрному списку (теги из чёрного списка не отправляем в YouTrack)
+        const taskTags = localTask.tags ?? [];
+        const tagsForYouTrack = await tagsBlacklistService.filterTagsForYouTrack(taskTags);
+
         // Применяем переопределения customFields, если есть
         const finalCustomFields = customFields
           ? Object.entries(customFields).map(([name, value]) => {
@@ -121,11 +126,17 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             })
           : templateData.customFields;
 
+        // Добавляем отфильтрованные теги в описание (если есть)
+        const descriptionWithTags =
+          tagsForYouTrack.length > 0
+            ? `${templateData.description || ''}\n\nТеги: ${tagsForYouTrack.join(', ')}`
+            : templateData.description;
+
         // Создаем задачу в YouTrack
         const createdIssue = await youtrackApiService.createIssue({
           project: { id: projectId },
           summary: templateData.summary,
-          description: templateData.description,
+          description: descriptionWithTags,
           customFields: finalCustomFields,
         });
 
@@ -228,6 +239,15 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
       const { taskId } = request.params;
       const { youtrackIssueId } = request.body;
 
+      // Получаем текущие связи задачи (для ответа при постановке в очередь)
+      const localTask = await tasksService.getTaskById(taskId);
+      if (!localTask) {
+        return reply.status(404).send({ message: `Task with id "${taskId}" not found` });
+      }
+      const currentIssueIds = (localTask.youtrackIssueIds || []).filter(
+        (id): id is string => typeof id === 'string' && id.length > 0
+      );
+
       // Проверяем доступность YouTrack
       if (!youtrackProcessorService.isYouTrackAvailable()) {
         // Добавляем операцию в очередь
@@ -243,7 +263,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           localTaskId: taskId,
           youtrackIssueId,
           youtrackIssueUrl: '',
-          youtrackIssueIds: [],
+          youtrackIssueIds: currentIssueIds,
           queued: true,
           operationId: operation.id,
         });
@@ -293,7 +313,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
               localTaskId: taskId,
               youtrackIssueId,
               youtrackIssueUrl: '',
-              youtrackIssueIds: [],
+              youtrackIssueIds: currentIssueIds,
               queued: true,
               operationId: operation.id,
             });
@@ -301,6 +321,59 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         }
         return reply.status(400).send({
           message: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    }
+  );
+
+  // GET /api/youtrack/issues/:youtrackIssueId - предпросмотр задачи YouTrack (для диалога связывания)
+  server.get(
+    '/youtrack/issues/:youtrackIssueId',
+    {
+      schema: {
+        description: 'Получить информацию о задаче YouTrack для предпросмотра',
+        params: z.object({
+          youtrackIssueId: z.string(),
+        }),
+        response: {
+          200: z.object({
+            idReadable: z.string(),
+            summary: z.string(),
+            state: z.string().optional(),
+            priority: z.string().optional(),
+          }),
+          404: z.object({ message: z.string() }),
+          503: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { youtrackIssueId } = request.params;
+
+      if (!youtrackProcessorService.isYouTrackAvailable()) {
+        return reply.status(503).send({
+          message: 'YouTrack is not configured or temporarily unavailable.',
+        });
+      }
+
+      try {
+        const issue = await youtrackApiService.getIssue(
+          youtrackIssueId,
+          'idReadable,summary,state(name),priority(name)'
+        );
+        return reply.send({
+          idReadable: issue.idReadable ?? issue.id,
+          summary: issue.summary ?? '',
+          state: issue.state?.name,
+          priority: issue.priority?.name,
+        });
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : '';
+        if (msg.includes('404') || msg.includes('not found')) {
+          return reply.status(404).send({ message: msg || 'Issue not found' });
+        }
+        return reply.status(503).send({
+          message: msg || 'YouTrack is temporarily unavailable.',
         });
       }
     }
@@ -421,6 +494,14 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
     async (request, reply) => {
       const { taskId, youtrackIssueId } = request.params;
 
+      const localTask = await tasksService.getTaskById(taskId);
+      if (!localTask) {
+        return reply.status(404).send({ message: `Task with id "${taskId}" not found` });
+      }
+      const currentIssueIds = (localTask.youtrackIssueIds || []).filter(
+        (id): id is string => typeof id === 'string' && id.length > 0
+      );
+
       // Проверяем доступность YouTrack
       if (!youtrackProcessorService.isYouTrackAvailable()) {
         // Добавляем операцию в очередь
@@ -435,7 +516,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         return reply.send({
           localTaskId: taskId,
           removedIssueId: youtrackIssueId,
-          youtrackIssueIds: [],
+          youtrackIssueIds: currentIssueIds,
           queued: true,
           operationId: operation.id,
         });
@@ -456,7 +537,11 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           }
           
           // Если ошибка связана с недоступностью YouTrack, добавляем в очередь
-          if (error.message.includes('not configured') || error.message.includes('Failed to connect')) {
+          if (
+            error.message.includes('not configured') ||
+            error.message.includes('Failed to connect') ||
+            error.message.includes('temporarily unavailable')
+          ) {
             const operation = await youtrackQueueService.enqueue({
               type: 'unlink_issue',
               data: {
@@ -468,7 +553,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
             return reply.send({
               localTaskId: taskId,
               removedIssueId: youtrackIssueId,
-              youtrackIssueIds: [],
+              youtrackIssueIds: currentIssueIds,
               queued: true,
               operationId: operation.id,
             });
@@ -675,6 +760,94 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         }
         throw error;
       }
+    }
+  );
+
+  // GET /api/youtrack/tags/blacklist - получить чёрный список тегов
+  server.get(
+    '/youtrack/tags/blacklist',
+    {
+      schema: {
+        description: 'Получить чёрный список тегов (теги из списка не отправляются в YouTrack)',
+        response: {
+          200: z.object({
+            blacklist: z.array(z.string()),
+          }),
+        },
+      },
+    },
+    async (_request, reply) => {
+      const blacklist = await tagsBlacklistService.getBlacklist();
+      return reply.send({ blacklist });
+    }
+  );
+
+  // POST /api/youtrack/tags/blacklist - полная замена чёрного списка
+  server.post(
+    '/youtrack/tags/blacklist',
+    {
+      schema: {
+        description: 'Обновить чёрный список тегов (полная замена)',
+        body: z.object({
+          blacklist: z.array(z.string()),
+        }),
+        response: {
+          200: z.object({
+            blacklist: z.array(z.string()),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { blacklist } = request.body;
+      const updated = await tagsBlacklistService.setBlacklist(blacklist);
+      return reply.send({ blacklist: updated });
+    }
+  );
+
+  // PUT /api/youtrack/tags/blacklist - добавить тег в чёрный список
+  server.put(
+    '/youtrack/tags/blacklist',
+    {
+      schema: {
+        description: 'Добавить тег в чёрный список (если его ещё нет)',
+        body: z.object({
+          tag: z.string(),
+        }),
+        response: {
+          200: z.object({
+            blacklist: z.array(z.string()),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { tag } = request.body;
+      const blacklist = await tagsBlacklistService.addTag(tag);
+      return reply.send({ blacklist });
+    }
+  );
+
+  // DELETE /api/youtrack/tags/blacklist/:tag - удалить тег из чёрного списка
+  server.delete(
+    '/youtrack/tags/blacklist/:tag',
+    {
+      schema: {
+        description: 'Удалить тег из чёрного списка',
+        params: z.object({
+          tag: z.string(),
+        }),
+        response: {
+          200: z.object({
+            blacklist: z.array(z.string()),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { tag } = request.params;
+      const blacklist = await tagsBlacklistService.removeTag(decodeURIComponent(tag));
+      return reply.send({ blacklist });
     }
   );
 

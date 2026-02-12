@@ -11,7 +11,8 @@ export interface Task {
   createdDate: string | null;
   completedDate: string | null;
   branch: string | null;
-  youtrackIssueIds?: string[]; // Опциональное поле для связей с YouTrack
+  youtrackIssueIds?: string[];
+  tags?: string[]; // Теги задачи (при отправке в YouTrack фильтруются по чёрному списку)
 }
 
 export interface TaskDetail extends Task {
@@ -25,4 +26,5 @@ export interface UpdateTaskMetaInput {
   createdDate?: string | null;
   completedDate?: string | null;
   branch?: string | null;
+  tags?: string[];
 }

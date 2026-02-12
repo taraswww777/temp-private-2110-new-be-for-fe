@@ -3,6 +3,8 @@ import { TasksListPage } from '@/pages/TasksListPage';
 import { TaskDetailPage } from '@/pages/TaskDetailPage';
 import { YouTrackTemplatesPage } from '@/pages/YouTrackTemplatesPage';
 import { YouTrackQueuePage } from '@/pages/YouTrackQueuePage';
+import { YouTrackTagsBlacklistPage } from '@/pages/YouTrackTagsBlacklistPage';
+import { TaskTagsPage } from '@/pages/TaskTagsPage';
 import { Toaster } from 'sonner';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
@@ -22,6 +24,12 @@ function AppContent() {
                     Задачи
                   </Link>
                   <Link
+                    to="/tasks/tags"
+                    className="text-sm text-muted-foreground hover:text-foreground"
+                  >
+                    Теги
+                  </Link>
+                  <Link
                     to="/youtrack/templates"
                     className="text-sm text-muted-foreground hover:text-foreground"
                   >
@@ -33,6 +41,12 @@ function AppContent() {
                   >
                     Очередь YouTrack
                   </Link>
+                  <Link
+                    to="/youtrack/tags/blacklist"
+                    className="text-sm text-muted-foreground hover:text-foreground"
+                  >
+                    Чёрный список тегов
+                  </Link>
                 </nav>
                 <ThemeSwitcher />
               </div>
@@ -43,8 +57,10 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<TasksListPage />} />
             <Route path="/tasks/:id" element={<TaskDetailPage />} />
+            <Route path="/tasks/tags" element={<TaskTagsPage />} />
             <Route path="/youtrack/templates" element={<YouTrackTemplatesPage />} />
             <Route path="/youtrack/queue" element={<YouTrackQueuePage />} />
+            <Route path="/youtrack/tags/blacklist" element={<YouTrackTagsBlacklistPage />} />
           </Routes>
         </main>
       </div>

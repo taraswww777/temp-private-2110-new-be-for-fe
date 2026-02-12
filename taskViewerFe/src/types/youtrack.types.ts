@@ -17,6 +17,8 @@ export interface TaskYouTrackLinks {
 }
 
 export interface YouTrackIssueInfo {
+  /** idReadable (например VTB-538), приходит из GET /api/youtrack/issues/:id */
+  idReadable?: string;
   summary: string;
   state?: string;
   priority?: string;

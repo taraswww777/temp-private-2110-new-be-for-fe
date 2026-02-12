@@ -86,7 +86,7 @@ npm run viewer:fe:dev
 ```
 
 После запуска:
-- Backend будет доступен по адресу: http://localhost:3001
+- Backend будет доступен по адресу: http://localhost:3002
 - Frontend будет доступен по адресу: http://localhost:5173
 
 ### Доступные скрипты
@@ -131,24 +131,24 @@ npm run viewer:fe:dev      # запуск frontend в dev режиме
 
 ### Получить все задачи
 ```bash
-curl http://localhost:3001/api/tasks
+curl http://localhost:3002/api/tasks
 ```
 
 ### Получить задачу с содержимым
 ```bash
-curl http://localhost:3001/api/tasks/TASK-004
+curl http://localhost:3002/api/tasks/TASK-004
 ```
 
 ### Обновить статус задачи
 ```bash
-curl -X PATCH http://localhost:3001/api/tasks/TASK-004 \
+curl -X PATCH http://localhost:3002/api/tasks/TASK-004 \
   -H "Content-Type: application/json" \
   -d '{"status":"in-progress"}'
 ```
 
 ### Обновить метаданные задачи
 ```bash
-curl -X PATCH http://localhost:3001/api/tasks/TASK-004 \
+curl -X PATCH http://localhost:3002/api/tasks/TASK-004 \
   -H "Content-Type: application/json" \
   -d '{"title":"Новое название","branch":"feature/TASK-004"}'
 ```
@@ -158,7 +158,7 @@ curl -X PATCH http://localhost:3001/api/tasks/TASK-004 \
 ### Backend (.env)
 ```env
 NODE_ENV=development
-PORT=3001
+PORT=3002
 HOST=localhost
 CORS_ORIGIN=http://localhost:5173
 TASKS_DIR=../docs/tasks
@@ -174,7 +174,7 @@ server: {
   port: 5173,
   proxy: {
     '/api': {
-      target: 'http://localhost:3001',
+      target: 'http://localhost:3002',
       changeOrigin: true,
     },
   },
@@ -183,7 +183,7 @@ server: {
 
 API запросы используют относительный путь `/api`, который автоматически проксируется на backend:
 ```typescript
-const API_BASE_URL = '/api';  // Проксируется на http://localhost:3001
+const API_BASE_URL = '/api';  // Проксируется на http://localhost:3002
 ```
 
 ## Production Build

@@ -458,7 +458,10 @@
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+      ]
     },
     {
       "id": "TASK-047",
@@ -468,7 +471,10 @@
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+      ]
     },
     {
       "id": "TASK-048",
@@ -520,7 +526,8 @@
       "priority": "medium",
       "youtrackIssueIds": [
         "VTB-540"
-      ]
+      ],
+      "tags": []
     },
     {
       "id": "TASK-052",
@@ -533,6 +540,10 @@
       "priority": "medium",
       "youtrackIssueIds": [
         "VTB-539"
+      ],
+      "tagIds": [
+        "2579ec4b-e9a4-4347-addc-6e9097e8b51d",
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
       ]
     },
     {
@@ -546,6 +557,10 @@
       "priority": "medium",
       "youtrackIssueIds": [
         "VTB-538"
+      ],
+      "tagIds": [
+        "2579ec4b-e9a4-4347-addc-6e9097e8b51d",
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
       ]
     },
     {
@@ -581,12 +596,28 @@
     {
       "id": "TASK-057",
       "title": "Доработки интеграции YouTrack (TASK-035 / TASK-036)",
-      "status": "completed",
+      "status": "in-progress",
       "file": "TASK-057-youtrack-integration-follow-up.md",
       "createdDate": "2026-02-06T18:00:00Z",
-      "completedDate": "2026-02-07",
+      "completedDate": null,
       "branch": "feature/TASK-057",
-      "priority": "medium"
+      "priority": "medium",
+      "tagIds": [
+        "75da3be8-c06d-4464-99d5-fe33a288bc77"
+      ]
+    },
+    {
+      "id": "TASK-058",
+      "title": "Вертикальный скролл в выпадающем списке Select (uiKit)",
+      "status": "backlog",
+      "file": "TASK-058-select-vertical-scroll.md",
+      "createdDate": "2026-02-07T12:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "low",
+      "tagIds": [
+        "75da3be8-c06d-4464-99d5-fe33a288bc77"
+      ]
     }
   ]
 }

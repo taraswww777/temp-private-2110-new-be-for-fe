@@ -12,7 +12,7 @@ import type {
   YouTrackQueueProcessResult,
 } from '@/types/youtrack.types';
 
-// Используем относительный путь - Vite dev server проксирует на http://localhost:3001
+// Используем относительный путь - Vite dev server проксирует на http://localhost:3002
 const API_BASE_URL = '/api';
 
 /**
@@ -102,13 +102,22 @@ export const youtrackApi = {
   },
 
   /**
-   * Получить информацию о задаче из YouTrack
+   * Получить информацию о задаче YouTrack для предпросмотра (GET /api/youtrack/issues/:id).
    */
-  async getIssueInfo(_youtrackIssueId: string): Promise<YouTrackIssueInfo> {
-    // Используем getIssueLinks с includeDetails для получения информации
-    // Но нам нужен taskId, поэтому лучше использовать прямой запрос к YouTrack API через бэкенд
-    // Пока используем getIssueLinks, но это не оптимально
-    throw new Error('getIssueInfo requires taskId. Use getIssueLinks instead.');
+  async getIssueInfo(youtrackIssueId: string): Promise<YouTrackIssueInfo> {
+    const response = await fetch(
+      `${API_BASE_URL}/youtrack/issues/${encodeURIComponent(youtrackIssueId)}`
+    );
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    const data = await response.json();
+    return {
+      idReadable: data.idReadable,
+      summary: data.summary ?? '',
+      state: data.state,
+      priority: data.priority,
+    };
   },
 
   /**
@@ -211,6 +220,61 @@ export const youtrackApi = {
     const response = await fetch(`${API_BASE_URL}/youtrack/queue/process`, {
       method: 'POST',
     });
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Получить чёрный список тегов (теги из списка не отправляются в YouTrack)
+   */
+  async getTagsBlacklist(): Promise<{ blacklist: string[] }> {
+    const response = await fetch(`${API_BASE_URL}/youtrack/tags/blacklist`);
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Обновить чёрный список тегов (полная замена)
+   */
+  async updateTagsBlacklist(blacklist: string[]): Promise<{ blacklist: string[] }> {
+    const response = await fetch(`${API_BASE_URL}/youtrack/tags/blacklist`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ blacklist }),
+    });
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Добавить тег в чёрный список
+   */
+  async addTagToBlacklist(tag: string): Promise<{ blacklist: string[] }> {
+    const response = await fetch(`${API_BASE_URL}/youtrack/tags/blacklist`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tag }),
+    });
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Удалить тег из чёрного списка
+   */
+  async removeTagFromBlacklist(tag: string): Promise<{ blacklist: string[] }> {
+    const response = await fetch(
+      `${API_BASE_URL}/youtrack/tags/blacklist/${encodeURIComponent(tag)}`,
+      { method: 'DELETE' }
+    );
     if (!response.ok) {
       throw await ApiError.fromResponse(response);
     }

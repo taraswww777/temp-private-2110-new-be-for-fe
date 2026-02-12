@@ -7,7 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  Input,
+  InputField,
   Label,
 } from '@/uiKit';
 import { TemplatePreview } from './TemplatePreview';
@@ -112,61 +112,42 @@ export function TemplateFormDialog({
             </div>
           )}
           {!template && (
-            <div className="grid gap-2">
-              <Label htmlFor="id">ID шаблона</Label>
-              <Input
-                id="id"
-                value={formData.id}
-                onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                placeholder="default"
-              />
-            </div>
+            <InputField
+              label="ID шаблона"
+              value={formData.id}
+              onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+              placeholder="default"
+            />
           )}
-          <div className="grid gap-2">
-            <Label htmlFor="name">Название</Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Шаблон по умолчанию"
-            />
-          </div>
+          <InputField
+            label="Название"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Шаблон по умолчанию"
+          />
 
-          <div className="grid gap-2">
-            <Label htmlFor="description">Описание</Label>
-            <Input
-              id="description"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Описание шаблона"
-            />
-          </div>
+          <InputField
+            label="Описание"
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            placeholder="Описание шаблона"
+          />
 
-          <div className="grid gap-2">
-            <Label htmlFor="projectId">ID проекта YouTrack</Label>
-            <Input
-              id="projectId"
-              value={formData.projectId}
-              onChange={(e) => setFormData({ ...formData, projectId: e.target.value })}
-              placeholder="0-0"
-            />
-            <p className="text-xs text-muted-foreground">
-              ID проекта в YouTrack. Используйте "0-0" для автоматического определения.
-            </p>
-          </div>
+          <InputField
+            label="ID проекта YouTrack"
+            value={formData.projectId}
+            onChange={(e) => setFormData({ ...formData, projectId: e.target.value })}
+            placeholder="0-0"
+            description='ID проекта в YouTrack. Используйте "0-0" для автоматического определения.'
+          />
 
-          <div className="grid gap-2">
-            <Label htmlFor="parentIssueId">Родительская задача (YouTrack)</Label>
-            <Input
-              id="parentIssueId"
-              value={formData.parentIssueId ?? ''}
-              onChange={(e) => setFormData({ ...formData, parentIssueId: e.target.value })}
-              placeholder="VTB-100"
-            />
-            <p className="text-xs text-muted-foreground">
-              Номер задачи в YouTrack (idReadable). Если указано, новая задача создаётся как подзадача этой.
-            </p>
-          </div>
+          <InputField
+            label="Родительская задача (YouTrack)"
+            value={formData.parentIssueId ?? ''}
+            onChange={(e) => setFormData({ ...formData, parentIssueId: e.target.value })}
+            placeholder="VTB-100"
+            description="Номер задачи в YouTrack (idReadable). Если указано, новая задача создаётся как подзадача этой."
+          />
 
           <div className="grid gap-2">
             <Label htmlFor="summaryTemplate">Шаблон Summary</Label>

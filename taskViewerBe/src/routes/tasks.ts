@@ -7,6 +7,7 @@ import {
   updateTaskMetaSchema,
 } from '../schemas/tasks.schema.js';
 import { tasksService } from '../services/tasks.service.js';
+import { tagsMetadataService, PREDEFINED_COLORS } from '../services/tags-metadata.service.js';
 
 export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   const server = fastify.withTypeProvider<ZodTypeProvider>();
@@ -85,6 +86,160 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       return reply.send(task);
+    }
+  );
+
+  // POST /api/tasks/tags — создать новый тег (добавить в источник истины; без привязки к задаче)
+  server.post(
+    '/tasks/tags',
+    {
+      schema: {
+        description: 'Создать новый тег в tags-metadata.json',
+        body: z.object({
+          name: z.string().min(1),
+          color: z.string().optional(),
+        }),
+        response: {
+          201: z.object({
+            id: z.string(),
+            name: z.string(),
+            color: z.string().optional(),
+          }),
+          400: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { name, color } = request.body;
+      const trimmed = name.trim();
+      if (!trimmed) {
+        return reply.status(400).send({ message: 'Имя тега не должно быть пустым' });
+      }
+      const id = await tagsMetadataService.getOrCreateTagByName(trimmed, color ?? undefined);
+      const tag = await tagsMetadataService.getTagById(id);
+      if (!tag) {
+        return reply.status(400).send({ message: 'Не удалось создать тег' });
+      }
+      return reply.status(201).send({
+        id,
+        name: tag.name,
+        ...(tag.color && { color: tag.color }),
+      });
+    }
+  );
+
+  // GET /api/tasks/tags/metadata — метаданные тегов (для обратной совместимости: tags по имени; + список с id)
+  server.get(
+    '/tasks/tags/metadata',
+    {
+      schema: {
+        description: 'Получить метаданные тегов (источник истины — tags-metadata.json)',
+        response: {
+          200: z.object({
+            tags: z.record(z.string(), z.object({ color: z.string().optional() })),
+            tagsWithId: z.array(z.object({
+              id: z.string(),
+              name: z.string(),
+              color: z.string().optional(),
+            })),
+            predefinedColors: z.array(z.string()),
+          }),
+        },
+      },
+    },
+    async (_request, reply) => {
+      const tags = await tagsMetadataService.getMetadataLegacy();
+      const tagsWithId = await tagsMetadataService.getAllTags();
+      return reply.send({
+        tags,
+        tagsWithId,
+        predefinedColors: [...PREDEFINED_COLORS],
+      });
+    }
+  );
+
+  // PATCH /api/tasks/tags/metadata — установить цвет тега (по имени)
+  server.patch(
+    '/tasks/tags/metadata',
+    {
+      schema: {
+        description: 'Установить цвет для тега',
+        body: z.object({
+          tag: z.string(),
+          color: z.string(),
+        }),
+        response: {
+          200: z.object({
+            tags: z.record(z.string(), z.object({ color: z.string().optional() })),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { tag, color } = request.body;
+      await tagsMetadataService.setTagColorByName(tag, color);
+      const tags = await tagsMetadataService.getMetadataLegacy();
+      return reply.send({ tags });
+    }
+  );
+
+  // POST /api/tasks/tags/rename — переименовать тег (только в источнике истины; в задачах хранятся id)
+  server.post(
+    '/tasks/tags/rename',
+    {
+      schema: {
+        description: 'Переименовать тег (имя меняется в tags-metadata.json)',
+        body: z.object({
+          oldTag: z.string(),
+          newTag: z.string(),
+        }),
+        response: {
+          200: z.object({
+            updated: z.number(),
+          }),
+          400: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { oldTag, newTag } = request.body;
+      const oldTrimmed = oldTag.trim();
+      const newTrimmed = newTag.trim();
+      if (!oldTrimmed || !newTrimmed) {
+        return reply.status(400).send({ message: 'oldTag и newTag не должны быть пустыми' });
+      }
+      if (oldTrimmed === newTrimmed) {
+        return reply.status(400).send({ message: 'Новое имя должно отличаться от старого' });
+      }
+      const updated = await tasksService.renameTagInAllTasks(oldTrimmed, newTrimmed);
+      return reply.send({ updated });
+    }
+  );
+
+  // DELETE /api/tasks/tags/:tag — удалить тег (из метаданных и из всех задач)
+  server.delete(
+    '/tasks/tags/:tag',
+    {
+      schema: {
+        description: 'Удалить тег из источника истины и из всех задач',
+        params: z.object({
+          tag: z.string(),
+        }),
+        response: {
+          200: z.object({
+            updated: z.number(),
+          }),
+          400: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const tag = decodeURIComponent(request.params.tag).trim();
+      if (!tag) {
+        return reply.status(400).send({ message: 'Тег не должен быть пустым' });
+      }
+      const updated = await tasksService.removeTagFromAllTasks(tag);
+      return reply.send({ updated });
     }
   );
 };

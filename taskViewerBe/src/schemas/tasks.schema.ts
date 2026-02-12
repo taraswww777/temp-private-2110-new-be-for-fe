@@ -14,6 +14,7 @@ export const taskSchema = z.object({
   completedDate: z.string().nullable(),
   branch: z.string().nullable(),
   youtrackIssueIds: z.array(z.string()).optional(), // Опциональное поле для связей с YouTrack
+  tags: z.array(z.string()).optional(), // Теги задачи (при создании в YouTrack фильтруются по чёрному списку)
 });
 
 export const taskManifestSchema = z.object({
@@ -27,6 +28,7 @@ export const updateTaskMetaSchema = z.object({
   createdDate: z.string().nullable().optional(),
   completedDate: z.string().nullable().optional(),
   branch: z.string().nullable().optional(),
+  tags: z.array(z.string()).optional(),
 });
 
 export const taskParamsSchema = z.object({

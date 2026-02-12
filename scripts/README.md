@@ -66,7 +66,7 @@ node scripts/generate-swagger-html.js
 ```bash
 # Через npm scripts
 npm run kill:3000   # Освободить порт 3000
-npm run kill:3001   # Освободить порт 3001
+npm run kill:3002   # Освободить порт 3002
 npm run kill:5173   # Освободить порт 5173
 npm run kill:all    # Освободить все порты
 
@@ -103,6 +103,6 @@ node scripts/kill-port.js <любой_порт>
 Некоторые npm скрипты автоматически освобождают порты перед запуском:
 
 - `npm run dev` → автоматически освобождает порт 3000
-- `npm run taskViewer:dev` → автоматически освобождает порты 3001 и 5173
+- `npm run taskViewer:dev` → автоматически освобождает порты 3002 и 5173
 
 Это достигается через pre-hooks: `predev` и `pretaskViewer:dev`

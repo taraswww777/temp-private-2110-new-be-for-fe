@@ -1,4 +1,4 @@
-import { Input, MultiSelect } from '@/uiKit';
+import { InputField, MultiSelectField } from '@/uiKit';
 import type { TaskStatus, TaskPriority } from '@/types/task.types';
 
 interface TaskFiltersProps {
@@ -35,14 +35,16 @@ export function TaskFilters({
 
   return (
     <div className="flex gap-4 mb-6">
-      <Input
-        placeholder="Поиск по названию или ID..."
+      <InputField
+        label="Поиск"
+        placeholder="По названию или ID..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
         className="flex-grow"
       />
 
-      <MultiSelect
+      <MultiSelectField
+        label="Статус"
         options={statusOptions}
         selected={statusFilter}
         onChange={(selected) => onStatusFilterChange(selected as TaskStatus[])}
@@ -50,7 +52,8 @@ export function TaskFilters({
         className="flex-grow"
       />
 
-      <MultiSelect
+      <MultiSelectField
+        label="Приоритет"
         options={priorityOptions}
         selected={priorityFilter}
         onChange={(selected) => onPriorityFilterChange(selected as TaskPriority[])}

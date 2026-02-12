@@ -177,7 +177,7 @@ export default eslintConfig;
 **.env.example**
 ```env
 NODE_ENV=development
-PORT=3001
+PORT=3002
 HOST=localhost
 CORS_ORIGIN=http://localhost:5173
 
@@ -266,7 +266,7 @@ import { z } from 'zod';
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  PORT: z.string().transform(Number).default('3001'),
+  PORT: z.string().transform(Number).default('3002'),
   HOST: z.string().default('localhost'),
   CORS_ORIGIN: z.string().default('http://localhost:5173'),
   TASKS_DIR: z.string().default('../docs/tasks'),
@@ -718,7 +718,7 @@ export interface UpdateTaskMetaInput {
 ```typescript
 import type { Task, TaskDetail, UpdateTaskMetaInput } from '@/types/task.types';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'http://localhost:3002/api';
 
 export const tasksApi = {
   async getAllTasks(): Promise<Task[]> {
@@ -1822,7 +1822,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3002',
         changeOrigin: true,
       },
     },
@@ -1832,7 +1832,7 @@ export default defineConfig({
 
 **src/api/tasks.api.ts** (обновленная версия):
 ```typescript
-// Используем относительный путь - Vite dev server проксирует на http://localhost:3001
+// Используем относительный путь - Vite dev server проксирует на http://localhost:3002
 const API_BASE_URL = '/api';
 ```
 

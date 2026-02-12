@@ -68,7 +68,7 @@ npm install
 npm run start:mock
 ```
 
-Приложение на [http://localhost:3001](http://localhost:3001), данные отдаются мок-сервером (axios-mock-adapter). Логи — в консоли браузера.
+Приложение на [http://localhost:3002](http://localhost:3002), данные отдаются мок-сервером (axios-mock-adapter). Логи — в консоли браузера.
 ```
 
 **4. Раздел "Сборка":**

@@ -7,11 +7,20 @@ export interface Task {
   createdDate: string | null;
   completedDate: string | null;
   branch: string | null;
-  youtrackIssueIds?: string[]; // Опциональное поле для связей с YouTrack
+  youtrackIssueIds?: string[];
+  /** Имена тегов (в API и ответах; в манифесте хранятся tagIds). */
+  tags?: string[];
+}
+
+/** Запись задачи в манифесте: теги хранятся по ID. */
+export interface TaskInManifest extends Omit<Task, 'tags'> {
+  tagIds?: string[];
+  /** @deprecated Используется только при миграции со старого формата (tags по именам). */
+  tags?: string[];
 }
 
 export interface TaskManifest {
-  tasks: Task[];
+  tasks: TaskInManifest[];
 }
 
 export interface TaskDetail extends Task {

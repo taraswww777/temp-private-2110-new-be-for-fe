@@ -8,6 +8,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  Input,
   Select,
   SelectContent,
   SelectItem,
@@ -16,6 +17,7 @@ import {
   Skeleton,
 } from '@/uiKit';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
+import { TagBadge } from '@/uiKit';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
 import { PageHeader } from '@/components/PageHeader';
@@ -31,6 +33,9 @@ export function TaskDetailPage() {
   const [task, setTask] = useState<TaskDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [newTagInput, setNewTagInput] = useState('');
+  const [tagsSaving, setTagsSaving] = useState(false);
+  const [tagMetadata, setTagMetadata] = useState<Record<string, { color?: string }>>({});
 
   const fetchTask = async () => {
     if (!id) return;
@@ -51,6 +56,10 @@ export function TaskDetailPage() {
     fetchTask();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useEffect(() => {
+    tasksApi.getTagsMetadata().then((d) => setTagMetadata(d.tags)).catch(() => setTagMetadata({}));
+  }, []);
 
   const handleSave = async (updates: UpdateTaskMetaInput) => {
     if (!id) return;
@@ -77,6 +86,46 @@ export function TaskDetailPage() {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Не удалось обновить приоритет';
       toast.error(message);
+    }
+  };
+
+  const currentTags = task?.tags ?? [];
+
+  const handleAddTag = async () => {
+    if (!id) return;
+    const tag = newTagInput.trim();
+    if (!tag) return;
+    if (currentTags.includes(tag)) {
+      setNewTagInput('');
+      return;
+    }
+    setTagsSaving(true);
+    try {
+      await tasksApi.updateTaskMeta(id, { tags: [...currentTags, tag] });
+      setNewTagInput('');
+      await fetchTask();
+      toast.success('Тег добавлен');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось добавить тег';
+      toast.error(message);
+    } finally {
+      setTagsSaving(false);
+    }
+  };
+
+  const handleRemoveTag = async (tagToRemove: string) => {
+    if (!id) return;
+    const next = currentTags.filter((t) => t !== tagToRemove);
+    setTagsSaving(true);
+    try {
+      await tasksApi.updateTaskMeta(id, { tags: next });
+      await fetchTask();
+      toast.success('Тег удалён');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось удалить тег';
+      toast.error(message);
+    } finally {
+      setTagsSaving(false);
     }
   };
 
@@ -180,12 +229,58 @@ export function TaskDetailPage() {
                   <code className="text-sm bg-muted px-2 py-1 rounded">{task.file}</code>
                 </div>
               </div>
+
+              <div className="mt-4 pt-4 border-t">
+                <span className="font-semibold block mb-2">Теги</span>
+                <div className="flex flex-wrap gap-2 items-center">
+                  {currentTags.map((tag) => (
+                    <TagBadge
+                      key={tag}
+                      tag={tag}
+                      colorKey={tagMetadata[tag]?.color}
+                      onRemove={() => handleRemoveTag(tag)}
+                      disabled={tagsSaving}
+                      className="text-xs"
+                    />
+                  ))}
+                  <div className="flex gap-2 flex-1 min-w-[200px]">
+                    <Input
+                      placeholder="Добавить тег..."
+                      value={newTagInput}
+                      onChange={(e) => setNewTagInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddTag();
+                        }
+                      }}
+                      disabled={tagsSaving}
+                      className="max-w-[200px]"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleAddTag}
+                      disabled={!newTagInput.trim() || tagsSaving}
+                    >
+                      Добавить
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </div>
           <aside className="CardRightBar w-full lg:w-[min(360px,100%)] lg:min-w-[280px] lg:border-l lg:border-border lg:bg-muted/30 p-4 lg:p-6 flex flex-col">
             <YouTrackLinkCard
               taskId={task.id}
               initialIssueIds={task.youtrackIssueIds}
+              taskPreview={{
+                title: task.title,
+                content: task.content ?? '',
+                status: task.status,
+                branch: task.branch ?? null,
+              }}
               onLinksUpdated={fetchTask}
             />
           </aside>
