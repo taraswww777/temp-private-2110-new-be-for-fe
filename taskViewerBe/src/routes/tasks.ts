@@ -5,6 +5,8 @@ import {
   taskSchema,
   taskParamsSchema,
   updateTaskMetaSchema,
+  createTaskSchema,
+  updateTaskContentSchema,
 } from '../schemas/tasks.schema.js';
 import { tasksService } from '../services/tasks.service.js';
 import { tagsMetadataService, PREDEFINED_COLORS } from '../services/tags-metadata.service.js';
@@ -26,6 +28,30 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
     async (request, reply) => {
       const tasks = await tasksService.getAllTasks();
       return reply.send(tasks);
+    }
+  );
+
+  // POST /api/tasks - создать новую задачу
+  server.post(
+    '/tasks',
+    {
+      schema: {
+        description: 'Создать новую задачу',
+        body: createTaskSchema,
+        response: {
+          201: taskSchema,
+          400: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      try {
+        const task = await tasksService.createTask(request.body);
+        return reply.status(201).send(task);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Не удалось создать задачу';
+        return reply.status(400).send({ message });
+      }
     }
   );
 
@@ -83,6 +109,36 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
       // Если обновился статус, обновляем также markdown файл
       if (updates.status) {
         await tasksService.updateTaskStatusInMarkdown(task.file, updates.status);
+      }
+
+      return reply.send(task);
+    }
+  );
+
+  // PATCH /api/tasks/:id/content - обновить содержимое задачи (markdown)
+  server.patch(
+    '/tasks/:id/content',
+    {
+      schema: {
+        description: 'Обновить содержимое задачи (markdown файл)',
+        params: taskParamsSchema,
+        body: updateTaskContentSchema,
+        response: {
+          200: taskSchema.extend({
+            content: z.string(),
+          }),
+          404: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { id } = request.params;
+      const { content } = request.body;
+
+      const task = await tasksService.updateTaskContent(id, content);
+
+      if (!task) {
+        return reply.status(404).send({ message: 'Task not found' });
       }
 
       return reply.send(task);

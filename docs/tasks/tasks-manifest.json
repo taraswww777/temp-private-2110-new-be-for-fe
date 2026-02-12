@@ -701,7 +701,7 @@
     {
       "id": "TASK-060",
       "title": "Создание и редактирование задач с Markdown редактором",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-060-create-edit-tasks-with-md-editor.md",
       "createdDate": "2026-02-12T00:00:00Z",
       "completedDate": null,
@@ -788,6 +788,16 @@
         "75da3be8-c06d-4464-99d5-fe33a288bc77"
       ],
       "projectId": "taskviewer-project-id"
+    },
+    {
+      "id": "TASK-067",
+      "title": "Реализация полноценного WYSIWYG редактора для Markdown",
+      "status": "backlog",
+      "file": "TASK-067-implement-wysiwyg-editor.md",
+      "createdDate": "2026-02-12T00:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium"
     }
   ]
 }

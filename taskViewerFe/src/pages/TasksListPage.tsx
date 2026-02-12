@@ -10,6 +10,7 @@ import {
   Skeleton,
 } from '@/uiKit';
 import { TaskList } from '@/components/TaskList';
+import { TaskCreateDialog } from '@/components/TaskCreateDialog';
 import { useTasks } from '@/hooks/useTasks';
 import { useProject } from '@/contexts/ProjectContext';
 import { projectsApi, type Project } from '@/api/projects.api';
@@ -75,10 +76,13 @@ export function TasksListPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Задачи проекта</CardTitle>
-            <CardDescription>
-              Всего задач: {filteredTasks.length} {selectedProject && `(отфильтровано из ${tasks.length})`}
-            </CardDescription>
+            <div>
+              <CardTitle>Задачи проекта</CardTitle>
+              <CardDescription>
+                Всего задач: {filteredTasks.length} {selectedProject && `(отфильтровано из ${tasks.length})`}
+              </CardDescription>
+            </div>
+            <TaskCreateDialog onTaskCreated={() => refetch()} />
           </div>
         </CardHeader>
         <CardContent>

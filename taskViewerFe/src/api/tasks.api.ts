@@ -111,4 +111,47 @@ export const tasksApi = {
     }
     return response.json();
   },
+
+  /**
+   * Создать новую задачу
+   */
+  async createTask(input: {
+    title: string;
+    status?: 'backlog' | 'planned' | 'in-progress' | 'completed' | 'cancelled';
+    priority?: 'low' | 'medium' | 'high' | 'critical';
+    content?: string;
+    createdDate?: string | null;
+    branch?: string | null;
+    tags?: string[];
+    project?: string | null;
+  }): Promise<Task> {
+    const response = await fetch(`${API_BASE_URL}/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    });
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
+
+  /**
+   * Обновить содержимое задачи (markdown)
+   */
+  async updateTaskContent(id: string, content: string): Promise<TaskDetail> {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}/content`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content }),
+    });
+    if (!response.ok) {
+      throw await ApiError.fromResponse(response);
+    }
+    return response.json();
+  },
 };
