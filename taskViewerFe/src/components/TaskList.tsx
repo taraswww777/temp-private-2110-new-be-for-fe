@@ -173,7 +173,7 @@ function TaskListTagsCell({
   const [saving, setSaving] = useState(false);
   const [dropdownFocusedIndex, setDropdownFocusedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
-  const currentTags = task.tags ?? [];
+  const currentTags = useMemo(() => task.tags ?? [], [task.tags]);
   const tagsByLastUsed = useTagsSortedByLastUsed(allTasks);
 
   const trimmedInput = newTagInput.trim();

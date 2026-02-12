@@ -1,8 +1,6 @@
 import { cn } from '@/lib/utils';
 import { getTagBadgeClassName } from './tag-colors';
 
-export { getTagBadgeClassName } from './tag-colors';
-
 export interface TagBadgeProps {
   tag: string;
   colorKey?: string;
