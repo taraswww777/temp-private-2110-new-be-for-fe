@@ -428,10 +428,10 @@
     {
       "id": "TASK-040",
       "title": "Добавление поля code в DTO хранилища и отображение ТФР только на странице ТФР",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-040-storage-volume-code-field.md",
       "createdDate": "2026-02-06T12:00:00Z",
-      "completedDate": null,
+      "completedDate": "2026-02-12T00:00:00Z",
       "branch": null,
       "priority": "medium",
       "projectId": "2110-project-id",
@@ -759,6 +759,35 @@
         "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
         "2579ec4b-e9a4-4347-addc-6e9097e8b51d"
       ]
+    },
+    {
+      "id": "TASK-065",
+      "title": "Обновление Frontend для использования поля code в DTO хранилища",
+      "status": "backlog",
+      "file": "TASK-065-frontend-storage-volume-code-field.md",
+      "createdDate": "2026-02-12T00:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium",
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
+        "2579ec4b-e9a4-4347-addc-6e9097e8b51d"
+      ]
+    },
+    {
+      "id": "TASK-066",
+      "title": "Удаление `temp-private-2110` из описания задач при создании в YouTrack",
+      "status": "backlog",
+      "file": "TASK-066-remove-temp-private-2110-from-youtrack-description.md",
+      "createdDate": "2026-02-12T00:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium",
+      "tagIds": [
+        "75da3be8-c06d-4464-99d5-fe33a288bc77"
+      ],
+      "projectId": "taskviewer-project-id"
     }
   ]
 }

@@ -62,7 +62,7 @@ import {
   statusHistoryItemSchema,
   statusHistoryResponseSchema,
 } from './report-6406/task-status-history.schema.js';
-import { storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.js';
+import { storageCodeSchema, storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.js';
 import {
   taskFileSchema,
   taskFilesResponseSchema,
@@ -111,6 +111,7 @@ export function getOpenApiComponents() {
     ReportTaskStatusEnumSchema: zodToJsonSchema(reportTaskStatusSchema, 'ReportTaskStatusEnumSchema'),
     CurrencyEnumSchema: zodToJsonSchema(currencySchema, 'CurrencyEnumSchema'),
     SortOrderEnumSchema: zodToJsonSchema(sortOrderSchema, 'SortOrderEnumSchema'),
+    StorageCodeEnumSchema: zodToJsonSchema(storageCodeSchema, 'StorageCodeEnumSchema'),
     HealthResponseDto: zodToJsonSchema(healthResponseSchema, 'HealthResponseDto'),
     HttpErrorWithInstanceDto: zodToJsonSchema(httpErrorWithInstanceSchema, 'HttpErrorWithInstanceDto'),
     

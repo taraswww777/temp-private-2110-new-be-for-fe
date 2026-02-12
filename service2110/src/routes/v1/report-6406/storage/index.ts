@@ -14,7 +14,7 @@ export const storageRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Report 6406 - Storage'],
       summary: 'Получить объём хранилищ',
-      description: 'Возвращает массив сущностей по одному на каждое хранилище (корзина 1, корзина 2, ТФР). Каждый элемент содержит id, name, totalHuman, freeHuman, percent для отображения и key в JSX.',
+      description: 'Возвращает массив сущностей по одному на каждое хранилище (корзина 1, корзина 2, ТФР). Каждый элемент содержит id, name, code, totalHuman, freeHuman, percent для отображения и key в JSX.',
       response: {
         200: storageVolumeListResponseSchema,
       },

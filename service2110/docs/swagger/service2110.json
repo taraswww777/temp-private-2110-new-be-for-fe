@@ -219,6 +219,15 @@
         "additionalProperties": false,
         "title": "FilterDto"
       },
+      "StorageCodeEnumSchema": {
+        "type": "string",
+        "enum": [
+          "TFR",
+          "S3",
+          "LOCAL"
+        ],
+        "title": "StorageCodeEnumSchema"
+      },
       "HealthResponseDto": {
         "type": "object",
         "properties": {
@@ -2141,6 +2150,9 @@
             "type": "string",
             "description": "Имя хранилища (например, \"Корзина 1\", \"ТФР\")"
           },
+          "code": {
+            "$ref": "#/components/schemas/StorageCodeEnumSchema"
+          },
           "totalHuman": {
             "type": "string",
             "description": "Общий объём хранилища в человекочитаемом формате (например, \"1.00 TB\")"
@@ -2159,6 +2171,7 @@
         "required": [
           "id",
           "name",
+          "code",
           "totalHuman",
           "freeHuman",
           "percent"
@@ -3188,7 +3201,7 @@
         "tags": [
           "Report 6406 - Storage"
         ],
-        "description": "Возвращает массив сущностей по одному на каждое хранилище (корзина 1, корзина 2, ТФР). Каждый элемент содержит id, name, totalHuman, freeHuman, percent для отображения и key в JSX.",
+        "description": "Возвращает массив сущностей по одному на каждое хранилище (корзина 1, корзина 2, ТФР). Каждый элемент содержит id, name, code, totalHuman, freeHuman, percent для отображения и key в JSX.",
         "responses": {
           "200": {
             "description": "OK",

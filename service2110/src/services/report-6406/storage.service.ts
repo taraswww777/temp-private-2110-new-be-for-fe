@@ -2,12 +2,14 @@ import { db } from '../../db/index.js';
 import { report6406Tasks } from '../../db/schema/index.js';
 import { sql, ne } from 'drizzle-orm';
 import type { StorageVolumeItem } from '../../schemas/report-6406/storage.schema.js';
+import { StorageCode } from '../../schemas/report-6406/storage.schema.js';
 import { formatBytesFixed } from '../../utils/file-size-formatter.js';
 import { env } from '../../config/env.js';
 import { TaskStatus } from '../../types/status-model.js';
 
 const DEFAULT_STORAGE_ID = 'default';
 const DEFAULT_STORAGE_NAME = 'Корзина 1';
+const DEFAULT_STORAGE_CODE: StorageCode = 'LOCAL';
 
 export class StorageService {
   /**
@@ -35,6 +37,7 @@ export class StorageService {
     const item: StorageVolumeItem = {
       id: DEFAULT_STORAGE_ID,
       name: DEFAULT_STORAGE_NAME,
+      code: DEFAULT_STORAGE_CODE,
       totalHuman,
       freeHuman,
       percent,
