@@ -1,6 +1,13 @@
 import { z } from 'zod';
 
 /**
+ * Enum кодов хранилищ
+ */
+export const storageCodeSchema = z.enum(['TFR', 'S3', 'LOCAL']);
+
+export type StorageCode = z.infer<typeof storageCodeSchema>;
+
+/**
  * Схема элемента массива хранилищ (корзина, ТФР и т.д.)
  */
 export const storageVolumeItemSchema = z.object({
@@ -10,6 +17,8 @@ export const storageVolumeItemSchema = z.object({
   name: z
     .string()
     .describe('Имя хранилища (например, "Корзина 1", "ТФР")'),
+  code: storageCodeSchema
+    .describe('Код хранилища (TFR, S3, LOCAL)'),
   totalHuman: z
     .string()
     .describe('Общий объём хранилища в человекочитаемом формате (например, "1.00 TB")'),

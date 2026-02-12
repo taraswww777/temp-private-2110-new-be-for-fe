@@ -62,7 +62,7 @@ import {
   statusHistoryItemSchema,
   statusHistoryResponseSchema,
 } from './report-6406/task-status-history.schema.js';
-import { storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.js';
+import { storageCodeSchema, storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.js';
 import {
   taskFileSchema,
   taskFilesResponseSchema,
@@ -87,6 +87,7 @@ export const schemaRegistry = new Map<string, unknown>([
   ['ReportTaskStatusEnumSchema', reportTaskStatusSchema],
   ['CurrencyEnumSchema', currencySchema],
   ['SortOrderEnumSchema', sortOrderSchema],
+  ['StorageCodeEnumSchema', storageCodeSchema],
   ['HealthResponseDto', healthResponseSchema],
   ['HttpErrorWithInstanceDto', httpErrorWithInstanceSchema],
   
