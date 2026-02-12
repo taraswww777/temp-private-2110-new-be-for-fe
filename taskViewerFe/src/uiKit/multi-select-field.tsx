@@ -9,6 +9,8 @@ export interface MultiSelectFieldProps {
   onChange: (selected: string[]) => void
   placeholder?: string
   className?: string
+  /** Показывать ли кнопку очистки (по умолчанию true) */
+  showClearButton?: boolean
   /** Кастомный рендер опции в выпадающем списке */
   renderOption?: (option: MultiSelectOption) => React.ReactNode
   /** Кастомный рендер выбранного значения (бейдж) */
@@ -22,6 +24,7 @@ export function MultiSelectField({
   onChange,
   placeholder = "Выберите...",
   className,
+  showClearButton = true,
   renderOption,
   renderValue,
 }: MultiSelectFieldProps) {
@@ -34,6 +37,7 @@ export function MultiSelectField({
         onChange={onChange}
         placeholder={placeholder}
         className="w-full"
+        showClearButton={showClearButton}
         renderOption={renderOption}
         renderValue={renderValue}
       />

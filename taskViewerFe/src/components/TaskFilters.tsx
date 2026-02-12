@@ -53,6 +53,8 @@ export function TaskFilters({
         placeholder="По названию или ID..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
+        onClear={() => onSearchChange('')}
+        showClearButton={true}
         className="flex-grow"
       />
 
@@ -62,6 +64,7 @@ export function TaskFilters({
         selected={statusFilter}
         onChange={(selected) => onStatusFilterChange(selected as TaskStatus[])}
         placeholder="Все статусы"
+        showClearButton={true}
         className="flex-grow"
       />
 
@@ -71,6 +74,7 @@ export function TaskFilters({
         selected={priorityFilter}
         onChange={(selected) => onPriorityFilterChange(selected as TaskPriority[])}
         placeholder="Все приоритеты"
+        showClearButton={true}
         className="flex-grow"
       />
 
@@ -80,6 +84,7 @@ export function TaskFilters({
         selected={tagsFilter}
         onChange={(selected) => onTagsFilterChange(selected)}
         placeholder="Все теги"
+        showClearButton={true}
         className="flex-grow"
         renderOption={(option) => (
           <TagBadge 

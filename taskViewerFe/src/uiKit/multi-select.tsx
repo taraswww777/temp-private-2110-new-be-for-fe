@@ -13,6 +13,8 @@ interface MultiSelectProps {
   onChange: (selected: string[]) => void
   placeholder?: string
   className?: string
+  /** Показывать ли кнопку очистки (появляется когда есть выбранные значения) */
+  showClearButton?: boolean
   /** Кастомный рендер опции в выпадающем списке */
   renderOption?: (option: MultiSelectOption) => React.ReactNode
   /** Кастомный рендер выбранного значения (бейдж) */
@@ -25,6 +27,7 @@ export function MultiSelect({
   onChange,
   placeholder = "Выберите...",
   className,
+  showClearButton = true,
   renderOption,
   renderValue,
 }: MultiSelectProps) {
@@ -49,6 +52,14 @@ export function MultiSelect({
       onChange(options.map((opt) => opt.value))
     }
   }
+
+  const handleClear = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onChange([])
+  }
+
+  const shouldShowClear = showClearButton && selected.length > 0
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -122,7 +133,24 @@ export function MultiSelect({
               </span>
             )}
           </div>
-          <span className="h-4 w-4 shrink-0 opacity-50">▼</span>
+          <div className="flex items-center gap-1 shrink-0">
+            {shouldShowClear && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="h-4 w-4 flex items-center justify-center rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors text-xl leading-none"
+                aria-label="Очистить все"
+                title="Очистить все"
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                }}
+              >
+                ×
+              </button>
+            )}
+            <span className="h-4 w-4 shrink-0 opacity-50">▼</span>
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
