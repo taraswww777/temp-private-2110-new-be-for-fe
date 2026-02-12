@@ -190,12 +190,14 @@ export function TaskDetailPage() {
                 <div className="space-y-2">
                   <CardTitle className="text-3xl">{task.title}</CardTitle>
                   <div className="flex items-center gap-4 flex-wrap">
-                    <CardDescription 
-                      className="text-lg font-mono cursor-pointer hover:bg-accent/50 select-none transition-colors px-2 py-1 rounded"
-                      onClick={(e) => handleCopyId(task.id, e)}
-                      title="Нажмите, чтобы скопировать ID"
-                    >
-                      {task.id}
+                    <CardDescription className="text-lg font-mono">
+                      <span
+                        className="cursor-pointer hover:bg-accent/50 select-none transition-colors px-2 py-1 rounded inline-block"
+                        onClick={(e) => handleCopyId(task.id, e)}
+                        title="Нажмите, чтобы скопировать ID"
+                      >
+                        {task.id}
+                      </span>
                     </CardDescription>
                     <div className="flex items-center gap-2">
                       <Select
