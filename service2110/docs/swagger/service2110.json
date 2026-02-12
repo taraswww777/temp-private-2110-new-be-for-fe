@@ -847,6 +847,12 @@
               }
             },
             "additionalProperties": false
+          },
+          "includedInPacket": {
+            "$ref": "#/components/schemas/UuidSchema"
+          },
+          "excludedInPacket": {
+            "$ref": "#/components/schemas/UuidSchema"
           }
         },
         "required": [
@@ -1793,182 +1799,6 @@
         ],
         "additionalProperties": false,
         "title": "PackageDto"
-      },
-      "PackageDetailDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/UuidSchema"
-          },
-          "name": {
-            "type": "string",
-            "description": "Название пакета"
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "createdBy": {
-            "type": "string",
-            "description": "Создатель пакета"
-          },
-          "lastCopiedToTfrAt": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeSchema"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Дата последнего копирования в ТФР"
-          },
-          "tasksCount": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество заданий в пакете"
-          },
-          "totalSize": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общий размер пакета в байтах (сумма размеров всех файлов). Всегда число; 0 при пустом пакете."
-          },
-          "updatedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "tasks": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "$ref": "#/components/schemas/UuidSchema"
-                },
-                "createdAt": {
-                  "$ref": "#/components/schemas/DateTimeSchema"
-                },
-                "createdBy": {
-                  "type": "string",
-                  "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)"
-                },
-                "branchId": {
-                  "$ref": "#/components/schemas/UuidSchema"
-                },
-                "branchIds": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UuidSchema"
-                  },
-                  "description": "Массив идентификаторов филиалов"
-                },
-                "branchName": {
-                  "type": "string",
-                  "description": "Название филиала (название первого филиала)"
-                },
-                "branchNames": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Массив названий филиалов"
-                },
-                "periodStart": {
-                  "$ref": "#/components/schemas/DateSchema"
-                },
-                "periodEnd": {
-                  "$ref": "#/components/schemas/DateSchema"
-                },
-                "status": {
-                  "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
-                },
-                "fileSize": {
-                  "anyOf": [
-                    {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991,
-                      "description": "Размер файла в байтах; null — размер ещё не рассчитан."
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "format": {
-                  "$ref": "#/components/schemas/FileFormatEnumSchema"
-                },
-                "reportType": {
-                  "$ref": "#/components/schemas/ReportTypeEnumSchema"
-                },
-                "updatedAt": {
-                  "$ref": "#/components/schemas/DateTimeSchema"
-                },
-                "canCancel": {
-                  "type": "boolean",
-                  "description": "Можно ли отменить задание"
-                },
-                "canDelete": {
-                  "type": "boolean",
-                  "description": "Можно ли удалить задание"
-                },
-                "canStart": {
-                  "type": "boolean",
-                  "description": "Можно ли запустить задание"
-                },
-                "packageIds": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UuidSchema"
-                  },
-                  "description": "ID пакетов, в которые входит задание (пустой массив = не в пакете)"
-                },
-                "addedAt": {
-                  "$ref": "#/components/schemas/DateTimeSchema"
-                }
-              },
-              "required": [
-                "id",
-                "createdAt",
-                "createdBy",
-                "branchId",
-                "branchIds",
-                "branchName",
-                "branchNames",
-                "periodStart",
-                "periodEnd",
-                "status",
-                "fileSize",
-                "format",
-                "reportType",
-                "updatedAt",
-                "canCancel",
-                "canDelete",
-                "canStart",
-                "packageIds",
-                "addedAt"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "tasksPagination": {
-            "$ref": "#/components/schemas/PaginationMetadataDto"
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "createdAt",
-          "createdBy",
-          "lastCopiedToTfrAt",
-          "tasksCount",
-          "totalSize",
-          "updatedAt",
-          "tasks",
-          "tasksPagination"
-        ],
-        "additionalProperties": false,
-        "title": "PackageDetailDto"
       },
       "PackagesListResponseDto": {
         "type": "object",
@@ -3152,58 +2982,11 @@
     },
     "/api/v1/report-6406/packages/{id}": {
       "get": {
-        "summary": "Получить детальную информацию о пакете с заданиями",
+        "summary": "Получить детальную информацию о пакете",
         "tags": [
           "Report 6406 - Packages"
         ],
         "parameters": [
-          {
-            "schema": {
-              "default": 1,
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            },
-            "in": "query",
-            "name": "tasksNumber",
-            "required": true,
-            "description": "Номер страницы заданий в пакете (начиная с 1)"
-          },
-          {
-            "schema": {
-              "default": 20,
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100
-            },
-            "in": "query",
-            "name": "tasksSize",
-            "required": true,
-            "description": "Размер страницы заданий"
-          },
-          {
-            "schema": {
-              "default": "createdAt",
-              "type": "string",
-              "enum": [
-                "createdAt",
-                "branchId",
-                "status",
-                "periodStart"
-              ]
-            },
-            "in": "query",
-            "name": "tasksSortBy",
-            "required": true
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/SortOrderEnumSchema"
-            },
-            "in": "query",
-            "name": "tasksSortOrder",
-            "required": true
-          },
           {
             "schema": {
               "$ref": "#/components/schemas/UuidSchema"
@@ -3219,7 +3002,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PackageDetailDto"
+                  "$ref": "#/components/schemas/PackageDto"
                 }
               }
             }

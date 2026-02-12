@@ -5,17 +5,13 @@ import {
   report6406Tasks,
   report6406TaskBranches,
   branches,
-  TaskStatus,
 } from '../../db/schema/index.js';
 import { eq, sql, desc, asc, like, and, inArray } from 'drizzle-orm';
-import { getStatusPermissions } from '../../types/status-model.js';
 import type {
   CreatePackageInput,
   UpdatePackageInput,
   PackagesQuery,
   PackagesListResponse,
-  PackageDetail,
-  PackageTasksQuery,
   Package,
   UpdatePackageResponse,
   BulkDeletePackagesInput,
@@ -98,9 +94,9 @@ export class PackagesService {
   }
 
   /**
-   * Получить детальную информацию о пакете с заданиями
+   * Получить детальную информацию о пакете
    */
-  async getPackageById(id: string, tasksQuery: PackageTasksQuery): Promise<PackageDetail> {
+  async getPackageById(id: string): Promise<Package> {
     const [pkg] = await db
       .select()
       .from(report6406Packages)
@@ -111,128 +107,7 @@ export class PackagesService {
       throw new Error(`Package with id '${id}' not found`);
     }
 
-    // Получить задания в пакете
-    const { tasksNumber, tasksSize, tasksSortBy, tasksSortOrder } = tasksQuery;
-
-    // Подсчет общего количества заданий в пакете
-    const [{ count }] = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(report6406PackageTasks)
-      .where(eq(report6406PackageTasks.packageId, id));
-
-    // Сортировка
-    const orderByColumn = {
-      createdAt: report6406Tasks.createdAt,
-      branchId: report6406Tasks.branchId,
-      status: report6406Tasks.status,
-      periodStart: report6406Tasks.periodStart,
-    }[tasksSortBy];
-
-    const orderByClause = tasksSortOrder === 'ASC' ? asc(orderByColumn) : desc(orderByColumn);
-
-    // Получение заданий
-    const tasks = await db
-      .select({
-        id: report6406Tasks.id,
-        createdAt: report6406Tasks.createdAt,
-        createdBy: report6406Tasks.createdBy,
-        branchId: report6406Tasks.branchId,
-        branchName: report6406Tasks.branchName,
-        periodStart: report6406Tasks.periodStart,
-        periodEnd: report6406Tasks.periodEnd,
-        status: report6406Tasks.status,
-        fileSize: report6406Tasks.fileSize,
-        format: report6406Tasks.format,
-        reportType: report6406Tasks.reportType,
-        updatedAt: report6406Tasks.updatedAt,
-        addedAt: report6406PackageTasks.addedAt,
-      })
-      .from(report6406PackageTasks)
-      .innerJoin(report6406Tasks, eq(report6406PackageTasks.taskId, report6406Tasks.id))
-      .where(eq(report6406PackageTasks.packageId, id))
-      .orderBy(orderByClause)
-      .limit(tasksSize)
-      .offset((tasksNumber - 1) * tasksSize);
-
-    // Подгрузка всех packageIds для заданий (задание может быть в нескольких пакетах)
-    const taskIds = tasks.map((t) => t.id);
-    const packageLinks =
-      taskIds.length > 0
-        ? await db
-            .select({
-              taskId: report6406PackageTasks.taskId,
-              packageId: report6406PackageTasks.packageId,
-            })
-            .from(report6406PackageTasks)
-            .where(inArray(report6406PackageTasks.taskId, taskIds))
-        : [];
-    const taskIdToPackageIds = new Map<string, string[]>();
-    for (const link of packageLinks) {
-      const arr = taskIdToPackageIds.get(link.taskId) ?? [];
-      arr.push(link.packageId);
-      taskIdToPackageIds.set(link.taskId, arr);
-    }
-
-    // Подгрузка branchIds для заданий (связь many-to-many через report_6406_task_branches)
-    const branchLinks =
-      taskIds.length > 0
-        ? await db
-            .select({
-              taskId: report6406TaskBranches.taskId,
-              branchId: report6406TaskBranches.branchId,
-              branchName: branches.name,
-            })
-            .from(report6406TaskBranches)
-            .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
-            .where(inArray(report6406TaskBranches.taskId, taskIds))
-        : [];
-    const taskIdToBranchIds = new Map<string, string[]>();
-    const taskIdToBranchNames = new Map<string, string[]>();
-    for (const link of branchLinks) {
-      const ids = taskIdToBranchIds.get(link.taskId) ?? [];
-      ids.push(link.branchId);
-      taskIdToBranchIds.set(link.taskId, ids);
-      
-      const names = taskIdToBranchNames.get(link.taskId) ?? [];
-      names.push(link.branchName);
-      taskIdToBranchNames.set(link.taskId, names);
-    }
-
-    return {
-      ...this.formatPackage(pkg),
-      tasks: tasks.map((task) => {
-        const permissions = getStatusPermissions(task.status as TaskStatus);
-        const taskBranchIds = taskIdToBranchIds.get(task.id) ?? [task.branchId];
-        const taskBranchNames = taskIdToBranchNames.get(task.id) ?? [task.branchName];
-        return {
-          id: task.id,
-          createdAt: task.createdAt.toISOString(),
-          createdBy: task.createdBy ?? '',
-          branchId: task.branchId,
-          branchIds: taskBranchIds,
-          branchName: task.branchName,
-          branchNames: taskBranchNames,
-          periodStart: task.periodStart,
-          periodEnd: task.periodEnd,
-          status: task.status as TaskStatus,
-          fileSize: task.fileSize,
-          format: task.format,
-          reportType: task.reportType,
-          updatedAt: task.updatedAt.toISOString(),
-          canCancel: permissions.canCancel,
-          canDelete: permissions.canDelete,
-          canStart: permissions.canStart,
-          packageIds: taskIdToPackageIds.get(task.id) ?? [id],
-          addedAt: task.addedAt.toISOString(),
-        };
-      }),
-      tasksPagination: {
-        number: tasksNumber,
-        size: tasksSize,
-        totalItems: count,
-        totalPages: Math.ceil(count / tasksSize),
-      },
-    };
+    return this.formatPackage(pkg);
   }
 
   /**

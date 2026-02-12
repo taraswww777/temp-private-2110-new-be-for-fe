@@ -8,12 +8,10 @@ import {
   updatePackageSchema,
   packagesQuerySchema,
   packagesListResponseSchema,
-  packageDetailSchema,
   packageSchema,
   updatePackageResponseSchema,
   bulkDeletePackagesSchema,
   bulkDeletePackagesResponseSchema,
-  packageTasksQuerySchema,
   addTasksToPackageSchema,
   addTasksToPackageResponseSchema,
   bulkRemoveTasksFromPackageSchema,
@@ -63,21 +61,20 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
 
   /**
    * GET /api/v1/report-6406/packages/:id
-   * Получить детальную информацию о пакете с заданиями
+   * Получить детальную информацию о пакете
    */
   app.get('/:id', {
     schema: {
       tags: ['Report 6406 - Packages'],
-      summary: 'Получить детальную информацию о пакете с заданиями',
+      summary: 'Получить детальную информацию о пакете',
       params: uuidParamSchema,
-      querystring: packageTasksQuerySchema,
       response: {
-        200: packageDetailSchema,
+        200: packageSchema,
       },
     },
   }, async (request, reply) => {
     try {
-      const pkg = await packagesService.getPackageById(request.params.id, request.query);
+      const pkg = await packagesService.getPackageById(request.params.id);
       return reply.status(200).send(pkg);
     } catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
