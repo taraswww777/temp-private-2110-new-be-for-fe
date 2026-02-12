@@ -284,7 +284,7 @@
     {
       "id": "TASK-028",
       "title": "Добавление моков для эндпоинта истории изменения статусов задачи",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-028-add-task-status-history-mocks.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": "2026-02-04T00:00:00Z",
@@ -326,7 +326,8 @@
       "priority": "medium",
       "projectId": "2110-project-id",
       "tagIds": [
-        "f15ee308-9732-448c-a102-a3a5bf631e72"
+        "f15ee308-9732-448c-a102-a3a5bf631e72",
+        "2a16bebe-5093-48e7-934d-f7d29fc6c04e"
       ]
     },
     {
@@ -729,6 +730,20 @@
       "branch": null,
       "priority": "medium",
       "projectId": "taskviewer-project-id"
+    },
+    {
+      "id": "TASK-063",
+      "title": "Улучшение генератора моков истории статусов — реалистичные последовательности",
+      "status": "backlog",
+      "file": "TASK-063-improve-status-history-mocks-sequences.md",
+      "createdDate": "2026-02-12T00:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium",
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     }
   ]
 }
