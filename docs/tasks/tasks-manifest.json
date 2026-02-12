@@ -270,7 +270,7 @@
     {
       "id": "TASK-027",
       "title": "Добавление эндпоинта истории изменения статусов задачи",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-027-add-task-status-history-endpoint.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": "2026-02-04T00:00:00Z",
