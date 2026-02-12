@@ -5,9 +5,12 @@ import { YouTrackTemplatesPage } from '@/pages/YouTrackTemplatesPage';
 import { YouTrackQueuePage } from '@/pages/YouTrackQueuePage';
 import { YouTrackTagsBlacklistPage } from '@/pages/YouTrackTagsBlacklistPage';
 import { TaskTagsPage } from '@/pages/TaskTagsPage';
+import { TaskProjectsPage } from '@/pages/TaskProjectsPage';
 import { Toaster } from 'sonner';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
+import { ProjectProvider } from '@/contexts/ProjectContext';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+import { ProjectSelector } from '@/components/ProjectSelector';
 
 function AppContent() {
   const { resolvedTheme } = useTheme();
@@ -17,7 +20,10 @@ function AppContent() {
         <header className="border-b border-border">
           <div className="container mx-auto px-4 py-2">
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold">Task Viewer</h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-2xl font-bold">Task Viewer</h1>
+                <ProjectSelector />
+              </div>
               <div className="flex items-center gap-4">
                 <nav className="flex gap-4">
                   <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
@@ -28,6 +34,12 @@ function AppContent() {
                     className="text-sm text-muted-foreground hover:text-foreground"
                   >
                     Теги
+                  </Link>
+                  <Link
+                    to="/tasks/projects"
+                    className="text-sm text-muted-foreground hover:text-foreground"
+                  >
+                    Проекты
                   </Link>
                   <Link
                     to="/youtrack/templates"
@@ -58,6 +70,7 @@ function AppContent() {
             <Route path="/" element={<TasksListPage />} />
             <Route path="/tasks/:id" element={<TaskDetailPage />} />
             <Route path="/tasks/tags" element={<TaskTagsPage />} />
+            <Route path="/tasks/projects" element={<TaskProjectsPage />} />
             <Route path="/youtrack/templates" element={<YouTrackTemplatesPage />} />
             <Route path="/youtrack/queue" element={<YouTrackQueuePage />} />
             <Route path="/youtrack/tags/blacklist" element={<YouTrackTagsBlacklistPage />} />
@@ -73,7 +86,9 @@ export function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
-        <AppContent />
+        <ProjectProvider>
+          <AppContent />
+        </ProjectProvider>
       </BrowserRouter>
     </ThemeProvider>
   );

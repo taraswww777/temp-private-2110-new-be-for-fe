@@ -21,6 +21,7 @@ import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
 import { PageHeader } from '@/components/PageHeader';
 import { tasksApi } from '@/api/tasks.api';
+import { projectsApi, type Project } from '@/api/projects.api';
 import { ApiError } from '@/api/apiError';
 import type { Task, TaskDetail, UpdateTaskMetaInput, TaskStatus, TaskPriority } from '@/types/task.types';
 import { format } from 'date-fns';
@@ -35,6 +36,8 @@ export function TaskDetailPage() {
   const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [tagsSaving, setTagsSaving] = useState(false);
   const [tagMetadata, setTagMetadata] = useState<Record<string, { color?: string }>>({});
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [projectSaving, setProjectSaving] = useState(false);
 
   const fetchTask = async () => {
     if (!id) return;
@@ -58,6 +61,7 @@ export function TaskDetailPage() {
 
   useEffect(() => {
     tasksApi.getTagsMetadata().then((d) => setTagMetadata(d.tags)).catch(() => setTagMetadata({}));
+    projectsApi.getAllProjects().then(setProjects).catch(() => setProjects([]));
   }, []);
 
   useEffect(() => {
@@ -93,6 +97,7 @@ export function TaskDetailPage() {
   };
 
   const currentTags = task?.tags ?? [];
+  const currentProject = task?.project ?? null;
 
   const handleTagsChange = async (newTags: string[]) => {
     if (!id) return;
@@ -111,9 +116,37 @@ export function TaskDetailPage() {
     }
   };
 
+  const handleProjectChange = async (newProject: string | null) => {
+    if (!id) return;
+    setProjectSaving(true);
+    try {
+      await tasksApi.updateTaskMeta(id, { project: newProject });
+      await fetchTask();
+      toast.success(newProject ? 'Проект обновлён' : 'Проект удалён');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось изменить проект';
+      toast.error(message);
+    } finally {
+      setProjectSaving(false);
+    }
+  };
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '—';
     return format(new Date(dateString), 'dd MMMM yyyy', { locale: ru });
+  };
+
+  const handleCopyId = async (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    try {
+      await navigator.clipboard.writeText(id);
+      toast.success(`ID "${id}" скопирован в буфер обмена`);
+    } catch (err) {
+      console.error('Failed to copy ID:', err);
+      toast.error('Не удалось скопировать ID');
+    }
   };
 
   if (loading) {
@@ -157,7 +190,15 @@ export function TaskDetailPage() {
                 <div className="space-y-2">
                   <CardTitle className="text-3xl">{task.title}</CardTitle>
                   <div className="flex items-center gap-4 flex-wrap">
-                    <CardDescription className="text-lg font-mono">{task.id}</CardDescription>
+                    <CardDescription className="text-lg font-mono">
+                      <span
+                        className="cursor-pointer hover:bg-accent/50 select-none transition-colors px-2 py-1 rounded inline-block"
+                        onClick={(e) => handleCopyId(task.id, e)}
+                        title="Нажмите, чтобы скопировать ID"
+                      >
+                        {task.id}
+                      </span>
+                    </CardDescription>
                     <div className="flex items-center gap-2">
                       <Select
                         value={task.status}
@@ -187,6 +228,23 @@ export function TaskDetailPage() {
                           <SelectItem value="high">🟠 Высокий</SelectItem>
                           <SelectItem value="medium">🔵 Средний</SelectItem>
                           <SelectItem value="low">⚪ Низкий</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select
+                        value={currentProject || '__none__'}
+                        onValueChange={(value) => handleProjectChange(value === '__none__' ? null : value)}
+                        disabled={projectSaving}
+                      >
+                        <SelectTrigger className="w-[160px]">
+                          <SelectValue placeholder="Без проекта" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="__none__">Без проекта</SelectItem>
+                          {projects.map((project) => (
+                            <SelectItem key={project.id} value={project.name}>
+                              {project.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>

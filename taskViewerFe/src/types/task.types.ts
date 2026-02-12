@@ -13,6 +13,7 @@ export interface Task {
   branch: string | null;
   youtrackIssueIds?: string[];
   tags?: string[]; // Теги задачи (при отправке в YouTrack фильтруются по чёрному списку)
+  project?: string | null; // Имя проекта
 }
 
 export interface TaskDetail extends Task {
@@ -27,4 +28,5 @@ export interface UpdateTaskMetaInput {
   completedDate?: string | null;
   branch?: string | null;
   tags?: string[];
+  project?: string | null;
 }

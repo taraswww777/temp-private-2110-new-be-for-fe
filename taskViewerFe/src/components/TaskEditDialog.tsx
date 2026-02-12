@@ -19,6 +19,7 @@ import {
 } from '@/uiKit';
 import { TaskTagsEditor } from '@/components/TaskTagsEditor';
 import { tasksApi } from '@/api/tasks.api';
+import { projectsApi, type Project } from '@/api/projects.api';
 import type { Task, TaskStatus, TaskPriority, UpdateTaskMetaInput } from '@/types/task.types';
 
 interface TaskEditDialogProps {
@@ -35,15 +36,18 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
     branch: task.branch,
     createdDate: task.createdDate,
     tags: task.tags ?? [],
+    project: task.project ?? null,
   });
   const [saving, setSaving] = useState(false);
   const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [tagMetadata, setTagMetadata] = useState<Record<string, { color?: string }>>({});
+  const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     if (open) {
       tasksApi.getAllTasks().then(setAllTasks).catch(() => setAllTasks([]));
       tasksApi.getTagsMetadata().then((d) => setTagMetadata(d.tags)).catch(() => setTagMetadata({}));
+      projectsApi.getAllProjects().then(setProjects).catch(() => setProjects([]));
     }
   }, [open]);
 
@@ -56,9 +60,10 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
         branch: task.branch,
         createdDate: task.createdDate,
         tags: task.tags ?? [],
+        project: task.project ?? null,
       });
     }
-  }, [open, task.title, task.status, task.priority, task.branch, task.createdDate, task.tags]);
+  }, [open, task.title, task.status, task.priority, task.branch, task.createdDate, task.tags, task.project]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -142,6 +147,27 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
               onChange={(e) => setFormData({ ...formData, branch: e.target.value || null })}
               placeholder="feature/TASK-XXX"
             />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="project">Проект</Label>
+            <Select
+              value={formData.project || '__none__'}
+              onValueChange={(value) =>
+                setFormData({ ...formData, project: value === '__none__' ? null : value })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Без проекта" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">Без проекта</SelectItem>
+                {projects.map((project) => (
+                  <SelectItem key={project.id} value={project.name}>
+                    {project.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid gap-2">
             <TaskTagsEditor
