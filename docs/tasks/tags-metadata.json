@@ -5,7 +5,8 @@
       "color": "red"
     },
     "2579ec4b-e9a4-4347-addc-6e9097e8b51d": {
-      "name": "6406"
+      "name": "6406",
+      "color": "violet"
     },
     "c1bfb65a-75bb-4108-9837-9d4b53a6bb14": {
       "name": "FE",
@@ -13,11 +14,18 @@
     },
     "4a6b6472-57b8-4db8-990c-67d937fb5318": {
       "name": "Саша",
-      "color": "red"
+      "color": "yellow"
     },
     "55a807df-986c-47b8-ae94-e9f5bc9840fd": {
       "name": "Тарас",
       "color": "blue"
+    },
+    "f15ee308-9732-448c-a102-a3a5bf631e72": {
+      "name": "BE",
+      "color": "blue"
+    },
+    "0d01c73e-9472-499b-84ac-19f8405bb529": {
+      "name": "DOC"
     }
   }
 }

@@ -250,7 +250,11 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-026",
@@ -272,7 +276,10 @@
       "completedDate": "2026-02-04T00:00:00Z",
       "branch": "feature/TASK-027-add-task-status-history-endpoint",
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-028",
@@ -283,7 +290,10 @@
       "completedDate": "2026-02-04T00:00:00Z",
       "branch": "feature/TASK-028-add-task-status-history-mocks",
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-029",
@@ -314,7 +324,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-032",
@@ -378,7 +391,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-038",
@@ -389,7 +405,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-039",
@@ -400,7 +419,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-040",
@@ -411,7 +433,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-041",
@@ -432,7 +457,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-043",
@@ -443,7 +471,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-044",
@@ -465,7 +496,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-046",
@@ -491,7 +525,8 @@
       "branch": null,
       "priority": "medium",
       "tagIds": [
-        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
       ],
       "projectId": "2110-project-id"
     },
@@ -507,7 +542,10 @@
       "youtrackIssueIds": [
         "VTB-543"
       ],
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ]
     },
     {
       "id": "TASK-049",
@@ -536,7 +574,7 @@
         "VTB-542"
       ],
       "tagIds": [
-        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
       ],
       "projectId": "2110-project-id"
     },
@@ -586,7 +624,8 @@
       ],
       "tagIds": [
         "2579ec4b-e9a4-4347-addc-6e9097e8b51d",
-        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
+        "0d01c73e-9472-499b-84ac-19f8405bb529"
       ],
       "projectId": "2110-project-id"
     },
@@ -650,11 +689,11 @@
     {
       "id": "TASK-059",
       "title": "Управление проектами для задач",
-      "status": "in-progress",
+      "status": "completed",
       "file": "TASK-059-task-projects-management.md",
       "createdDate": "2026-02-12T00:00:00Z",
-      "completedDate": null,
-      "branch": null,
+      "completedDate": "2026-02-12T00:00:00Z",
+      "branch": "feature/TASK-059-task-projects-management",
       "priority": "medium",
       "tagIds": [
         "75da3be8-c06d-4464-99d5-fe33a288bc77"
@@ -666,6 +705,20 @@
       "title": "Создание и редактирование задач с Markdown редактором",
       "status": "backlog",
       "file": "TASK-060-create-edit-tasks-with-md-editor.md",
+      "createdDate": "2026-02-12T00:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium",
+      "tagIds": [
+        "75da3be8-c06d-4464-99d5-fe33a288bc77"
+      ],
+      "projectId": "taskviewer-project-id"
+    },
+    {
+      "id": "TASK-061",
+      "title": "Массовые операции над задачами на странице списка задач",
+      "status": "backlog",
+      "file": "TASK-061-bulk-operations-tasks.md",
       "createdDate": "2026-02-12T00:00:00Z",
       "completedDate": null,
       "branch": null,
