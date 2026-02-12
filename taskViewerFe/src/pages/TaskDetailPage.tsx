@@ -21,6 +21,7 @@ import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
 import { PageHeader } from '@/components/PageHeader';
 import { tasksApi } from '@/api/tasks.api';
+import { projectsApi, type Project } from '@/api/projects.api';
 import { ApiError } from '@/api/apiError';
 import type { Task, TaskDetail, UpdateTaskMetaInput, TaskStatus, TaskPriority } from '@/types/task.types';
 import { format } from 'date-fns';
@@ -35,6 +36,8 @@ export function TaskDetailPage() {
   const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [tagsSaving, setTagsSaving] = useState(false);
   const [tagMetadata, setTagMetadata] = useState<Record<string, { color?: string }>>({});
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [projectSaving, setProjectSaving] = useState(false);
 
   const fetchTask = async () => {
     if (!id) return;
@@ -58,6 +61,7 @@ export function TaskDetailPage() {
 
   useEffect(() => {
     tasksApi.getTagsMetadata().then((d) => setTagMetadata(d.tags)).catch(() => setTagMetadata({}));
+    projectsApi.getAllProjects().then(setProjects).catch(() => setProjects([]));
   }, []);
 
   useEffect(() => {
@@ -93,6 +97,7 @@ export function TaskDetailPage() {
   };
 
   const currentTags = task?.tags ?? [];
+  const currentProject = task?.project ?? null;
 
   const handleTagsChange = async (newTags: string[]) => {
     if (!id) return;
@@ -108,6 +113,21 @@ export function TaskDetailPage() {
       toast.error(message);
     } finally {
       setTagsSaving(false);
+    }
+  };
+
+  const handleProjectChange = async (newProject: string | null) => {
+    if (!id) return;
+    setProjectSaving(true);
+    try {
+      await tasksApi.updateTaskMeta(id, { project: newProject });
+      await fetchTask();
+      toast.success(newProject ? 'Проект обновлён' : 'Проект удалён');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось изменить проект';
+      toast.error(message);
+    } finally {
+      setProjectSaving(false);
     }
   };
 
@@ -212,7 +232,27 @@ export function TaskDetailPage() {
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t">
+              <div className="mt-4 pt-4 border-t space-y-4">
+                <div className="grid gap-2">
+                  <label className="text-sm font-medium">Проект</label>
+                  <Select
+                    value={currentProject || '__none__'}
+                    onValueChange={(value) => handleProjectChange(value === '__none__' ? null : value)}
+                    disabled={projectSaving}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Без проекта" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__none__">Без проекта</SelectItem>
+                      {projects.map((project) => (
+                        <SelectItem key={project.id} value={project.name}>
+                          {project.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
                 <TaskTagsEditor
                   tags={currentTags}
                   onTagsChange={handleTagsChange}

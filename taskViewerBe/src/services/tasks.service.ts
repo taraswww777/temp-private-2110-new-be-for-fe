@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
 import { env } from '../config/env.js';
 import { tagsMetadataService } from './tags-metadata.service.js';
+import { projectsMetadataService } from './projects-metadata.service.js';
 import type { Task, TaskManifest, TaskDetail, TaskInManifest } from '../types/task.types.js';
 import type { UpdateTaskMetaInput } from '../schemas/tasks.schema.js';
 
@@ -23,18 +24,22 @@ function normalizeTagIds(ids: unknown[] | undefined): string[] | undefined {
 }
 
 /**
- * Преобразовать задачу из манифеста в Task для API: резолв tagIds -> names.
+ * Преобразовать задачу из манифеста в Task для API: резолв tagIds -> names, projectId -> name.
  */
 async function manifestTaskToApiTask(row: TaskInManifest): Promise<Task> {
   const tagIds = normalizeTagIds(row.tagIds);
   const tags = tagIds?.length
     ? await tagsMetadataService.resolveTagIdsToNames(tagIds)
     : undefined;
+  const project = row.projectId
+    ? await projectsMetadataService.resolveProjectIdToName(row.projectId)
+    : null;
   return {
     ...row,
     priority: row.priority || 'medium',
     youtrackIssueIds: normalizeYoutrackIssueIds(row.youtrackIssueIds),
     tags,
+    project,
   };
 }
 
@@ -88,6 +93,7 @@ export const tasksService = {
 
   /**
    * Обновить метаданные задачи. При передаче tags (имена) резолвим в tagIds и сохраняем в манифесте только tagIds.
+   * При передаче project (имя) резолвим в projectId и сохраняем в манифесте только projectId.
    */
   async updateTaskMeta(id: string, updates: UpdateTaskMetaInput): Promise<Task | null> {
     const content = await readFile(MANIFEST_PATH, 'utf-8');
@@ -112,6 +118,21 @@ export const tasksService = {
     } else {
       updatedRow = { ...updatedRow, tagIds: row.tagIds };
       delete (updatedRow as unknown as Record<string, unknown>).tags;
+    }
+
+    if (updates.project !== undefined) {
+      if (updates.project === null || updates.project === '') {
+        updatedRow.projectId = null;
+      } else {
+        const projectName = String(updates.project).trim();
+        if (projectName) {
+          updatedRow.projectId = await projectsMetadataService.getOrCreateProjectByName(projectName);
+        } else {
+          updatedRow.projectId = null;
+        }
+      }
+    } else {
+      updatedRow.projectId = row.projectId;
     }
 
     if (updates.title !== undefined) updatedRow.title = updates.title;
@@ -177,6 +198,32 @@ export const tasksService = {
       if (tagIds.length !== (row.tagIds?.length ?? 0)) {
         manifest.tasks[i] = { ...row, tagIds: tagIds.length > 0 ? tagIds : undefined };
         delete (manifest.tasks[i] as TaskInManifest).tags;
+        updated++;
+      }
+    }
+
+    if (updated > 0) {
+      await writeFile(MANIFEST_PATH, JSON.stringify(manifest, null, 2), 'utf-8');
+    }
+    return updated;
+  },
+
+  /**
+   * Удалить проект: сначала из метаданных, затем projectId из всех задач в манифесте.
+   */
+  async removeProjectFromAllTasks(projectId: string): Promise<number> {
+    if (!projectId) return 0;
+
+    await projectsMetadataService.removeProjectById(projectId);
+
+    const content = await readFile(MANIFEST_PATH, 'utf-8');
+    const manifest: TaskManifest = JSON.parse(content);
+    let updated = 0;
+
+    for (let i = 0; i < manifest.tasks.length; i++) {
+      const row = manifest.tasks[i];
+      if (row.projectId === projectId) {
+        manifest.tasks[i] = { ...row, projectId: null };
         updated++;
       }
     }

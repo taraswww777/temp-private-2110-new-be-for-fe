@@ -1,3 +1,4 @@
+import { useMemo, useEffect, useState } from 'react';
 import {
   Alert,
   Button,
@@ -10,10 +11,33 @@ import {
 } from '@/uiKit';
 import { TaskList } from '@/components/TaskList';
 import { useTasks } from '@/hooks/useTasks';
+import { useProject } from '@/contexts/ProjectContext';
+import { projectsApi, type Project } from '@/api/projects.api';
 import { ApiError } from '@/api/apiError';
 
 export function TasksListPage() {
   const { tasks, loading, error, refetch, updateTask } = useTasks();
+  const { selectedProject } = useProject();
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    projectsApi.getAllProjects().then(setProjects).catch(() => setProjects([]));
+  }, []);
+
+  // Фильтрация задач по выбранному проекту
+  const filteredTasks = useMemo(() => {
+    if (!selectedProject) return tasks;
+    
+    // Находим имя проекта по ID
+    const selectedProjectObj = projects.find((p) => p.id === selectedProject);
+    if (!selectedProjectObj) {
+      // Если проект не найден (возможно был удалён), показываем все задачи
+      return tasks;
+    }
+    
+    // Фильтруем задачи по имени проекта
+    return tasks.filter((task) => task.project === selectedProjectObj.name);
+  }, [tasks, selectedProject, projects]);
 
   if (loading) {
     return (
@@ -48,15 +72,17 @@ export function TasksListPage() {
           <div className="flex items-center justify-between">
             <CardTitle>Задачи проекта</CardTitle>
             <CardDescription>
-              Всего задач: {tasks.length}
+              Всего задач: {filteredTasks.length} {selectedProject && `(отфильтровано из ${tasks.length})`}
             </CardDescription>
           </div>
         </CardHeader>
         <CardContent>
           <TaskList 
-            tasks={tasks} 
+            tasks={filteredTasks} 
             onTaskUpdate={refetch}
             onTaskChange={updateTask}
+            showProjectColumn={!selectedProject}
+            projects={projects}
           />
         </CardContent>
       </Card>

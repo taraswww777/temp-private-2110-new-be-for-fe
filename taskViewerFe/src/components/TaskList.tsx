@@ -18,6 +18,7 @@ import { YouTrackConnectDialog } from './YouTrackConnectDialog';
 import { TagBadge } from '@/uiKit';
 import { tasksApi } from '@/api/tasks.api';
 import { youtrackApi, buildYouTrackIssueUrl } from '@/api/youtrack.api';
+import type { Project } from '@/api/projects.api';
 import type { Task, TaskStatus, TaskPriority } from '@/types/task.types';
 import type { YouTrackQueueStatus } from '@/types/youtrack.types';
 import { format } from 'date-fns';
@@ -28,6 +29,8 @@ interface TaskListProps {
   tasks: Task[];
   onTaskUpdate: () => void;
   onTaskChange?: (taskId: string, updates: Partial<Task>) => void;
+  showProjectColumn?: boolean;
+  projects?: Project[];
 }
 
 const SortIcon = ({ 
@@ -252,7 +255,7 @@ function TaskListTagsCell({
   );
 }
 
-export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
+export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn = false, projects = [] }: TaskListProps) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const isUpdatingFromUrl = useRef(false);
@@ -541,6 +544,20 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
     }
   };
 
+  const handleProjectChange = async (taskId: string, newProject: string | null) => {
+    try {
+      await tasksApi.updateTaskMeta(taskId, { project: newProject });
+      // Обновляем локальное состояние задачи без запроса к API
+      if (onTaskChange) {
+        onTaskChange(taskId, { project: newProject });
+      }
+      toast.success(newProject ? 'Проект обновлён' : 'Проект удалён');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось обновить проект';
+      toast.error(message);
+    }
+  };
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '—';
     return format(new Date(dateString), 'dd.MM.yyyy', { locale: ru });
@@ -659,7 +676,9 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                 </div>
               </th>
               <th className="h-12 px-4 text-left align-middle font-medium">Теги</th>
-              <th className="h-12 px-4 text-left align-middle font-medium">Ветка</th>
+              {showProjectColumn && (
+                <th className="h-12 px-4 text-left align-middle font-medium">Проект</th>
+              )}
               <th className="h-12 px-4 text-left align-middle font-medium">YouTrack</th>
             </tr>
           </thead>
@@ -689,11 +708,11 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                     value={task.status}
                     onValueChange={(value) => handleStatusChange(task.id, value as TaskStatus)}
                   >
-<SelectTrigger className="w-[140px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="backlog">📋 Бэклог</SelectItem>
+                    <SelectTrigger className="w-[140px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="backlog">📋 Бэклог</SelectItem>
                       <SelectItem value="planned">📅 Запланировано</SelectItem>
                       <SelectItem value="in-progress">⏳ В работе</SelectItem>
                       <SelectItem value="completed">✅ Выполнено</SelectItem>
@@ -707,11 +726,11 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                     onValueChange={(value) => handlePriorityChange(task.id, value as TaskPriority)}
                     disabled={task.status === 'completed'}
                   >
-<SelectTrigger className="w-[140px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="critical">🔴 Критический</SelectItem>
+                    <SelectTrigger className="w-[140px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="critical">🔴 Критический</SelectItem>
                       <SelectItem value="high">🟠 Высокий</SelectItem>
                       <SelectItem value="medium">🔵 Средний</SelectItem>
                       <SelectItem value="low">⚪ Низкий</SelectItem>
@@ -728,7 +747,26 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange }: TaskListProps) {
                     onTaskChange={onTaskChange}
                   />
                 </td>
-                <td className="p-4 align-middle font-mono text-sm">{task.branch || '—'}</td>
+                {showProjectColumn && (
+                  <td className="p-4 align-middle">
+                    <Select
+                      value={task.project || '__none__'}
+                      onValueChange={(value) => handleProjectChange(task.id, value === '__none__' ? null : value)}
+                    >
+                      <SelectTrigger className="w-[160px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="__none__">Без проекта</SelectItem>
+                        {projects.map((project) => (
+                          <SelectItem key={project.id} value={project.name}>
+                            {project.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </td>
+                )}
                 <td className="p-4 align-middle">
                   <TaskListYouTrackCell
                     task={task}

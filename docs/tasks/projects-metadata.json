@@ -1,0 +1,10 @@
+{
+  "projects": {
+    "2110-project-id": {
+      "name": "2110"
+    },
+    "taskviewer-project-id": {
+      "name": "TaskViewer"
+    }
+  }
+}
