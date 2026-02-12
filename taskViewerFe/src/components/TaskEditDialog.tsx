@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import {
   Button,
@@ -17,6 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/uiKit';
+import { TaskTagsEditor } from '@/components/TaskTagsEditor';
+import { tasksApi } from '@/api/tasks.api';
 import type { Task, TaskStatus, TaskPriority, UpdateTaskMetaInput } from '@/types/task.types';
 
 interface TaskEditDialogProps {
@@ -32,8 +34,31 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
     priority: task.priority,
     branch: task.branch,
     createdDate: task.createdDate,
+    tags: task.tags ?? [],
   });
   const [saving, setSaving] = useState(false);
+  const [allTasks, setAllTasks] = useState<Task[]>([]);
+  const [tagMetadata, setTagMetadata] = useState<Record<string, { color?: string }>>({});
+
+  useEffect(() => {
+    if (open) {
+      tasksApi.getAllTasks().then(setAllTasks).catch(() => setAllTasks([]));
+      tasksApi.getTagsMetadata().then((d) => setTagMetadata(d.tags)).catch(() => setTagMetadata({}));
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (open) {
+      setFormData({
+        title: task.title,
+        status: task.status,
+        priority: task.priority,
+        branch: task.branch,
+        createdDate: task.createdDate,
+        tags: task.tags ?? [],
+      });
+    }
+  }, [open, task.title, task.status, task.priority, task.branch, task.createdDate, task.tags]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -116,6 +141,16 @@ export function TaskEditDialog({ task, onSave }: TaskEditDialogProps) {
               value={formData.branch || ''}
               onChange={(e) => setFormData({ ...formData, branch: e.target.value || null })}
               placeholder="feature/TASK-XXX"
+            />
+          </div>
+          <div className="grid gap-2">
+            <TaskTagsEditor
+              tags={formData.tags ?? []}
+              onTagsChange={(tags) => setFormData({ ...formData, tags })}
+              allTasks={allTasks}
+              tagMetadata={tagMetadata}
+              label="Теги"
+              placeholder="Введите или выберите тег..."
             />
           </div>
         </div>

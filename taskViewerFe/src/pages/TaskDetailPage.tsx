@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Input,
   Select,
   SelectContent,
   SelectItem,
@@ -17,13 +16,13 @@ import {
   Skeleton,
 } from '@/uiKit';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
-import { TagBadge } from '@/uiKit';
+import { TaskTagsEditor } from '@/components/TaskTagsEditor';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
 import { PageHeader } from '@/components/PageHeader';
 import { tasksApi } from '@/api/tasks.api';
 import { ApiError } from '@/api/apiError';
-import type { TaskDetail, UpdateTaskMetaInput, TaskStatus, TaskPriority } from '@/types/task.types';
+import type { Task, TaskDetail, UpdateTaskMetaInput, TaskStatus, TaskPriority } from '@/types/task.types';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { toast } from 'sonner';
@@ -33,7 +32,7 @@ export function TaskDetailPage() {
   const [task, setTask] = useState<TaskDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [newTagInput, setNewTagInput] = useState('');
+  const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [tagsSaving, setTagsSaving] = useState(false);
   const [tagMetadata, setTagMetadata] = useState<Record<string, { color?: string }>>({});
 
@@ -59,6 +58,10 @@ export function TaskDetailPage() {
 
   useEffect(() => {
     tasksApi.getTagsMetadata().then((d) => setTagMetadata(d.tags)).catch(() => setTagMetadata({}));
+  }, []);
+
+  useEffect(() => {
+    tasksApi.getAllTasks().then(setAllTasks).catch(() => setAllTasks([]));
   }, []);
 
   const handleSave = async (updates: UpdateTaskMetaInput) => {
@@ -91,38 +94,17 @@ export function TaskDetailPage() {
 
   const currentTags = task?.tags ?? [];
 
-  const handleAddTag = async () => {
+  const handleTagsChange = async (newTags: string[]) => {
     if (!id) return;
-    const tag = newTagInput.trim();
-    if (!tag) return;
-    if (currentTags.includes(tag)) {
-      setNewTagInput('');
-      return;
-    }
     setTagsSaving(true);
     try {
-      await tasksApi.updateTaskMeta(id, { tags: [...currentTags, tag] });
-      setNewTagInput('');
+      await tasksApi.updateTaskMeta(id, { tags: newTags });
       await fetchTask();
-      toast.success('Тег добавлен');
+      toast.success(
+        newTags.length > currentTags.length ? 'Тег добавлен' : newTags.length < currentTags.length ? 'Тег удалён' : 'Теги обновлены'
+      );
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Не удалось добавить тег';
-      toast.error(message);
-    } finally {
-      setTagsSaving(false);
-    }
-  };
-
-  const handleRemoveTag = async (tagToRemove: string) => {
-    if (!id) return;
-    const next = currentTags.filter((t) => t !== tagToRemove);
-    setTagsSaving(true);
-    try {
-      await tasksApi.updateTaskMeta(id, { tags: next });
-      await fetchTask();
-      toast.success('Тег удалён');
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Не удалось удалить тег';
+      const message = err instanceof Error ? err.message : 'Не удалось изменить теги';
       toast.error(message);
     } finally {
       setTagsSaving(false);
@@ -231,43 +213,13 @@ export function TaskDetailPage() {
               </div>
 
               <div className="mt-4 pt-4 border-t">
-                <span className="font-semibold block mb-2">Теги</span>
-                <div className="flex flex-wrap gap-2 items-center">
-                  {currentTags.map((tag) => (
-                    <TagBadge
-                      key={tag}
-                      tag={tag}
-                      colorKey={tagMetadata[tag]?.color}
-                      onRemove={() => handleRemoveTag(tag)}
-                      disabled={tagsSaving}
-                      className="text-xs"
-                    />
-                  ))}
-                  <div className="flex gap-2 flex-1 min-w-[200px]">
-                    <Input
-                      placeholder="Добавить тег..."
-                      value={newTagInput}
-                      onChange={(e) => setNewTagInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddTag();
-                        }
-                      }}
-                      disabled={tagsSaving}
-                      className="max-w-[200px]"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={handleAddTag}
-                      disabled={!newTagInput.trim() || tagsSaving}
-                    >
-                      Добавить
-                    </Button>
-                  </div>
-                </div>
+                <TaskTagsEditor
+                  tags={currentTags}
+                  onTagsChange={handleTagsChange}
+                  allTasks={allTasks}
+                  tagMetadata={tagMetadata}
+                  saving={tagsSaving}
+                />
               </div>
             </CardContent>
           </div>

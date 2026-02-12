@@ -24,9 +24,11 @@ export {
 export { Input } from './input'
 export { InputField } from './input-field'
 export { Label } from './label'
+export { SearchSelect, type SearchSelectProps } from './search-select'
+export { SearchSelectField, type SearchSelectFieldProps } from './search-select-field'
 export { MultiSelect, type MultiSelectOption } from './multi-select'
 export { MultiSelectField } from './multi-select-field'
-export { Popover, PopoverTrigger, PopoverContent } from './popover'
+export { Popover, PopoverTrigger, PopoverAnchor, PopoverContent } from './popover'
 export {
   Select,
   SelectGroup,

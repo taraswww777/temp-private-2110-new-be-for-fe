@@ -222,11 +222,11 @@
 
 ---
 
-## Выявленные уточнения (по ходу реализации)
+## Выявленные уточнения
 
-Ниже перечислены уточнения и доработки, выявленные при реализации и исправлении багов.
+Все уточнения и доработки, выявленные при реализации и исправлении багов.
 
-### Backend
+### Backend (по ходу реализации)
 
 1. **Формат entity id в YouTrack**  
    Ответ YouTrack при создании задачи может содержать только внутренний `id` (например `3-994`), без `idReadable` (VTB-538). В манифест и в ответ API нужно писать человекочитаемый id: после создания вызывать GET issue с `fields=idReadable,id` и использовать его (`getIssueIdReadable`).
@@ -249,7 +249,7 @@
 7. **Родительская задача в шаблоне**  
    В шаблон добавлено опциональное поле `parentIssueId` (idReadable в YT). После создания задачи в YouTrack применять команду `subtask of <parentIssueId>` через POST /api/commands (`applyCommand` в youtrack-api.service).
 
-### Frontend
+### Frontend (по ходу реализации)
 
 8. **Ссылка на задачу YouTrack**  
    Ссылку строить на фронте из номера задачи и baseUrl (из env через GET /api/youtrack/config). Хелпер `buildYouTrackIssueUrl(baseUrl, issueId)`. Не опираться на поле `youtrackIssueUrl` в ответах API; в типах сделать его опциональным.
@@ -263,45 +263,19 @@
 11. **Форма редактирования шаблона**  
     Поле «ID шаблона» при редактировании — в одну строку вверху (readonly, текст, не input). Поле «Название» — на всю ширину формы.
 
----
-
-## Уточнение: проверка реализации (2026-02-07)
+### Уточнение проверки реализации (2026-02-07)
 
 При проверке кода выявлено: в `tasks-manifest.json` задача была помечена как выполненная, но многие критерии приёмки не были реализованы. Ниже — актуальный статус после доработок по тегам и смежному функционалу.
 
-### Backend (taskViewerBe) — не сделано
+**Backend (taskViewerBe) — сделано в рамках доработок:**  
+Поле `tags` в схеме задачи (манифест, Zod, типы), нормализация в `tasks.service`, поддержка в `PATCH /api/tasks/:id`. Файл `docs/tasks/youtrack-tags-blacklist.json`, сервис `tags-blacklist.service.ts`, API GET/POST/PUT/DELETE `/api/youtrack/tags/blacklist`. Фильтрация тегов по чёрному списку при создании задачи в YouTrack; отфильтрованные теги добавляются в описание (блок «Теги: …»). Метаданные тегов (цвет): `docs/tasks/tags-metadata.json`, сервис `tags-metadata.service.ts`, API GET/PATCH `/api/tasks/tags/metadata`, POST `/api/tasks/tags/rename` (переименование тега во всех задачах + перенос метаданных). Unit-тесты (Vitest): `youtrack-api.service.test.ts` (моки fetch и env), `youtrack-links.service.test.ts` (моки fs и tasks.service), `youtrack-processor.service.test.ts` (моки api, queue, links); ранее добавлены templates, youtrack-queue, tags-blacklist.
 
-- Все перечисленные ранее пункты выполнены: unit-тесты (youtrack-api с моками fetch, youtrack-links, youtrack-processor, templates, queue, tags-blacklist), endpoint GET issues/:id, ответ link в очередь с youtrackIssueIds, счётчик attempts, предпросмотры и переопределение полей на фронте, удаление CreateYouTrackIssueDialog.
+**Frontend (taskViewerFe) — сделано в рамках доработок:**  
+Отображение тегов в списке задач (колонка «Теги», Badge) и на детальной странице; редактирование тегов (добавление/удаление, PATCH). Страница управления тегами `TaskTagsPage` (роут `/tasks/tags`): сводка по тегам, переименование, выбор цвета, «В чёрный список». Страница чёрного списка `YouTrackTagsBlacklistPage` (роут `/youtrack/tags/blacklist`), навигация в шапке, методы youtrack.api: getTagsBlacklist, updateTagsBlacklist, addTagToBlacklist, removeTagFromBlacklist. Цвета тегов и компонент тега в uiKit: `tag-colors.ts` (TAG_COLOR_OPTIONS, getTagBadgeClassName), `tag-badge.tsx` (TagBadge); экспорт из `@/uiKit`. Палитра: серый + радуга (7 цветов), стиль Metro (плоский фон, белый/чёрный текст). Выбор цвета на странице тегов — в виде стилизованных тегов в Select. Для TagBadge добавлена стори в Storybook (UI Kit / Обратная связь / TagBadge). Константа `IS_DEV` в `env.ts` (капсом); в режиме разработки Select не закрывается при клике снаружи. Действие «Просмотр» в таблице задач перенесено в начало строки, оформлено как ссылка-иконка (глаз); колонки «Статус» и «Приоритет» сужены (140px).
 
-### Backend (taskViewerBe) — сделано в рамках доработок
+**Уже реализовано ранее:** Бэкенд: создание задачи в YouTrack с учётом `customFields`, постановка в очередь при недоступности YT, связывание/отвязка, получение связей с `includeDetails`. Фронт: единый `YouTrackConnectDialog` с вкладками «Создать» и «Связать», страницы шаблонов и очереди, вызовы create/link.
 
-- Поле `tags` в схеме задачи (манифест, Zod, типы), нормализация в `tasks.service`, поддержка в `PATCH /api/tasks/:id`.
-- Файл `docs/tasks/youtrack-tags-blacklist.json`, сервис `tags-blacklist.service.ts`, API GET/POST/PUT/DELETE `/api/youtrack/tags/blacklist`.
-- Фильтрация тегов по чёрному списку при создании задачи в YouTrack; отфильтрованные теги добавляются в описание (блок «Теги: …»).
-- Метаданные тегов (цвет): `docs/tasks/tags-metadata.json`, сервис `tags-metadata.service.ts`, API GET/PATCH `/api/tasks/tags/metadata`, POST `/api/tasks/tags/rename` (переименование тега во всех задачах + перенос метаданных).
-- Unit-тесты (Vitest): `youtrack-api.service.test.ts` (моки fetch и env), `youtrack-links.service.test.ts` (моки fs и tasks.service), `youtrack-processor.service.test.ts` (моки api, queue, links); ранее добавлены templates, youtrack-queue, tags-blacklist.
-
-### Frontend (taskViewerFe) — сделано в рамках доработок
-
-- Отображение тегов в списке задач (колонка «Теги», Badge) и на детальной странице; редактирование тегов (добавление/удаление, PATCH).
-- Страница управления тегами `TaskTagsPage` (роут `/tasks/tags`): сводка по тегам, переименование, выбор цвета, «В чёрный список».
-- Страница чёрного списка `YouTrackTagsBlacklistPage` (роут `/youtrack/tags/blacklist`), навигация в шапке, методы youtrack.api: getTagsBlacklist, updateTagsBlacklist, addTagToBlacklist, removeTagFromBlacklist.
-- Цвета тегов и компонент тега в uiKit: `taskViewerFe/src/uiKit/tag-colors.ts` (TAG_COLOR_OPTIONS, getTagBadgeClassName), `taskViewerFe/src/uiKit/tag-badge.tsx` (TagBadge); экспорт из `@/uiKit`. Палитра: серый + радуга (7 цветов), стиль Metro (плоский фон, белый/чёрный текст). Выбор цвета на странице тегов — в виде стилизованных тегов в Select. Для TagBadge добавлена стори в Storybook (UI Kit / Обратная связь / TagBadge).
-- Константа `IS_DEV` в `env.ts` (капсом); в режиме разработки Select не закрывается при клике снаружи (удобно инспектировать выпадающий список в DevTools).
-- Действие «Просмотр» в таблице задач перенесено в начало строки, оформлено как ссылка-иконка (глаз); колонки «Статус» и «Приоритет» сужены (140px).
-
-### Уже реализовано ранее
-
-- Бэкенд: создание задачи в YouTrack с учётом `customFields`, постановка в очередь при недоступности YT, связывание/отвязка, получение связей с `includeDetails`.
-- Фронт: единый `YouTrackConnectDialog` с вкладками «Создать» и «Связать», страницы шаблонов и очереди, вызовы create/link.
-
----
-
-## Выявленные уточнения (дополнение 2026-02-07)
-
-Контекст и решения, зафиксированные в ходе доработок по тегам и UI.
-
-### Теги и палитра
+### Теги и палитра (дополнение 2026-02-07)
 
 - Теги по умолчанию отображаются серым (тот же стиль, что вариант «Серый» в палитре).
 - Палитра цветов: без промежуточных оттенков — только 100/800/400 (светлая тема) и 600/100/500 (тёмная); использованы семейства slate (серый), rose (красный), sky (синий) для отличия от прежней палитры. Ключи цветов (gray, red, blue, …) сохранены для совместимости с бэкендом.
@@ -310,15 +284,31 @@
 - **Компонент тега в uiKit:** компонент `TagBadge` и палитра (TAG_COLOR_OPTIONS, getTagBadgeClassName) вынесены в `taskViewerFe/src/uiKit/`: файлы `tag-badge.tsx`, `tag-colors.ts`; экспорт из `@/uiKit`. Использование: TaskList, TaskDetailPage, TaskTagsPage импортируют TagBadge и при необходимости TAG_COLOR_OPTIONS/getTagBadgeClassName из `@/uiKit`.
 - **Storybook для компонента тега:** добавлена стори `tag-badge.stories.tsx` в uiKit (раздел «UI Kit / Обратная связь / TagBadge»): Default, WithoutColor, WithRemove, WithRemoveDisabled, AllColors, AllColorsWithRemove.
 
-### Select (uiKit) и скролл
+### Select (uiKit) и скролл (дополнение 2026-02-07)
 
 - В выпадающем списке Select при большом числе пунктов вертикальный скролл не удалось стабильно сделать видимым (стили в `index.css` для `.select-dropdown-viewport`, увеличенная ширина полосы — результат неудовлетворительный). Заведена отдельная задача **TASK-058** (низкий приоритет, тег private): приделать вертикальный скролл к Select.
 - В режиме разработки (`IS_DEV` из `env.ts`) выпадающий список Select не закрывается при клике снаружи и при потере фокуса, чтобы можно было переключиться в DevTools и инспектировать разметку. Константа вынесена в `taskViewerFe/src/env.ts`, имя в капсе: `IS_DEV`.
 
-### Таблица задач
+### Таблица задач (дополнение 2026-02-07)
 
 - Действие «Просмотр» перенесено в первую колонку таблицы, реализовано как ссылка с иконкой глаза (SVG), без кнопки с текстом «Просмотр». Колонка «Действия» удалена.
 - Ширина селектов «Статус» и «Приоритет» уменьшена до 140px (ранее 160px).
+
+### UI Kit: компоненты Field (дополнение 2026-02-12)
+
+- **InputField, MultiSelectField, SelectField:** созданы компоненты-обёртки над Input/MultiSelect/Select с Label и опциональным описанием. Экспорт из `@/uiKit`. Позволяют единообразно отображать поля форм с подписями.
+- **Фильтры на странице «Задачи проекта»:** добавлены label (Поиск, Статус, Приоритет) к фильтрам; TaskFilters переведён на использование InputField и MultiSelectField.
+- **TemplateFormDialog:** поля формы переведены на InputField (ID шаблона, Название, Описание, ID проекта, Родительская задача); для полей с подсказкой используется проп `description`.
+- **Исправления ESLint:** в `tag-badge.tsx` удалён реэкспорт `getTagBadgeClassName` (файл должен экспортировать только компоненты для react-refresh/only-export-components); в `TaskList.tsx` обёрнут `currentTags` в `useMemo` во избежание нестабильных зависимостей useMemo; в `tag-badge.stories.tsx` добавлены обязательные `args` в stories с `render` для корректной типизации Storybook.
+
+### UI Kit: компоненты SearchSelect (дополнение 2026-02-12)
+
+- **SearchSelect, SearchSelectField:** созданы универсальные компоненты для множественного выбора с поиском и добавлением собственных значений. Компонент `SearchSelect` предоставляет поле ввода с выпадающим списком опций, фильтрацией по вводу, возможностью добавления новых значений через Enter или выбор из списка. Компонент `SearchSelectField` — обёртка над `SearchSelect` с Label и опциональным описанием. Экспорт из `@/uiKit`.
+- **Рефакторинг редактирования тегов:** компонент `TaskTagsEditor` переведён на использование `SearchSelectField` для унификации интерфейса. Компонент `TaskListTagsCell` также использует `SearchSelect` внутри Popover для редактирования тегов в таблице.
+- **Проблемы с отображением выпадающих списков:** выявлены проблемы с обрезанием и позиционированием выпадающих списков в таблице задач (особенно в пограничных случаях). Исправлено через использование Popover с Portal (`PopoverContent` рендерится в `document.body`) и добавление `collisionPadding={16}` для корректного позиционирования у краёв экрана. Добавлен `max-h-[min(400px,80vh)] overflow-y-auto` для PopoverContent, чтобы при большом количестве тегов контент прокручивался вместо обрезания.
+- **Избыточность кнопки "Добавить":** кнопка "Добавить" в интерфейсе редактирования тегов была избыточной, так как теги можно добавлять через Enter или выбор из списка. Кнопка удалена для упрощения UI.
+- **Проблема с открытием выпадающего списка:** выявлена проблема, когда выпадающий список открывался при фокусе, но сразу закрывался из-за обработки событий blur. Исправлено через использование `modal={true}` для Popover (по умолчанию в Radix UI), что обеспечивает корректную обработку событий фокуса и кликов.
+- **Ограничение ширины SearchSelect:** добавлено ограничение ширины по умолчанию (`max-w-md`) для компонента `SearchSelect`, чтобы предотвратить излишнее растягивание на широких экранах. Ширину можно переопределить через проп `className`.
 
 ### Связанная задача
 
