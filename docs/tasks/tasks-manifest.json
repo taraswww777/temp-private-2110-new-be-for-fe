@@ -386,10 +386,10 @@
     {
       "id": "TASK-037",
       "title": "История статусов отчета - получение данных с Backend",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-037-history-status-report-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
-      "completedDate": null,
+      "completedDate": "2026-02-12T00:00:00Z",
       "branch": null,
       "priority": "medium",
       "projectId": "2110-project-id",
