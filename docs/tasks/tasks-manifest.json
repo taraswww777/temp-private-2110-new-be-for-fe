@@ -744,6 +744,21 @@
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72"
       ]
+    },
+    {
+      "id": "TASK-064",
+      "title": "Обновление Frontend для рефакторинга endpoint получения деталей пакета",
+      "status": "backlog",
+      "file": "TASK-064-frontend-refactor-package-details-endpoint.md",
+      "createdDate": "2026-02-12T00:00:00Z",
+      "completedDate": null,
+      "branch": null,
+      "priority": "medium",
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
+        "2579ec4b-e9a4-4347-addc-6e9097e8b51d"
+      ]
     }
   ]
 }

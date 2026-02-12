@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { paginationQuerySchema, sortOrderSchema, paginationMetadataSchema } from '../common.schema';
-import { taskListItemSchema } from './tasks.schema';
 
 /**
  * Схема для создания пакета
@@ -42,25 +41,6 @@ export const packageSchema = z.object({
 export type Package = z.infer<typeof packageSchema>;
 
 /**
- * Схема для задания в пакете (расширенная с addedAt)
- */
-export const packageTaskItemSchema = taskListItemSchema.extend({
-  addedAt: z.string().datetime(),
-});
-
-export type PackageTaskItem = z.infer<typeof packageTaskItemSchema>;
-
-/**
- * Схема для детального пакета (с заданиями)
- */
-export const packageDetailSchema = packageSchema.extend({
-  tasks: z.array(packageTaskItemSchema),
-  tasksPagination: paginationMetadataSchema,
-});
-
-export type PackageDetail = z.infer<typeof packageDetailSchema>;
-
-/**
  * Схема для query параметров списка пакетов
  */
 export const packagesQuerySchema = paginationQuerySchema.extend({
@@ -70,18 +50,6 @@ export const packagesQuerySchema = paginationQuerySchema.extend({
 });
 
 export type PackagesQuery = z.infer<typeof packagesQuerySchema>;
-
-/**
- * Схема для query параметров заданий в пакете
- */
-export const packageTasksQuerySchema = z.object({
-  tasksNumber: z.coerce.number().int().min(1).default(1).describe('Номер страницы заданий в пакете (начиная с 1)'),
-  tasksSize: z.coerce.number().int().min(1).max(100).default(20).describe('Размер страницы заданий'),
-  tasksSortBy: z.enum(['createdAt', 'branchId', 'status', 'periodStart']).default('createdAt'),
-  tasksSortOrder: sortOrderSchema,
-});
-
-export type PackageTasksQuery = z.infer<typeof packageTasksQuerySchema>;
 
 /**
  * Схема для ответа со списком пакетов

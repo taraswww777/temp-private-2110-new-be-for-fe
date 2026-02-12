@@ -101,12 +101,12 @@ export class TasksService {
    * Получить список заданий с фильтрацией и пагинацией (body: pagination, sorting, filter)
    */
   async getTasks(body: GetTasksRequest): Promise<TasksListResponse> {
-    const { pagination, sorting, filter } = body;
+    const { pagination, sorting, filter, includedInPacket, excludedInPacket } = body;
     const pageNumber = pagination.number;
     const pageSize = pagination.size;
 
-    // Построение WHERE из filter[]
-    const conditions = this.buildFilterConditions(filter);
+    // Построение WHERE из filter[] и параметров фильтрации по пакету
+    const conditions = this.buildFilterConditions(filter, includedInPacket, excludedInPacket);
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
@@ -210,16 +210,52 @@ export class TasksService {
   }
 
   /**
-   * Построение условий WHERE из массива FilterDto
+   * Построение условий WHERE из массива FilterDto и параметров фильтрации по пакету
    * Поддержка фильтра packageId: задания в/не в указанном пакете (связь через report_6406_package_tasks).
+   * Поддержка параметров includedInPacket и excludedInPacket для фильтрации по пакету.
    */
-  private buildFilterConditions(filter: GetTasksRequest['filter']) {
-    if (!filter) return [];
-
+  private buildFilterConditions(
+    filter: GetTasksRequest['filter'],
+    includedInPacket?: string,
+    excludedInPacket?: string,
+  ) {
     const conditions: Array<ReturnType<typeof eq> | ReturnType<typeof sql>> = [];
 
-    // Фильтр по пакету: задания в/не в пакете (связь many-to-many через report_6406_package_tasks)
-    if (filter.packageId !== undefined) {
+    // Фильтр по пакету через includedInPacket/excludedInPacket (приоритет над filter.packageId)
+    if (includedInPacket) {
+      // Задания, входящие в пакет с указанным ID
+      conditions.push(
+        exists(
+          db
+            .select({ one: sql`1` })
+            .from(report6406PackageTasks)
+            .where(
+              and(
+                eq(report6406PackageTasks.taskId, report6406Tasks.id),
+                eq(report6406PackageTasks.packageId, includedInPacket),
+              ),
+            ),
+        ),
+      );
+    } else if (excludedInPacket) {
+      // Задания, НЕ входящие в пакет с указанным ID
+      conditions.push(
+        not(
+          exists(
+            db
+              .select({ one: sql`1` })
+              .from(report6406PackageTasks)
+              .where(
+                and(
+                  eq(report6406PackageTasks.taskId, report6406Tasks.id),
+                  eq(report6406PackageTasks.packageId, excludedInPacket),
+                ),
+              ),
+          ),
+        ),
+      );
+    } else if (filter?.packageId !== undefined) {
+      // Фильтр по пакету через filter.packageId (для обратной совместимости)
       if (filter.packageId === null) {
         // Задания, не входящие ни в один пакет
         conditions.push(
@@ -249,6 +285,8 @@ export class TasksService {
         );
       }
     }
+
+    if (!filter) return conditions;
 
     // Фильтр по филиалам: задания, связанные с указанными филиалами (связь many-to-many через report_6406_task_branches)
     if (filter.branchIds !== undefined && filter.branchIds.length > 0) {
