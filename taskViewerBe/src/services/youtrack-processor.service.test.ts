@@ -91,7 +91,7 @@ describe('youtrackProcessorService', () => {
         undefined,
         { success: true }
       );
-      expect(op.result).toEqual({ success: true });
+      expect((op as { result?: { success: boolean } }).result).toEqual({ success: true });
     });
 
     it('on getIssue error updates status to pending and rethrows', async () => {
@@ -125,7 +125,7 @@ describe('youtrackProcessorService', () => {
         undefined,
         { success: true }
       );
-      expect(op.result).toEqual({ success: true });
+      expect((op as { result?: { success: boolean } }).result).toEqual({ success: true });
     });
   });
 });

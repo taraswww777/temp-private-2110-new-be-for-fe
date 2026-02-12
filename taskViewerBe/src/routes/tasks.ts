@@ -197,8 +197,8 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
           200: z.object({
             updated: z.number(),
           }),
+          400: z.object({ message: z.string() }),
         },
-        400: z.object({ message: z.string() }),
       },
     },
     async (request, reply) => {
@@ -229,8 +229,8 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
           200: z.object({
             updated: z.number(),
           }),
+          400: z.object({ message: z.string() }),
         },
-        400: z.object({ message: z.string() }),
       },
     },
     async (request, reply) => {

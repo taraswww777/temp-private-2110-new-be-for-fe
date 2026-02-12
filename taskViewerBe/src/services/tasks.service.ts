@@ -111,7 +111,7 @@ export const tasksService = {
       delete updatedRow.tags;
     } else {
       updatedRow = { ...updatedRow, tagIds: row.tagIds };
-      delete (updatedRow as Record<string, unknown>).tags;
+      delete (updatedRow as unknown as Record<string, unknown>).tags;
     }
 
     if (updates.title !== undefined) updatedRow.title = updates.title;
