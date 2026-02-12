@@ -58,7 +58,12 @@ export function TaskProjectsPage() {
   /** Все проекты из источника истины + статистика по задачам (в т.ч. проекты с 0 задач) */
   const projectsWithStats = useMemo(() => {
     const map = taskStatsByProject;
-    const list = projects.map((p) => ({
+    const list: Array<{
+      project: string | null;
+      projectId: string | null;
+      count: number;
+      taskIds: string[];
+    }> = projects.map((p) => ({
       project: p.name,
       projectId: p.id,
       count: map.get(p.name)?.count ?? 0,
@@ -68,8 +73,8 @@ export function TaskProjectsPage() {
     const noProject = map.get(null);
     if (noProject && noProject.count > 0) {
       list.push({
-        project: null,
-        projectId: null,
+        project: null as string | null,
+        projectId: null as string | null,
         count: noProject.count,
         taskIds: noProject.taskIds,
       });
@@ -109,7 +114,7 @@ export function TaskProjectsPage() {
     const trimmed = newProjectName.trim();
     setRenameSaving(true);
     try {
-      const updated = await projectsApi.renameProject(editProject, trimmed);
+      await projectsApi.renameProject(editProject, trimmed);
       toast.success(`Проект переименован в «${trimmed}»`);
       setRenameDialogOpen(false);
       setEditProject(null);
@@ -123,7 +128,7 @@ export function TaskProjectsPage() {
     }
   };
 
-  const handleOpenDelete = (projectId: string, projectName: string) => {
+  const handleOpenDelete = (projectId: string, _projectName: string) => {
     setProjectToDelete(projectId);
     setDeleteDialogOpen(true);
   };
