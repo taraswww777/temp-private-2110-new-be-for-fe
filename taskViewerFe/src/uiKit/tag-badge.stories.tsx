@@ -61,6 +61,7 @@ export const WithRemoveDisabled: Story = {
 }
 
 export const AllColors: Story = {
+  args: { tag: 'тег' },
   render: () => (
     <div className="flex flex-wrap gap-2">
       {TAG_COLOR_OPTIONS.map((opt) => (
@@ -71,6 +72,7 @@ export const AllColors: Story = {
 }
 
 export const AllColorsWithRemove: Story = {
+  args: { tag: 'тег' },
   render: () => (
     <div className="flex flex-wrap gap-2">
       {TAG_COLOR_OPTIONS.map((opt) => (
