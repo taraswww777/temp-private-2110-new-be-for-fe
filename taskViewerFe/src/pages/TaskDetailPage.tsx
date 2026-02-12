@@ -16,6 +16,7 @@ import {
   Skeleton,
 } from '@/uiKit';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
+import { TaskContentEditDialog } from '@/components/TaskContentEditDialog';
 import { TaskTagsEditor } from '@/components/TaskTagsEditor';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 import { YouTrackLinkCard } from '@/components/YouTrackLinkCard';
@@ -180,7 +181,14 @@ export function TaskDetailPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader actions={<TaskEditDialog task={task} onSave={handleSave} />} />
+      <PageHeader 
+        actions={
+          <div className="flex gap-2">
+            <TaskEditDialog task={task} onSave={handleSave} />
+            <TaskContentEditDialog task={task} onContentUpdated={fetchTask} />
+          </div>
+        } 
+      />
 
       <Card className="overflow-hidden">
         <div className="flex flex-col lg:flex-row">

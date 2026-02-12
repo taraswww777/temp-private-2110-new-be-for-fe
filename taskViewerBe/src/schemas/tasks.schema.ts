@@ -37,5 +37,22 @@ export const taskParamsSchema = z.object({
   id: z.string(),
 });
 
+export const createTaskSchema = z.object({
+  title: z.string().min(1),
+  status: taskStatusEnum.default('backlog'),
+  priority: taskPriorityEnum.default('medium'),
+  content: z.string().default(''),
+  createdDate: z.string().nullable().optional(),
+  branch: z.string().nullable().optional(),
+  tags: z.array(z.string()).optional(),
+  project: z.string().nullable().optional(),
+});
+
+export const updateTaskContentSchema = z.object({
+  content: z.string(),
+});
+
 export type TaskStatus = z.infer<typeof taskStatusEnum>;
 export type UpdateTaskMetaInput = z.infer<typeof updateTaskMetaSchema>;
+export type CreateTaskInput = z.infer<typeof createTaskSchema>;
+export type UpdateTaskContentInput = z.infer<typeof updateTaskContentSchema>;

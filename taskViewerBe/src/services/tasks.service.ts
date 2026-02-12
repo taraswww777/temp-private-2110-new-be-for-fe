@@ -1,10 +1,11 @@
 import { readFile, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
+import { existsSync } from 'fs';
 import { env } from '../config/env.js';
 import { tagsMetadataService } from './tags-metadata.service.js';
 import { projectsMetadataService } from './projects-metadata.service.js';
 import type { Task, TaskManifest, TaskDetail, TaskInManifest } from '../types/task.types.js';
-import type { UpdateTaskMetaInput } from '../schemas/tasks.schema.js';
+import type { UpdateTaskMetaInput, CreateTaskInput } from '../schemas/tasks.schema.js';
 
 const TASKS_DIR = resolve(process.cwd(), env.TASKS_DIR);
 const MANIFEST_PATH = join(TASKS_DIR, 'tasks-manifest.json');
@@ -148,6 +149,183 @@ export const tasksService = {
   },
 
   /**
+   * Генерировать следующий доступный ID задачи (TASK-001, TASK-002 и т.д.)
+   */
+  async getNextTaskId(): Promise<string> {
+    const tasks = await this.getAllTasks();
+    const existingIds = tasks.map((t) => t.id);
+    let nextNum = 1;
+    
+    while (true) {
+      const candidateId = `TASK-${String(nextNum).padStart(3, '0')}`;
+      if (!existingIds.includes(candidateId)) {
+        return candidateId;
+      }
+      nextNum++;
+      // Защита от бесконечного цикла
+      if (nextNum > 9999) {
+        throw new Error('Превышен лимит количества задач');
+      }
+    }
+  },
+
+  /**
+   * Создать slug из названия задачи для имени файла
+   */
+  createSlugFromTitle(title: string): string {
+    return title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '') // Удалить спецсимволы
+      .replace(/\s+/g, '-') // Заменить пробелы на дефисы
+      .replace(/-+/g, '-') // Убрать множественные дефисы
+      .replace(/^-|-$/g, ''); // Убрать дефисы в начале и конце
+  },
+
+  /**
+   * Создать шаблон содержимого задачи в формате Markdown
+   */
+  createTaskMarkdownTemplate(
+    id: string,
+    title: string,
+    status: string,
+    content: string,
+    slug: string
+  ): string {
+    const statusEmojiMap: Record<string, string> = {
+      backlog: '📋 Бэклог',
+      planned: '📅 Запланировано',
+      'in-progress': '⏳ В работе',
+      completed: '✅ Выполнено',
+      cancelled: '❌ Отменено',
+    };
+    const statusLine = statusEmojiMap[status] || status;
+
+    return `# ${id}: ${title}
+
+**Статус**: ${statusLine}  
+**Ветка**: \`feature/${id.toLowerCase()}-${slug}\` (при необходимости)  
+**Приоритет**: средний  
+
+---
+
+## Краткое описание
+
+${content || 'Описание задачи...'}
+
+---
+
+## Контекст
+
+_(добавьте контекст задачи здесь)_
+
+---
+
+## Цели
+
+- [ ] Цель 1
+- [ ] Цель 2
+
+---
+
+## Критерии приёмки
+
+- [ ] Критерий 1
+- [ ] Критерий 2
+
+---
+
+## Технические заметки
+
+_(добавьте технические заметки здесь)_
+
+---
+
+## Уточнения в процессе выполнения
+
+_(здесь будут добавляться уточнения, выявленные в процессе работы)_
+`;
+  },
+
+  /**
+   * Создать новую задачу
+   */
+  async createTask(input: CreateTaskInput): Promise<Task> {
+    const id = await this.getNextTaskId();
+    const slug = this.createSlugFromTitle(input.title);
+    const fileName = `${id}-${slug}.md`;
+    const filePath = join(TASKS_DIR, fileName);
+
+    // Проверить, что файл не существует
+    if (existsSync(filePath)) {
+      throw new Error(`Файл ${fileName} уже существует`);
+    }
+
+    // Создать содержимое файла
+    const markdownContent = this.createTaskMarkdownTemplate(
+      id,
+      input.title,
+      input.status,
+      input.content,
+      slug
+    );
+
+    // Создать файл Markdown
+    await writeFile(filePath, markdownContent, 'utf-8');
+
+    // Добавить запись в манифест
+    const content = await readFile(MANIFEST_PATH, 'utf-8');
+    const manifest: TaskManifest = JSON.parse(content);
+
+    // Резолвить теги в tagIds
+    const tagIds: string[] = [];
+    if (input.tags && input.tags.length > 0) {
+      for (const name of input.tags) {
+        const t = String(name).trim();
+        if (t) tagIds.push(await tagsMetadataService.getOrCreateTagByName(t));
+      }
+    }
+
+    // Резолвить проект в projectId
+    let projectId: string | null = null;
+    if (input.project && input.project.trim()) {
+      projectId = await projectsMetadataService.getOrCreateProjectByName(input.project.trim());
+    }
+
+    const newTask: TaskInManifest = {
+      id,
+      title: input.title,
+      status: input.status,
+      priority: input.priority,
+      file: fileName,
+      createdDate: input.createdDate || new Date().toISOString(),
+      completedDate: null,
+      branch: input.branch || null,
+      tagIds: tagIds.length > 0 ? tagIds : undefined,
+      projectId,
+    };
+
+    manifest.tasks.push(newTask);
+    await writeFile(MANIFEST_PATH, JSON.stringify(manifest, null, 2), 'utf-8');
+
+    return manifestTaskToApiTask(newTask);
+  },
+
+  /**
+   * Обновить содержимое задачи (markdown файл)
+   */
+  async updateTaskContent(id: string, content: string): Promise<TaskDetail | null> {
+    const tasks = await this.getAllTasks();
+    const task = tasks.find((t) => t.id === id);
+    if (!task) return null;
+
+    const mdPath = join(TASKS_DIR, task.file);
+    await writeFile(mdPath, content, 'utf-8');
+
+    return { ...task, content };
+  },
+
+  /**
    * Обновить статус в markdown файле (первая строка с эмодзи)
    */
   async updateTaskStatusInMarkdown(taskFile: string, newStatus: string): Promise<void> {
@@ -161,7 +339,7 @@ export const tasksService = {
       cancelled: '❌ Отменено',
     };
     const statusLine = statusEmojiMap[newStatus] || newStatus;
-    content = content.replace(/(## Статус\n)(.+)/, `$1${statusLine}`);
+    content = content.replace(/(\*\*Статус\*\*: )(.+)/, `$1${statusLine}`);
     await writeFile(mdPath, content, 'utf-8');
   },
 
