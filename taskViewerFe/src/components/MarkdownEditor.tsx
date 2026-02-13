@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Button } from '@/uiKit';
@@ -16,41 +16,41 @@ function insertText(textarea: HTMLTextAreaElement, before: string, after: string
   const end = textarea.selectionEnd;
   const selectedText = textarea.value.substring(start, end);
   const textToInsert = selectedText || placeholder;
-  
-  const newValue = 
+
+  const newValue =
     textarea.value.substring(0, start) +
     before + textToInsert + after +
     textarea.value.substring(end);
-  
+
   const newCursorPos = start + before.length + textToInsert.length + after.length;
-  
+
   return { newValue, newCursorPos };
 }
 
 // Компонент тулбара форматирования
-function FormatToolbar({ 
-  textareaRef, 
-  value, 
+function FormatToolbar({
+  textareaRef,
+  value,
   onChange,
   onUndo,
   onRedo,
   canUndo,
   canRedo
-}: { 
-  textareaRef: React.RefObject<HTMLTextAreaElement | null>, 
-  value: string, 
+}: {
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>,
+  value: string,
   onChange: (value: string) => void,
   onUndo?: () => void,
   onRedo?: () => void,
   canUndo?: boolean,
   canRedo?: boolean
 }) {
-  const applyFormat = (before: string, after: string = '', placeholder: string = 'текст') => {
+  const applyFormat = useCallback((before: string, after: string = '', placeholder: string = 'текст') => {
     if (!textareaRef.current) return;
-    
+
     const { newValue, newCursorPos } = insertText(textareaRef.current, before, after, placeholder);
     onChange(newValue);
-    
+
     // Восстанавливаем фокус и позицию курсора
     setTimeout(() => {
       if (textareaRef.current) {
@@ -58,151 +58,153 @@ function FormatToolbar({
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
       }
     }, 0);
-  };
+  }, [textareaRef, onChange]);
 
-  const formatButtons = [
-    ...(onUndo && onRedo ? [
-      { 
-        label: 'Отменить', 
-        icon: '↶', 
+  const formatButtons = useMemo(() => {
+    return [
+      ...(onUndo && onRedo ? [
+        {
+          label: 'Отменить',
+          icon: '↶',
+          onClick: () => {
+            onUndo();
+            setTimeout(() => {
+              textareaRef.current?.focus();
+            }, 0);
+          },
+          title: 'Отменить (Ctrl+Z)',
+          disabled: !canUndo
+        },
+        {
+          label: 'Повторить',
+          icon: '↷',
+          onClick: () => {
+            onRedo();
+            setTimeout(() => {
+              textareaRef.current?.focus();
+            }, 0);
+          },
+          title: 'Повторить (Shift+Ctrl+Z)',
+          disabled: !canRedo
+        },
+      ] : []),
+      {
+        label: 'Жирный',
+        icon: 'B',
+        onClick: () => applyFormat('**', '**', 'жирный текст'),
+        title: 'Жирный текст (Ctrl+B)'
+      },
+      {
+        label: 'Курсив',
+        icon: 'I',
+        onClick: () => applyFormat('*', '*', 'курсив'),
+        title: 'Курсив (Ctrl+I)'
+      },
+      {
+        label: 'Заголовок 1',
+        icon: 'H1',
+        onClick: () => applyFormat('# ', '', 'Заголовок 1'),
+        title: 'Заголовок 1'
+      },
+      {
+        label: 'Заголовок 2',
+        icon: 'H2',
+        onClick: () => applyFormat('## ', '', 'Заголовок 2'),
+        title: 'Заголовок 2'
+      },
+      {
+        label: 'Заголовок 3',
+        icon: 'H3',
+        onClick: () => applyFormat('### ', '', 'Заголовок 3'),
+        title: 'Заголовок 3'
+      },
+      {
+        label: 'Список',
+        icon: '•',
         onClick: () => {
-          onUndo();
+          if (!textareaRef.current) return;
+          const start = textareaRef.current.selectionStart;
+          const lines = value.substring(0, start).split('\n');
+          const currentLine = lines[lines.length - 1];
+          const indent = currentLine.match(/^(\s*)/)?.[1] || '';
+          applyFormat(`${indent}- `, '', 'Элемент списка');
+        },
+        title: 'Маркированный список'
+      },
+      {
+        label: 'Нумерованный список',
+        icon: '1.',
+        onClick: () => {
+          if (!textareaRef.current) return;
+          const start = textareaRef.current.selectionStart;
+          const lines = value.substring(0, start).split('\n');
+          const currentLine = lines[lines.length - 1];
+          const indent = currentLine.match(/^(\s*)/)?.[1] || '';
+          applyFormat(`${indent}1. `, '', 'Элемент списка');
+        },
+        title: 'Нумерованный список'
+      },
+      {
+        label: 'Ссылка',
+        icon: '🔗',
+        onClick: () => applyFormat('[', '](https://example.com)', 'текст ссылки'),
+        title: 'Вставить ссылку'
+      },
+      {
+        label: 'Код',
+        icon: '</>',
+        onClick: () => applyFormat('`', '`', 'код'),
+        title: 'Инлайн код'
+      },
+      {
+        label: 'Блок кода',
+        icon: '```',
+        onClick: () => {
+          if (!textareaRef.current) return;
+          const start = textareaRef.current.selectionStart;
+          const beforeText = value.substring(0, start);
+          const afterText = value.substring(start);
+          const newValue = beforeText + '\n```\nкод\n```\n' + afterText;
+          onChange(newValue);
           setTimeout(() => {
-            textareaRef.current?.focus();
+            if (textareaRef.current) {
+              const newPos = start + 5; // Позиция после "```\n"
+              textareaRef.current.focus();
+              textareaRef.current.setSelectionRange(newPos, newPos + 4);
+            }
           }, 0);
         },
-        title: 'Отменить (Ctrl+Z)',
-        disabled: !canUndo
+        title: 'Блок кода'
       },
-      { 
-        label: 'Повторить', 
-        icon: '↷', 
+      {
+        label: 'Разделитель',
+        icon: '---',
         onClick: () => {
-          onRedo();
+          if (!textareaRef.current) return;
+          const start = textareaRef.current.selectionStart;
+          const beforeText = value.substring(0, start);
+          const afterText = value.substring(start);
+          const needsNewlineBefore = beforeText && !beforeText.endsWith('\n');
+          const needsNewlineAfter = afterText && !afterText.startsWith('\n');
+          const newValue =
+            beforeText +
+            (needsNewlineBefore ? '\n' : '') +
+            '---\n' +
+            (needsNewlineAfter ? '' : '') +
+            afterText;
+          onChange(newValue);
           setTimeout(() => {
-            textareaRef.current?.focus();
+            if (textareaRef.current) {
+              const newPos = start + (needsNewlineBefore ? 1 : 0) + 5;
+              textareaRef.current.focus();
+              textareaRef.current.setSelectionRange(newPos, newPos);
+            }
           }, 0);
         },
-        title: 'Повторить (Shift+Ctrl+Z)',
-        disabled: !canRedo
+        title: 'Горизонтальная линия'
       },
-    ] : []),
-    { 
-      label: 'Жирный', 
-      icon: 'B', 
-      onClick: () => applyFormat('**', '**', 'жирный текст'),
-      title: 'Жирный текст (Ctrl+B)'
-    },
-    { 
-      label: 'Курсив', 
-      icon: 'I', 
-      onClick: () => applyFormat('*', '*', 'курсив'),
-      title: 'Курсив (Ctrl+I)'
-    },
-    { 
-      label: 'Заголовок 1', 
-      icon: 'H1', 
-      onClick: () => applyFormat('# ', '', 'Заголовок 1'),
-      title: 'Заголовок 1'
-    },
-    { 
-      label: 'Заголовок 2', 
-      icon: 'H2', 
-      onClick: () => applyFormat('## ', '', 'Заголовок 2'),
-      title: 'Заголовок 2'
-    },
-    { 
-      label: 'Заголовок 3', 
-      icon: 'H3', 
-      onClick: () => applyFormat('### ', '', 'Заголовок 3'),
-      title: 'Заголовок 3'
-    },
-    { 
-      label: 'Список', 
-      icon: '•', 
-      onClick: () => {
-        if (!textareaRef.current) return;
-        const start = textareaRef.current.selectionStart;
-        const lines = value.substring(0, start).split('\n');
-        const currentLine = lines[lines.length - 1];
-        const indent = currentLine.match(/^(\s*)/)?.[1] || '';
-        applyFormat(`${indent}- `, '', 'Элемент списка');
-      },
-      title: 'Маркированный список'
-    },
-    { 
-      label: 'Нумерованный список', 
-      icon: '1.', 
-      onClick: () => {
-        if (!textareaRef.current) return;
-        const start = textareaRef.current.selectionStart;
-        const lines = value.substring(0, start).split('\n');
-        const currentLine = lines[lines.length - 1];
-        const indent = currentLine.match(/^(\s*)/)?.[1] || '';
-        applyFormat(`${indent}1. `, '', 'Элемент списка');
-      },
-      title: 'Нумерованный список'
-    },
-    { 
-      label: 'Ссылка', 
-      icon: '🔗', 
-      onClick: () => applyFormat('[', '](https://example.com)', 'текст ссылки'),
-      title: 'Вставить ссылку'
-    },
-    { 
-      label: 'Код', 
-      icon: '</>', 
-      onClick: () => applyFormat('`', '`', 'код'),
-      title: 'Инлайн код'
-    },
-    { 
-      label: 'Блок кода', 
-      icon: '```', 
-      onClick: () => {
-        if (!textareaRef.current) return;
-        const start = textareaRef.current.selectionStart;
-        const beforeText = value.substring(0, start);
-        const afterText = value.substring(start);
-        const newValue = beforeText + '\n```\nкод\n```\n' + afterText;
-        onChange(newValue);
-        setTimeout(() => {
-          if (textareaRef.current) {
-            const newPos = start + 5; // Позиция после "```\n"
-            textareaRef.current.focus();
-            textareaRef.current.setSelectionRange(newPos, newPos + 4);
-          }
-        }, 0);
-      },
-      title: 'Блок кода'
-    },
-    { 
-      label: 'Разделитель', 
-      icon: '---', 
-      onClick: () => {
-        if (!textareaRef.current) return;
-        const start = textareaRef.current.selectionStart;
-        const beforeText = value.substring(0, start);
-        const afterText = value.substring(start);
-        const needsNewlineBefore = beforeText && !beforeText.endsWith('\n');
-        const needsNewlineAfter = afterText && !afterText.startsWith('\n');
-        const newValue = 
-          beforeText + 
-          (needsNewlineBefore ? '\n' : '') + 
-          '---\n' + 
-          (needsNewlineAfter ? '' : '') + 
-          afterText;
-        onChange(newValue);
-        setTimeout(() => {
-          if (textareaRef.current) {
-            const newPos = start + (needsNewlineBefore ? 1 : 0) + 5;
-            textareaRef.current.focus();
-            textareaRef.current.setSelectionRange(newPos, newPos);
-          }
-        }, 0);
-      },
-      title: 'Горизонтальная линия'
-    },
-  ];
+    ];
+  }, [textareaRef, value, applyFormat, onUndo, onRedo, canUndo, canRedo, onChange]);
 
   return (
     <div className="flex flex-wrap gap-1 p-2 border-b border-input bg-muted/30">
@@ -228,47 +230,47 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
   const [viewMode, setViewMode] = useState<'edit' | 'preview' | 'split'>('split');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const textareaRefSplit = useRef<HTMLTextAreaElement>(null);
-  
+
   // История изменений для undo/redo
   const historyRef = useRef<string[]>([value]);
   const historyIndexRef = useRef(0);
   const isHistoryUpdateRef = useRef(false);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastAddedValueRef = useRef<string>(value);
-  
+
   // Состояние для отслеживания возможности undo/redo
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
-  
+
   // Обновление состояния undo/redo
   const updateUndoRedoState = useCallback(() => {
     setCanUndo(historyIndexRef.current > 0);
     setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
   }, []);
-  
+
   // Добавление в историю с debounce
   const addToHistory = useCallback((newValue: string) => {
     if (isHistoryUpdateRef.current) return;
-    
+
     // Сохраняем последнее добавленное значение
     lastAddedValueRef.current = newValue;
-    
+
     // Очищаем таймер если он есть
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
-    
+
     // Добавляем в историю с задержкой для группировки быстрых изменений
     debounceTimerRef.current = setTimeout(() => {
       const history = historyRef.current;
       const index = historyIndexRef.current;
-      
+
       // Используем последнее значение (может измениться за время debounce)
       const valueToAdd = lastAddedValueRef.current;
-      
+
       // Удаляем все записи после текущего индекса (если были redo)
       const newHistory = history.slice(0, index + 1);
-      
+
       // Добавляем новое значение только если оно отличается от последнего в истории
       if (newHistory[newHistory.length - 1] !== valueToAdd) {
         newHistory.push(valueToAdd);
@@ -282,21 +284,21 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
       }
     }, 300);
   }, [updateUndoRedoState]);
-  
+
   // Принудительное сохранение текущего значения в историю
   const flushHistory = useCallback(() => {
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
       debounceTimerRef.current = null;
     }
-    
+
     const currentValue = lastAddedValueRef.current;
     const history = historyRef.current;
     const index = historyIndexRef.current;
-    
+
     // Удаляем все записи после текущего индекса
     const newHistory = history.slice(0, index + 1);
-    
+
     // Добавляем текущее значение если оно отличается от последнего
     if (newHistory[newHistory.length - 1] !== currentValue) {
       newHistory.push(currentValue);
@@ -308,15 +310,15 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
       updateUndoRedoState();
     }
   }, [updateUndoRedoState]);
-  
+
   // Undo
   const handleUndo = useCallback(() => {
     // Принудительно сохраняем текущее состояние перед undo
     flushHistory();
-    
+
     const history = historyRef.current;
     const index = historyIndexRef.current;
-    
+
     if (index > 0) {
       isHistoryUpdateRef.current = true;
       historyIndexRef.current = index - 1;
@@ -327,12 +329,12 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
       }, 0);
     }
   }, [onChange, updateUndoRedoState, flushHistory]);
-  
+
   // Redo
   const handleRedo = useCallback(() => {
     const history = historyRef.current;
     const index = historyIndexRef.current;
-    
+
     if (index < history.length - 1) {
       isHistoryUpdateRef.current = true;
       historyIndexRef.current = index + 1;
@@ -343,7 +345,7 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
       }, 0);
     }
   }, [onChange, updateUndoRedoState]);
-  
+
   // Инициализация истории при монтировании и при изменении value извне
   useEffect(() => {
     // Если значение изменилось извне (не через undo/redo), сбрасываем историю
@@ -363,13 +365,13 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
       }
     }
   }, [value, updateUndoRedoState]);
-  
+
   // Обработка изменений с добавлением в историю
   const handleChange = useCallback((newValue: string) => {
     onChange(newValue);
     addToHistory(newValue);
   }, [onChange, addToHistory]);
-  
+
   // Обработка клавиатурных сокращений
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'z') {
@@ -415,9 +417,9 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
 
       {viewMode === 'edit' && (
         <div className="border border-input rounded-md overflow-hidden flex flex-col flex-1 min-h-0">
-          <FormatToolbar 
-            textareaRef={textareaRef} 
-            value={value} 
+          <FormatToolbar
+            textareaRef={textareaRef}
+            value={value}
             onChange={handleChange}
             onUndo={handleUndo}
             onRedo={handleRedo}
@@ -453,9 +455,9 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
           <div className="flex flex-col min-h-0 h-full">
             <label className="block text-sm font-medium mb-2 text-foreground flex-shrink-0">Редактор</label>
             <div className="border border-input rounded-md overflow-hidden flex flex-col flex-1 min-h-0">
-              <FormatToolbar 
-                textareaRef={textareaRefSplit} 
-                value={value} 
+              <FormatToolbar
+                textareaRef={textareaRefSplit}
+                value={value}
                 onChange={handleChange}
                 onUndo={handleUndo}
                 onRedo={handleRedo}
