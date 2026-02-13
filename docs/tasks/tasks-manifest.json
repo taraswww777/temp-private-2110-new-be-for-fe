@@ -350,7 +350,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+      ]
     },
     {
       "id": "TASK-034",
@@ -361,7 +364,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "0d01c73e-9472-499b-84ac-19f8405bb529"
+      ]
     },
     {
       "id": "TASK-035",
