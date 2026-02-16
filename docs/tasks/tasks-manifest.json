@@ -265,7 +265,11 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
+        "2a16bebe-5093-48e7-934d-f7d29fc6c04e"
+      ]
     },
     {
       "id": "TASK-027",
@@ -339,7 +343,11 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "0d01c73e-9472-499b-84ac-19f8405bb529",
+        "2a16bebe-5093-48e7-934d-f7d29fc6c04e"
+      ]
     },
     {
       "id": "TASK-033",
@@ -467,6 +475,9 @@
       "projectId": "2110-project-id",
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ],
+      "youtrackIssueIds": [
+        "VTB-552"
       ]
     },
     {
@@ -492,7 +503,10 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium",
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "0d01c73e-9472-499b-84ac-19f8405bb529"
+      ]
     },
     {
       "id": "TASK-045",
@@ -566,7 +580,10 @@
       "youtrackIssueIds": [
         "VTB-541"
       ],
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "a6c4234b-0e26-4760-bfd2-9b9bb6792531"
+      ]
     },
     {
       "id": "TASK-050",
@@ -597,7 +614,10 @@
       "youtrackIssueIds": [
         "VTB-540"
       ],
-      "projectId": "2110-project-id"
+      "projectId": "2110-project-id",
+      "tagIds": [
+        "0d01c73e-9472-499b-84ac-19f8405bb529"
+      ]
     },
     {
       "id": "TASK-052",
