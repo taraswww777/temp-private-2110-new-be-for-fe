@@ -1,8 +1,8 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { projectsMetadataService } from '../services/projects-metadata.service.js';
-import { tasksService } from '../services/tasks.service.js';
+import { projectsMetadataService } from '../services/projects-metadata.service.ts';
+import { tasksService } from '../services/tasks.service.ts';
 
 export const projectsRoutes: FastifyPluginAsync = async (fastify) => {
   const server = fastify.withTypeProvider<ZodTypeProvider>();

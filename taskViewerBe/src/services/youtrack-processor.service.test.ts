@@ -1,11 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { TaskStatusEnum } from '../types/taskStatusEnum.ts';
+
+import { YouTrackTaskStatusEnum } from '../types/queue.types.ts';
 
 const mockGetIssue = vi.fn();
 const mockAddLink = vi.fn();
 const mockRemoveLink = vi.fn();
 const mockUpdateOperationStatus = vi.fn();
 
-vi.mock('./youtrack-api.service.js', () => ({
+vi.mock('./youtrack-api.service.ts', () => ({
   youtrackApiService: {
     isConfigured: () => true,
     isUnavailable: () => false,
@@ -13,14 +16,14 @@ vi.mock('./youtrack-api.service.js', () => ({
   },
 }));
 
-vi.mock('./youtrack-queue.service.js', () => ({
+vi.mock('./youtrack-queue.service.ts', () => ({
   youtrackQueueService: {
     updateOperationStatus: (...args: unknown[]) =>
       mockUpdateOperationStatus(...args),
   },
 }));
 
-vi.mock('./youtrack-links.service.js', () => ({
+vi.mock('./youtrack-links.service.ts', () => ({
   youtrackLinksService: {
     addLink: (...args: unknown[]) => mockAddLink(...args),
     removeLink: (...args: unknown[]) => mockRemoveLink(...args),
@@ -28,7 +31,7 @@ vi.mock('./youtrack-links.service.js', () => ({
 }));
 
 const { youtrackProcessorService } = await import(
-  './youtrack-processor.service.js'
+  './youtrack-processor.service.ts'
 );
 
 function linkOperation(overrides: Partial<{ id: string; taskId: string; youtrackIssueId: string }> = {}) {
@@ -87,7 +90,7 @@ describe('youtrackProcessorService', () => {
       expect(mockAddLink).toHaveBeenCalledWith('t1', 'VTB-100');
       expect(mockUpdateOperationStatus).toHaveBeenCalledWith(
         op.id,
-        'completed',
+        YouTrackTaskStatusEnum.completed,
         undefined,
         { success: true }
       );
@@ -121,7 +124,7 @@ describe('youtrackProcessorService', () => {
       expect(mockRemoveLink).toHaveBeenCalledWith('t1', 'VTB-100');
       expect(mockUpdateOperationStatus).toHaveBeenCalledWith(
         op.id,
-        'completed',
+        YouTrackTaskStatusEnum.completed,
         undefined,
         { success: true }
       );

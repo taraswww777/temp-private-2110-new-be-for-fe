@@ -6,8 +6,8 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
-import { env } from './config/env.js';
-import { routes } from './routes/index.js';
+import { env } from './config/env.ts';
+import { routes } from './routes/index.ts';
 
 /** Формат одной ошибки валидации для ответа API */
 interface ValidationDetail {

@@ -4,7 +4,7 @@ import { z } from 'zod';
  * Схема для филиала
  */
 export const branchSchema = z.object({
-  id: z.string().uuid().describe('Идентификатор филиала'),
+  id: z.uuid().describe('Идентификатор филиала'),
   code: z.string().describe('Код филиала'),
   name: z.string().describe('Название филиала'),
 });

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { tagsBlacklistService } from './tags-blacklist.service.js';
+import { tagsBlacklistService } from './tags-blacklist.service.ts';
 import { rm } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';

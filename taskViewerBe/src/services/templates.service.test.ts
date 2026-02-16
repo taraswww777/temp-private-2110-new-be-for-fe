@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { templatesService } from './templates.service.js';
+import { templatesService } from './templates.service.ts';
+import { TaskStatusEnum } from '../types/taskStatusEnum.ts';
 
 describe('templatesService.applyTemplateVariables', () => {
   it('replaces all variables in template string', () => {
@@ -9,7 +10,7 @@ describe('templatesService.applyTemplateVariables', () => {
         taskId: 'TASK-001',
         title: 'Fix bug',
         content: 'Description here',
-        status: 'in-progress',
+        status: TaskStatusEnum.inProgress,
         branch: 'feature/TASK-001',
       }
     );

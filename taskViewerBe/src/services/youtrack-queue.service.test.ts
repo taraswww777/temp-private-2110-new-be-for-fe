@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { youtrackQueueService } from './youtrack-queue.service.js';
-import { readFile, rm } from 'fs/promises';
+import { youtrackQueueService } from './youtrack-queue.service.ts';
+import { rm } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { YouTrackTaskStatusEnum } from '../types/queue.types.ts';
 
 const TASKS_DIR = process.env.TASKS_DIR || '';
 const QUEUE_FILE = join(TASKS_DIR, 'youtrack-queue', 'queue.json');
@@ -32,8 +33,8 @@ describe('youtrackQueueService', () => {
       type: 'link_issue',
       data: { taskId: 't1', youtrackIssueId: 'PROJ-1' },
     });
-    await youtrackQueueService.updateOperationStatus(op.id, 'processing');
-    await youtrackQueueService.updateOperationStatus(op.id, 'completed', undefined, { success: true });
+    await youtrackQueueService.updateOperationStatus(op.id, YouTrackTaskStatusEnum.processing);
+    await youtrackQueueService.updateOperationStatus(op.id, YouTrackTaskStatusEnum.completed, undefined, { success: true });
     const updated = await youtrackQueueService.getOperation(op.id);
     expect(updated?.attempts).toBe(0);
   });
@@ -53,7 +54,7 @@ describe('youtrackQueueService', () => {
       type: 'create_issue',
       data: { taskId: 't1', templateId: 'default' },
     });
-    await youtrackQueueService.updateOperationStatus(op.id, 'pending', 'Retry');
+    await youtrackQueueService.updateOperationStatus(op.id, YouTrackTaskStatusEnum.pending, 'Retry');
     const updated = await youtrackQueueService.getOperation(op.id);
     expect(updated?.attempts).toBe(1);
   });

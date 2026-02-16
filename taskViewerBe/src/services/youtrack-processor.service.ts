@@ -1,15 +1,18 @@
-import { youtrackApiService } from './youtrack-api.service.js';
-import { youtrackQueueService } from './youtrack-queue.service.js';
-import { templatesService } from './templates.service.js';
-import { youtrackLinksService } from './youtrack-links.service.js';
-import { tasksService } from './tasks.service.js';
-import { tagsBlacklistService } from './tags-blacklist.service.js';
+import { youtrackApiService } from './youtrack-api.service.ts';
+import { youtrackQueueService } from './youtrack-queue.service.ts';
+import { templatesService } from './templates.service.ts';
+import { youtrackLinksService } from './youtrack-links.service.ts';
+import { tasksService } from './tasks.service.ts';
+import { tagsBlacklistService } from './tags-blacklist.service.ts';
 import type {
   QueueOperation,
   CreateIssueOperation,
   LinkIssueOperation,
   UnlinkIssueOperation,
-} from '../types/queue.types.js';
+} from '../types/queue.types.ts';
+import { TaskStatusEnum } from '../types/taskStatusEnum.ts';
+
+import { YouTrackTaskStatusEnum } from '../types/queue.types.ts';
 /**
  * Сервис для обработки очереди операций YouTrack
  */
@@ -51,13 +54,13 @@ export const youtrackProcessorService = {
       // Обновляем статус на completed
       await youtrackQueueService.updateOperationStatus(
         operation.id,
-        'completed',
+        YouTrackTaskStatusEnum.completed,
         undefined,
         operation.result
       );
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      
+
       // Если операция уже пыталась выполняться много раз, помечаем как failed
       const maxAttempts = 5;
       if (operation.attempts >= maxAttempts) {

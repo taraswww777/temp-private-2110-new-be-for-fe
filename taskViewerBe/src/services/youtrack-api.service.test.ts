@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-vi.mock('../config/env.js', () => ({
+vi.mock('../config/env.ts', () => ({
   env: {
     YOUTRACK_URL: 'https://yt.test',
     YOUTRACK_TOKEN: 'test-token',
@@ -12,7 +12,7 @@ const mockFetch = vi.fn();
 vi.stubGlobal('fetch', mockFetch);
 
 // Импорт после моков
-const { youtrackApiService } = await import('./youtrack-api.service.js');
+const { youtrackApiService } = await import('./youtrack-api.service.ts');
 
 function jsonResponse(data: unknown) {
   return {

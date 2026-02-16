@@ -1,15 +1,17 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { env } from '../config/env.js';
-import { youtrackApiService } from '../services/youtrack-api.service.js';
-import { templatesService } from '../services/templates.service.js';
-import { youtrackLinksService } from '../services/youtrack-links.service.js';
-import { tasksService } from '../services/tasks.service.js';
-import { youtrackQueueService } from '../services/youtrack-queue.service.js';
-import { youtrackProcessorService } from '../services/youtrack-processor.service.js';
-import { tagsBlacklistService } from '../services/tags-blacklist.service.js';
-import type { YouTrackTemplate } from '../types/template.types.js';
+import { env } from '../config/env.ts';
+import { youtrackApiService } from '../services/youtrack-api.service.ts';
+import { templatesService } from '../services/templates.service.ts';
+import { youtrackLinksService } from '../services/youtrack-links.service.ts';
+import { tasksService } from '../services/tasks.service.ts';
+import { youtrackQueueService } from '../services/youtrack-queue.service.ts';
+import { youtrackProcessorService } from '../services/youtrack-processor.service.ts';
+import { tagsBlacklistService } from '../services/tags-blacklist.service.ts';
+import type { YouTrackTemplate } from '../types/template.types.ts';
+
+import { YouTrackTaskStatusEnum } from '../types/queue.types.ts';
 
 export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
   const server = fastify.withTypeProvider<ZodTypeProvider>();
@@ -168,7 +170,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
         });
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        
+
         // Если ошибка связана с недоступностью YouTrack, добавляем в очередь (не слать запросы, режим без YT)
         if (
           errorMessage.includes('not configured') ||
@@ -294,7 +296,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
               message: error.message,
             });
           }
-          
+
           // Если ошибка связана с недоступностью YouTrack, добавляем в очередь (режим без YT)
           if (
             error.message.includes('not configured') ||
@@ -535,7 +537,7 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
           if (error.message.includes('not found')) {
             return reply.status(404).send({ message: error.message });
           }
-          
+
           // Если ошибка связана с недоступностью YouTrack, добавляем в очередь
           if (
             error.message.includes('not configured') ||
@@ -902,12 +904,12 @@ export const youtrackRoutes: FastifyPluginAsync = async (fastify) => {
     },
     async (request, reply) => {
       const operations = await youtrackQueueService.getAllOperations();
-      
+
       const stats = {
-        pending: operations.filter(op => op.status === 'pending').length,
-        processing: operations.filter(op => op.status === 'processing').length,
-        completed: operations.filter(op => op.status === 'completed').length,
-        failed: operations.filter(op => op.status === 'failed').length,
+        pending: operations.filter(op => op.status === YouTrackTaskStatusEnum.pending).length,
+        processing: operations.filter(op => op.status === YouTrackTaskStatusEnum.processing).length,
+        completed: operations.filter(op => op.status === YouTrackTaskStatusEnum.completed).length,
+        failed: operations.filter(op => op.status === YouTrackTaskStatusEnum.failed).length,
         operations: operations.map(op => ({
           id: op.id,
           type: op.type,

@@ -1,14 +1,27 @@
 import { z } from 'zod';
+import { TaskStatusEnum } from '../types/taskStatusEnum.ts';
+import { TaskPriorityEnum } from '../types/taskPriorityEnum.ts';
 
-export const taskStatusEnum = z.enum(['backlog', 'planned', 'in-progress', 'completed', 'cancelled']);
+export const taskStatusEnum = z.enum([
+  TaskStatusEnum.backlog,
+  TaskStatusEnum.planned,
+  TaskStatusEnum.inProgress,
+  TaskStatusEnum.completed,
+  TaskStatusEnum.cancelled
+]);
 
-export const taskPriorityEnum = z.enum(['low', 'medium', 'high', 'critical']);
+export const taskPriorityEnum = z.enum([
+  TaskPriorityEnum.low,
+  TaskPriorityEnum.medium,
+  TaskPriorityEnum.high,
+  TaskPriorityEnum.critical
+]);
 
 export const taskSchema = z.object({
   id: z.string(),
   title: z.string(),
   status: taskStatusEnum,
-  priority: taskPriorityEnum.default('medium'),
+  priority: taskPriorityEnum.default(TaskPriorityEnum.medium),
   file: z.string(),
   createdDate: z.string().nullable(),
   completedDate: z.string().nullable(),
@@ -39,8 +52,8 @@ export const taskParamsSchema = z.object({
 
 export const createTaskSchema = z.object({
   title: z.string().min(1),
-  status: taskStatusEnum.default('backlog'),
-  priority: taskPriorityEnum.default('medium'),
+  status: taskStatusEnum.default(TaskStatusEnum.backlog),
+  priority: taskPriorityEnum.default(TaskPriorityEnum.medium),
   content: z.string().default(''),
   createdDate: z.string().nullable().optional(),
   branch: z.string().nullable().optional(),
@@ -52,7 +65,6 @@ export const updateTaskContentSchema = z.object({
   content: z.string(),
 });
 
-export type TaskStatus = z.infer<typeof taskStatusEnum>;
 export type UpdateTaskMetaInput = z.infer<typeof updateTaskMetaSchema>;
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export type UpdateTaskContentInput = z.infer<typeof updateTaskContentSchema>;

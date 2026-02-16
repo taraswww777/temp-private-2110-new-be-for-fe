@@ -13,8 +13,8 @@ import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.sch
 
 // Схема для параметров с двумя UUID
 const taskFileParamsSchema = z.object({
-  taskId: z.string().uuid(),
-  fileId: z.string().uuid(),
+  taskId: z.uuid(),
+  fileId: z.uuid(),
 });
 
 export const filesRoutes: FastifyPluginAsync = async (fastify) => {

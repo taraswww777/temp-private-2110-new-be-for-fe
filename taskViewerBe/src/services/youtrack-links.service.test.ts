@@ -7,18 +7,20 @@ vi.mock('fs/promises', () => ({
 }));
 
 const mockGetAllTasks = vi.fn();
-vi.mock('./tasks.service.js', () => ({
+vi.mock('./tasks.service.ts', () => ({
   tasksService: {
     getAllTasks: () => mockGetAllTasks(),
   },
 }));
 
-const { youtrackLinksService } = await import('./youtrack-links.service.js');
+const { youtrackLinksService } = await import('./youtrack-links.service.ts');
+
+import { TaskStatusEnum } from '../types/taskStatusEnum.ts';
 
 const defaultTask = {
   id: 't1',
   title: 'Task 1',
-  status: 'backlog' as const,
+  status: TaskStatusEnum.backlog,
   priority: 'medium' as const,
   file: 't1.md',
   createdDate: null,

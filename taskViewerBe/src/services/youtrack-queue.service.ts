@@ -2,14 +2,14 @@ import { readFile, writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join, resolve } from 'path';
 import { randomUUID } from 'crypto';
-import { env } from '../config/env.js';
+import { env } from '../config/env.ts';
 import type {
   QueueOperation,
   QueueManifest,
   CreateIssueOperation,
   LinkIssueOperation,
   UnlinkIssueOperation,
-} from '../types/queue.types.js';
+} from '../types/queue.types.ts';
 
 const TASKS_DIR = resolve(process.cwd(), env.TASKS_DIR);
 const QUEUE_DIR = join(TASKS_DIR, 'youtrack-queue');

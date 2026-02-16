@@ -1,11 +1,12 @@
 import { readFile, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
 import { existsSync } from 'fs';
-import { env } from '../config/env.js';
-import { tagsMetadataService } from './tags-metadata.service.js';
-import { projectsMetadataService } from './projects-metadata.service.js';
-import type { Task, TaskManifest, TaskDetail, TaskInManifest } from '../types/task.types.js';
-import type { UpdateTaskMetaInput, CreateTaskInput } from '../schemas/tasks.schema.js';
+import { env } from '../config/env.ts';
+import { tagsMetadataService } from './tags-metadata.service.ts';
+import { projectsMetadataService } from './projects-metadata.service.ts';
+import type { Task, TaskManifest, TaskDetail, TaskInManifest } from '../types/task.types.ts';
+import type { UpdateTaskMetaInput, CreateTaskInput } from '../schemas/tasks.schema.ts';
+import { TaskStatusEnum } from '../types/taskStatusEnum.ts';
 
 const TASKS_DIR = resolve(process.cwd(), env.TASKS_DIR);
 const MANIFEST_PATH = join(TASKS_DIR, 'tasks-manifest.json');
@@ -155,7 +156,7 @@ export const tasksService = {
     const tasks = await this.getAllTasks();
     const existingIds = tasks.map((t) => t.id);
     let nextNum = 1;
-    
+
     while (true) {
       const candidateId = `TASK-${String(nextNum).padStart(3, '0')}`;
       if (!existingIds.includes(candidateId)) {
@@ -188,16 +189,16 @@ export const tasksService = {
   createTaskMarkdownTemplate(
     id: string,
     title: string,
-    status: string,
+    status: TaskStatusEnum,
     content: string,
     slug: string
   ): string {
-    const statusEmojiMap: Record<string, string> = {
-      backlog: '📋 Бэклог',
-      planned: '📅 Запланировано',
-      'in-progress': '⏳ В работе',
-      completed: '✅ Выполнено',
-      cancelled: '❌ Отменено',
+    const statusEmojiMap: Record<TaskStatusEnum, string> = {
+      [TaskStatusEnum.backlog]: '📋 Бэклог',
+      [TaskStatusEnum.planned]: '📅 Запланировано',
+      [TaskStatusEnum.inProgress]: '⏳ В работе',
+      [TaskStatusEnum.completed]: '✅ Выполнено',
+      [TaskStatusEnum.cancelled]: '❌ Отменено',
     };
     const statusLine = statusEmojiMap[status] || status;
 
@@ -328,15 +329,15 @@ _(здесь будут добавляться уточнения, выявле�
   /**
    * Обновить статус в markdown файле (первая строка с эмодзи)
    */
-  async updateTaskStatusInMarkdown(taskFile: string, newStatus: string): Promise<void> {
+  async updateTaskStatusInMarkdown(taskFile: string, newStatus: TaskStatusEnum): Promise<void> {
     const mdPath = join(TASKS_DIR, taskFile);
     let content = await readFile(mdPath, 'utf-8');
-    const statusEmojiMap: Record<string, string> = {
-      backlog: '📋 Бэклог',
-      planned: '📅 Запланировано',
-      'in-progress': '⏳ В работе',
-      completed: '✅ Выполнено',
-      cancelled: '❌ Отменено',
+    const statusEmojiMap: Record<TaskStatusEnum, string> = {
+      [TaskStatusEnum.backlog]: '📋 Бэклог',
+      [TaskStatusEnum.planned]: '📅 Запланировано',
+      [TaskStatusEnum.inProgress]: '⏳ В работе',
+      [TaskStatusEnum.completed]: '✅ Выполнено',
+      [TaskStatusEnum.cancelled]: '❌ Отменено',
     };
     const statusLine = statusEmojiMap[newStatus] || newStatus;
     content = content.replace(/(\*\*Статус\*\*: )(.+)/, `$1${statusLine}`);

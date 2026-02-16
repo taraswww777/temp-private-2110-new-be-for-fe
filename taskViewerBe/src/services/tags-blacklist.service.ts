@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join, resolve } from 'path';
-import { env } from '../config/env.js';
+import { env } from '../config/env.ts';
 
 const TASKS_DIR = resolve(process.cwd(), env.TASKS_DIR);
 const BLACKLIST_PATH = join(TASKS_DIR, 'youtrack-tags-blacklist.json');

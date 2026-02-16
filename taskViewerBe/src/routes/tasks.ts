@@ -6,10 +6,11 @@ import {
   taskParamsSchema,
   updateTaskMetaSchema,
   createTaskSchema,
-  updateTaskContentSchema,
-} from '../schemas/tasks.schema.js';
-import { tasksService } from '../services/tasks.service.js';
-import { tagsMetadataService, PREDEFINED_COLORS } from '../services/tags-metadata.service.js';
+  updateTaskContentSchema, UpdateTaskMetaInput,
+} from '../schemas/tasks.schema.ts';
+import { tasksService } from '../services/tasks.service.ts';
+import { tagsMetadataService, PREDEFINED_COLORS } from '../services/tags-metadata.service.ts';
+import { TaskStatusEnum } from '../types/taskStatusEnum.ts';
 
 export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   const server = fastify.withTypeProvider<ZodTypeProvider>();
@@ -98,7 +99,11 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
     },
     async (request, reply) => {
       const { id } = request.params;
-      const updates = request.body;
+      const updates = request.body as UpdateTaskMetaInput;
+
+      if(updates.status === TaskStatusEnum.completed){
+        updates.completedDate = new Date().toISOString();
+      }
 
       const task = await tasksService.updateTaskMeta(id, updates);
 

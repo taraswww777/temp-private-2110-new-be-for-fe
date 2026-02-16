@@ -56,8 +56,8 @@ export type ReportTypeType = z.infer<typeof reportTypeSchema>;
  * Поддерживает как branchId (для обратной совместимости), так и branchIds (новый формат)
  */
 export const createTaskSchema = z.object({
-  branchId: z.string().uuid().optional().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(z.string().uuid()).min(1).optional().describe('Массив идентификаторов филиалов'),
+  branchId: z.uuid().optional().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
+  branchIds: z.array(z.uuid()).min(1).optional().describe('Массив идентификаторов филиалов'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
   accountMask: z.string().max(20).optional().describe('Маска счетов для фильтрации'),
@@ -96,7 +96,7 @@ export type CreateTaskInput = z.infer<typeof createTaskSchema>;
  * Схема для ответа с информацией о пакете в задании
  */
 export const taskPackageInfoSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string(),
   addedAt: z.string().datetime(),
 });
@@ -107,11 +107,11 @@ export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
  * Схема для полного задания
  */
 export const taskSchema = z.object({
-  id: z.string().uuid().describe('Уникальный идентификатор задания'),
+  id: z.uuid().describe('Уникальный идентификатор задания'),
   createdAt: z.string().datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchId: z.string().uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(z.string().uuid()).describe('Массив идентификаторов филиалов'),
+  branchId: z.uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
+  branchIds: z.array(z.uuid()).describe('Массив идентификаторов филиалов'),
   branchName: z.string().describe('Название филиала (название первого филиала)'),
   branchNames: z.array(z.string()).describe('Массив названий филиалов'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
@@ -161,11 +161,11 @@ export type TaskDetail = z.infer<typeof taskDetailSchema>;
  * Без лишних полей errorMessage, fileUrl. С полями s3FolderId, type, accounts для UI.
  */
 export const taskDetailsSchema = z.object({
-  id: z.string().uuid().describe('Уникальный идентификатор задания'),
+  id: z.uuid().describe('Уникальный идентификатор задания'),
   createdAt: z.string().datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchId: z.string().uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(z.string().uuid()).describe('Массив идентификаторов филиалов'),
+  branchId: z.uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
+  branchIds: z.array(z.uuid()).describe('Массив идентификаторов филиалов'),
   branchName: z.string().describe('Название филиала (название первого филиала)'),
   branchNames: z.array(z.string()).describe('Массив названий филиалов'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
@@ -207,11 +207,11 @@ export type TaskDetails = z.infer<typeof taskDetailsSchema>;
  * Схема для элемента списка заданий (TaskListItemDto)
  */
 export const taskListItemSchema = z.object({
-  id: z.string().uuid().describe('Уникальный идентификатор задания'),
+  id: z.uuid().describe('Уникальный идентификатор задания'),
   createdAt: z.string().datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)'),
-  branchId: z.string().uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(z.string().uuid()).describe('Массив идентификаторов филиалов'),
+  branchId: z.uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
+  branchIds: z.array(z.uuid()).describe('Массив идентификаторов филиалов'),
   branchName: z.string().describe('Название филиала (название первого филиала)'),
   branchNames: z.array(z.string()).describe('Массив названий филиалов'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
@@ -230,7 +230,7 @@ export const taskListItemSchema = z.object({
   canDelete: z.boolean().describe('Можно ли удалить задание'),
   canStart: z.boolean().describe('Можно ли запустить задание'),
   packageIds: z
-    .array(z.string().uuid())
+    .array(z.uuid())
     .describe('ID пакетов, в которые входит задание (пустой массив = не в пакете)'),
 });
 
@@ -265,8 +265,8 @@ export const tasksListSortingSchema = z.object({
  * Все поля опциональны, можно комбинировать несколько фильтров одновременно
  */
 export const tasksListFilterSchema = z.object({
-  packageId: z.string().uuid().nullable().optional().describe('ID пакета (null — задания без пакета)'),
-  branchIds: z.array(z.string().uuid()).optional().describe('Массив идентификаторов филиалов'),
+  packageId: z.uuid().nullable().optional().describe('ID пакета (null — задания без пакета)'),
+  branchIds: z.array(z.uuid()).optional().describe('Массив идентификаторов филиалов'),
   branchName: z.string().optional().describe('Название филиала'),
   status: reportTaskStatusSchema.optional().describe('Статус задания'),
   reportType: reportTypeSchema.optional().describe('Тип отчёта'),
@@ -288,19 +288,19 @@ export const getTasksRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
   filter: tasksListFilterSchema.describe('Фильтры для списка заданий (объект с опциональными полями)'),
-  includedInPacket: z.string().uuid().optional().describe('UUID пакета - вернуть только задачи, входящие в указанный пакет'),
-  excludedInPacket: z.string().uuid().optional().describe('UUID пакета - вернуть только задачи, НЕ входящие в указанный пакет'),
+  includedInPackage: z.uuid().optional().describe('UUID пакета - вернуть только задачи, входящие в указанный пакет'),
+  excludedInPackage: z.uuid().optional().describe('UUID пакета - вернуть только задачи, НЕ входящие в указанный пакет'),
 }).refine(
   (data) => {
     // Параметры взаимоисключающие
-    if (data.includedInPacket && data.excludedInPacket) {
+    if (data.includedInPackage && data.excludedInPackage) {
       return false;
     }
     return true;
   },
   {
-    message: 'includedInPacket and excludedInPacket cannot be used together',
-    path: ['includedInPacket'],
+    message: 'includedInPackage and excludedInPackage cannot be used together',
+    path: ['includedInPackage'],
   }
 );
 
@@ -320,7 +320,7 @@ export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
  * Схема для массового удаления заданий
  */
 export const bulkDeleteTasksSchema = z.object({
-  taskIds: z.array(z.string().uuid()).min(1),
+  taskIds: z.array(z.uuid()).min(1),
 });
 
 export type BulkDeleteTasksInput = z.infer<typeof bulkDeleteTasksSchema>;
@@ -332,7 +332,7 @@ export const bulkDeleteResponseSchema = z.object({
   deleted: z.number().int().min(0),
   failed: z.number().int().min(0),
   results: z.array(z.object({
-    taskId: z.string().uuid(),
+    taskId: z.uuid(),
     success: z.boolean(),
     reason: z.string().optional(),
   })),
@@ -344,7 +344,7 @@ export type BulkDeleteResponse = z.infer<typeof bulkDeleteResponseSchema>;
  * Схема для массовой отмены заданий
  */
 export const bulkCancelTasksSchema = z.object({
-  taskIds: z.array(z.string().uuid()).min(1),
+  taskIds: z.array(z.uuid()).min(1),
 });
 
 export type BulkCancelTasksInput = z.infer<typeof bulkCancelTasksSchema>;
@@ -356,7 +356,7 @@ export const bulkCancelResponseSchema = z.object({
   cancelled: z.number().int().min(0),
   failed: z.number().int().min(0),
   results: z.array(z.object({
-    taskId: z.string().uuid(),
+    taskId: z.uuid(),
     success: z.boolean(),
     status: reportTaskStatusSchema.optional(),
     updatedAt: z.string().datetime().optional(),
@@ -370,7 +370,7 @@ export type BulkCancelResponse = z.infer<typeof bulkCancelResponseSchema>;
  * Схема для ответа при отмене задания
  */
 export const cancelTaskResponseSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   status: reportTaskStatusSchema,
   updatedAt: z.string().datetime(),
 });
@@ -381,7 +381,7 @@ export type CancelTaskResponse = z.infer<typeof cancelTaskResponseSchema>;
  * Схема для запуска заданий (одного или нескольких)
  */
 export const startTasksSchema = z.object({
-  taskIds: z.array(z.string().uuid()).min(1),
+  taskIds: z.array(z.uuid()).min(1),
 });
 
 export type StartTasksInput = z.infer<typeof startTasksSchema>;
@@ -390,7 +390,7 @@ export type StartTasksInput = z.infer<typeof startTasksSchema>;
  * Схема для успешного результата запуска задания
  */
 export const startTaskResultSchema = z.object({
-  taskId: z.string().uuid(),
+  taskId: z.uuid(),
   status: reportTaskStatusSchema,
   startedAt: z.string().datetime(),
 });
@@ -401,7 +401,7 @@ export type StartTaskResult = z.infer<typeof startTaskResultSchema>;
  * Схема для ошибки запуска задания
  */
 export const startTaskErrorSchema = z.object({
-  taskId: z.string().uuid(),
+  taskId: z.uuid(),
   reason: z.string(),
 });
 

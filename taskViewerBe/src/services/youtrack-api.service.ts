@@ -1,10 +1,10 @@
-import { env } from '../config/env.js';
+import { env } from '../config/env.ts';
 import type {
   YouTrackProject,
   YouTrackIssue,
   YouTrackCreateIssueRequest,
   YouTrackCreateIssueResponse,
-} from '../types/youtrack.types.js';
+} from '../types/youtrack.types.ts';
 
 /** Время, на которое считаем YT недоступным после ошибки (мс) */
 const UNAVAILABLE_COOLDOWN_MS = 5 * 60 * 1000;

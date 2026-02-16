@@ -2,7 +2,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 
 const mockFileParamsSchema = z.object({
-  fileId: z.string().uuid(),
+  fileId: z.uuid(),
   fileName: z.string(),
 });
 

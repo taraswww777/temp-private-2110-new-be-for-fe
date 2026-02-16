@@ -53,7 +53,7 @@ export type PaginatedResponse = z.infer<typeof paginatedResponseSchema>;
  * Переиспользуемая схема для UUID
  * Используется для создания ссылок в OpenAPI спецификации
  */
-export const uuidSchema = z.string().uuid().describe('UUID в формате RFC 4122');
+export const uuidSchema = z.uuid().describe('UUID в формате RFC 4122');
 
 export type Uuid = z.infer<typeof uuidSchema>;
 
