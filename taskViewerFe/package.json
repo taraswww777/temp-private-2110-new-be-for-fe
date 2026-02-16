@@ -5,8 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build": "npm run checks && vite build",
+    "checks": "npm run tsc:ci && npm run eslint:quiet",
+    "eslint": "eslint \"@(src)/**/*.@(ts|tsx)\" --cache --cache-location \"./.cache/\" --max-warnings 1000",
+    "eslint:quiet": "npm run eslint -- --quiet",
+    "eslint:fix": "npm run eslint:quiet -- --fix",
+    "tsc:ci": "tsc --noEmit",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
