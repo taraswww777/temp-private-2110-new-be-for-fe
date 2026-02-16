@@ -1,7 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   /** Показывать ли кнопку очистки (появляется когда есть значение) */
