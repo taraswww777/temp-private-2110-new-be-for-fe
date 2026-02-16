@@ -10,6 +10,7 @@ import { Toaster } from 'sonner';
 import { useTheme } from '@/contexts/ThemeContext.tsx';
 import { AppLoader } from '@/app/AppLoader.tsx';
 import { AppTemplate } from '@/app/components/AppTemplate.tsx';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 const AppContent = () => {
   const { resolvedTheme } = useTheme();
@@ -34,6 +35,8 @@ AppContent.displayName = 'AppContent';
 
 export const App = () => (
   <AppLoader>
-    <AppContent />
+    <ErrorBoundary>
+      <AppContent />
+    </ErrorBoundary>
   </AppLoader>
 );
