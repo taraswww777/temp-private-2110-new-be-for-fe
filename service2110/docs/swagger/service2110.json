@@ -857,10 +857,10 @@
             },
             "additionalProperties": false
           },
-          "includedInPacket": {
+          "includedInPackage": {
             "$ref": "#/components/schemas/UuidSchema"
           },
-          "excludedInPacket": {
+          "excludedInPackage": {
             "$ref": "#/components/schemas/UuidSchema"
           }
         },

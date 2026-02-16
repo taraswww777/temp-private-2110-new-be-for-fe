@@ -101,12 +101,12 @@ export class TasksService {
    * Получить список заданий с фильтрацией и пагинацией (body: pagination, sorting, filter)
    */
   async getTasks(body: GetTasksRequest): Promise<TasksListResponse> {
-    const { pagination, sorting, filter, includedInPacket, excludedInPacket } = body;
+    const { pagination, sorting, filter, includedInPackage, excludedInPackage } = body;
     const pageNumber = pagination.number;
     const pageSize = pagination.size;
 
     // Построение WHERE из filter[] и параметров фильтрации по пакету
-    const conditions = this.buildFilterConditions(filter, includedInPacket, excludedInPacket);
+    const conditions = this.buildFilterConditions(filter, includedInPackage, excludedInPackage);
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
@@ -212,17 +212,17 @@ export class TasksService {
   /**
    * Построение условий WHERE из массива FilterDto и параметров фильтрации по пакету
    * Поддержка фильтра packageId: задания в/не в указанном пакете (связь через report_6406_package_tasks).
-   * Поддержка параметров includedInPacket и excludedInPacket для фильтрации по пакету.
+   * Поддержка параметров includedInPackage и excludedInPackage для фильтрации по пакету.
    */
   private buildFilterConditions(
     filter: GetTasksRequest['filter'],
-    includedInPacket?: string,
-    excludedInPacket?: string,
+    includedInPackage?: string,
+    excludedInPackage?: string,
   ) {
     const conditions: Array<ReturnType<typeof eq> | ReturnType<typeof sql>> = [];
 
-    // Фильтр по пакету через includedInPacket/excludedInPacket (приоритет над filter.packageId)
-    if (includedInPacket) {
+    // Фильтр по пакету через includedInPackage/excludedInPackage (приоритет над filter.packageId)
+    if (includedInPackage) {
       // Задания, входящие в пакет с указанным ID
       conditions.push(
         exists(
@@ -232,12 +232,12 @@ export class TasksService {
             .where(
               and(
                 eq(report6406PackageTasks.taskId, report6406Tasks.id),
-                eq(report6406PackageTasks.packageId, includedInPacket),
+                eq(report6406PackageTasks.packageId, includedInPackage),
               ),
             ),
         ),
       );
-    } else if (excludedInPacket) {
+    } else if (excludedInPackage) {
       // Задания, НЕ входящие в пакет с указанным ID
       conditions.push(
         not(
@@ -248,7 +248,7 @@ export class TasksService {
               .where(
                 and(
                   eq(report6406PackageTasks.taskId, report6406Tasks.id),
-                  eq(report6406PackageTasks.packageId, excludedInPacket),
+                  eq(report6406PackageTasks.packageId, excludedInPackage),
                 ),
               ),
           ),

@@ -458,11 +458,11 @@
     {
       "id": "TASK-042",
       "title": "Переименование сущностей связанных с Пакетами на Backend (packet)",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-042-rename-packet-entities-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
-      "completedDate": null,
-      "branch": null,
+      "completedDate": "2026-02-16T17:37:00Z",
+      "branch": "feature/TASK-042-rename-packet-entities-backend",
       "priority": "medium",
       "projectId": "2110-project-id",
       "tagIds": [

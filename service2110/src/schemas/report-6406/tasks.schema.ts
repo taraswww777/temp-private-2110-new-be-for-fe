@@ -288,19 +288,19 @@ export const getTasksRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
   filter: tasksListFilterSchema.describe('Фильтры для списка заданий (объект с опциональными полями)'),
-  includedInPacket: z.string().uuid().optional().describe('UUID пакета - вернуть только задачи, входящие в указанный пакет'),
-  excludedInPacket: z.string().uuid().optional().describe('UUID пакета - вернуть только задачи, НЕ входящие в указанный пакет'),
+  includedInPackage: z.string().uuid().optional().describe('UUID пакета - вернуть только задачи, входящие в указанный пакет'),
+  excludedInPackage: z.string().uuid().optional().describe('UUID пакета - вернуть только задачи, НЕ входящие в указанный пакет'),
 }).refine(
   (data) => {
     // Параметры взаимоисключающие
-    if (data.includedInPacket && data.excludedInPacket) {
+    if (data.includedInPackage && data.excludedInPackage) {
       return false;
     }
     return true;
   },
   {
-    message: 'includedInPacket and excludedInPacket cannot be used together',
-    path: ['includedInPacket'],
+    message: 'includedInPackage and excludedInPackage cannot be used together',
+    path: ['includedInPackage'],
   }
 );
 
