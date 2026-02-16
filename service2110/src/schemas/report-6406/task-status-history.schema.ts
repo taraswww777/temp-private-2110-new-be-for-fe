@@ -5,7 +5,7 @@ import { reportTaskStatusSchema } from './tasks.schema.js';
  * Схема для записи истории статуса
  */
 export const statusHistoryItemSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   status: reportTaskStatusSchema,
   previousStatus: reportTaskStatusSchema.nullable(),
   changedAt: z.string().datetime(),

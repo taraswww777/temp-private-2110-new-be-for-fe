@@ -12,7 +12,7 @@ export type FileStatusType = z.infer<typeof fileStatusSchema>;
  * Схема для файла задания
  */
 export const taskFileSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   fileName: z.string(),
   fileSize: z
     .number()
@@ -45,7 +45,7 @@ export type TaskFilesQuery = z.infer<typeof taskFilesQuerySchema>;
  * Схема для ответа со списком файлов
  */
 export const taskFilesResponseSchema = z.object({
-  taskId: z.string().uuid(),
+  taskId: z.uuid(),
   files: z.array(taskFileSchema),
   pagination: paginationMetadataSchema,
 });
@@ -56,7 +56,7 @@ export type TaskFilesResponse = z.infer<typeof taskFilesResponseSchema>;
  * Схема для ответа при повторе конвертации файла
  */
 export const retryFileConversionResponseSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   status: fileStatusSchema,
   message: z.string(),
 });
