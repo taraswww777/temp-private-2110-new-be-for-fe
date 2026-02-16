@@ -1,15 +1,10 @@
 import { z } from 'zod';
-import {
-  paginationQuerySchema,
-  sortOrderSchema,
-  paginationMetadataSchema,
-  sortingRequestSchema,
-  filterSchema,
-} from '../common.schema.js';
+import { paginationQuerySchema, } from '../common.schema.js';
+import { reportTypeSchema } from '../enums/ReportFormTypeEnum';
 
 /**
  * Enum схемы для валидации
- * 
+ *
  * 21 статус согласно новой статусной модели:
  * - 10 DAPP статусов (Data Application Processing)
  * - 11 FC статусов (File Conversion)
@@ -44,7 +39,6 @@ export const currencySchema = z.enum(['RUB', 'FOREIGN']);
 
 export const fileFormatSchema = z.enum(['TXT', 'XLSX', 'XML']);
 
-export const reportTypeSchema = z.enum(['LSOZ', 'LSOS', 'LSOP']);
 
 export type ReportTaskStatusType = z.infer<typeof reportTaskStatusSchema>;
 export type CurrencyType = z.infer<typeof currencySchema>;

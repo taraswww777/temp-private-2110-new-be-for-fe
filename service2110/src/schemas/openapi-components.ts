@@ -2,101 +2,78 @@
  * Регистрация переиспользуемых компонентов для OpenAPI спецификации
  */
 
-import { 
-  paginationQuerySchema, 
-  paginationMetadataSchema,
-  paginatedResponseSchema,
-  sortingRequestSchema,
-  filterSchema,
+import {
   dateSchema,
   dateTimeSchema,
-  sortOrderSchema,
+  filterSchema,
   healthResponseSchema,
   httpErrorWithInstanceSchema,
+  paginatedResponseSchema,
+  paginationMetadataSchema,
+  paginationQuerySchema,
+  sortingRequestSchema,
+  sortOrderSchema,
   uuidSchema,
 } from './common.schema.js';
 import {
+  bulkCancelResponseSchema,
+  bulkDeleteResponseSchema,
   createTaskSchema,
-  taskSchema,
-  taskListItemSchema,
+  currencySchema,
+  fileFormatSchema,
   getTasksRequestSchema,
-  tasksListResponseSchema,
+  reportTaskStatusSchema,
+  startTasksResponseSchema,
   taskDetailSchema,
   taskDetailsSchema,
-  bulkDeleteResponseSchema,
-  bulkCancelResponseSchema,
-  startTasksResponseSchema,
-  fileFormatSchema,
-  reportTypeSchema,
-  reportTaskStatusSchema,
-  currencySchema,
+  taskListItemSchema,
+  taskSchema,
+  tasksListResponseSchema,
 } from './report-6406/tasks.schema.js';
 import {
+  branchesResponseSchema,
   branchSchema,
-  reportTypeReferenceSchema,
+  currenciesResponseSchema,
   currencyReferenceSchema,
   formatReferenceSchema,
-  sourceSchema,
-  branchesResponseSchema,
-  reportTypesResponseSchema,
-  currenciesResponseSchema,
   formatsResponseSchema,
+  sourceSchema,
   sourcesResponseSchema,
 } from './report-6406/references.schema.js';
 import {
-  createPackageSchema,
-  updatePackageSchema,
-  packageSchema,
-  packagesListResponseSchema,
-  bulkDeletePackagesResponseSchema,
-  updatePackageResponseSchema,
   addTasksToPackageResponseSchema,
+  bulkDeletePackagesResponseSchema,
   bulkRemoveTasksResponseSchema,
   copyToTfrResponseSchema,
+  createPackageSchema,
+  packageSchema,
+  packagesListResponseSchema,
+  updatePackageResponseSchema,
+  updatePackageSchema,
 } from './report-6406/packages.schema.js';
+import { exportTasksRequestSchema, exportTasksResponseSchema, } from './report-6406/export.schema.js';
+import { statusHistoryItemSchema, statusHistoryResponseSchema, } from './report-6406/task-status-history.schema.js';
 import {
-  exportTasksRequestSchema,
-  exportTasksResponseSchema,
-} from './report-6406/export.schema.js';
+  storageCodeSchema,
+  storageVolumeItemSchema,
+  storageVolumeListResponseSchema
+} from './report-6406/storage.schema.js';
 import {
-  statusHistoryItemSchema,
-  statusHistoryResponseSchema,
-} from './report-6406/task-status-history.schema.js';
-import { storageCodeSchema, storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.js';
-import {
+  retryFileConversionResponseSchema,
   taskFileSchema,
   taskFilesResponseSchema,
-  retryFileConversionResponseSchema,
 } from './report-6406/task-files.schema.js';
-
-/**
- * Функция для конвертации Zod схемы в JSON Schema с именем
- */
-function zodToJsonSchema(schema: unknown, name: string) {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const jsonSchema = (schema as any).toJSONSchema({
-      target: 'openApi3' as const,
-      $refStrategy: 'none' as const,
-      removeIncompatibleMeta: true,
-    });
-    
-    // Добавляем заголовок для идентификации
-    return {
-      ...jsonSchema,
-      title: name,
-    };
-  } catch (error) {
-    console.error(`Error converting schema ${name}:`, error);
-    return { type: 'object', title: name };
-  }
-}
+import { zodToJsonSchema } from './utils/zodToJsonSchema';
+import { ReportFormTypeEnumSchema } from './enums/ReportFormTypeEnum';
 
 /**
  * Получить все переиспользуемые компоненты для OpenAPI
  */
 export function getOpenApiComponents() {
   return {
+    // Enums
+    ReportFormTypeEnum: ReportFormTypeEnumSchema,
+
     // Общие схемы
     PaginationRequestDto: zodToJsonSchema(paginationQuerySchema, 'PaginationRequestDto'),
     PaginationMetadataDto: zodToJsonSchema(paginationMetadataSchema, 'PaginationMetadataDto'),
@@ -107,26 +84,23 @@ export function getOpenApiComponents() {
     DateTimeSchema: zodToJsonSchema(dateTimeSchema, 'DateTimeSchema'),
     UuidSchema: zodToJsonSchema(uuidSchema, 'UuidSchema'),
     FileFormatEnumSchema: zodToJsonSchema(fileFormatSchema, 'FileFormatEnumSchema'),
-    ReportTypeEnumSchema: zodToJsonSchema(reportTypeSchema, 'ReportTypeEnumSchema'),
     ReportTaskStatusEnumSchema: zodToJsonSchema(reportTaskStatusSchema, 'ReportTaskStatusEnumSchema'),
     CurrencyEnumSchema: zodToJsonSchema(currencySchema, 'CurrencyEnumSchema'),
     SortOrderEnumSchema: zodToJsonSchema(sortOrderSchema, 'SortOrderEnumSchema'),
     StorageCodeEnumSchema: zodToJsonSchema(storageCodeSchema, 'StorageCodeEnumSchema'),
     HealthResponseDto: zodToJsonSchema(healthResponseSchema, 'HealthResponseDto'),
     HttpErrorWithInstanceDto: zodToJsonSchema(httpErrorWithInstanceSchema, 'HttpErrorWithInstanceDto'),
-    
+
     // Справочники
     BranchDto: zodToJsonSchema(branchSchema, 'BranchDto'),
-    ReportTypeDto: zodToJsonSchema(reportTypeReferenceSchema, 'ReportTypeDto'),
     CurrencyDto: zodToJsonSchema(currencyReferenceSchema, 'CurrencyDto'),
     FormatDto: zodToJsonSchema(formatReferenceSchema, 'FormatDto'),
     SourceDto: zodToJsonSchema(sourceSchema, 'SourceDto'),
     BranchesResponseDto: zodToJsonSchema(branchesResponseSchema, 'BranchesResponseDto'),
-    ReportTypesResponseDto: zodToJsonSchema(reportTypesResponseSchema, 'ReportTypesResponseDto'),
     CurrenciesResponseDto: zodToJsonSchema(currenciesResponseSchema, 'CurrenciesResponseDto'),
     FormatsResponseDto: zodToJsonSchema(formatsResponseSchema, 'FormatsResponseDto'),
     SourcesResponseDto: zodToJsonSchema(sourcesResponseSchema, 'SourcesResponseDto'),
-    
+
     // Задания
     CreateTaskDto: zodToJsonSchema(createTaskSchema, 'CreateTaskDto'),
     TaskDto: zodToJsonSchema(taskSchema, 'TaskDto'),
@@ -143,7 +117,7 @@ export function getOpenApiComponents() {
     TaskFileDto: zodToJsonSchema(taskFileSchema, 'TaskFileDto'),
     TaskFilesResponseDto: zodToJsonSchema(taskFilesResponseSchema, 'TaskFilesResponseDto'),
     RetryFileConversionResponseDto: zodToJsonSchema(retryFileConversionResponseSchema, 'RetryFileConversionResponseDto'),
-    
+
     // Пакеты
     CreatePackageDto: zodToJsonSchema(createPackageSchema, 'CreatePackageDto'),
     UpdatePackageDto: zodToJsonSchema(updatePackageSchema, 'UpdatePackageDto'),
@@ -154,11 +128,11 @@ export function getOpenApiComponents() {
     AddTasksToPackageResponseDto: zodToJsonSchema(addTasksToPackageResponseSchema, 'AddTasksToPackageResponseDto'),
     BulkRemoveTasksResponseDto: zodToJsonSchema(bulkRemoveTasksResponseSchema, 'BulkRemoveTasksResponseDto'),
     CopyToTfrResponseDto: zodToJsonSchema(copyToTfrResponseSchema, 'CopyToTfrResponseDto'),
-    
+
     // Экспорт
     ExportTasksRequestDto: zodToJsonSchema(exportTasksRequestSchema, 'ExportTasksRequestDto'),
     ExportTasksResponseDto: zodToJsonSchema(exportTasksResponseSchema, 'ExportTasksResponseDto'),
-    
+
     // Storage
     StorageVolumeItemDto: zodToJsonSchema(storageVolumeItemSchema, 'StorageVolumeItemDto'),
     StorageVolumeListResponseDto: zodToJsonSchema(storageVolumeListResponseSchema, 'StorageVolumeListResponseDto'),

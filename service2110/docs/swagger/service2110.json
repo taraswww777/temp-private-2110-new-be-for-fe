@@ -40,14 +40,48 @@
         ],
         "title": "FileFormatEnumSchema"
       },
-      "ReportTypeEnumSchema": {
+      "ReportFormTypeEnum": {
         "type": "string",
         "enum": [
-          "LSOZ",
-          "LSOS",
-          "LSOP"
+          "N3462D",
+          "KROS",
+          "N6406D"
         ],
-        "title": "ReportTypeEnumSchema"
+        "description": "Тип отчета",
+        "title": "ReportFormTypeEnum",
+        "x-enum-descriptions": [
+          "3462у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
+          "КРОС: КРОС, Ведомость открытых счетов, Ведомость закрытых счетов",
+          "6406у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции"
+        ],
+        "x-enum-varnames": [
+          "N3462D",
+          "KROS",
+          "N6406D"
+        ],
+        "oneOf": [
+          {
+            "description": "3462у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
+            "title": "N3462D",
+            "enum": [
+              "N3462D"
+            ]
+          },
+          {
+            "description": "КРОС: КРОС, Ведомость открытых счетов, Ведомость закрытых счетов",
+            "title": "KROS",
+            "enum": [
+              "KROS"
+            ]
+          },
+          {
+            "description": "6406у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
+            "title": "N6406D",
+            "enum": [
+              "N6406D"
+            ]
+          }
+        ]
       },
       "ReportTaskStatusEnumSchema": {
         "type": "string",
@@ -311,7 +345,7 @@
         "additionalProperties": false,
         "title": "BranchDto"
       },
-      "ReportTypeDto": {
+      "CurrencyDto": {
         "type": "object",
         "properties": {
           "code": {
@@ -326,13 +360,10 @@
           "name"
         ],
         "additionalProperties": false,
-        "title": "ReportTypeDto"
-      },
-      "CurrencyDto": {
-        "$ref": "#/components/schemas/ReportTypeDto"
+        "title": "CurrencyDto"
       },
       "FormatDto": {
-        "$ref": "#/components/schemas/ReportTypeDto"
+        "$ref": "#/components/schemas/CurrencyDto"
       },
       "SourceDto": {
         "type": "object",
@@ -369,24 +400,17 @@
         },
         "title": "BranchesResponseDto"
       },
-      "ReportTypesResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/ReportTypeDto"
-        },
-        "title": "ReportTypesResponseDto"
-      },
       "CurrenciesResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/ReportTypeDto"
+          "$ref": "#/components/schemas/CurrencyDto"
         },
         "title": "CurrenciesResponseDto"
       },
       "FormatsResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/ReportTypeDto"
+          "$ref": "#/components/schemas/CurrencyDto"
         },
         "title": "FormatsResponseDto"
       },
@@ -434,7 +458,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "$ref": "#/components/schemas/ReportFormTypeEnum"
           },
           "source": {
             "description": "Ссылка на справочник или идентификатор источника данных",
@@ -520,7 +544,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "$ref": "#/components/schemas/ReportFormTypeEnum"
           },
           "source": {
             "anyOf": [
@@ -710,7 +734,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "$ref": "#/components/schemas/ReportFormTypeEnum"
           },
           "updatedAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -829,7 +853,7 @@
                 "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
               },
               "reportType": {
-                "$ref": "#/components/schemas/ReportTypeEnumSchema"
+                "$ref": "#/components/schemas/ReportFormTypeEnum"
               },
               "format": {
                 "$ref": "#/components/schemas/FileFormatEnumSchema"
@@ -964,7 +988,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "$ref": "#/components/schemas/ReportFormTypeEnum"
           },
           "source": {
             "anyOf": [
@@ -1187,7 +1211,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "$ref": "#/components/schemas/ReportFormTypeEnum"
           },
           "source": {
             "anyOf": [
@@ -2030,7 +2054,7 @@
                 "description": "Список типов отчётов для фильтрации",
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/ReportTypeEnumSchema"
+                  "$ref": "#/components/schemas/ReportFormTypeEnum"
                 }
               },
               "formats": {
@@ -2265,11 +2289,11 @@
         }
       }
     },
-    "/api/v1/report-6406/references/branches": {
+    "/api/v1/report-6406/dictionary/branches": {
       "get": {
         "summary": "Получить список филиалов",
         "tags": [
-          "Report 6406 - References"
+          "Report 6406 - Dictionary"
         ],
         "responses": {
           "200": {
@@ -2277,7 +2301,46 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BranchesResponseDto"
+                  "type": "object",
+                  "properties": {
+                    "branches": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "minimum": -9007199254740991,
+                            "maximum": 9007199254740991,
+                            "description": "Идентификатор филиала"
+                          },
+                          "codeCB": {
+                            "type": "string",
+                            "description": "Код ЦБ"
+                          },
+                          "codeDAPP": {
+                            "type": "string",
+                            "description": "Код DAPP"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Название филиала"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "codeCB",
+                          "codeDAPP",
+                          "name"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "branches"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }
@@ -2285,31 +2348,11 @@
         }
       }
     },
-    "/api/v1/report-6406/references/report-types": {
-      "get": {
-        "summary": "Получить список типов отчётов",
-        "tags": [
-          "Report 6406 - References"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ReportTypesResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/report-6406/references/currencies": {
+    "/api/v1/report-6406/dictionary/currencies": {
       "get": {
         "summary": "Получить список валют",
         "tags": [
-          "Report 6406 - References"
+          "Report 6406 - Dictionary"
         ],
         "responses": {
           "200": {
@@ -2317,7 +2360,19 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CurrenciesResponseDto"
+                  "type": "object",
+                  "properties": {
+                    "currencies": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CurrencyDto"
+                      }
+                    }
+                  },
+                  "required": [
+                    "currencies"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }
@@ -2325,31 +2380,11 @@
         }
       }
     },
-    "/api/v1/report-6406/references/formats": {
-      "get": {
-        "summary": "Получить список форматов файлов",
-        "tags": [
-          "Report 6406 - References"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FormatsResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/report-6406/references/sources": {
+    "/api/v1/report-6406/dictionary/sources": {
       "get": {
         "summary": "Получить список источников счетов",
         "tags": [
-          "Report 6406 - References"
+          "Report 6406 - Dictionary"
         ],
         "responses": {
           "200": {
@@ -2357,7 +2392,106 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SourcesResponseDto"
+                  "type": "object",
+                  "properties": {
+                    "sources": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SourceDto"
+                      }
+                    }
+                  },
+                  "required": [
+                    "sources"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/dictionary/account-masks": {
+      "get": {
+        "summary": "Получить маски счетов в виде связанного списка",
+        "tags": [
+          "Report 6406 - Dictionary"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "firstAccount": {
+                        "type": "number"
+                      },
+                      "secondAccounts": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "required": [
+                      "firstAccount",
+                      "secondAccounts"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/dictionary/employee/{login}": {
+      "get": {
+        "summary": "Получить данные о сотруднике по AD-логину",
+        "tags": [
+          "Report 6406 - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 30,
+              "pattern": "^([^А-Яа-я\\,\\s\\:]+)$"
+            },
+            "in": "path",
+            "name": "login",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "fullName": {
+                      "type": "string",
+                      "maxLength": 50
+                    },
+                    "login": {
+                      "type": "string",
+                      "maxLength": 30,
+                      "pattern": "^([^А-Яа-я\\,\\s\\:]+)$"
+                    }
+                  },
+                  "required": [
+                    "fullName",
+                    "login"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }
@@ -3237,7 +3371,7 @@
       "description": "Health check endpoints"
     },
     {
-      "name": "Report 6406 - References",
+      "name": "Report 6406 - Dictionary",
       "description": "Справочники для формы отчётности 6406"
     },
     {
