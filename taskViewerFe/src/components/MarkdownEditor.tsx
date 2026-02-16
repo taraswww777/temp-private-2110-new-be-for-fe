@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Button } from '@/uiKit';
@@ -51,7 +51,6 @@ function FormatToolbar({
     const { newValue, newCursorPos } = insertText(textareaRef.current, before, after, placeholder);
     onChange(newValue);
 
-    // Восстанавливаем фокус и позицию курсора
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
@@ -60,168 +59,229 @@ function FormatToolbar({
     }, 0);
   }, [textareaRef, onChange]);
 
-  const formatButtons = useMemo(() => {
-    return [
-      ...(onUndo && onRedo ? [
-        {
-          label: 'Отменить',
-          icon: '↶',
-          onClick: () => {
-            onUndo();
-            setTimeout(() => {
-              textareaRef.current?.focus();
-            }, 0);
-          },
-          title: 'Отменить (Ctrl+Z)',
-          disabled: !canUndo
-        },
-        {
-          label: 'Повторить',
-          icon: '↷',
-          onClick: () => {
-            onRedo();
-            setTimeout(() => {
-              textareaRef.current?.focus();
-            }, 0);
-          },
-          title: 'Повторить (Shift+Ctrl+Z)',
-          disabled: !canRedo
-        },
-      ] : []),
-      {
-        label: 'Жирный',
-        icon: 'B',
-        onClick: () => applyFormat('**', '**', 'жирный текст'),
-        title: 'Жирный текст (Ctrl+B)'
-      },
-      {
-        label: 'Курсив',
-        icon: 'I',
-        onClick: () => applyFormat('*', '*', 'курсив'),
-        title: 'Курсив (Ctrl+I)'
-      },
-      {
-        label: 'Заголовок 1',
-        icon: 'H1',
-        onClick: () => applyFormat('# ', '', 'Заголовок 1'),
-        title: 'Заголовок 1'
-      },
-      {
-        label: 'Заголовок 2',
-        icon: 'H2',
-        onClick: () => applyFormat('## ', '', 'Заголовок 2'),
-        title: 'Заголовок 2'
-      },
-      {
-        label: 'Заголовок 3',
-        icon: 'H3',
-        onClick: () => applyFormat('### ', '', 'Заголовок 3'),
-        title: 'Заголовок 3'
-      },
-      {
-        label: 'Список',
-        icon: '•',
-        onClick: () => {
-          if (!textareaRef.current) return;
-          const start = textareaRef.current.selectionStart;
-          const lines = value.substring(0, start).split('\n');
-          const currentLine = lines[lines.length - 1];
-          const indent = currentLine.match(/^(\s*)/)?.[1] || '';
-          applyFormat(`${indent}- `, '', 'Элемент списка');
-        },
-        title: 'Маркированный список'
-      },
-      {
-        label: 'Нумерованный список',
-        icon: '1.',
-        onClick: () => {
-          if (!textareaRef.current) return;
-          const start = textareaRef.current.selectionStart;
-          const lines = value.substring(0, start).split('\n');
-          const currentLine = lines[lines.length - 1];
-          const indent = currentLine.match(/^(\s*)/)?.[1] || '';
-          applyFormat(`${indent}1. `, '', 'Элемент списка');
-        },
-        title: 'Нумерованный список'
-      },
-      {
-        label: 'Ссылка',
-        icon: '🔗',
-        onClick: () => applyFormat('[', '](https://example.com)', 'текст ссылки'),
-        title: 'Вставить ссылку'
-      },
-      {
-        label: 'Код',
-        icon: '</>',
-        onClick: () => applyFormat('`', '`', 'код'),
-        title: 'Инлайн код'
-      },
-      {
-        label: 'Блок кода',
-        icon: '```',
-        onClick: () => {
-          if (!textareaRef.current) return;
-          const start = textareaRef.current.selectionStart;
-          const beforeText = value.substring(0, start);
-          const afterText = value.substring(start);
-          const newValue = beforeText + '\n```\nкод\n```\n' + afterText;
-          onChange(newValue);
-          setTimeout(() => {
-            if (textareaRef.current) {
-              const newPos = start + 5; // Позиция после "```\n"
-              textareaRef.current.focus();
-              textareaRef.current.setSelectionRange(newPos, newPos + 4);
-            }
-          }, 0);
-        },
-        title: 'Блок кода'
-      },
-      {
-        label: 'Разделитель',
-        icon: '---',
-        onClick: () => {
-          if (!textareaRef.current) return;
-          const start = textareaRef.current.selectionStart;
-          const beforeText = value.substring(0, start);
-          const afterText = value.substring(start);
-          const needsNewlineBefore = beforeText && !beforeText.endsWith('\n');
-          const needsNewlineAfter = afterText && !afterText.startsWith('\n');
-          const newValue =
-            beforeText +
-            (needsNewlineBefore ? '\n' : '') +
-            '---\n' +
-            (needsNewlineAfter ? '' : '') +
-            afterText;
-          onChange(newValue);
-          setTimeout(() => {
-            if (textareaRef.current) {
-              const newPos = start + (needsNewlineBefore ? 1 : 0) + 5;
-              textareaRef.current.focus();
-              textareaRef.current.setSelectionRange(newPos, newPos);
-            }
-          }, 0);
-        },
-        title: 'Горизонтальная линия'
-      },
-    ];
-  }, [textareaRef, value, applyFormat, onUndo, onRedo, canUndo, canRedo, onChange]);
+  const handleUndoClick = useCallback(() => {
+    if (!onUndo) return;
+    onUndo();
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 0);
+  }, [onUndo, textareaRef]);
 
+  const handleRedoClick = useCallback(() => {
+    if (!onRedo) return;
+    onRedo();
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 0);
+  }, [onRedo, textareaRef]);
+
+  const handleListClick = useCallback(() => {
+    if (!textareaRef.current) return;
+    const start = textareaRef.current.selectionStart;
+    const lines = value.substring(0, start).split('\n');
+    const currentLine = lines[lines.length - 1];
+    const indent = currentLine.match(/^(\s*)/)?.[1] || '';
+    applyFormat(`${indent}- `, '', 'Элемент списка');
+  }, [textareaRef, value, applyFormat]);
+
+  const handleNumberedListClick = useCallback(() => {
+    if (!textareaRef.current) return;
+    const start = textareaRef.current.selectionStart;
+    const lines = value.substring(0, start).split('\n');
+    const currentLine = lines[lines.length - 1];
+    const indent = currentLine.match(/^(\s*)/)?.[1] || '';
+    applyFormat(`${indent}1. `, '', 'Элемент списка');
+  }, [textareaRef, value, applyFormat]);
+
+  const handleCodeBlockClick = useCallback(() => {
+    if (!textareaRef.current) return;
+    const start = textareaRef.current.selectionStart;
+    const beforeText = value.substring(0, start);
+    const afterText = value.substring(start);
+    const newValue = beforeText + '\n```\nкод\n```\n' + afterText;
+    onChange(newValue);
+    setTimeout(() => {
+      if (textareaRef.current) {
+        const newPos = start + 5;
+        textareaRef.current.focus();
+        textareaRef.current.setSelectionRange(newPos, newPos + 4);
+      }
+    }, 0);
+  }, [textareaRef, value, onChange]);
+
+  const handleDividerClick = useCallback(() => {
+    if (!textareaRef.current) return;
+    const start = textareaRef.current.selectionStart;
+    const beforeText = value.substring(0, start);
+    const afterText = value.substring(start);
+    const needsNewlineBefore = beforeText && !beforeText.endsWith('\n');
+    const needsNewlineAfter = afterText && !afterText.startsWith('\n');
+    const newValue =
+      beforeText +
+      (needsNewlineBefore ? '\n' : '') +
+      '---\n' +
+      (needsNewlineAfter ? '' : '') +
+      afterText;
+    onChange(newValue);
+    setTimeout(() => {
+      if (textareaRef.current) {
+        const newPos = start + (needsNewlineBefore ? 1 : 0) + 5;
+        textareaRef.current.focus();
+        textareaRef.current.setSelectionRange(newPos, newPos);
+      }
+    }, 0);
+  }, [textareaRef, value, onChange]);
+
+  // Рендерим кнопки напрямую, без создания промежуточного массива
   return (
     <div className="flex flex-wrap gap-1 p-2 border-b border-input bg-muted/30">
-      {formatButtons.map((btn, idx) => (
-        <Button
-          key={idx}
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={btn.onClick}
-          title={btn.title}
-          disabled={btn.disabled}
-          className="h-8 px-2 text-xs"
-        >
-          <span className="font-semibold">{btn.icon}</span>
-        </Button>
-      ))}
+      {onUndo && onRedo && (
+        <>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleUndoClick}
+            title="Отменить (Ctrl+Z)"
+            disabled={!canUndo}
+            className="h-8 px-2 text-xs"
+          >
+            <span className="font-semibold">↶</span>
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleRedoClick}
+            title="Повторить (Shift+Ctrl+Z)"
+            disabled={!canRedo}
+            className="h-8 px-2 text-xs"
+          >
+            <span className="font-semibold">↷</span>
+          </Button>
+        </>
+      )}
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => applyFormat('**', '**', 'жирный текст')}
+        title="Жирный текст (Ctrl+B)"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">B</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => applyFormat('*', '*', 'курсив')}
+        title="Курсив (Ctrl+I)"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">I</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => applyFormat('# ', '', 'Заголовок 1')}
+        title="Заголовок 1"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">H1</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => applyFormat('## ', '', 'Заголовок 2')}
+        title="Заголовок 2"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">H2</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => applyFormat('### ', '', 'Заголовок 3')}
+        title="Заголовок 3"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">H3</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={handleListClick}
+        title="Маркированный список"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">•</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={handleNumberedListClick}
+        title="Нумерованный список"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">1.</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => applyFormat('[', '](https://example.com)', 'текст ссылки')}
+        title="Вставить ссылку"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">🔗</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => applyFormat('`', '`', 'код')}
+        title="Инлайн код"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">{'</>'}</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={handleCodeBlockClick}
+        title="Блок кода"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">{'```'}</span>
+      </Button>
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={handleDividerClick}
+        title="Горизонтальная линия"
+        className="h-8 px-2 text-xs"
+      >
+        <span className="font-semibold">---</span>
+      </Button>
     </div>
   );
 }
