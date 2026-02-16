@@ -51,28 +51,28 @@ function FormatToolbar({
     const { newValue, newCursorPos } = insertText(textareaRef.current, before, after, placeholder);
     onChange(newValue);
 
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
       }
-    }, 0);
+    });
   }, [textareaRef, onChange]);
 
   const handleUndoClick = useCallback(() => {
     if (!onUndo) return;
     onUndo();
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       textareaRef.current?.focus();
-    }, 0);
+    });
   }, [onUndo, textareaRef]);
 
   const handleRedoClick = useCallback(() => {
     if (!onRedo) return;
     onRedo();
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       textareaRef.current?.focus();
-    }, 0);
+    });
   }, [onRedo, textareaRef]);
 
   const handleListClick = useCallback(() => {
@@ -100,13 +100,13 @@ function FormatToolbar({
     const afterText = value.substring(start);
     const newValue = beforeText + '\n```\nкод\n```\n' + afterText;
     onChange(newValue);
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       if (textareaRef.current) {
         const newPos = start + 5;
         textareaRef.current.focus();
         textareaRef.current.setSelectionRange(newPos, newPos + 4);
       }
-    }, 0);
+    });
   }, [textareaRef, value, onChange]);
 
   const handleDividerClick = useCallback(() => {
@@ -123,13 +123,13 @@ function FormatToolbar({
       (needsNewlineAfter ? '' : '') +
       afterText;
     onChange(newValue);
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       if (textareaRef.current) {
         const newPos = start + (needsNewlineBefore ? 1 : 0) + 5;
         textareaRef.current.focus();
         textareaRef.current.setSelectionRange(newPos, newPos);
       }
-    }, 0);
+    });
   }, [textareaRef, value, onChange]);
 
   // Рендерим кнопки напрямую, без создания промежуточного массива
@@ -302,6 +302,15 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
 
+  // Очистка таймеров при размонтировании компонента
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
   // Обновление состояния undo/redo
   const updateUndoRedoState = useCallback(() => {
     setCanUndo(historyIndexRef.current > 0);
@@ -384,9 +393,9 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
       historyIndexRef.current = index - 1;
       onChange(history[index - 1]);
       updateUndoRedoState();
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         isHistoryUpdateRef.current = false;
-      }, 0);
+      });
     }
   }, [onChange, updateUndoRedoState, flushHistory]);
 
@@ -400,9 +409,9 @@ export function MarkdownEditor({ value, onChange, placeholder = 'Введите 
       historyIndexRef.current = index + 1;
       onChange(history[index + 1]);
       updateUndoRedoState();
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         isHistoryUpdateRef.current = false;
-      }, 0);
+      });
     }
   }, [onChange, updateUndoRedoState]);
 
