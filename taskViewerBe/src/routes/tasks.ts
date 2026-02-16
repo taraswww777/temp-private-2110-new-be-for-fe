@@ -6,7 +6,7 @@ import {
   taskParamsSchema,
   updateTaskMetaSchema,
   createTaskSchema,
-  updateTaskContentSchema,
+  updateTaskContentSchema, UpdateTaskMetaInput,
 } from '../schemas/tasks.schema.js';
 import { tasksService } from '../services/tasks.service.js';
 import { tagsMetadataService, PREDEFINED_COLORS } from '../services/tags-metadata.service.js';
@@ -98,7 +98,11 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
     },
     async (request, reply) => {
       const { id } = request.params;
-      const updates = request.body;
+      const updates = request.body as UpdateTaskMetaInput;
+
+      if(updates.status === 'completed'){
+        updates.completedDate = new Date().toISOString();
+      }
 
       const task = await tasksService.updateTaskMeta(id, updates);
 
