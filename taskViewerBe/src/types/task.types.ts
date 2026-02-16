@@ -1,8 +1,11 @@
+import { TaskStatusEnum } from './taskStatusEnum.ts';
+import { TaskPriorityEnum } from './taskPriorityEnum.ts';
+
 export interface Task {
   id: string;
   title: string;
-  status: 'backlog' | 'planned' | 'in-progress' | 'completed' | 'cancelled';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  status: TaskStatusEnum;
+  priority: TaskPriorityEnum;
   file: string;
   createdDate: string | null;
   completedDate: string | null;

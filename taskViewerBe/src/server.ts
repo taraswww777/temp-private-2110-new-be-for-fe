@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { buildApp } from './app.js';
-import { env } from './config/env.js';
-import { youtrackProcessorService } from './services/youtrack-processor.service.js';
+import { buildApp } from './app.ts';
+import { env } from './config/env.ts';
+import { youtrackProcessorService } from './services/youtrack-processor.service.ts';
 
 async function start() {
   try {

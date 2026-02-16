@@ -1,8 +1,8 @@
 import { readFile, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
-import { env } from '../config/env.js';
-import type { Task, TaskManifest } from '../types/task.types.js';
-import { tasksService } from './tasks.service.js';
+import { env } from '../config/env.ts';
+import type { Task, TaskManifest } from '../types/task.types.ts';
+import { tasksService } from './tasks.service.ts';
 
 const TASKS_DIR = resolve(process.cwd(), env.TASKS_DIR);
 const MANIFEST_PATH = join(TASKS_DIR, 'tasks-manifest.json');

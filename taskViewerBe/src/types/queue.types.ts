@@ -2,16 +2,22 @@
  * Типы для системы очереди операций YouTrack
  */
 
-export type QueueOperationType =
-  | 'create_issue'
-  | 'link_issue'
-  | 'unlink_issue';
+export enum YouTrackOperationTypeEnum {
+  create_issue = 'create_issue',
+  link_issue = 'link_issue',
+  unlink_issue = 'unlink_issue',
+}
 
-export type QueueOperationStatus =
-  | 'pending'
-  | 'processing'
-  | 'completed'
-  | 'failed';
+export type QueueOperationType = keyof typeof YouTrackOperationTypeEnum;
+
+export enum YouTrackTaskStatusEnum {
+  pending = 'pending',
+  processing = 'processing',
+  completed = 'completed',
+  failed = 'failed'
+}
+
+export type QueueOperationStatus = keyof typeof YouTrackTaskStatusEnum;
 
 export interface BaseQueueOperation {
   id: string; // UUID операции

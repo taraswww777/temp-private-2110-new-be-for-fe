@@ -1,8 +1,8 @@
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join, resolve } from 'path';
-import { env } from '../config/env.js';
-import type { YouTrackTemplate, TemplateVariables } from '../types/template.types.js';
+import { env } from '../config/env.ts';
+import type { YouTrackTemplate, TemplateVariables } from '../types/template.types.ts';
 import { z } from 'zod';
 
 const TASKS_DIR = resolve(process.cwd(), env.TASKS_DIR);

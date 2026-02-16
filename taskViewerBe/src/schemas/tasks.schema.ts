@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { TaskStatusEnum } from '../types/taskStatusEnum.js';
-import { TaskPriorityEnum } from '../types/taskPriorityEnum.js';
+import { TaskStatusEnum } from '../types/taskStatusEnum.ts';
+import { TaskPriorityEnum } from '../types/taskPriorityEnum.ts';
 
 export const taskStatusEnum = z.enum([
   TaskStatusEnum.backlog,
@@ -52,8 +52,8 @@ export const taskParamsSchema = z.object({
 
 export const createTaskSchema = z.object({
   title: z.string().min(1),
-  status: taskStatusEnum.default('backlog'),
-  priority: taskPriorityEnum.default('medium'),
+  status: taskStatusEnum.default(TaskStatusEnum.backlog),
+  priority: taskPriorityEnum.default(TaskPriorityEnum.medium),
   content: z.string().default(''),
   createdDate: z.string().nullable().optional(),
   branch: z.string().nullable().optional(),
@@ -65,9 +65,6 @@ export const updateTaskContentSchema = z.object({
   content: z.string(),
 });
 
-export type TaskStatus = TaskStatusEnum;
-export type TaskStatus = TaskStatusEnum;
-export type TaskPriority = TaskPriorityEnum;
 export type UpdateTaskMetaInput = z.infer<typeof updateTaskMetaSchema>;
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export type UpdateTaskContentInput = z.infer<typeof updateTaskContentSchema>;
