@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
-import { sortOrderSchema } from '../common.schema';
 
 /**
  * Направление сортировки (enum ASC/DESC)

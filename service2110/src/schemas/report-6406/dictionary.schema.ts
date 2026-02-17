@@ -6,7 +6,6 @@ import { z } from 'zod';
 export const branchSchema = z.object({
   id: z.number().int().describe('Идентификатор филиала'),
   codeCB: z.string().describe('Код ЦБ'),
-  codeDAPP: z.string().describe('Код DAPP'),
   name: z.string().describe('Название филиала'),
 });
 
@@ -59,7 +58,7 @@ export type SourcesResponse = z.infer<typeof sourcesResponseSchema>;
  */
 export const employeeSchema = z.object({
   fullName: z.string().max(50),
-  login: z.string().max(30).regex(/^([^А-Яа-я\,\s\:]+)$/),
+  login: z.string().max(15),
 });
 
 export type Employee = z.infer<typeof employeeSchema>;

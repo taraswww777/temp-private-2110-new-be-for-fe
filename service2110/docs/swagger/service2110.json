@@ -462,7 +462,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportFormTypeEnum"
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ],
+            "description": "Тип отчёта"
           },
           "source": {
             "description": "Ссылка на справочник или идентификатор источника данных",
@@ -1215,7 +1224,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportFormTypeEnum"
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ],
+            "description": "Тип отчёта"
           },
           "source": {
             "anyOf": [

@@ -90,14 +90,14 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Dictionary'],
       summary: 'Получить данные о сотруднике по AD-логину',
       params: z.object({
-        login: z.string().max(30).regex(/^([^А-Яа-я\,\s\:]+)$/),
+        login: z.string().max(15),
       }),
       response: {
         200: employeeResponseSchema,
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getEmployee(request.params.adLogin);
+    const result = await referencesService.getEmployee(request.params.login);
     return reply.status(200).send(result);
   });
 };

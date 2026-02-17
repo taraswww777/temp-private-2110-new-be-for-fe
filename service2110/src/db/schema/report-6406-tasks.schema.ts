@@ -1,5 +1,19 @@
-import { pgTable, uuid, timestamp, integer, varchar, date, bigint, text, index } from 'drizzle-orm/pg-core';
+import { bigint, date, index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { branches } from './branches.schema.js';
+import { ReportTypeEnum } from '../../schemas/enums/ReportTypeEnum';
+
+/**
+ * PostgreSQL enum для типа отчёта
+ * Создаётся на основе TypeScript enum ReportTypeEnum
+ */
+export const reportTypePgEnum = pgEnum('report_type_enum', [
+  ReportTypeEnum.LSOZ,
+  ReportTypeEnum.LSOS,
+  ReportTypeEnum.LSOP,
+  ReportTypeEnum.KROS_VOS,
+  ReportTypeEnum.KROS_VZS,
+  ReportTypeEnum.KROS,
+]);
 
 /**
  * Задания на построение отчёта для формы 6406
@@ -7,27 +21,27 @@ import { branches } from './branches.schema.js';
 export const report6406Tasks = pgTable('report_6406_tasks', {
   id: uuid('id').primaryKey().defaultRandom(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-  
+
   // Информация о создателе
   createdBy: varchar('created_by', { length: 255 }),
-  
+
   // Информация о филиале и периоде
   branchId: uuid('branch_id').notNull().references(() => branches.id),
   branchName: varchar('branch_name', { length: 255 }).notNull(),
   periodStart: date('period_start').notNull(),
   periodEnd: date('period_end').notNull(),
-  
+
   // Фильтры для построения отчёта
   accountMask: varchar('account_mask', { length: 20 }),
   accountSecondOrder: varchar('account_second_order', { length: 2 }),
   currency: varchar('currency', { length: 20 }).notNull().$type<'RUB' | 'FOREIGN'>(),
   format: varchar('format', { length: 10 }).notNull().$type<'TXT' | 'XLSX' | 'XML'>(),
-  reportType: varchar('report_type', { length: 10 }).notNull().$type<'LSOZ' | 'LSOS' | 'LSOP'>(),
+  reportType: reportTypePgEnum('report_type').notNull(),
   source: varchar('source', { length: 20 }),
-  
+
   // Статус задания (21 статус)
   status: varchar('status', { length: 30 }).notNull().default('created'),
-  
+
   // Информация о результате
   /**
    * Размер файла в байтах.
@@ -37,7 +51,7 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
   filesCount: integer('files_count').notNull().default(0),
   fileUrl: text('file_url'),
   errorMessage: text('error_message'),
-  
+
   // Временные метки
   lastStatusChangedAt: timestamp('last_status_changed_at').notNull().defaultNow(),
   startedAt: timestamp('started_at'),
@@ -66,13 +80,6 @@ export enum FileFormat {
   TXT = 'TXT',
   XLSX = 'XLSX',
   XML = 'XML',
-}
-
-// Enum для типов отчётов
-export enum ReportType {
-  LSOZ = 'LSOZ',
-  LSOS = 'LSOS',
-  LSOP = 'LSOP',
 }
 
 // Re-export TaskStatus from status-model

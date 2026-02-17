@@ -1,11 +1,11 @@
 import { db } from '../../db/index.js';
 import { branches, sources } from '../../db/schema/index.js';
 import type {
+  AccountMasksResponse,
   BranchesResponse,
   CurrenciesResponse,
-  SourcesResponse,
   EmployeeResponse,
-  AccountMasksResponse
+  SourcesResponse
 } from '../../schemas/report-6406/dictionary.schema';
 import { FormatsResponse } from '../../schemas/report-6406/references.schema';
 
@@ -16,12 +16,11 @@ export class ReferencesService {
   async getBranches(): Promise<BranchesResponse> {
     const branchesList = await db.select().from(branches);
 
-    return { branches: branchesList.map(branch => ({
+    return branchesList.map(branch => ({
       id: Number(branch.id),
       codeCB: branch.code,
-      codeDAPP: branch.dappCode,
       name: branch.name
-    })) };
+    }));
   }
 
 
@@ -29,18 +28,16 @@ export class ReferencesService {
    * Получить список валют
    */
   async getCurrencies(): Promise<CurrenciesResponse> {
-    return {
-      currencies: [
-        {
-          code: 'RUB',
-          name: 'Российский рубль'
-        },
-        {
-          code: 'USD',
-          name: 'Доллар США'
-        }
-      ]
-    };
+    return [
+      {
+        code: 'RUB',
+        name: 'Российский рубль'
+      },
+      {
+        code: 'USD',
+        name: 'Доллар США'
+      }
+    ];
   }
 
   /**
@@ -67,9 +64,7 @@ export class ReferencesService {
    * Получить список источников
    */
   async getSources(): Promise<SourcesResponse> {
-    const sourcesList = await db.select().from(sources);
-
-    return { sources: sourcesList };
+    return db.select().from(sources);
   }
 
   /**
