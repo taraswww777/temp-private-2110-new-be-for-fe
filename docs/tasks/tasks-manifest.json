@@ -483,15 +483,18 @@
     {
       "id": "TASK-043",
       "title": "Обратная связь по API контракту от Backend",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-043-api-contract-feedback-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
-      "completedDate": null,
-      "branch": null,
+      "completedDate": "2026-02-17T11:56:30.489Z",
+      "branch": "feature/TASK-043-api-contract-feedback-backend",
       "priority": "medium",
       "projectId": "2110-project-id",
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ],
+      "youtrackIssueIds": [
+        "VTB-553"
       ]
     },
     {

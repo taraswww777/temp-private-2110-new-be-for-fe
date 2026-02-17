@@ -19,23 +19,6 @@ export const branchesResponseSchema = z.array(branchSchema);
 export type BranchesResponse = z.infer<typeof branchesResponseSchema>;
 
 /**
- * Схема для типа отчёта
- */
-export const reportTypeReferenceSchema = z.object({
-  code: z.string(),
-  name: z.string(),
-});
-
-export type ReportTypeReference = z.infer<typeof reportTypeReferenceSchema>;
-
-/**
- * Схема для ответа со списком типов отчётов (прямой массив)
- */
-export const reportTypesResponseSchema = z.array(reportTypeReferenceSchema);
-
-export type ReportTypesResponse = z.infer<typeof reportTypesResponseSchema>;
-
-/**
  * Схема для валюты
  */
 export const currencyReferenceSchema = z.object({

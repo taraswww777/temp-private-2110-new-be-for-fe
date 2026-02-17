@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { paginationQuerySchema, sortOrderSchema, paginationMetadataSchema } from '../common.schema';
+import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema';
+import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**
  * Схема для создания пакета
@@ -26,16 +27,16 @@ export type UpdatePackageInput = z.infer<typeof updatePackageSchema>;
 export const packageSchema = z.object({
   id: z.uuid().describe('Уникальный идентификатор пакета'),
   name: z.string().describe('Название пакета'),
-  createdAt: z.string().datetime().describe('Дата создания пакета'),
+  createdAt: z.iso.datetime().describe('Дата создания пакета'),
   createdBy: z.string().describe('Создатель пакета'),
-  lastCopiedToTfrAt: z.string().datetime().nullable().describe('Дата последнего копирования в ТФР'),
+  lastCopiedToTfrAt: z.iso.datetime().nullable().describe('Дата последнего копирования в ТФР'),
   tasksCount: z.number().int().min(0).describe('Количество заданий в пакете'),
   totalSize: z
     .number()
     .int()
     .min(0)
     .describe('Общий размер пакета в байтах (сумма размеров всех файлов). Всегда число; 0 при пустом пакете.'),
-  updatedAt: z.string().datetime().describe('Дата последнего обновления'),
+  updatedAt: z.iso.datetime().describe('Дата последнего обновления'),
 });
 
 export type Package = z.infer<typeof packageSchema>;
@@ -45,7 +46,7 @@ export type Package = z.infer<typeof packageSchema>;
  */
 export const packagesQuerySchema = paginationQuerySchema.extend({
   sortBy: z.enum(['createdAt', 'name', 'tasksCount', 'totalSize']).default('createdAt'),
-  sortOrder: sortOrderSchema,
+  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
   search: z.string().optional(),
 });
 
@@ -91,7 +92,7 @@ export type BulkDeletePackagesResponse = z.infer<typeof bulkDeletePackagesRespon
 export const updatePackageResponseSchema = z.object({
   id: z.uuid(),
   name: z.string(),
-  updatedAt: z.string().datetime(),
+  updatedAt: z.iso.datetime(),
 });
 
 export type UpdatePackageResponse = z.infer<typeof updatePackageResponseSchema>;
@@ -149,7 +150,7 @@ export type BulkRemoveTasksResponse = z.infer<typeof bulkRemoveTasksResponseSche
  */
 export const copyToTfrResponseSchema = z.object({
   id: z.uuid(),
-  lastCopiedToTfrAt: z.string().datetime(),
+  lastCopiedToTfrAt: z.iso.datetime(),
   message: z.string(),
 });
 

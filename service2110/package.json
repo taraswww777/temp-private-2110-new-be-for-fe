@@ -26,6 +26,7 @@
   "license": "ISC",
   "description": "Backend application on Fastify + TypeScript + PostgreSQL + Drizzle ORM",
   "devDependencies": {
+    "@anatine/zod-openapi": "2.2.8",
     "@eslint/js": "9.39.2",
     "@fastify/cors": "11.2.0",
     "@fastify/swagger": "9.6.1",

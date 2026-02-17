@@ -2,15 +2,14 @@
  * Реестр Zod схем для создания ссылок в OpenAPI
  */
 
-import { 
-  paginationQuerySchema, 
+import {
+  paginationQuerySchema,
   paginationMetadataSchema,
   paginatedResponseSchema,
   sortingRequestSchema,
   filterSchema,
   dateSchema,
   dateTimeSchema,
-  sortOrderSchema,
   healthResponseSchema,
   httpErrorWithInstanceSchema,
   uuidSchema,
@@ -26,19 +25,14 @@ import {
   bulkDeleteResponseSchema,
   bulkCancelResponseSchema,
   startTasksResponseSchema,
-  fileFormatSchema,
-  reportTypeSchema,
   reportTaskStatusSchema,
-  currencySchema,
 } from './report-6406/tasks.schema.js';
 import {
   branchSchema,
-  reportTypeReferenceSchema,
   currencyReferenceSchema,
   formatReferenceSchema,
   sourceSchema,
   branchesResponseSchema,
-  reportTypesResponseSchema,
   currenciesResponseSchema,
   formatsResponseSchema,
   sourcesResponseSchema,
@@ -68,11 +62,19 @@ import {
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
 } from './report-6406/task-files.schema.js';
+import { reportFormTypeSchema } from './enums/ReportFormTypeEnum';
+import { SortOrderEnum, sortOrderSchema } from './enums/SortOrderEnum';
+import { fileFormatSchema } from './enums/FileFormatEnum';
+import { currencySchema } from './enums/CurrencyEnum';
 
 /**
  * Маппинг имён схем на Zod схемы
  */
 export const schemaRegistry = new Map<string, unknown>([
+  // enums
+  ['SortOrderEnum', sortOrderSchema],
+  ['ReportFormTypeEnum', reportFormTypeSchema],
+
   // Общие схемы
   ['PaginationRequestDto', paginationQuerySchema],
   ['PaginationMetadataDto', paginationMetadataSchema],
@@ -83,26 +85,22 @@ export const schemaRegistry = new Map<string, unknown>([
   ['DateTimeSchema', dateTimeSchema],
   ['UuidSchema', uuidSchema],
   ['FileFormatEnumSchema', fileFormatSchema],
-  ['ReportTypeEnumSchema', reportTypeSchema],
   ['ReportTaskStatusEnumSchema', reportTaskStatusSchema],
   ['CurrencyEnumSchema', currencySchema],
-  ['SortOrderEnumSchema', sortOrderSchema],
   ['StorageCodeEnumSchema', storageCodeSchema],
   ['HealthResponseDto', healthResponseSchema],
   ['HttpErrorWithInstanceDto', httpErrorWithInstanceSchema],
-  
+
   // Справочники
   ['BranchDto', branchSchema],
-  ['ReportTypeDto', reportTypeReferenceSchema],
   ['CurrencyDto', currencyReferenceSchema],
   ['FormatDto', formatReferenceSchema],
   ['SourceDto', sourceSchema],
   ['BranchesResponseDto', branchesResponseSchema],
-  ['ReportTypesResponseDto', reportTypesResponseSchema],
   ['CurrenciesResponseDto', currenciesResponseSchema],
   ['FormatsResponseDto', formatsResponseSchema],
   ['SourcesResponseDto', sourcesResponseSchema],
-  
+
   // Задания
   ['CreateTaskDto', createTaskSchema],
   ['TaskDto', taskSchema],
@@ -119,7 +117,7 @@ export const schemaRegistry = new Map<string, unknown>([
   ['TaskFileDto', taskFileSchema],
   ['TaskFilesResponseDto', taskFilesResponseSchema],
   ['RetryFileConversionResponseDto', retryFileConversionResponseSchema],
-  
+
   // Пакеты
   ['CreatePackageDto', createPackageSchema],
   ['UpdatePackageDto', updatePackageSchema],
@@ -130,11 +128,11 @@ export const schemaRegistry = new Map<string, unknown>([
   ['AddTasksToPackageResponseDto', addTasksToPackageResponseSchema],
   ['BulkRemoveTasksResponseDto', bulkRemoveTasksResponseSchema],
   ['CopyToTfrResponseDto', copyToTfrResponseSchema],
-  
+
   // Экспорт
   ['ExportTasksRequestDto', exportTasksRequestSchema],
   ['ExportTasksResponseDto', exportTasksResponseSchema],
-  
+
   // Storage
   ['StorageVolumeItemDto', storageVolumeItemSchema],
   ['StorageVolumeListResponseDto', storageVolumeListResponseSchema],

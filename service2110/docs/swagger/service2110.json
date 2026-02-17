@@ -38,16 +38,51 @@
           "XLSX",
           "XML"
         ],
+        "description": "Формат файла",
         "title": "FileFormatEnumSchema"
       },
-      "ReportTypeEnumSchema": {
+      "ReportFormTypeEnum": {
         "type": "string",
         "enum": [
-          "LSOZ",
-          "LSOS",
-          "LSOP"
+          "N3462D",
+          "KROS",
+          "N6406D"
         ],
-        "title": "ReportTypeEnumSchema"
+        "description": "Тип формы отчетности",
+        "title": "ReportFormTypeEnum",
+        "x-enum-descriptions": [
+          "3462у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
+          "КРОС: КРОС, Ведомость открытых счетов, Ведомость закрытых счетов",
+          "6406у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции"
+        ],
+        "x-enum-varnames": [
+          "N3462D",
+          "KROS",
+          "N6406D"
+        ],
+        "oneOf": [
+          {
+            "description": "3462у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
+            "title": "N3462D",
+            "enum": [
+              "N3462D"
+            ]
+          },
+          {
+            "description": "КРОС: КРОС, Ведомость открытых счетов, Ведомость закрытых счетов",
+            "title": "KROS",
+            "enum": [
+              "KROS"
+            ]
+          },
+          {
+            "description": "6406у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
+            "title": "N6406D",
+            "enum": [
+              "N6406D"
+            ]
+          }
+        ]
       },
       "ReportTaskStatusEnumSchema": {
         "type": "string",
@@ -82,16 +117,27 @@
           "RUB",
           "FOREIGN"
         ],
+        "description": "Валюта",
         "title": "CurrencyEnumSchema"
       },
       "SortOrderEnumSchema": {
         "default": "DESC",
+        "description": "Направление сортировки",
         "type": "string",
         "enum": [
           "ASC",
           "DESC"
         ],
         "title": "SortOrderEnumSchema"
+      },
+      "SortOrderEnum": {
+        "$ref": "#/components/schemas/SortOrderEnumSchema"
+      },
+      "CurrencyEnum": {
+        "$ref": "#/components/schemas/CurrencyEnumSchema"
+      },
+      "FileFormatEnum": {
+        "$ref": "#/components/schemas/FileFormatEnumSchema"
       },
       "PaginationRequestDto": {
         "type": "object",
@@ -311,7 +357,7 @@
         "additionalProperties": false,
         "title": "BranchDto"
       },
-      "ReportTypeDto": {
+      "CurrencyDto": {
         "type": "object",
         "properties": {
           "code": {
@@ -326,13 +372,10 @@
           "name"
         ],
         "additionalProperties": false,
-        "title": "ReportTypeDto"
-      },
-      "CurrencyDto": {
-        "$ref": "#/components/schemas/ReportTypeDto"
+        "title": "CurrencyDto"
       },
       "FormatDto": {
-        "$ref": "#/components/schemas/ReportTypeDto"
+        "$ref": "#/components/schemas/CurrencyDto"
       },
       "SourceDto": {
         "type": "object",
@@ -369,24 +412,17 @@
         },
         "title": "BranchesResponseDto"
       },
-      "ReportTypesResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/ReportTypeDto"
-        },
-        "title": "ReportTypesResponseDto"
-      },
       "CurrenciesResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/ReportTypeDto"
+          "$ref": "#/components/schemas/CurrencyDto"
         },
         "title": "CurrenciesResponseDto"
       },
       "FormatsResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/ReportTypeDto"
+          "$ref": "#/components/schemas/CurrencyDto"
         },
         "title": "FormatsResponseDto"
       },
@@ -434,7 +470,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ],
+            "description": "Тип отчёта"
           },
           "source": {
             "description": "Ссылка на справочник или идентификатор источника данных",
@@ -520,7 +565,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "description": "Тип отчёта",
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ]
           },
           "source": {
             "anyOf": [
@@ -632,7 +686,6 @@
           "accountSecondOrder",
           "currency",
           "format",
-          "reportType",
           "source",
           "status",
           "canCancel",
@@ -710,7 +763,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "description": "Тип отчёта",
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ]
           },
           "updatedAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -748,7 +810,6 @@
           "status",
           "fileSize",
           "format",
-          "reportType",
           "updatedAt",
           "canCancel",
           "canDelete",
@@ -829,7 +890,16 @@
                 "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
               },
               "reportType": {
-                "$ref": "#/components/schemas/ReportTypeEnumSchema"
+                "description": "Тип отчёта",
+                "type": "string",
+                "enum": [
+                  "LSOZ",
+                  "LSOS",
+                  "LSOP",
+                  "KROS_VOS",
+                  "KROS_VZS",
+                  "KROS"
+                ]
               },
               "format": {
                 "$ref": "#/components/schemas/FileFormatEnumSchema"
@@ -964,7 +1034,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "description": "Тип отчёта",
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ]
           },
           "source": {
             "anyOf": [
@@ -1099,7 +1178,6 @@
           "accountSecondOrder",
           "currency",
           "format",
-          "reportType",
           "source",
           "status",
           "canCancel",
@@ -1187,7 +1265,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnumSchema"
+            "description": "Тип отчёта",
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ]
           },
           "source": {
             "anyOf": [
@@ -1330,7 +1417,6 @@
           "accountSecondOrder",
           "currency",
           "format",
-          "reportType",
           "source",
           "status",
           "canCancel",
@@ -2030,7 +2116,16 @@
                 "description": "Список типов отчётов для фильтрации",
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/ReportTypeEnumSchema"
+                  "type": "string",
+                  "enum": [
+                    "LSOZ",
+                    "LSOS",
+                    "LSOP",
+                    "KROS_VOS",
+                    "KROS_VZS",
+                    "KROS"
+                  ],
+                  "description": "Тип отчёта"
                 }
               },
               "formats": {
@@ -2265,11 +2360,11 @@
         }
       }
     },
-    "/api/v1/report-6406/references/branches": {
+    "/api/v1/report-6406/dictionary/branches": {
       "get": {
         "summary": "Получить список филиалов",
         "tags": [
-          "Report 6406 - References"
+          "Report 6406 - Dictionary"
         ],
         "responses": {
           "200": {
@@ -2277,7 +2372,32 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BranchesResponseDto"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991,
+                        "description": "Идентификатор филиала"
+                      },
+                      "codeCB": {
+                        "type": "string",
+                        "description": "Код ЦБ"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Название филиала"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "codeCB",
+                      "name"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               }
             }
@@ -2285,31 +2405,11 @@
         }
       }
     },
-    "/api/v1/report-6406/references/report-types": {
-      "get": {
-        "summary": "Получить список типов отчётов",
-        "tags": [
-          "Report 6406 - References"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ReportTypesResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/report-6406/references/currencies": {
+    "/api/v1/report-6406/dictionary/currencies": {
       "get": {
         "summary": "Получить список валют",
         "tags": [
-          "Report 6406 - References"
+          "Report 6406 - Dictionary"
         ],
         "responses": {
           "200": {
@@ -2317,7 +2417,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CurrenciesResponseDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrencyDto"
+                  }
                 }
               }
             }
@@ -2325,31 +2428,11 @@
         }
       }
     },
-    "/api/v1/report-6406/references/formats": {
-      "get": {
-        "summary": "Получить список форматов файлов",
-        "tags": [
-          "Report 6406 - References"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FormatsResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/report-6406/references/sources": {
+    "/api/v1/report-6406/dictionary/sources": {
       "get": {
         "summary": "Получить список источников счетов",
         "tags": [
-          "Report 6406 - References"
+          "Report 6406 - Dictionary"
         ],
         "responses": {
           "200": {
@@ -2357,7 +2440,95 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SourcesResponseDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SourceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/dictionary/account-masks": {
+      "get": {
+        "summary": "Получить маски счетов в виде связанного списка",
+        "tags": [
+          "Report 6406 - Dictionary"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "firstAccount": {
+                        "type": "number"
+                      },
+                      "secondAccounts": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "required": [
+                      "firstAccount",
+                      "secondAccounts"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/dictionary/employee/{login}": {
+      "get": {
+        "summary": "Получить данные о сотруднике по AD-логину",
+        "tags": [
+          "Report 6406 - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 15
+            },
+            "in": "path",
+            "name": "login",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "fullName": {
+                      "type": "string",
+                      "maxLength": 50
+                    },
+                    "login": {
+                      "type": "string",
+                      "maxLength": 15
+                    }
+                  },
+                  "required": [
+                    "fullName",
+                    "login"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }
@@ -2698,11 +2869,12 @@
           },
           {
             "schema": {
-              "$ref": "#/components/schemas/SortOrderEnumSchema"
+              "$ref": "#/components/schemas/SortOrderEnum"
             },
             "in": "query",
             "name": "sortOrder",
-            "required": true
+            "required": true,
+            "description": "Направление сортировки"
           },
           {
             "schema": {
@@ -2922,11 +3094,12 @@
           },
           {
             "schema": {
-              "$ref": "#/components/schemas/SortOrderEnumSchema"
+              "$ref": "#/components/schemas/SortOrderEnum"
             },
             "in": "query",
             "name": "sortOrder",
-            "required": true
+            "required": true,
+            "description": "Направление сортировки"
           },
           {
             "schema": {
@@ -3237,7 +3410,7 @@
       "description": "Health check endpoints"
     },
     {
-      "name": "Report 6406 - References",
+      "name": "Report 6406 - Dictionary",
       "description": "Справочники для формы отчётности 6406"
     },
     {

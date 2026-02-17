@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { paginationQuerySchema, paginationMetadataSchema, sortOrderSchema } from '../common.schema.js';
+import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema.js';
+import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**
  * Enum для статусов файлов
@@ -22,10 +23,10 @@ export const taskFileSchema = z.object({
   fileType: z.string(),
   status: fileStatusSchema,
   downloadUrl: z.string().nullable(),
-  downloadUrlExpiresAt: z.string().datetime().nullable(),
+  downloadUrlExpiresAt: z.iso.datetime().nullable(),
   errorMessage: z.string().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 
 export type TaskFile = z.infer<typeof taskFileSchema>;
@@ -35,7 +36,7 @@ export type TaskFile = z.infer<typeof taskFileSchema>;
  */
 export const taskFilesQuerySchema = paginationQuerySchema.extend({
   sortBy: z.enum(['status', 'fileName', 'fileSize', 'createdAt']).default('status'),
-  sortOrder: sortOrderSchema,
+  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
   status: z.array(fileStatusSchema).optional(),
 });
 

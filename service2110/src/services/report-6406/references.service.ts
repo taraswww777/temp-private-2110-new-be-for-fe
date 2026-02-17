@@ -1,12 +1,13 @@
 import { db } from '../../db/index.js';
 import { branches, sources } from '../../db/schema/index.js';
-import type { 
-  BranchesResponse, 
-  ReportTypesResponse, 
-  CurrenciesResponse, 
-  FormatsResponse,
-  SourcesResponse 
-} from '../../schemas/report-6406/references.schema';
+import type {
+  AccountMasksResponse,
+  BranchesResponse,
+  CurrenciesResponse,
+  EmployeeResponse,
+  SourcesResponse
+} from '../../schemas/report-6406/dictionary.schema';
+import { FormatsResponse } from '../../schemas/report-6406/references.schema';
 
 export class ReferencesService {
   /**
@@ -14,29 +15,14 @@ export class ReferencesService {
    */
   async getBranches(): Promise<BranchesResponse> {
     const branchesList = await db.select().from(branches);
-    
-    return branchesList;
+
+    return branchesList.map(branch => ({
+      id: Number(branch.id),
+      codeCB: branch.code,
+      name: branch.name
+    }));
   }
 
-  /**
-   * Получить список типов отчётов
-   */
-  async getReportTypes(): Promise<ReportTypesResponse> {
-    return [
-      {
-        code: 'LSOZ',
-        name: 'Информация об открытых и закрытых счетах',
-      },
-      {
-        code: 'LSOS',
-        name: 'Информация о счетах. Остатки',
-      },
-      {
-        code: 'LSOP',
-        name: 'Информация о счетах. Операции',
-      },
-    ];
-  }
 
   /**
    * Получить список валют
@@ -45,12 +31,12 @@ export class ReferencesService {
     return [
       {
         code: 'RUB',
-        name: 'Рубль',
+        name: 'Российский рубль'
       },
       {
-        code: 'FOREIGN',
-        name: 'Иностранная валюта',
-      },
+        code: 'USD',
+        name: 'Доллар США'
+      }
     ];
   }
 
@@ -78,9 +64,34 @@ export class ReferencesService {
    * Получить список источников
    */
   async getSources(): Promise<SourcesResponse> {
-    const sourcesList = await db.select().from(sources);
-    
-    return sourcesList;
+    return db.select().from(sources);
+  }
+
+  /**
+   * Получить маски счетов в виде связанного списка
+   */
+  async getAccountMasks(): Promise<AccountMasksResponse> {
+    return [
+      {
+        firstAccount: 123,
+        secondAccounts: [12345, 12345]
+      },
+      {
+        firstAccount: 456,
+        secondAccounts: [45690, 45691]
+      }
+    ];
+  }
+
+  /**
+   * Получить данные о сотруднике по AD-логину
+   */
+  async getEmployee(login: string): Promise<EmployeeResponse> {
+    // Временная реализация, в будущем будет интеграция с AD
+    return {
+      fullName: 'Иванов Иван Иванович',
+      login: 'vtb12345678'
+    };
   }
 }
 
