@@ -514,10 +514,10 @@
     {
       "id": "TASK-045",
       "title": "Валидация уникальности наименования пакета",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-045-package-unique-name-validation.md",
       "createdDate": "2026-02-06T12:00:00Z",
-      "completedDate": null,
+      "completedDate": "2026-02-17T14:51:47.630Z",
       "branch": null,
       "priority": "medium",
       "projectId": "2110-project-id",

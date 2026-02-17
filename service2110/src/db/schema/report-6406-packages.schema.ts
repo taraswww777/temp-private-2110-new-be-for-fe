@@ -5,7 +5,7 @@ import { pgTable, uuid, timestamp, varchar, integer, bigint, index } from 'drizz
  */
 export const report6406Packages = pgTable('report_6406_packages', {
   id: uuid('id').primaryKey().defaultRandom(),
-  name: varchar('name', { length: 255 }).notNull(),
+  name: varchar('name', { length: 255 }).notNull().unique(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   createdBy: varchar('created_by', { length: 255 }).notNull(),
   lastCopiedToTfrAt: timestamp('last_copied_to_tfr_at'),
