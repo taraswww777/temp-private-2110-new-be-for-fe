@@ -1,11 +1,11 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { dictionaryRoutes } from './dictionary/index.js';
-import { tasksRoutes } from './tasks/index.js';
-import { statusHistoryRoutes } from './tasks/status-history.js';
-import { filesRoutes } from './tasks/files.js';
-import { exportRoutes } from './tasks/export.js';
-import { packagesRoutes } from './packages/index.js';
-import { storageRoutes } from './storage/index.js';
+import { dictionaryRoutes } from './dictionary/index.ts';
+import { tasksRoutes } from './tasks/index.ts';
+import { statusHistoryRoutes } from './tasks/status-history.ts';
+import { filesRoutes } from './tasks/files.ts';
+import { exportRoutes } from './tasks/export.ts';
+import { packagesRoutes } from './packages/index.ts';
+import { storageRoutes } from './storage/index.ts';
 
 export const report6406Routes: FastifyPluginAsync = async (fastify) => {
   // Справочники (переименовано из references)

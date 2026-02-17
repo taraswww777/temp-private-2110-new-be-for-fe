@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
-import { db } from '../../db/index.js';
-import { report6406Tasks, report6406TaskBranches } from '../../db/schema/index.js';
+import { db } from '../../db/index.ts';
+import { report6406Tasks, report6406TaskBranches } from '../../db/schema/index.ts';
 import { and, inArray, gte, lte, desc, asc, exists, eq, sql } from 'drizzle-orm';
 import type {
   ExportTasksRequest,
   ExportTasksResponse,
-} from '../../schemas/report-6406/export.schema.js';
-import { generateTasksCsv, generateCsvFileName } from '../../utils/csv-generator.js';
-import { env } from '../../config/env.js';
+} from '../../schemas/report-6406/export.schema.ts';
+import { generateTasksCsv, generateCsvFileName } from '../../utils/csv-generator.ts';
+import { env } from '../../config/env.ts';
 import { randomUUID } from 'crypto';
 
 export class ExportService {

@@ -2,11 +2,11 @@
 //@ts-nocheck
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { taskStatusHistoryService } from '../../../../services/report-6406/task-status-history.service.js';
+import { taskStatusHistoryService } from '../../../../services/report-6406/task-status-history.service.ts';
 import {
   statusHistoryResponseSchema,
-} from '../../../../schemas/report-6406/task-status-history.schema.js';
-import { uuidParamSchema } from '../../../../schemas/common.schema.js';
+} from '../../../../schemas/report-6406/task-status-history.schema.ts';
+import { uuidParamSchema } from '../../../../schemas/common.schema.ts';
 
 export const statusHistoryRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();

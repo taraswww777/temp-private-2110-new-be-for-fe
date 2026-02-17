@@ -2,7 +2,7 @@
 //@ts-nocheck
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { packagesService } from '../../../../services/report-6406/packages.service.js';
+import { packagesService } from '../../../../services/report-6406/packages.service.ts';
 import {
   createPackageSchema,
   updatePackageSchema,
@@ -34,11 +34,36 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
       body: createPackageSchema,
       response: {
         201: packageSchema,
+        400: {
+          type: 'object',
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' },
+            details: {
+              type: 'object',
+              properties: {
+                name: { type: 'string' },
+                existingPacketId: { type: 'string' }
+              }
+            }
+          }
+        }
       },
     },
   }, async (request, reply) => {
-    const pkg = await packagesService.createPackage(request.body);
-    return reply.status(201).send(pkg);
+    try {
+      const pkg = await packagesService.createPackage(request.body);
+      return reply.status(201).send(pkg);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'PACKET_NAME_DUPLICATE') {
+        return reply.status(400).send({
+          error: 'PACKET_NAME_DUPLICATE',
+          message: 'Пакет с таким наименованием уже существует',
+          details: error.details
+        });
+      }
+      throw error;
+    }
   });
 
   /**
@@ -101,6 +126,20 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
       body: updatePackageSchema,
       response: {
         200: updatePackageResponseSchema,
+        400: {
+          type: 'object',
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' },
+            details: {
+              type: 'object',
+              properties: {
+                name: { type: 'string' },
+                existingPacketId: { type: 'string' }
+              }
+            }
+          }
+        }
       },
     },
   }, async (request, reply) => {
@@ -114,6 +153,13 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
           title: 'Not Found',
           status: 404,
           detail: error.message,
+        });
+      }
+      if (error instanceof Error && error.message === 'PACKET_NAME_DUPLICATE') {
+        return reply.status(400).send({
+          error: 'PACKET_NAME_DUPLICATE',
+          message: 'Пакет с таким наименованием уже существует',
+          details: error.details
         });
       }
       throw error;

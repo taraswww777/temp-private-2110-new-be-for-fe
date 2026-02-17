@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { client } from '../db/index.js';
-import { healthResponseSchema, httpErrorWithInstanceSchema } from '../schemas/common.schema.js';
+import { client } from '../db/index.ts';
+import { healthResponseSchema, httpErrorWithInstanceSchema } from '../schemas/common.schema.ts';
 
 export const healthRoutes: FastifyPluginAsync = async (fastify) => {
   // GET /health - проверка состояния приложения

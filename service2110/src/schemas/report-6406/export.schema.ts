@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { reportTaskStatusSchema } from './tasks.schema.js';
+import { reportTaskStatusSchema } from './tasks.schema.ts';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';

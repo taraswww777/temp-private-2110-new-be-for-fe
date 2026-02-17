@@ -1,11 +1,11 @@
-import { db } from '../../db/index.js';
-import { 
-  report6406Packages, 
-  report6406PackageTasks, 
+import { db } from '../../db/index.ts';
+import {
+  report6406Packages,
+  report6406PackageTasks,
   report6406Tasks,
   report6406TaskBranches,
   branches,
-} from '../../db/schema/index.js';
+} from '../../db/schema/index.ts';
 import { eq, sql, desc, asc, like, and, inArray } from 'drizzle-orm';
 import type {
   CreatePackageInput,
@@ -22,13 +22,54 @@ import type {
   BulkRemoveTasksResponse,
   CopyToTfrResponse,
 } from '../../schemas/report-6406/packages.schema';
-import { tasksService } from './tasks.service.js';
 
 export class PackagesService {
+  /**
+   * Проверить уникальность имени пакета
+   */
+  private async checkPackageNameUniqueness(name: string, excludeId?: string): Promise<string | null> {
+    const result = await db
+      .select({ id: report6406Packages.id })
+      .from(report6406Packages)
+      .where(eq(report6406Packages.name, name))
+      .limit(2);
+
+    // Если нет пакетов с таким именем
+    if (result.length === 0) {
+      return null;
+    }
+
+    // Если найден только один пакет
+    if (result.length === 1) {
+      // Если это тот же пакет, который мы редактируем - нет дубликата
+      if (excludeId && result[0].id === excludeId) {
+        return null;
+      }
+      // Иначе есть дубликат
+      return result[0].id;
+    }
+
+    // Если найдено два пакета, значит есть дубликат
+    // (даже если один из них - редактируемый, другой - дубликат)
+    return result.find(r => r.id !== excludeId)?.id || null;
+  }
+
   /**
    * Создать новый пакет
    */
   async createPackage(input: CreatePackageInput): Promise<Package> {
+    // Проверка уникальности имени пакета
+    const existingPackageId = await this.checkPackageNameUniqueness(input.name);
+    if (existingPackageId) {
+      const error = new Error('PACKET_NAME_DUPLICATE') as Error & { statusCode?: number; details?: object };
+      error.statusCode = 400;
+      error.details = {
+        name: input.name,
+        existingPacketId: existingPackageId
+      };
+      throw error;
+    }
+
     const [pkg] = await db
       .insert(report6406Packages)
       .values({
@@ -122,6 +163,18 @@ export class PackagesService {
 
     if (!pkg) {
       throw new Error(`Package with id '${id}' not found`);
+    }
+
+    // Проверка уникальности имени пакета (исключая текущий пакет)
+    const existingPackageId = await this.checkPackageNameUniqueness(input.name, id);
+    if (existingPackageId) {
+      const error = new Error('PACKET_NAME_DUPLICATE') as Error & { statusCode?: number; details?: object };
+      error.statusCode = 400;
+      error.details = {
+        name: input.name,
+        existingPacketId: existingPackageId
+      };
+      throw error;
     }
 
     const [updatedPkg] = await db

@@ -13,7 +13,7 @@ import {
   healthResponseSchema,
   httpErrorWithInstanceSchema,
   uuidSchema,
-} from './common.schema.js';
+} from './common.schema.ts';
 import {
   createTaskSchema,
   taskSchema,
@@ -26,7 +26,7 @@ import {
   bulkCancelResponseSchema,
   startTasksResponseSchema,
   reportTaskStatusSchema,
-} from './report-6406/tasks.schema.js';
+} from './report-6406/tasks.schema.ts';
 import {
   branchSchema,
   currencyReferenceSchema,
@@ -36,7 +36,7 @@ import {
   currenciesResponseSchema,
   formatsResponseSchema,
   sourcesResponseSchema,
-} from './report-6406/references.schema.js';
+} from './report-6406/references.schema.ts';
 import {
   createPackageSchema,
   updatePackageSchema,
@@ -47,21 +47,21 @@ import {
   addTasksToPackageResponseSchema,
   bulkRemoveTasksResponseSchema,
   copyToTfrResponseSchema,
-} from './report-6406/packages.schema.js';
+} from './report-6406/packages.schema.ts';
 import {
   exportTasksRequestSchema,
   exportTasksResponseSchema,
-} from './report-6406/export.schema.js';
+} from './report-6406/export.schema.ts';
 import {
   statusHistoryItemSchema,
   statusHistoryResponseSchema,
-} from './report-6406/task-status-history.schema.js';
-import { storageCodeSchema, storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.js';
+} from './report-6406/task-status-history.schema.ts';
+import { storageCodeSchema, storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.ts';
 import {
   taskFileSchema,
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
-} from './report-6406/task-files.schema.js';
+} from './report-6406/task-files.schema.ts';
 import { reportFormTypeSchema } from './enums/ReportFormTypeEnum';
 import { SortOrderEnum, sortOrderSchema } from './enums/SortOrderEnum';
 import { fileFormatSchema } from './enums/FileFormatEnum';

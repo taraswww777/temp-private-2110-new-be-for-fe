@@ -1,4 +1,4 @@
-import { db } from '../../db/index.js';
+import { db } from '../../db/index.ts';
 import {
   branches,
   report6406Packages,
@@ -7,7 +7,7 @@ import {
   report6406Tasks,
   report6406TaskStatusHistory,
   TaskStatus,
-} from '../../db/schema/index.js';
+} from '../../db/schema/index.ts';
 import { and, asc, desc, eq, exists, inArray, not, sql } from 'drizzle-orm';
 import type {
   BulkCancelResponse,
@@ -22,9 +22,9 @@ import type {
   Task,
   TaskDetails,
   TasksListResponse,
-} from '../../schemas/report-6406/tasks.schema.js';
-import { getStatusPermissions } from '../../types/status-model.js';
-import { storageService } from './storage.service.js';
+} from '../../schemas/report-6406/tasks.schema.ts';
+import { getStatusPermissions } from '../../types/status-model.ts';
+import { storageService } from './storage.service.ts';
 import { Currency } from '../../schemas/enums/CurrencyEnum';
 
 export class TasksService {

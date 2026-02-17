@@ -2,7 +2,7 @@
  * Генератор pre-signed URLs для моковой реализации
  */
 
-import { env } from '../config/env.js';
+import { env } from '../config/env.ts';
 
 /**
  * Результат генерации pre-signed URL

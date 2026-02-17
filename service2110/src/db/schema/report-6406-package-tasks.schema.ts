@@ -1,6 +1,6 @@
 import { pgTable, uuid, timestamp, primaryKey, index } from 'drizzle-orm/pg-core';
-import { report6406Packages } from './report-6406-packages.schema.js';
-import { report6406Tasks } from './report-6406-tasks.schema.js';
+import { report6406Packages } from './report-6406-packages.schema.ts';
+import { report6406Tasks } from './report-6406-tasks.schema.ts';
 
 /**
  * Связующая таблица many-to-many между пакетами и заданиями

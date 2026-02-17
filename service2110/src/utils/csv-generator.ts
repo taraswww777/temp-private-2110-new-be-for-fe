@@ -2,7 +2,7 @@
  * Утилиты для генерации CSV файлов
  */
 
-import type { Report6406Task } from '../db/schema/report-6406-tasks.schema.js';
+import type { Report6406Task } from '../db/schema/report-6406-tasks.schema.ts';
 
 /**
  * Интерфейс для строки CSV реестра заданий

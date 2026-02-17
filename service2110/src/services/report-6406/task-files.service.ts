@@ -1,13 +1,13 @@
-import { db } from '../../db/index.js';
-import { report6406TaskFiles, report6406Tasks } from '../../db/schema/index.js';
+import { db } from '../../db/index.ts';
+import { report6406TaskFiles, report6406Tasks } from '../../db/schema/index.ts';
 import { eq, sql, desc, asc, inArray } from 'drizzle-orm';
 import type {
   TaskFilesQuery,
   TaskFilesResponse,
   RetryFileConversionResponse,
-} from '../../schemas/report-6406/task-files.schema.js';
-import { FileStatus } from '../../types/status-model.js';
-import { generateMockPresignedUrl } from '../../utils/presigned-url-generator.js';
+} from '../../schemas/report-6406/task-files.schema.ts';
+import { FileStatus } from '../../types/status-model.ts';
+import { generateMockPresignedUrl } from '../../utils/presigned-url-generator.ts';
 
 export class TaskFilesService {
   /**

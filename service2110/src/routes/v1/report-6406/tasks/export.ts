@@ -1,10 +1,10 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { exportService } from '../../../../services/report-6406/export.service.js';
+import { exportService } from '../../../../services/report-6406/export.service.ts';
 import {
   exportTasksRequestSchema,
   exportTasksResponseSchema,
-} from '../../../../schemas/report-6406/export.schema.js';
+} from '../../../../schemas/report-6406/export.schema.ts';
 
 export const exportRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();

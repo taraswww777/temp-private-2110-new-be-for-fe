@@ -1,5 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { report6406Routes } from './report-6406/index.js';
+import { report6406Routes } from './report-6406/index.ts';
 
 export const v1Routes: FastifyPluginAsync = async (fastify) => {
   // API для формы отчётности 6406
