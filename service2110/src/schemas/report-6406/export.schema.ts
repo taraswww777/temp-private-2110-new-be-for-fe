@@ -28,8 +28,8 @@ export const exportFiltersSchema = z.object({
   periodEndTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Конечная дата окончания периода'),
 
   // Фильтры по дате создания
-  createdAtFrom: z.string().datetime().optional().describe('Начальная дата создания'),
-  createdAtTo: z.string().datetime().optional().describe('Конечная дата создания'),
+  createdAtFrom: z.iso.datetime().optional().describe('Начальная дата создания'),
+  createdAtTo: z.iso.datetime().optional().describe('Конечная дата создания'),
 }).optional();
 
 export type ExportFilters = z.infer<typeof exportFiltersSchema>;
@@ -58,13 +58,13 @@ export const exportTasksResponseSchema = z.object({
     .int()
     .min(0)
     .describe('Размер экспортированного файла в байтах (например, 52428800 = 50 MB)'),
-  downloadUrlExpiresAt: z.string().datetime().describe('Дата истечения срока действия ссылки'),
+  downloadUrlExpiresAt: z.iso.datetime().describe('Дата истечения срока действия ссылки'),
   recordsCount: z
     .number()
     .int()
     .min(0)
     .describe('Количество записей в экспортированном файле'),
-  createdAt: z.string().datetime().describe('Дата создания экспорта'),
+  createdAt: z.iso.datetime().describe('Дата создания экспорта'),
 });
 
 export type ExportTasksResponse = z.infer<typeof exportTasksResponseSchema>;

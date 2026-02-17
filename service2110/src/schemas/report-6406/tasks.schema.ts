@@ -92,7 +92,7 @@ export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export const taskPackageInfoSchema = z.object({
   id: z.uuid(),
   name: z.string(),
-  addedAt: z.string().datetime(),
+  addedAt: z.iso.datetime(),
 });
 
 export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
@@ -102,7 +102,7 @@ export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
  */
 export const taskSchema = z.object({
   id: z.uuid().describe('Уникальный идентификатор задания'),
-  createdAt: z.string().datetime().describe('Дата и время создания'),
+  createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
   branchId: z.uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
   branchIds: z.array(z.uuid()).describe('Массив идентификаторов филиалов'),
@@ -133,10 +133,10 @@ export const taskSchema = z.object({
     .describe('Количество файлов в задании'),
   fileUrl: z.string().nullable().describe('URL для скачивания файла'),
   errorMessage: z.string().nullable().describe('Сообщение об ошибке'),
-  lastStatusChangedAt: z.string().datetime().describe('Дата и время последнего изменения статуса'),
-  startedAt: z.string().datetime().nullable().describe('Дата и время начала обработки'),
-  completedAt: z.string().datetime().nullable().describe('Дата и время завершения'),
-  updatedAt: z.string().datetime().describe('Дата и время последнего обновления'),
+  lastStatusChangedAt: z.iso.datetime().describe('Дата и время последнего изменения статуса'),
+  startedAt: z.iso.datetime().nullable().describe('Дата и время начала обработки'),
+  completedAt: z.iso.datetime().nullable().describe('Дата и время завершения'),
+  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
 });
 
 export type Task = z.infer<typeof taskSchema>;
@@ -156,7 +156,7 @@ export type TaskDetail = z.infer<typeof taskDetailSchema>;
  */
 export const taskDetailsSchema = z.object({
   id: z.uuid().describe('Уникальный идентификатор задания'),
-  createdAt: z.string().datetime().describe('Дата и время создания'),
+  createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
   branchId: z.uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
   branchIds: z.array(z.uuid()).describe('Массив идентификаторов филиалов'),
@@ -185,10 +185,10 @@ export const taskDetailsSchema = z.object({
     .int()
     .min(0)
     .describe('Количество файлов в задании'),
-  lastStatusChangedAt: z.string().datetime().describe('Дата и время последнего изменения статуса'),
-  startedAt: z.string().datetime().nullable().describe('Дата и время начала обработки'),
-  completedAt: z.string().datetime().nullable().describe('Дата и время завершения'),
-  updatedAt: z.string().datetime().describe('Дата и время последнего обновления'),
+  lastStatusChangedAt: z.iso.datetime().describe('Дата и время последнего изменения статуса'),
+  startedAt: z.iso.datetime().nullable().describe('Дата и время начала обработки'),
+  completedAt: z.iso.datetime().nullable().describe('Дата и время завершения'),
+  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
   s3FolderId: z.string().nullable().describe('ID папки в S3'),
   type: z.string().nullable().describe('Тип задания'),
   accounts: z.array(z.string()).describe('Список счетов'),
@@ -202,7 +202,7 @@ export type TaskDetails = z.infer<typeof taskDetailsSchema>;
  */
 export const taskListItemSchema = z.object({
   id: z.uuid().describe('Уникальный идентификатор задания'),
-  createdAt: z.string().datetime().describe('Дата и время создания'),
+  createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)'),
   branchId: z.uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
   branchIds: z.array(z.uuid()).describe('Массив идентификаторов филиалов'),
@@ -219,7 +219,7 @@ export const taskListItemSchema = z.object({
     .nullable(),
   format: fileFormatSchema,
   reportType: reportTypeSchema,
-  updatedAt: z.string().datetime().describe('Дата и время последнего обновления'),
+  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
   canCancel: z.boolean().describe('Можно ли отменить задание'),
   canDelete: z.boolean().describe('Можно ли удалить задание'),
   canStart: z.boolean().describe('Можно ли запустить задание'),
@@ -269,8 +269,8 @@ export const tasksListFilterSchema = z.object({
   createdBy: z.string().optional().describe('ФИО создателя задания'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
-  createdAt: z.string().datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
-  updatedAt: z.string().datetime().optional().describe('Дата и время обновления (формат: ISO 8601)'),
+  createdAt: z.iso.datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
+  updatedAt: z.iso.datetime().optional().describe('Дата и время обновления (формат: ISO 8601)'),
 }).optional();
 
 export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
@@ -353,7 +353,7 @@ export const bulkCancelResponseSchema = z.object({
     taskId: z.uuid(),
     success: z.boolean(),
     status: reportTaskStatusSchema.optional(),
-    updatedAt: z.string().datetime().optional(),
+    updatedAt: z.iso.datetime().optional(),
     reason: z.string().optional(),
   })),
 });
@@ -366,7 +366,7 @@ export type BulkCancelResponse = z.infer<typeof bulkCancelResponseSchema>;
 export const cancelTaskResponseSchema = z.object({
   id: z.uuid(),
   status: reportTaskStatusSchema,
-  updatedAt: z.string().datetime(),
+  updatedAt: z.iso.datetime(),
 });
 
 export type CancelTaskResponse = z.infer<typeof cancelTaskResponseSchema>;
@@ -386,7 +386,7 @@ export type StartTasksInput = z.infer<typeof startTasksSchema>;
 export const startTaskResultSchema = z.object({
   taskId: z.uuid(),
   status: reportTaskStatusSchema,
-  startedAt: z.string().datetime(),
+  startedAt: z.iso.datetime(),
 });
 
 export type StartTaskResult = z.infer<typeof startTaskResultSchema>;

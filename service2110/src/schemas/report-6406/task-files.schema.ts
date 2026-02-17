@@ -23,10 +23,10 @@ export const taskFileSchema = z.object({
   fileType: z.string(),
   status: fileStatusSchema,
   downloadUrl: z.string().nullable(),
-  downloadUrlExpiresAt: z.string().datetime().nullable(),
+  downloadUrlExpiresAt: z.iso.datetime().nullable(),
   errorMessage: z.string().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 
 export type TaskFile = z.infer<typeof taskFileSchema>;

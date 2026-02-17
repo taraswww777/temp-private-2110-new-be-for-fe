@@ -8,7 +8,7 @@ export const statusHistoryItemSchema = z.object({
   id: z.uuid(),
   status: reportTaskStatusSchema,
   previousStatus: reportTaskStatusSchema.nullable(),
-  changedAt: z.string().datetime(),
+  changedAt: z.iso.datetime(),
   changedBy: z.string().nullable(),
   comment: z.string().nullable(),
   metadata: z.record(z.string(), z.any()).nullable().describe('Дополнительные метаданные в формате ключ-значение'),

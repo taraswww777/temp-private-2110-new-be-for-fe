@@ -113,7 +113,7 @@ export type DateString = z.infer<typeof dateSchema>;
  * Переиспользуемая схема для даты-времени в формате ISO 8601
  * Используется в query параметрах для фильтрации по датам создания/обновления
  */
-export const dateTimeSchema = z.string().datetime().describe('Дата и время в формате ISO 8601');
+export const dateTimeSchema = z.iso.datetime().describe('Дата и время в формате ISO 8601');
 
 export type DateTimeString = z.infer<typeof dateTimeSchema>;
 
