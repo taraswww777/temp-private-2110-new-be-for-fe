@@ -26,7 +26,7 @@ const ReportFormTypeDescriptions = {
   }
 } as const;
 // Создаем схему через nativeEnum (который возвращает ZodEnum)
-export const reportTypeSchema = z.enum(ReportFormTypeEnum).describe('Тип формы отчетности');
+export const reportFormTypeSchema = z.enum(ReportFormTypeEnum).describe('Тип формы отчетности');
 
 // Добавляем метаданные через describe (некоторые генераторы поддерживают)
 export const ReportFormTypeEnumSchema = createEnumSchemaWithDescriptions(

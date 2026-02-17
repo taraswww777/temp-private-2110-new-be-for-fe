@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { reportTaskStatusSchema, fileFormatSchema } from './tasks.schema.js';
-import { reportTypeSchema } from '../enums/ReportFormTypeEnum';
+import { reportFormTypeSchema } from '../enums/ReportFormTypeEnum';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**
@@ -14,7 +14,7 @@ export const exportFiltersSchema = z.object({
   branchIds: z.array(z.uuid()).optional().describe('Список идентификаторов филиалов для фильтрации'),
 
   // Фильтры по типам отчётов (массив)
-  reportTypes: z.array(reportTypeSchema).optional().describe('Список типов отчётов для фильтрации'),
+  reportTypes: z.array(reportFormTypeSchema).optional().describe('Список типов отчётов для фильтрации'),
 
   // Фильтры по форматам (массив)
   formats: z.array(fileFormatSchema).optional().describe('Список форматов для фильтрации'),

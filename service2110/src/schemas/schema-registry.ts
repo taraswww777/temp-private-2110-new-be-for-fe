@@ -64,7 +64,7 @@ import {
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
 } from './report-6406/task-files.schema.js';
-import { reportTypeSchema } from './enums/ReportFormTypeEnum';
+import { reportFormTypeSchema } from './enums/ReportFormTypeEnum';
 import { SortOrderEnum, sortOrderSchema } from './enums/SortOrderEnum';
 
 /**
@@ -73,7 +73,7 @@ import { SortOrderEnum, sortOrderSchema } from './enums/SortOrderEnum';
 export const schemaRegistry = new Map<string, unknown>([
   // enums
   ['SortOrderEnum', sortOrderSchema],
-  ['ReportFormTypeEnum', reportTypeSchema],
+  ['ReportFormTypeEnum', reportFormTypeSchema],
 
   // Общие схемы
   ['PaginationRequestDto', paginationQuerySchema],

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { paginationQuerySchema, } from '../common.schema.js';
-import { reportTypeSchema } from '../enums/ReportFormTypeEnum';
+import { reportFormTypeSchema } from '../enums/ReportFormTypeEnum';
 
 /**
  * Enum схемы для валидации
@@ -43,7 +43,7 @@ export const fileFormatSchema = z.enum(['TXT', 'XLSX', 'XML']);
 export type ReportTaskStatusType = z.infer<typeof reportTaskStatusSchema>;
 export type CurrencyType = z.infer<typeof currencySchema>;
 export type FileFormatType = z.infer<typeof fileFormatSchema>;
-export type ReportTypeType = z.infer<typeof reportTypeSchema>;
+export type ReportTypeType = z.infer<typeof reportFormTypeSchema>;
 
 /**
  * Схема для создания задания
@@ -58,7 +58,7 @@ export const createTaskSchema = z.object({
   accountSecondOrder: z.string().max(2).optional().describe('Счета второго порядка'),
   currency: currencySchema.optional().describe('Валюта (опционально при создании; по умолчанию RUB)'),
   format: fileFormatSchema,
-  reportType: reportTypeSchema,
+  reportType: reportFormTypeSchema,
   source: z.string().max(20).optional().describe('Ссылка на справочник или идентификатор источника данных'),
 }).refine(
   (data) => {
@@ -114,7 +114,7 @@ export const taskSchema = z.object({
   accountSecondOrder: z.string().nullable().describe('Счета второго порядка'),
   currency: currencySchema,
   format: fileFormatSchema,
-  reportType: reportTypeSchema,
+  reportType: reportFormTypeSchema,
   source: z.string().nullable().describe('Ссылка на справочник или идентификатор источника данных'),
   status: reportTaskStatusSchema,
   canCancel: z.boolean().describe('Возможность отмены задания'),
@@ -168,7 +168,7 @@ export const taskDetailsSchema = z.object({
   accountSecondOrder: z.string().nullable().describe('Счета второго порядка'),
   currency: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
   format: fileFormatSchema,
-  reportType: reportTypeSchema,
+  reportType: reportFormTypeSchema,
   source: z.string().nullable().describe('Ссылка на справочник или идентификатор источника данных'),
   status: reportTaskStatusSchema.describe('Статус задания'),
   canCancel: z.boolean().describe('Возможность отмены задания'),
@@ -218,7 +218,7 @@ export const taskListItemSchema = z.object({
     .describe('Размер файла в байтах; null — размер ещё не рассчитан.')
     .nullable(),
   format: fileFormatSchema,
-  reportType: reportTypeSchema,
+  reportType: reportFormTypeSchema,
   updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
   canCancel: z.boolean().describe('Можно ли отменить задание'),
   canDelete: z.boolean().describe('Можно ли удалить задание'),
@@ -263,7 +263,7 @@ export const tasksListFilterSchema = z.object({
   branchIds: z.array(z.uuid()).optional().describe('Массив идентификаторов филиалов'),
   branchName: z.string().optional().describe('Название филиала'),
   status: reportTaskStatusSchema.optional().describe('Статус задания'),
-  reportType: reportTypeSchema.optional().describe('Тип отчёта'),
+  reportType: reportFormTypeSchema.optional().describe('Тип отчёта'),
   format: fileFormatSchema.optional().describe('Формат файла'),
   source: z.string().optional().describe('Источник данных'),
   createdBy: z.string().optional().describe('ФИО создателя задания'),
