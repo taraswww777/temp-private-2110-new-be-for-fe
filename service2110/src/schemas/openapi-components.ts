@@ -12,7 +12,6 @@ import {
   paginationMetadataSchema,
   paginationQuerySchema,
   sortingRequestSchema,
-  sortOrderSchema,
   uuidSchema,
 } from './common.schema.js';
 import {
@@ -65,6 +64,7 @@ import {
 } from './report-6406/task-files.schema.js';
 import { zodToJsonSchema } from './utils/zodToJsonSchema';
 import { ReportFormTypeEnumSchema } from './enums/ReportFormTypeEnum';
+import { SortOrderEnumSchema, sortOrderSchema } from './enums/SortOrderEnum';
 
 /**
  * Получить все переиспользуемые компоненты для OpenAPI
@@ -73,6 +73,7 @@ export function getOpenApiComponents() {
   return {
     // Enums
     ReportFormTypeEnum: ReportFormTypeEnumSchema,
+    SortOrderEnum: SortOrderEnumSchema,
 
     // Общие схемы
     PaginationRequestDto: zodToJsonSchema(paginationQuerySchema, 'PaginationRequestDto'),

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { sortOrderSchema } from './enums/SortOrderEnum';
 
 /**
  * Схема для пагинации в query параметрах (PaginationRequestDto по задаче: number, size)
@@ -19,11 +20,6 @@ export const sortingRequestSchema = z.object({
 });
 
 export type SortingRequest = z.infer<typeof sortingRequestSchema>;
-
-/**
- * Схема для направления сортировки в query параметрах (enum ASC/DESC)
- */
-export const sortOrderSchema = z.enum(['ASC', 'DESC']).default('DESC');
 
 export type SortOrder = z.infer<typeof sortOrderSchema>;
 

@@ -10,7 +10,6 @@ import {
   filterSchema,
   dateSchema,
   dateTimeSchema,
-  sortOrderSchema,
   healthResponseSchema,
   httpErrorWithInstanceSchema,
   uuidSchema,
@@ -66,11 +65,16 @@ import {
   retryFileConversionResponseSchema,
 } from './report-6406/task-files.schema.js';
 import { reportTypeSchema } from './enums/ReportFormTypeEnum';
+import { SortOrderEnum, sortOrderSchema } from './enums/SortOrderEnum';
 
 /**
  * Маппинг имён схем на Zod схемы
  */
 export const schemaRegistry = new Map<string, unknown>([
+  // enums
+  ['SortOrderEnum', sortOrderSchema],
+  ['ReportFormTypeEnum', reportTypeSchema],
+
   // Общие схемы
   ['PaginationRequestDto', paginationQuerySchema],
   ['PaginationMetadataDto', paginationMetadataSchema],
@@ -81,10 +85,8 @@ export const schemaRegistry = new Map<string, unknown>([
   ['DateTimeSchema', dateTimeSchema],
   ['UuidSchema', uuidSchema],
   ['FileFormatEnumSchema', fileFormatSchema],
-  ['ReportFormTypeEnum', reportTypeSchema],
   ['ReportTaskStatusEnumSchema', reportTaskStatusSchema],
   ['CurrencyEnumSchema', currencySchema],
-  ['SortOrderEnumSchema', sortOrderSchema],
   ['StorageCodeEnumSchema', storageCodeSchema],
   ['HealthResponseDto', healthResponseSchema],
   ['HttpErrorWithInstanceDto', httpErrorWithInstanceSchema],

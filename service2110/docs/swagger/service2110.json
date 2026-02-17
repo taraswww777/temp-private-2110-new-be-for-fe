@@ -47,7 +47,7 @@
           "KROS",
           "N6406D"
         ],
-        "description": "Тип отчета",
+        "description": "Тип формы отчетности",
         "title": "ReportFormTypeEnum",
         "x-enum-descriptions": [
           "3462у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
@@ -120,12 +120,16 @@
       },
       "SortOrderEnumSchema": {
         "default": "DESC",
+        "description": "Направление сортировки",
         "type": "string",
         "enum": [
           "ASC",
           "DESC"
         ],
         "title": "SortOrderEnumSchema"
+      },
+      "SortOrderEnum": {
+        "$ref": "#/components/schemas/SortOrderEnumSchema"
       },
       "PaginationRequestDto": {
         "type": "object",
@@ -2832,11 +2836,12 @@
           },
           {
             "schema": {
-              "$ref": "#/components/schemas/SortOrderEnumSchema"
+              "$ref": "#/components/schemas/SortOrderEnum"
             },
             "in": "query",
             "name": "sortOrder",
-            "required": true
+            "required": true,
+            "description": "Направление сортировки"
           },
           {
             "schema": {
@@ -3056,11 +3061,12 @@
           },
           {
             "schema": {
-              "$ref": "#/components/schemas/SortOrderEnumSchema"
+              "$ref": "#/components/schemas/SortOrderEnum"
             },
             "in": "query",
             "name": "sortOrder",
-            "required": true
+            "required": true,
+            "description": "Направление сортировки"
           },
           {
             "schema": {

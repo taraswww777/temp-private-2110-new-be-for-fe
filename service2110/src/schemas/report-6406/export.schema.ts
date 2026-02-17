@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { sortOrderSchema } from '../common.schema.js';
 import { reportTaskStatusSchema, fileFormatSchema } from './tasks.schema.js';
 import { reportTypeSchema } from '../enums/ReportFormTypeEnum';
+import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**
  * Схема для фильтров экспорта (расширенная)
@@ -41,7 +41,7 @@ export const exportTasksRequestSchema = z.object({
   filters: exportFiltersSchema,
   columns: z.array(z.string()).optional().describe('Список колонок для включения в экспорт'),
   sortBy: z.enum(['createdAt', 'branchId', 'status', 'periodStart', 'updatedAt']).default('createdAt').describe('Поле для сортировки'),
-  sortOrder: sortOrderSchema,
+  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
 });
 
 export type ExportTasksRequest = z.infer<typeof exportTasksRequestSchema>;

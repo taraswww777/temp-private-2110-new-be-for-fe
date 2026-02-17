@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { paginationQuerySchema, sortOrderSchema, paginationMetadataSchema } from '../common.schema';
+import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema';
+import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**
  * Схема для создания пакета
@@ -45,7 +46,7 @@ export type Package = z.infer<typeof packageSchema>;
  */
 export const packagesQuerySchema = paginationQuerySchema.extend({
   sortBy: z.enum(['createdAt', 'name', 'tasksCount', 'totalSize']).default('createdAt'),
-  sortOrder: sortOrderSchema,
+  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
   search: z.string().optional(),
 });
 

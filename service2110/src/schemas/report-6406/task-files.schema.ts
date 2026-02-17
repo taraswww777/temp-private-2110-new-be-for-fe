@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { paginationQuerySchema, paginationMetadataSchema, sortOrderSchema } from '../common.schema.js';
+import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema.js';
+import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**
  * Enum для статусов файлов
@@ -35,7 +36,7 @@ export type TaskFile = z.infer<typeof taskFileSchema>;
  */
 export const taskFilesQuerySchema = paginationQuerySchema.extend({
   sortBy: z.enum(['status', 'fileName', 'fileSize', 'createdAt']).default('status'),
-  sortOrder: sortOrderSchema,
+  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
   status: z.array(fileStatusSchema).optional(),
 });
 
