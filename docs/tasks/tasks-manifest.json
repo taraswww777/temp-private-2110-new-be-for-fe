@@ -591,10 +591,10 @@
     {
       "id": "TASK-050",
       "title": "Сортировка по размеру пакета на странице ТФР - Backend",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-050-tfr-page-sorting-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
-      "completedDate": null,
+      "completedDate": "2026-02-17T15:56:32.409Z",
       "branch": null,
       "priority": "medium",
       "youtrackIssueIds": [
