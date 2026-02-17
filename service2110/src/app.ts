@@ -9,12 +9,12 @@ import {
 } from 'fastify-type-provider-zod';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
-import { env } from './config/env.js';
-import { routes } from './routes/index.js';
-import { errorHandler } from './plugins/error-handler.js';
-import userContextPlugin from './plugins/user-context.js';
-import { getOpenApiComponents } from './schemas/openapi-components.js';
-import { getSchemaName, schemaRegistry } from './schemas/schema-registry.js';
+import { env } from './config/env.ts';
+import { routes } from './routes/index.ts';
+import { errorHandler } from './plugins/error-handler.ts';
+import userContextPlugin from './plugins/user-context.ts';
+import { getOpenApiComponents } from './schemas/openapi-components.ts';
+import { getSchemaName, schemaRegistry } from './schemas/schema-registry.ts';
 
 export async function buildApp() {
   const app = Fastify({
@@ -626,7 +626,7 @@ export async function buildApp() {
       ],
       js: [
         {
-          filename: 'theme-toggle.js',
+          filename: 'theme-toggle.ts',
           content: [
             "(function(){var k='swagger-ui-theme';var d=localStorage.getItem(k)!=='light';",
             "document.documentElement.classList.toggle('dark-mode',d);",

@@ -1,5 +1,5 @@
 import { pgTable, uuid, timestamp, varchar, text, jsonb, index } from 'drizzle-orm/pg-core';
-import { report6406Tasks } from './report-6406-tasks.schema.js';
+import { report6406Tasks } from './report-6406-tasks.schema.ts';
 
 /**
  * История изменений статусов заданий отчётов формы 6406

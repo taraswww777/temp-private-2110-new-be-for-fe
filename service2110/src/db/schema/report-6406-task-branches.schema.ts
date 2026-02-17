@@ -1,6 +1,6 @@
 import { pgTable, uuid, timestamp, primaryKey, index } from 'drizzle-orm/pg-core';
-import { report6406Tasks } from './report-6406-tasks.schema.js';
-import { branches } from './branches.schema.js';
+import { report6406Tasks } from './report-6406-tasks.schema.ts';
+import { branches } from './branches.schema.ts';
 
 /**
  * Связующая таблица many-to-many между заданиями и филиалами

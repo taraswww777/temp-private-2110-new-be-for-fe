@@ -3,13 +3,13 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { taskFilesService } from '../../../../services/report-6406/task-files.service.js';
+import { taskFilesService } from '../../../../services/report-6406/task-files.service.ts';
 import {
   taskFilesQuerySchema,
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
-} from '../../../../schemas/report-6406/task-files.schema.js';
-import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.js';
+} from '../../../../schemas/report-6406/task-files.schema.ts';
+import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.ts';
 
 // Схема для параметров с двумя UUID
 const taskFileParamsSchema = z.object({

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, } from '../common.schema.js';
+import { paginationQuerySchema, } from '../common.schema.ts';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';

@@ -1,10 +1,10 @@
-import { db } from '../../db/index.js';
-import { report6406TaskStatusHistory, report6406Tasks } from '../../db/schema/index.js';
+import { db } from '../../db/index.ts';
+import { report6406TaskStatusHistory, report6406Tasks } from '../../db/schema/index.ts';
 import { eq, desc } from 'drizzle-orm';
 import type {
   StatusHistoryResponse,
-} from '../../schemas/report-6406/task-status-history.schema.js';
-import type { TaskStatus } from '../../types/status-model.js';
+} from '../../schemas/report-6406/task-status-history.schema.ts';
+import type { TaskStatus } from '../../types/status-model.ts';
 
 export class TaskStatusHistoryService {
   /**

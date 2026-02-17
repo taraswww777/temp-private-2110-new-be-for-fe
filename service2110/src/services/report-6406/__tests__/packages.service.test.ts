@@ -1,5 +1,5 @@
-import { db } from '../../db/index.js';
-import { report6406Packages } from '../../db/schema/index.js';
+import { db } from '../../db/index.ts';
+import { report6406Packages } from '../../db/schema/index.ts';
 import { packagesService } from '../packages.service';
 import { eq } from 'drizzle-orm';
 

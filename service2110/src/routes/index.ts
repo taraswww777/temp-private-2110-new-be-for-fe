@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { healthRoutes } from './health.js';
-import { v1Routes } from './v1/index.js';
-import { mockFilesRoutes } from './mock-files.js';
+import { healthRoutes } from './health.ts';
+import { v1Routes } from './v1/index.ts';
+import { mockFilesRoutes } from './mock-files.ts';
 
 export const routes: FastifyPluginAsync = async (fastify) => {
   // Health check endpoint (без версионирования)

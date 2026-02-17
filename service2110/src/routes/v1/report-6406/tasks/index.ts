@@ -2,7 +2,7 @@
 //@ts-nocheck
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { tasksService } from '../../../../services/report-6406/tasks.service.js';
+import { tasksService } from '../../../../services/report-6406/tasks.service.ts';
 import {
   createTaskSchema,
   taskDetailsSchema,
@@ -14,8 +14,8 @@ import {
   bulkCancelResponseSchema,
   startTasksSchema,
   startTasksResponseSchema,
-} from '../../../../schemas/report-6406/tasks.schema.js';
-import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.js';
+} from '../../../../schemas/report-6406/tasks.schema.ts';
+import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.ts';
 
 export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();

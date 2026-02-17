@@ -1,5 +1,5 @@
-import { db } from './index.js';
-import { branches, sources } from './schema/index.js';
+import { db } from './index.ts';
+import { branches, sources } from './schema/index.ts';
 
 /**
  * Скрипт для заполнения справочников тестовыми данными

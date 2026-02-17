@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { storageService } from '../../../../services/report-6406/storage.service.js';
-import { storageVolumeListResponseSchema } from '../../../../schemas/report-6406/storage.schema.js';
+import { storageService } from '../../../../services/report-6406/storage.service.ts';
+import { storageVolumeListResponseSchema } from '../../../../schemas/report-6406/storage.schema.ts';
 
 export const storageRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();

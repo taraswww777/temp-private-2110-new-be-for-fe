@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { reportTaskStatusSchema } from './tasks.schema.js';
+import { reportTaskStatusSchema } from './tasks.schema.ts';
 
 /**
  * Схема для записи истории статуса

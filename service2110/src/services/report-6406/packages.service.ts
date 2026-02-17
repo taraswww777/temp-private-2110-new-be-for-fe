@@ -1,11 +1,11 @@
-import { db } from '../../db/index.js';
+import { db } from '../../db/index.ts';
 import {
   report6406Packages,
   report6406PackageTasks,
   report6406Tasks,
   report6406TaskBranches,
   branches,
-} from '../../db/schema/index.js';
+} from '../../db/schema/index.ts';
 import { eq, sql, desc, asc, like, and, inArray } from 'drizzle-orm';
 import type {
   CreatePackageInput,

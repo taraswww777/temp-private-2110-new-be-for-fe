@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { referencesService } from '../../../../services/report-6406/references.service.js';
+import { referencesService } from '../../../../services/report-6406/references.service.ts';
 import {
   branchesResponseSchema,
   currenciesResponseSchema,

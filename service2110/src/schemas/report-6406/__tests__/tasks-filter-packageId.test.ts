@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getTasksRequestSchema, taskListItemSchema } from '../tasks.schema.js';
+import { getTasksRequestSchema, taskListItemSchema } from '../tasks.schema.ts';
 
 describe('GetTasksRequestSchema / filter packageId', () => {
   it('принимает фильтр packageId (задания в указанном пакете)', () => {

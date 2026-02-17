@@ -2,7 +2,7 @@
 //@ts-nocheck
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { packagesService } from '../../../../services/report-6406/packages.service.js';
+import { packagesService } from '../../../../services/report-6406/packages.service.ts';
 import {
   createPackageSchema,
   updatePackageSchema,

@@ -1,5 +1,5 @@
-import { db } from '../../db/index.js';
-import { branches, sources } from '../../db/schema/index.js';
+import { db } from '../../db/index.ts';
+import { branches, sources } from '../../db/schema/index.ts';
 import type {
   AccountMasksResponse,
   BranchesResponse,

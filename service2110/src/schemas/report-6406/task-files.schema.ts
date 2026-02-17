@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema.js';
+import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema.ts';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**

@@ -1,5 +1,5 @@
 import { bigint, date, index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
-import { branches } from './branches.schema.js';
+import { branches } from './branches.schema.ts';
 import { ReportTypeEnum } from '../../schemas/enums/ReportTypeEnum';
 import { FileFormat } from '../../schemas/enums/FileFormatEnum';
 import { Currency } from '../../schemas/enums/CurrencyEnum';
@@ -85,4 +85,4 @@ export type NewReport6406Task = typeof report6406Tasks.$inferInsert;
 
 
 // Re-export TaskStatus from status-model
-export { TaskStatus } from '../../types/status-model.js';
+export { TaskStatus } from '../../types/status-model.ts';
