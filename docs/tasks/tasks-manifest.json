@@ -829,6 +829,20 @@
       "completedDate": null,
       "branch": null,
       "priority": "medium"
+    },
+    {
+      "id": "TASK-068",
+      "title": "Замена uuid на int",
+      "status": "backlog",
+      "priority": "medium",
+      "file": "TASK-068-uuid-int.md",
+      "createdDate": "2026-02-17T16:03:17.912Z",
+      "completedDate": null,
+      "branch": null,
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ],
+      "projectId": "2110-project-id"
     }
   ]
 }
