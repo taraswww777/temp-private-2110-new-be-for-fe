@@ -2305,46 +2305,37 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "branches": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "integer",
-                            "minimum": -9007199254740991,
-                            "maximum": 9007199254740991,
-                            "description": "Идентификатор филиала"
-                          },
-                          "codeCB": {
-                            "type": "string",
-                            "description": "Код ЦБ"
-                          },
-                          "codeDAPP": {
-                            "type": "string",
-                            "description": "Код DAPP"
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "Название филиала"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "codeCB",
-                          "codeDAPP",
-                          "name"
-                        ],
-                        "additionalProperties": false
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991,
+                        "description": "Идентификатор филиала"
+                      },
+                      "codeCB": {
+                        "type": "string",
+                        "description": "Код ЦБ"
+                      },
+                      "codeDAPP": {
+                        "type": "string",
+                        "description": "Код DAPP"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Название филиала"
                       }
-                    }
-                  },
-                  "required": [
-                    "branches"
-                  ],
-                  "additionalProperties": false
+                    },
+                    "required": [
+                      "id",
+                      "codeCB",
+                      "codeDAPP",
+                      "name"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               }
             }
@@ -2364,19 +2355,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "currencies": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/CurrencyDto"
-                      }
-                    }
-                  },
-                  "required": [
-                    "currencies"
-                  ],
-                  "additionalProperties": false
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrencyDto"
+                  }
                 }
               }
             }
@@ -2396,19 +2378,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "sources": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/SourceDto"
-                      }
-                    }
-                  },
-                  "required": [
-                    "sources"
-                  ],
-                  "additionalProperties": false
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SourceDto"
+                  }
                 }
               }
             }

@@ -27,7 +27,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (request, reply) => {
     const result = await referencesService.getBranches();
-    return reply.status(200).send({ branches: result });
+    return reply.status(200).send(result);
   });
 
   /**
@@ -44,7 +44,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (request, reply) => {
     const result = await referencesService.getCurrencies();
-    return reply.status(200).send({ currencies: result });
+    return reply.status(200).send(result);
   });
 
   /**
@@ -61,7 +61,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (request, reply) => {
     const result = await referencesService.getSources();
-    return reply.status(200).send({ sources: result });
+    return reply.status(200).send(result);
   });
 
   /**

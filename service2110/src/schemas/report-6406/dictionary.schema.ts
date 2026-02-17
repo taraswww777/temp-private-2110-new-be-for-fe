@@ -15,9 +15,7 @@ export type Branch = z.infer<typeof branchSchema>;
 /**
  * Схема для ответа со списком филиалов
  */
-export const branchesResponseSchema = z.object({
-  branches: z.array(branchSchema)
-});
+export const branchesResponseSchema = z.array(branchSchema);
 
 export type BranchesResponse = z.infer<typeof branchesResponseSchema>;
 
@@ -34,9 +32,7 @@ export type Currency = z.infer<typeof currencySchema>;
 /**
  * Схема для ответа со списком валют
  */
-export const currenciesResponseSchema = z.object({
-  currencies: z.array(currencySchema)
-});
+export const currenciesResponseSchema = z.array(currencySchema);
 
 export type CurrenciesResponse = z.infer<typeof currenciesResponseSchema>;
 
@@ -54,9 +50,7 @@ export type Source = z.infer<typeof sourceSchema>;
 /**
  * Схема для ответа со списком источников
  */
-export const sourcesResponseSchema = z.object({
-  sources: z.array(sourceSchema)
-});
+export const sourcesResponseSchema = z.array(sourceSchema);
 
 export type SourcesResponse = z.infer<typeof sourcesResponseSchema>;
 
