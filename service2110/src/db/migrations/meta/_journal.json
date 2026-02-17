@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1769604337460,
-      "tag": "0000_careful_diamondback",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1738075200000,
-      "tag": "0001_extend_6406_api",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1738224000000,
-      "tag": "0002_rename_account_second_order",
+      "when": 1771341919977,
+      "tag": "0000_glamorous_rhodey",
       "breakpoints": true
     }
   ]
