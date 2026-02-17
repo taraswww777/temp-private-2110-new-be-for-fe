@@ -1,31 +1,31 @@
 import { db } from '../../db/index.js';
-import { 
-  report6406Tasks, 
-  report6406PackageTasks, 
-  report6406Packages,
-  report6406TaskStatusHistory,
-  report6406TaskBranches,
+import {
   branches,
+  report6406Packages,
+  report6406PackageTasks,
+  report6406TaskBranches,
+  report6406Tasks,
+  report6406TaskStatusHistory,
   TaskStatus,
 } from '../../db/schema/index.js';
-import { eq, and, inArray, gte, lte, sql, desc, asc, ne, exists, not } from 'drizzle-orm';
+import { and, asc, desc, eq, exists, inArray, not, sql } from 'drizzle-orm';
 import type {
+  BulkCancelResponse,
+  BulkCancelTasksInput,
+  BulkDeleteResponse,
+  BulkDeleteTasksInput,
+  CancelTaskResponse,
   CreateTaskInput,
   GetTasksRequest,
-  TasksListResponse,
-  TaskDetail,
-  TaskDetails,
-  BulkDeleteTasksInput,
-  BulkDeleteResponse,
-  BulkCancelTasksInput,
-  BulkCancelResponse,
-  CancelTaskResponse,
-  Task,
   StartTasksInput,
   StartTasksResponse,
+  Task,
+  TaskDetails,
+  TasksListResponse,
 } from '../../schemas/report-6406/tasks.schema.js';
 import { getStatusPermissions } from '../../types/status-model.js';
 import { storageService } from './storage.service.js';
+import { Currency } from '../../schemas/enums/CurrencyEnum';
 
 export class TasksService {
   /**
@@ -34,7 +34,7 @@ export class TasksService {
   async createTask(input: CreateTaskInput, createdBy: string): Promise<TaskDetails> {
     // Определить массив филиалов: используем branchIds если есть, иначе branchId
     const branchIds = input.branchIds || (input.branchId ? [input.branchId] : []);
-    
+
     if (branchIds.length === 0) {
       throw new Error('At least one branchId must be provided');
     }
@@ -65,7 +65,7 @@ export class TasksService {
           periodEnd: input.periodEnd,
           accountMask: input.accountMask || null,
           accountSecondOrder: input.accountSecondOrder || null,
-          currency: input.currency ?? 'RUB',
+          currency: input.currency ?? Currency.RUB,
           format: input.format,
           reportType: input.reportType,
           source: input.source || null,
@@ -112,7 +112,11 @@ export class TasksService {
 
     // Подсчет общего количества
     const [{ count }] = await db
-      .select({ count: sql<number>`count(*)::int` })
+      .select({
+        count: sql<number>`count
+            (*)
+            ::int`
+      })
       .from(report6406Tasks)
       .where(whereClause);
 
@@ -157,12 +161,12 @@ export class TasksService {
     const packageLinks =
       taskIds.length > 0
         ? await db
-            .select({
-              taskId: report6406PackageTasks.taskId,
-              packageId: report6406PackageTasks.packageId,
-            })
-            .from(report6406PackageTasks)
-            .where(inArray(report6406PackageTasks.taskId, taskIds))
+          .select({
+            taskId: report6406PackageTasks.taskId,
+            packageId: report6406PackageTasks.packageId,
+          })
+          .from(report6406PackageTasks)
+          .where(inArray(report6406PackageTasks.taskId, taskIds))
         : [];
     const taskIdToPackageIds = new Map<string, string[]>();
     for (const link of packageLinks) {
@@ -175,14 +179,14 @@ export class TasksService {
     const branchLinks =
       taskIds.length > 0
         ? await db
-            .select({
-              taskId: report6406TaskBranches.taskId,
-              branchId: report6406TaskBranches.branchId,
-              branchName: branches.name,
-            })
-            .from(report6406TaskBranches)
-            .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
-            .where(inArray(report6406TaskBranches.taskId, taskIds))
+          .select({
+            taskId: report6406TaskBranches.taskId,
+            branchId: report6406TaskBranches.branchId,
+            branchName: branches.name,
+          })
+          .from(report6406TaskBranches)
+          .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
+          .where(inArray(report6406TaskBranches.taskId, taskIds))
         : [];
     const taskIdToBranchIds = new Map<string, string[]>();
     const taskIdToBranchNames = new Map<string, string[]>();
@@ -190,7 +194,7 @@ export class TasksService {
       const ids = taskIdToBranchIds.get(link.taskId) ?? [];
       ids.push(link.branchId);
       taskIdToBranchIds.set(link.taskId, ids);
-      
+
       const names = taskIdToBranchNames.get(link.taskId) ?? [];
       names.push(link.branchName);
       taskIdToBranchNames.set(link.taskId, names);
@@ -199,7 +203,7 @@ export class TasksService {
     return {
       items: tasks.map((task) =>
         this.formatTaskListItem(
-          task, 
+          task,
           taskIdToPackageIds.get(task.id) ?? [],
           taskIdToBranchIds.get(task.id) ?? [task.branchId],
           taskIdToBranchNames.get(task.id) ?? [task.branchName],
@@ -492,9 +496,9 @@ export class TasksService {
    */
   async bulkCancelTasks(input: BulkCancelTasksInput, cancelledBy?: string): Promise<BulkCancelResponse> {
     let cancelled = 0;
-    const results: Array<{ 
-      taskId: string; 
-      success: boolean; 
+    const results: Array<{
+      taskId: string;
+      success: boolean;
       status?: TaskStatus;
       updatedAt?: string;
       reason?: string;
@@ -657,7 +661,7 @@ export class TasksService {
    */
   private async formatTask(task: typeof report6406Tasks.$inferSelect): Promise<Task> {
     const permissions = getStatusPermissions(task.status as TaskStatus);
-    
+
     // Получить филиалы, связанные с заданием
     const taskBranches = await db
       .select({
@@ -669,13 +673,13 @@ export class TasksService {
       .where(eq(report6406TaskBranches.taskId, task.id))
       .orderBy(asc(branches.name));
 
-    const branchIds = taskBranches.length > 0 
+    const branchIds = taskBranches.length > 0
       ? taskBranches.map(b => b.branchId)
       : [task.branchId];
     const branchNames = taskBranches.length > 0
       ? taskBranches.map(b => b.branchName)
       : [task.branchName];
-    
+
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
@@ -717,14 +721,14 @@ export class TasksService {
     taskBranches: Array<{ branchId: string; branchName: string }> = [],
   ): TaskDetails {
     const permissions = getStatusPermissions(task.status as TaskStatus);
-    
-    const branchIds = taskBranches.length > 0 
+
+    const branchIds = taskBranches.length > 0
       ? taskBranches.map(b => b.branchId)
       : [task.branchId];
     const branchNames = taskBranches.length > 0
       ? taskBranches.map(b => b.branchName)
       : [task.branchName];
-    
+
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),

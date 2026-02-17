@@ -25,7 +25,7 @@ const ReportFormTypeDescriptions = {
     description: '6406у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции'
   }
 } as const;
-// Создаем схему через nativeEnum (который возвращает ZodEnum)
+
 export const reportFormTypeSchema = z.enum(ReportFormTypeEnum).describe('Тип формы отчетности');
 
 // Добавляем метаданные через describe (некоторые генераторы поддерживают)

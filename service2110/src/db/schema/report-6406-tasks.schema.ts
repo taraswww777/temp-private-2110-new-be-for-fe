@@ -1,6 +1,8 @@
 import { bigint, date, index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { branches } from './branches.schema.js';
 import { ReportTypeEnum } from '../../schemas/enums/ReportTypeEnum';
+import { FileFormat } from '../../schemas/enums/FileFormatEnum';
+import { Currency } from '../../schemas/enums/CurrencyEnum';
 
 /**
  * PostgreSQL enum для типа отчёта
@@ -13,6 +15,18 @@ export const reportTypePgEnum = pgEnum('report_type_enum', [
   ReportTypeEnum.KROS_VOS,
   ReportTypeEnum.KROS_VZS,
   ReportTypeEnum.KROS,
+]);
+
+
+export const fileFormatPgEnum = pgEnum('file_format_enum', [
+  FileFormat.TXT,
+  FileFormat.XLSX,
+  FileFormat.XML,
+]);
+
+export const currencyPgEnum = pgEnum('currency_enum', [
+  Currency.RUB,
+  Currency.FOREIGN
 ]);
 
 /**
@@ -34,8 +48,8 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
   // Фильтры для построения отчёта
   accountMask: varchar('account_mask', { length: 20 }),
   accountSecondOrder: varchar('account_second_order', { length: 2 }),
-  currency: varchar('currency', { length: 20 }).notNull().$type<'RUB' | 'FOREIGN'>(),
-  format: varchar('format', { length: 10 }).notNull().$type<'TXT' | 'XLSX' | 'XML'>(),
+  currency: currencyPgEnum('currency').notNull(),
+  format: fileFormatPgEnum('format').notNull(),
   reportType: reportTypePgEnum('report_type').notNull(),
   source: varchar('source', { length: 20 }),
 
@@ -69,18 +83,6 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
 export type Report6406Task = typeof report6406Tasks.$inferSelect;
 export type NewReport6406Task = typeof report6406Tasks.$inferInsert;
 
-// Enum для валют
-export enum Currency {
-  RUB = 'RUB',
-  FOREIGN = 'FOREIGN',
-}
-
-// Enum для форматов
-export enum FileFormat {
-  TXT = 'TXT',
-  XLSX = 'XLSX',
-  XML = 'XML',
-}
 
 // Re-export TaskStatus from status-model
 export { TaskStatus } from '../../types/status-model.js';

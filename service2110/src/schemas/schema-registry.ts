@@ -25,9 +25,7 @@ import {
   bulkDeleteResponseSchema,
   bulkCancelResponseSchema,
   startTasksResponseSchema,
-  fileFormatSchema,
   reportTaskStatusSchema,
-  currencySchema,
 } from './report-6406/tasks.schema.js';
 import {
   branchSchema,
@@ -66,6 +64,8 @@ import {
 } from './report-6406/task-files.schema.js';
 import { reportFormTypeSchema } from './enums/ReportFormTypeEnum';
 import { SortOrderEnum, sortOrderSchema } from './enums/SortOrderEnum';
+import { fileFormatSchema } from './enums/FileFormatEnum';
+import { currencySchema } from './enums/CurrencyEnum';
 
 /**
  * Маппинг имён схем на Zod схемы

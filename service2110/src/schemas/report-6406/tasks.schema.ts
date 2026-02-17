@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { paginationQuerySchema, } from '../common.schema.js';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
+import { currencySchema } from '../enums/CurrencyEnum';
+import { fileFormatSchema } from '../enums/FileFormatEnum';
 
 /**
  * Enum схемы для валидации
@@ -34,10 +36,6 @@ export const reportTaskStatusSchema = z.enum([
   'failed_fc',
   'have_broken_files',
 ]);
-
-export const currencySchema = z.enum(['RUB', 'FOREIGN']);
-
-export const fileFormatSchema = z.enum(['TXT', 'XLSX', 'XML']);
 
 
 export type ReportTaskStatusType = z.infer<typeof reportTaskStatusSchema>;

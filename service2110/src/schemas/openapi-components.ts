@@ -18,8 +18,6 @@ import {
   bulkCancelResponseSchema,
   bulkDeleteResponseSchema,
   createTaskSchema,
-  currencySchema,
-  fileFormatSchema,
   getTasksRequestSchema,
   reportTaskStatusSchema,
   startTasksResponseSchema,
@@ -65,6 +63,8 @@ import {
 import { zodToJsonSchema } from './utils/zodToJsonSchema';
 import { ReportFormTypeEnumSchema } from './enums/ReportFormTypeEnum';
 import { SortOrderEnumSchema, sortOrderSchema } from './enums/SortOrderEnum';
+import { CurrencyEnumSchema, currencySchema } from './enums/CurrencyEnum';
+import { FileFormatEnumSchema, fileFormatSchema } from './enums/FileFormatEnum';
 
 /**
  * Получить все переиспользуемые компоненты для OpenAPI
@@ -74,6 +74,8 @@ export function getOpenApiComponents() {
     // Enums
     ReportFormTypeEnum: ReportFormTypeEnumSchema,
     SortOrderEnum: SortOrderEnumSchema,
+    CurrencyEnum: CurrencyEnumSchema,
+    FileFormatEnum: FileFormatEnumSchema,
 
     // Общие схемы
     PaginationRequestDto: zodToJsonSchema(paginationQuerySchema, 'PaginationRequestDto'),

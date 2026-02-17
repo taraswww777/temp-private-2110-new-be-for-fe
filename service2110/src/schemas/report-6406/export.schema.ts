@@ -1,7 +1,8 @@
 import { z } from 'zod';
-import { reportTaskStatusSchema, fileFormatSchema } from './tasks.schema.js';
+import { reportTaskStatusSchema } from './tasks.schema.js';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
+import { fileFormatSchema } from '../enums/FileFormatEnum';
 
 /**
  * Схема для фильтров экспорта (расширенная)

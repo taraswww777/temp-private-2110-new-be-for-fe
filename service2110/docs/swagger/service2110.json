@@ -38,6 +38,7 @@
           "XLSX",
           "XML"
         ],
+        "description": "Формат файла",
         "title": "FileFormatEnumSchema"
       },
       "ReportFormTypeEnum": {
@@ -116,6 +117,7 @@
           "RUB",
           "FOREIGN"
         ],
+        "description": "Валюта",
         "title": "CurrencyEnumSchema"
       },
       "SortOrderEnumSchema": {
@@ -130,6 +132,12 @@
       },
       "SortOrderEnum": {
         "$ref": "#/components/schemas/SortOrderEnumSchema"
+      },
+      "CurrencyEnum": {
+        "$ref": "#/components/schemas/CurrencyEnumSchema"
+      },
+      "FileFormatEnum": {
+        "$ref": "#/components/schemas/FileFormatEnumSchema"
       },
       "PaginationRequestDto": {
         "type": "object",
@@ -557,7 +565,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportFormTypeEnum"
+            "description": "Тип отчёта",
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ]
           },
           "source": {
             "anyOf": [
@@ -669,7 +686,6 @@
           "accountSecondOrder",
           "currency",
           "format",
-          "reportType",
           "source",
           "status",
           "canCancel",
@@ -747,7 +763,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportFormTypeEnum"
+            "description": "Тип отчёта",
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ]
           },
           "updatedAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -785,7 +810,6 @@
           "status",
           "fileSize",
           "format",
-          "reportType",
           "updatedAt",
           "canCancel",
           "canDelete",
@@ -866,7 +890,16 @@
                 "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
               },
               "reportType": {
-                "$ref": "#/components/schemas/ReportFormTypeEnum"
+                "description": "Тип отчёта",
+                "type": "string",
+                "enum": [
+                  "LSOZ",
+                  "LSOS",
+                  "LSOP",
+                  "KROS_VOS",
+                  "KROS_VZS",
+                  "KROS"
+                ]
               },
               "format": {
                 "$ref": "#/components/schemas/FileFormatEnumSchema"
@@ -1001,7 +1034,16 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "$ref": "#/components/schemas/ReportFormTypeEnum"
+            "description": "Тип отчёта",
+            "type": "string",
+            "enum": [
+              "LSOZ",
+              "LSOS",
+              "LSOP",
+              "KROS_VOS",
+              "KROS_VZS",
+              "KROS"
+            ]
           },
           "source": {
             "anyOf": [
@@ -1136,7 +1178,6 @@
           "accountSecondOrder",
           "currency",
           "format",
-          "reportType",
           "source",
           "status",
           "canCancel",
@@ -1224,6 +1265,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
+            "description": "Тип отчёта",
             "type": "string",
             "enum": [
               "LSOZ",
@@ -1232,8 +1274,7 @@
               "KROS_VOS",
               "KROS_VZS",
               "KROS"
-            ],
-            "description": "Тип отчёта"
+            ]
           },
           "source": {
             "anyOf": [
@@ -1376,7 +1417,6 @@
           "accountSecondOrder",
           "currency",
           "format",
-          "reportType",
           "source",
           "status",
           "canCancel",
@@ -2076,7 +2116,16 @@
                 "description": "Список типов отчётов для фильтрации",
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/ReportFormTypeEnum"
+                  "type": "string",
+                  "enum": [
+                    "LSOZ",
+                    "LSOS",
+                    "LSOP",
+                    "KROS_VOS",
+                    "KROS_VZS",
+                    "KROS"
+                  ],
+                  "description": "Тип отчёта"
                 }
               },
               "formats": {
@@ -2337,10 +2386,6 @@
                         "type": "string",
                         "description": "Код ЦБ"
                       },
-                      "codeDAPP": {
-                        "type": "string",
-                        "description": "Код DAPP"
-                      },
                       "name": {
                         "type": "string",
                         "description": "Название филиала"
@@ -2349,7 +2394,6 @@
                     "required": [
                       "id",
                       "codeCB",
-                      "codeDAPP",
                       "name"
                     ],
                     "additionalProperties": false
@@ -2456,8 +2500,7 @@
           {
             "schema": {
               "type": "string",
-              "maxLength": 30,
-              "pattern": "^([^А-Яа-я\\,\\s\\:]+)$"
+              "maxLength": 15
             },
             "in": "path",
             "name": "login",
@@ -2478,8 +2521,7 @@
                     },
                     "login": {
                       "type": "string",
-                      "maxLength": 30,
-                      "pattern": "^([^А-Яа-я\\,\\s\\:]+)$"
+                      "maxLength": 15
                     }
                   },
                   "required": [
