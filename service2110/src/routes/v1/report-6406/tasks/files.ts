@@ -9,11 +9,11 @@ import {
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
 } from '../../../../schemas/report-6406/task-files.schema.ts';
-import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.ts';
+import { uuidParamSchema, httpErrorSchema, zIdSchema } from '../../../../schemas/common.schema.ts';
 
 // Схема для параметров с двумя UUID
 const taskFileParamsSchema = z.object({
-  taskId: z.uuid(),
+  taskId: zIdSchema,
   fileId: z.uuid(),
 });
 

@@ -260,7 +260,7 @@ export class PackagesService {
     let added = 0;
     let alreadyInPackage = 0;
     let notFound = 0;
-    const errors: Array<{ taskId: string; reason: string }> = [];
+    const errors: Array<{ taskId: ID; reason: string }> = [];
 
     for (const taskId of input.taskIds) {
       try {
@@ -326,7 +326,7 @@ export class PackagesService {
   /**
    * Удалить задание из пакета
    */
-  async removeTaskFromPackage(packageId: ID, taskId: string): Promise<void> {
+  async removeTaskFromPackage(packageId: ID, taskId: ID): Promise<void> {
     const [relation] = await db
       .select()
       .from(report6406PackageTasks)
@@ -363,7 +363,7 @@ export class PackagesService {
     input: BulkRemoveTasksFromPackageInput
   ): Promise<BulkRemoveTasksResponse> {
     let removed = 0;
-    const results: Array<{ taskId: string; success: boolean; reason?: string }> = [];
+    const results: Array<{ taskId: ID; success: boolean; reason?: string }> = [];
 
     for (const taskId of input.taskIds) {
       try {

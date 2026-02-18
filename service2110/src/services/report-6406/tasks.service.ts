@@ -169,7 +169,7 @@ export class TasksService {
           .from(report6406PackageTasks)
           .where(inArray(report6406PackageTasks.taskId, taskIds))
         : [];
-    const taskIdToPackageIds = new Map<string, ID[]>();
+    const taskIdToPackageIds = new Map<ID, ID[]>();
     for (const link of packageLinks) {
       const arr = taskIdToPackageIds.get(link.taskId) ?? [];
       arr.push(link.packageId);
@@ -189,8 +189,8 @@ export class TasksService {
           .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
           .where(inArray(report6406TaskBranches.taskId, taskIds))
         : [];
-    const taskIdToBranchIds = new Map<string, string[]>();
-    const taskIdToBranchNames = new Map<string, string[]>();
+    const taskIdToBranchIds = new Map<ID, string[]>();
+    const taskIdToBranchNames = new Map<ID, string[]>();
     for (const link of branchLinks) {
       const ids = taskIdToBranchIds.get(link.taskId) ?? [];
       ids.push(link.branchId);
@@ -354,15 +354,15 @@ export class TasksService {
   /**
    * Получить задание по ID с информацией о пакетах (TaskDetailsDto — без fileUrl, errorMessage; с s3FolderId, type, accounts)
    */
-  async getTaskById(id: string): Promise<TaskDetails> {
+  async getTaskById(taskId: ID): Promise<TaskDetails> {
     const [task] = await db
       .select()
       .from(report6406Tasks)
-      .where(eq(report6406Tasks.id, id))
+      .where(eq(report6406Tasks.id, taskId))
       .limit(1);
 
     if (!task) {
-      throw new Error(`Report task with id '${id}' not found`);
+      throw new Error(`Report task with id '${taskId}' not found`);
     }
 
     // Получить пакеты, в которых находится задание
@@ -374,7 +374,7 @@ export class TasksService {
       })
       .from(report6406PackageTasks)
       .innerJoin(report6406Packages, eq(report6406PackageTasks.packageId, report6406Packages.id))
-      .where(eq(report6406PackageTasks.taskId, id));
+      .where(eq(report6406PackageTasks.taskId, taskId));
 
     // Получить филиалы, связанные с заданием
     const taskBranches = await db
@@ -384,7 +384,7 @@ export class TasksService {
       })
       .from(report6406TaskBranches)
       .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
-      .where(eq(report6406TaskBranches.taskId, id))
+      .where(eq(report6406TaskBranches.taskId, taskId))
       .orderBy(asc(branches.name));
 
     return this.formatTaskDetails(task, packagesList, taskBranches);
@@ -393,7 +393,7 @@ export class TasksService {
   /**
    * Удалить задание
    */
-  async deleteTask(id: string): Promise<void> {
+  async deleteTask(id: ID): Promise<void> {
     const [task] = await db
       .select()
       .from(report6406Tasks)
@@ -416,7 +416,7 @@ export class TasksService {
    */
   async bulkDeleteTasks(input: BulkDeleteTasksInput): Promise<BulkDeleteResponse> {
     let deleted = 0;
-    const results: Array<{ taskId: string; success: boolean; reason?: string }> = [];
+    const results: Array<{ taskId: ID; success: boolean; reason?: string }> = [];
 
     for (const taskId of input.taskIds) {
       try {
@@ -445,15 +445,15 @@ export class TasksService {
   /**
    * Отменить задание
    */
-  async cancelTask(id: string, cancelledBy?: string): Promise<CancelTaskResponse> {
+  async cancelTask(taskId: ID, cancelledBy?: string): Promise<CancelTaskResponse> {
     const [task] = await db
       .select()
       .from(report6406Tasks)
-      .where(eq(report6406Tasks.id, id))
+      .where(eq(report6406Tasks.id, taskId))
       .limit(1);
 
     if (!task) {
-      throw new Error(`Report task with id '${id}' not found`);
+      throw new Error(`Report task with id '${taskId}' not found`);
     }
 
     if (!this.canCancel(task.status)) {
@@ -469,12 +469,12 @@ export class TasksService {
           lastStatusChangedAt: new Date(),
           updatedAt: new Date(),
         })
-        .where(eq(report6406Tasks.id, id))
+        .where(eq(report6406Tasks.id, taskId))
         .returning();
 
       // Добавляем запись в историю
       await trx.insert(report6406TaskStatusHistory).values({
-        taskId: id,
+        taskId: taskId,
         status: TaskStatus.KILLED_DAPP,
         previousStatus: task.status as TaskStatus,
         changedAt: new Date(),
@@ -498,7 +498,7 @@ export class TasksService {
   async bulkCancelTasks(input: BulkCancelTasksInput, cancelledBy?: string): Promise<BulkCancelResponse> {
     let cancelled = 0;
     const results: Array<{
-      taskId: string;
+      taskId: ID;
       success: boolean;
       status?: TaskStatus;
       updatedAt?: string;

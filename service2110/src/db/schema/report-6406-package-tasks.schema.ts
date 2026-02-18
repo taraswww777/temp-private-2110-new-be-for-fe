@@ -8,7 +8,7 @@ import { idColumn } from './base.schema.ts';
  */
 export const report6406PackageTasks = pgTable('report_6406_package_tasks', {
   packageId: idColumn('package_id').references(() => report6406Packages.id, { onDelete: 'cascade' }),
-  taskId: uuid('task_id').notNull().references(() => report6406Tasks.id, { onDelete: 'cascade' }),
+  taskId: idColumn('task_id').references(() => report6406Tasks.id, { onDelete: 'cascade' }),
   addedAt: timestamp('added_at').notNull().defaultNow(),
 }, (table) => ({
   pk: primaryKey({ columns: [table.packageId, table.taskId] }),

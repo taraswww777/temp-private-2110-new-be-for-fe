@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { zIdSchema, paginationQuerySchema, } from '../common.schema.ts';
+import { paginationQuerySchema, zIdSchema, } from '../common.schema.ts';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';
@@ -98,7 +98,7 @@ export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
  * Схема для полного задания
  */
 export const taskSchema = z.object({
-  id: z.uuid().describe('ИД задания'),
+  id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
   branchId: z.uuid().describe('ИД филиала (устаревшее поле, используйте branchIds)'),
@@ -152,7 +152,7 @@ export type TaskDetail = z.infer<typeof taskDetailSchema>;
  * Без лишних полей errorMessage, fileUrl. С полями s3FolderId, type, accounts для UI.
  */
 export const taskDetailsSchema = z.object({
-  id: z.uuid().describe('ИД задания'),
+  id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
   branchId: z.uuid().describe('ИД филиала (устаревшее поле, используйте branchIds)'),
@@ -198,7 +198,7 @@ export type TaskDetails = z.infer<typeof taskDetailsSchema>;
  * Схема для элемента списка заданий (TaskListItemDto)
  */
 export const taskListItemSchema = z.object({
-  id: z.uuid().describe('ИД задания'),
+  id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)'),
   branchId: z.uuid().describe('ИД филиала (устаревшее поле, используйте branchIds)'),
@@ -309,7 +309,7 @@ export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
  * Схема для массового удаления заданий
  */
 export const bulkDeleteTasksSchema = z.object({
-  taskIds: z.array(z.uuid()).min(1),
+  taskIds: z.array(zIdSchema).min(1),
 });
 
 export type BulkDeleteTasksInput = z.infer<typeof bulkDeleteTasksSchema>;
@@ -321,7 +321,7 @@ export const bulkDeleteResponseSchema = z.object({
   deleted: z.number().int().min(0),
   failed: z.number().int().min(0),
   results: z.array(z.object({
-    taskId: z.uuid(),
+    taskId: zIdSchema,
     success: z.boolean(),
     reason: z.string().optional(),
   })),
@@ -333,7 +333,7 @@ export type BulkDeleteResponse = z.infer<typeof bulkDeleteResponseSchema>;
  * Схема для массовой отмены заданий
  */
 export const bulkCancelTasksSchema = z.object({
-  taskIds: z.array(z.uuid()).min(1),
+  taskIds: z.array(zIdSchema).min(1),
 });
 
 export type BulkCancelTasksInput = z.infer<typeof bulkCancelTasksSchema>;
@@ -345,7 +345,7 @@ export const bulkCancelResponseSchema = z.object({
   cancelled: z.number().int().min(0),
   failed: z.number().int().min(0),
   results: z.array(z.object({
-    taskId: z.uuid(),
+    taskId: zIdSchema,
     success: z.boolean(),
     status: reportTaskStatusSchema.optional(),
     updatedAt: z.iso.datetime().optional(),
@@ -359,7 +359,7 @@ export type BulkCancelResponse = z.infer<typeof bulkCancelResponseSchema>;
  * Схема для ответа при отмене задания
  */
 export const cancelTaskResponseSchema = z.object({
-  id: z.uuid(),
+  id: zIdSchema,
   status: reportTaskStatusSchema,
   updatedAt: z.iso.datetime(),
 });
@@ -370,7 +370,7 @@ export type CancelTaskResponse = z.infer<typeof cancelTaskResponseSchema>;
  * Схема для запуска заданий (одного или нескольких)
  */
 export const startTasksSchema = z.object({
-  taskIds: z.array(z.uuid()).min(1),
+  taskIds: z.array(zIdSchema).min(1),
 });
 
 export type StartTasksInput = z.infer<typeof startTasksSchema>;
@@ -379,7 +379,7 @@ export type StartTasksInput = z.infer<typeof startTasksSchema>;
  * Схема для успешного результата запуска задания
  */
 export const startTaskResultSchema = z.object({
-  taskId: z.uuid(),
+  taskId: zIdSchema,
   status: reportTaskStatusSchema,
   startedAt: z.iso.datetime(),
 });
@@ -390,7 +390,7 @@ export type StartTaskResult = z.infer<typeof startTaskResultSchema>;
  * Схема для ошибки запуска задания
  */
 export const startTaskErrorSchema = z.object({
-  taskId: z.uuid(),
+  taskId: zIdSchema,
   reason: z.string(),
 });
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema.ts';
+import { paginationQuerySchema, paginationMetadataSchema, zIdSchema } from '../common.schema.ts';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**
@@ -46,7 +46,7 @@ export type TaskFilesQuery = z.infer<typeof taskFilesQuerySchema>;
  * Схема для ответа со списком файлов
  */
 export const taskFilesResponseSchema = z.object({
-  taskId: z.uuid(),
+  taskId: zIdSchema,
   files: z.array(taskFileSchema),
   pagination: paginationMetadataSchema,
 });

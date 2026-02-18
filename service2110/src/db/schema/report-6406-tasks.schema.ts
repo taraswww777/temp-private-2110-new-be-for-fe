@@ -3,6 +3,7 @@ import { branches } from './branches.schema.ts';
 import { ReportTypeEnum } from '../../schemas/enums/ReportTypeEnum';
 import { FileFormat } from '../../schemas/enums/FileFormatEnum';
 import { Currency } from '../../schemas/enums/CurrencyEnum';
+import { idColumnPrimary } from './base.schema.ts';
 
 /**
  * PostgreSQL enum для типа отчёта
@@ -33,7 +34,7 @@ export const currencyPgEnum = pgEnum('currency_enum', [
  * Задания на построение отчёта для формы 6406
  */
 export const report6406Tasks = pgTable('report_6406_tasks', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: idColumnPrimary(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 
   // Информация о создателе

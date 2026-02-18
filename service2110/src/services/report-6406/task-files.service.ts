@@ -8,12 +8,13 @@ import type {
 } from '../../schemas/report-6406/task-files.schema.ts';
 import { FileStatus } from '../../types/status-model.ts';
 import { generateMockPresignedUrl } from '../../utils/presigned-url-generator.ts';
+import { ID } from '../../schemas/common.schema.ts';
 
 export class TaskFilesService {
   /**
    * Получить список файлов задания
    */
-  async getTaskFiles(taskId: string, query: TaskFilesQuery): Promise<TaskFilesResponse> {
+  async getTaskFiles(taskId: ID, query: TaskFilesQuery): Promise<TaskFilesResponse> {
     const { number: pageNumber, size: pageSize, sortBy, sortOrder, status: statusFilter } = query;
 
     // Проверяем существование задания
@@ -29,7 +30,7 @@ export class TaskFilesService {
 
     // Построение WHERE условий
     const conditions = [eq(report6406TaskFiles.taskId, taskId)];
-    
+
     if (statusFilter && statusFilter.length > 0) {
       conditions.push(inArray(report6406TaskFiles.status, statusFilter));
     }
@@ -99,11 +100,11 @@ export class TaskFilesService {
 
   /**
    * Повторить конвертацию файла (экспериментальная функция)
-   * 
+   *
    * Возвращает 501 Not Implemented в текущей версии
    */
   async retryFileConversion(
-    taskId: string,
+    taskId: ID,
     fileId: string
   ): Promise<RetryFileConversionResponse> {
     // Проверяем существование задания
@@ -144,7 +145,7 @@ export class TaskFilesService {
   /**
    * Генерация моковых файлов для задания (для тестирования)
    */
-  async generateMockFilesForTask(taskId: string): Promise<void> {
+  async generateMockFilesForTask(taskId: ID): Promise<void> {
     const mockFiles = [
       {
         taskId,

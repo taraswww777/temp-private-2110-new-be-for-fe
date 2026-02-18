@@ -3,6 +3,7 @@
  */
 
 import { env } from '../config/env.ts';
+import { ID } from '../schemas/common.schema.ts';
 
 /**
  * Результат генерации pre-signed URL
@@ -49,7 +50,7 @@ export function generateMockPresignedUrl(
  * @param fileName - имя файла
  * @returns URL файла в хранилище
  */
-export function generateStorageUrl(taskId: string, fileName: string): string {
+export function generateStorageUrl(taskId: ID, fileName: string): string {
   // Моковая структура: s3://bucket-name/reports/taskId/fileName
   const bucketName = env.STORAGE_BUCKET_NAME || 'mock-reports-bucket';
   return `s3://${bucketName}/reports/${taskId}/${fileName}`;

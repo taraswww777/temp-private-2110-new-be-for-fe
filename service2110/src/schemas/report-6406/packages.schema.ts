@@ -101,7 +101,7 @@ export type UpdatePackageResponse = z.infer<typeof updatePackageResponseSchema>;
  * Схема для добавления заданий в пакет
  */
 export const addTasksToPackageSchema = z.object({
-  taskIds: z.array(z.uuid()).min(1),
+  taskIds: z.array(zIdSchema).min(1),
 });
 
 export type AddTasksToPackageInput = z.infer<typeof addTasksToPackageSchema>;
@@ -114,7 +114,7 @@ export const addTasksToPackageResponseSchema = z.object({
   alreadyInPackage: z.number().int().min(0),
   notFound: z.number().int().min(0),
   errors: z.array(z.object({
-    taskId: z.uuid(),
+    taskId: zIdSchema,
     reason: z.string(),
   })),
 });
@@ -125,7 +125,7 @@ export type AddTasksToPackageResponse = z.infer<typeof addTasksToPackageResponse
  * Схема для массового удаления заданий из пакета
  */
 export const bulkRemoveTasksFromPackageSchema = z.object({
-  taskIds: z.array(z.uuid()).min(1),
+  taskIds: z.array(zIdSchema).min(1),
 });
 
 export type BulkRemoveTasksFromPackageInput = z.infer<typeof bulkRemoveTasksFromPackageSchema>;
@@ -137,7 +137,7 @@ export const bulkRemoveTasksResponseSchema = z.object({
   removed: z.number().int().min(0),
   failed: z.number().int().min(0),
   results: z.array(z.object({
-    taskId: z.uuid(),
+    taskId: zIdSchema,
     success: z.boolean(),
     reason: z.string().optional(),
   })),
