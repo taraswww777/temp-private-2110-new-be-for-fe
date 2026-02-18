@@ -12,7 +12,7 @@ export const exportFiltersSchema = z.object({
   statuses: z.array(reportTaskStatusSchema).optional().describe('Список статусов для фильтрации'),
 
   // Фильтры по филиалам (массив строк)
-  branchIds: z.array(z.uuid()).optional().describe('Список идентификаторов филиалов для фильтрации'),
+  branchIds: z.array(z.uuid()).optional().describe('Список ИД филиалов для фильтрации'),
 
   // Фильтры по типам отчётов (массив)
   reportTypes: z.array(reportTypeSchema).optional().describe('Список типов отчётов для фильтрации'),
@@ -51,7 +51,7 @@ export type ExportTasksRequest = z.infer<typeof exportTasksRequestSchema>;
  * Схема для ответа экспорта
  */
 export const exportTasksResponseSchema = z.object({
-  exportId: z.uuid().describe('Идентификатор экспорта'),
+  exportId: z.uuid().describe('ИД экспорта'),
   status: z.literal('COMPLETED').describe('Статус экспорта'),
   fileUrl: z.string().describe('URL для скачивания файла'),
   fileSize: z

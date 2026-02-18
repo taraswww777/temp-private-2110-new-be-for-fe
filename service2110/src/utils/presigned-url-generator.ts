@@ -14,10 +14,10 @@ export interface PresignedUrlResult {
 
 /**
  * Генерирует моковый pre-signed URL для файла
- * 
+ *
  * В реальной реализации здесь будет обращение к S3 или аналогичному хранилищу
  * для генерации временной ссылки на скачивание файла.
- * 
+ *
  * @param fileId - ИД файла
  * @param fileName - имя файла
  * @returns объект с URL и временем истечения
@@ -28,24 +28,24 @@ export function generateMockPresignedUrl(
 ): PresignedUrlResult {
   const baseUrl = env.MOCK_FILE_STORAGE_URL || 'http://localhost:3000/mock-files';
   const expirationHours = env.PRESIGNED_URL_EXPIRATION_HOURS || 1;
-  
+
   // Кодируем имя файла для URL
   const encodedFileName = encodeURIComponent(fileName);
-  
+
   // Формируем URL
   const url = `${baseUrl}/${fileId}/${encodedFileName}`;
-  
+
   // Рассчитываем время истечения
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + expirationHours);
-  
+
   return { url, expiresAt };
 }
 
 /**
  * Генерирует моковый URL для хранилища (S3-подобный)
- * 
- * @param taskId - идентификатор задания
+ *
+ * @param taskId - ИД задания
  * @param fileName - имя файла
  * @returns URL файла в хранилище
  */
@@ -57,7 +57,7 @@ export function generateStorageUrl(taskId: string, fileName: string): string {
 
 /**
  * Проверяет, истёк ли срок действия pre-signed URL
- * 
+ *
  * @param expiresAt - дата истечения URL
  * @returns true, если URL истёк
  */
