@@ -52,7 +52,7 @@ export type ExportTasksRequest = z.infer<typeof exportTasksRequestSchema>;
  * Схема для ответа экспорта
  */
 export const exportTasksResponseSchema = z.object({
-  exportId: z.uuid().describe('ИД экспорта'),
+  exportId:zIdSchema.describe('ИД экспорта'),
   status: z.literal('COMPLETED').describe('Статус экспорта'),
   fileUrl: z.string().describe('URL для скачивания файла'),
   fileSize: z

@@ -80,7 +80,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
 });
 
 describe('TaskListItemSchema / packageIds', () => {
-  it('содержит поле packageIds (массив uuid)', () => {
+  it('содержит поле packageIds (массив id)', () => {
     const item = {
       id: 123,
       createdAt: '2026-01-30T12:00:00.000Z',
@@ -108,7 +108,7 @@ describe('TaskListItemSchema / packageIds', () => {
     }
   });
 
-  it('принимает packageIds с одним или несколькими uuid', () => {
+  it('принимает packageIds с одним или несколькими id', () => {
     const item = {
       id: 123,
       createdAt: '2026-01-30T12:00:00.000Z',
