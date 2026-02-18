@@ -254,7 +254,7 @@ export const tasksListSortingSchema = z.object({
  * Все поля опциональны, можно комбинировать несколько фильтров одновременно
  */
 export const tasksListFilterSchema = z.object({
-  packageId: zIdSchema.optional().describe('ID пакета (null — задания без пакета)'),
+  packageId: zIdSchema.optional().nullable().describe('ID пакета (null — задания без пакета)'),
   branchIds: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
   branchName: z.string().optional().describe('Название филиала'),
   status: reportTaskStatusSchema.optional().describe('Статус задания'),
