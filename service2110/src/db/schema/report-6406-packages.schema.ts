@@ -1,4 +1,4 @@
-import { pgTable, uuid, timestamp, varchar, integer, bigint, index } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, varchar, integer, bigint, index } from 'drizzle-orm/pg-core';
 import { idColumnPrimary } from './base.schema.ts';
 
 /**

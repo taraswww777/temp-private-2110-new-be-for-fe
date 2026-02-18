@@ -63,28 +63,6 @@ export const idParamSchema = z.object({
 
 export type IdParam = z.infer<typeof idParamSchema>;
 
-
-/**
- * Переиспользуемая схема для UUID
- * Используется для создания ссылок в OpenAPI спецификации
- *
- * @deprecated
- */
-export const uuidSchema = z.uuid().describe('UUID в формате RFC 4122');
-
-export type Uuid = z.infer<typeof uuidSchema>;
-
-/**
- * Схема для UUID параметров
- *
- * @deprecated
- */
-export const uuidParamSchema = z.object({
-  id: uuidSchema,
-});
-
-export type UuidParam = z.infer<typeof uuidParamSchema>;
-
 /**
  * Схема для RFC 7807 Problem Details ошибок
  */

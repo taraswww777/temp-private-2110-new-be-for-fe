@@ -18,7 +18,7 @@ import {
   bulkRemoveTasksResponseSchema,
   copyToTfrResponseSchema,
 } from '../../../../schemas/report-6406/packages.schema';
-import { idParamSchema, uuidParamSchema } from '../../../../schemas/common.schema';
+import { idParamSchema } from '../../../../schemas/common.schema';
 
 export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -92,7 +92,7 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Report 6406 - Packages'],
       summary: 'Получить детальную информацию о пакете',
-      params: uuidParamSchema,
+      params: idParamSchema,
       response: {
         200: packageSchema,
       },
@@ -122,7 +122,7 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Report 6406 - Packages'],
       summary: 'Обновить название пакета',
-      params: uuidParamSchema,
+      params: idParamSchema,
       body: updatePackageSchema,
       response: {
         200: updatePackageResponseSchema,

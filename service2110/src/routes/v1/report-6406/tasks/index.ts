@@ -15,7 +15,7 @@ import {
   startTasksSchema,
   startTasksResponseSchema,
 } from '../../../../schemas/report-6406/tasks.schema.ts';
-import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.ts';
+import { idParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.ts';
 
 export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -78,7 +78,7 @@ export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Report 6406 - Tasks'],
       summary: 'Получить детальную информацию о задании',
-      params: uuidParamSchema,
+      params: idParamSchema,
       response: {
         200: taskDetailsSchema,
       },

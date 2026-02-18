@@ -1,4 +1,4 @@
-import { pgTable, uuid, timestamp, primaryKey, index } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, primaryKey, index } from 'drizzle-orm/pg-core';
 import { report6406Packages } from './report-6406-packages.schema.ts';
 import { report6406Tasks } from './report-6406-tasks.schema.ts';
 import { idColumn } from './base.schema.ts';

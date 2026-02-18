@@ -12,7 +12,6 @@ import {
   dateTimeSchema,
   healthResponseSchema,
   httpErrorWithInstanceSchema,
-  uuidSchema,
 } from './common.schema.ts';
 import {
   createTaskSchema,
@@ -83,7 +82,6 @@ export const schemaRegistry = new Map<string, unknown>([
   ['FilterDto', filterSchema],
   ['DateSchema', dateSchema],
   ['DateTimeSchema', dateTimeSchema],
-  ['UuidSchema', uuidSchema],
   ['FileFormatEnumSchema', fileFormatSchema],
   ['ReportTaskStatusEnumSchema', reportTaskStatusSchema],
   ['CurrencyEnumSchema', currencySchema],

@@ -1,4 +1,4 @@
-import { bigint, date, index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { bigint, date, index, integer, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { branches } from './branches.schema.ts';
 import { ReportTypeEnum } from '../../schemas/enums/ReportTypeEnum';
 import { FileFormat } from '../../schemas/enums/FileFormatEnum';

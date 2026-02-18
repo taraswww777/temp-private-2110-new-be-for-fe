@@ -6,7 +6,7 @@ import { taskStatusHistoryService } from '../../../../services/report-6406/task-
 import {
   statusHistoryResponseSchema,
 } from '../../../../schemas/report-6406/task-status-history.schema.ts';
-import { uuidParamSchema } from '../../../../schemas/common.schema.ts';
+import { idParamSchema } from '../../../../schemas/common.schema.ts';
 
 export const statusHistoryRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -20,7 +20,7 @@ export const statusHistoryRoutes: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Tasks'],
       summary: 'Получить полную историю изменений статусов задания',
       description: 'Возвращает полную историю всех изменений статусов задания в виде простого массива (без пагинации)',
-      params: uuidParamSchema,
+      params: idParamSchema,
       response: {
         200: statusHistoryResponseSchema,
       },

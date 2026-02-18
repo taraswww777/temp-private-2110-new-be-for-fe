@@ -1,12 +1,12 @@
-import { pgTable, uuid, timestamp, varchar, text, jsonb, index } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, varchar, text, jsonb, index } from 'drizzle-orm/pg-core';
 import { report6406Tasks } from './report-6406-tasks.schema.ts';
-import { idColumn } from './base.schema.ts';
+import { idColumn, idColumnPrimary } from './base.schema.ts';
 
 /**
  * История изменений статусов заданий отчётов формы 6406
  */
 export const report6406TaskStatusHistory = pgTable('report_6406_task_status_history', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: idColumnPrimary(),
 
   // Связь с заданием
   taskId: idColumn('task_id').references(() => report6406Tasks.id, { onDelete: 'cascade' }),
