@@ -24,13 +24,6 @@
         "description": "Дата и время в формате ISO 8601",
         "title": "DateTimeSchema"
       },
-      "UuidSchema": {
-        "type": "string",
-        "format": "uuid",
-        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-        "description": "UUID в формате RFC 4122",
-        "title": "UuidSchema"
-      },
       "FileFormatEnumSchema": {
         "type": "string",
         "enum": [
@@ -338,7 +331,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД филиала"
           },
           "code": {
             "type": "string",
@@ -437,14 +433,20 @@
         "type": "object",
         "properties": {
           "branchId": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "description": "ИД филиала (устаревшее поле, используйте branchIds)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
           },
           "branchIds": {
-            "description": "Массив идентификаторов филиалов",
+            "description": "Массив ИД филиалов",
             "minItems": 1,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
             }
           },
           "periodStart": {
@@ -482,7 +484,7 @@
             "description": "Тип отчёта"
           },
           "source": {
-            "description": "Ссылка на справочник или идентификатор источника данных",
+            "description": "Ссылка на справочник или ИД источника данных",
             "type": "string",
             "maxLength": 20
           }
@@ -500,7 +502,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД задания"
           },
           "createdAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -510,14 +515,20 @@
             "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД филиала (устаревшее поле, используйте branchIds)"
           },
           "branchIds": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
             },
-            "description": "Массив идентификаторов филиалов"
+            "description": "Массив ИД филиалов"
           },
           "branchName": {
             "type": "string",
@@ -585,7 +596,7 @@
                 "type": "null"
               }
             ],
-            "description": "Ссылка на справочник или идентификатор источника данных"
+            "description": "Ссылка на справочник или ИД источника данных"
           },
           "status": {
             "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
@@ -707,7 +718,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД задания"
           },
           "createdAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -717,14 +731,20 @@
             "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)"
           },
           "branchId": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД филиала (устаревшее поле, используйте branchIds)"
           },
           "branchIds": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
             },
-            "description": "Массив идентификаторов филиалов"
+            "description": "Массив ИД филиалов"
           },
           "branchName": {
             "type": "string",
@@ -792,7 +812,10 @@
           "packageIds": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
             },
             "description": "ID пакетов, в которые входит задание (пустой массив = не в пакете)"
           }
@@ -865,21 +888,27 @@
             "type": "object",
             "properties": {
               "packageId": {
-                "description": "ID пакета (null — задания без пакета)",
                 "anyOf": [
                   {
-                    "$ref": "#/components/schemas/UuidSchema"
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991,
+                    "description": "Integer ID"
                   },
                   {
                     "type": "null"
                   }
-                ]
+                ],
+                "description": "ID пакета (null — задания без пакета)"
               },
               "branchIds": {
-                "description": "Массив идентификаторов филиалов",
+                "description": "Массив ИД филиалов",
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 }
               },
               "branchName": {
@@ -928,10 +957,16 @@
             "additionalProperties": false
           },
           "includedInPackage": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "description": "ID пакета - вернуть только задачи, входящие в указанный пакет",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
           },
           "excludedInPackage": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "description": "ID пакета - вернуть только задачи, НЕ входящие в указанный пакет",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
           }
         },
         "required": [
@@ -969,7 +1004,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД задания"
           },
           "createdAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -979,14 +1017,20 @@
             "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД филиала (устаревшее поле, используйте branchIds)"
           },
           "branchIds": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
             },
-            "description": "Массив идентификаторов филиалов"
+            "description": "Массив ИД филиалов"
           },
           "branchName": {
             "type": "string",
@@ -1054,7 +1098,7 @@
                 "type": "null"
               }
             ],
-            "description": "Ссылка на справочник или идентификатор источника данных"
+            "description": "Ссылка на справочник или ИД источника данных"
           },
           "status": {
             "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
@@ -1146,7 +1190,10 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 },
                 "name": {
                   "type": "string"
@@ -1200,7 +1247,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД задания"
           },
           "createdAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -1210,14 +1260,20 @@
             "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
           "branchId": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД филиала (устаревшее поле, используйте branchIds)"
           },
           "branchIds": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
             },
-            "description": "Массив идентификаторов филиалов"
+            "description": "Массив ИД филиалов"
           },
           "branchName": {
             "type": "string",
@@ -1285,7 +1341,7 @@
                 "type": "null"
               }
             ],
-            "description": "Ссылка на справочник или идентификатор источника данных"
+            "description": "Ссылка на справочник или ИД источника данных"
           },
           "status": {
             "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
@@ -1384,7 +1440,10 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 },
                 "name": {
                   "type": "string"
@@ -1455,7 +1514,10 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 },
                 "success": {
                   "type": "boolean"
@@ -1499,7 +1561,10 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 },
                 "success": {
                   "type": "boolean"
@@ -1549,7 +1614,10 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 },
                 "status": {
                   "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
@@ -1572,7 +1640,10 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 },
                 "reason": {
                   "type": "string"
@@ -1599,7 +1670,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
           },
           "status": {
             "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
@@ -1673,7 +1747,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
           },
           "fileName": {
             "type": "string"
@@ -1752,7 +1829,10 @@
         "type": "object",
         "properties": {
           "taskId": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
           },
           "files": {
             "type": "array",
@@ -1776,7 +1856,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
           },
           "status": {
             "type": "string",
@@ -1842,7 +1925,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД пакета"
           },
           "name": {
             "type": "string",
@@ -1934,7 +2020,10 @@
               "type": "object",
               "properties": {
                 "packageId": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 },
                 "success": {
                   "type": "boolean"
@@ -1963,7 +2052,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД пакета"
           },
           "name": {
             "type": "string"
@@ -2004,7 +2096,10 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 },
                 "reason": {
                   "type": "string"
@@ -2046,7 +2141,10 @@
               "type": "object",
               "properties": {
                 "taskId": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 },
                 "success": {
                   "type": "boolean"
@@ -2075,7 +2173,10 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД пакета"
           },
           "lastCopiedToTfrAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -2106,10 +2207,13 @@
                 }
               },
               "branchIds": {
-                "description": "Список идентификаторов филиалов для фильтрации",
+                "description": "Список ИД филиалов для фильтрации",
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/UuidSchema"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
                 }
               },
               "reportTypes": {
@@ -2190,7 +2294,10 @@
         "type": "object",
         "properties": {
           "exportId": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД экспорта"
           },
           "status": {
             "type": "string",
@@ -2239,7 +2346,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Уникальный идентификатор хранилища для key в JSX"
+            "description": "ИД хранилища для key в JSX"
           },
           "name": {
             "type": "string",
@@ -2378,9 +2485,9 @@
                     "properties": {
                       "id": {
                         "type": "integer",
-                        "minimum": -9007199254740991,
+                        "minimum": 1,
                         "maximum": 9007199254740991,
-                        "description": "Идентификатор филиала"
+                        "description": "ИД филиала"
                       },
                       "codeCB": {
                         "type": "string",
@@ -2580,7 +2687,10 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/UuidSchema"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991,
+                      "description": "Integer ID"
                     }
                   }
                 },
@@ -2646,11 +2756,14 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "id",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           }
         ],
         "responses": {
@@ -2684,7 +2797,10 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/UuidSchema"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991,
+                      "description": "Integer ID"
                     }
                   }
                 },
@@ -2728,7 +2844,10 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/UuidSchema"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991,
+                      "description": "Integer ID"
                     }
                   }
                 },
@@ -2799,11 +2918,14 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "id",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           }
         ],
         "responses": {
@@ -2895,11 +3017,14 @@
           },
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "id",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           }
         ],
         "responses": {
@@ -2926,19 +3051,25 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "taskId",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           },
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "fileId",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           }
         ],
         "responses": {
@@ -3168,7 +3299,10 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/UuidSchema"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991,
+                      "description": "Integer ID"
                     }
                   }
                 },
@@ -3204,11 +3338,14 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "id",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           }
         ],
         "responses": {
@@ -3241,11 +3378,14 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "id",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           }
         ],
         "responses": {
@@ -3307,7 +3447,10 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/UuidSchema"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991,
+                      "description": "Integer ID"
                     }
                   }
                 },
@@ -3323,11 +3466,14 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "packageId",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           }
         ],
         "responses": {
@@ -3359,7 +3505,10 @@
                     "minItems": 1,
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/UuidSchema"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991,
+                      "description": "Integer ID"
                     }
                   }
                 },
@@ -3375,11 +3524,14 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "packageId",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           }
         ],
         "responses": {
@@ -3405,11 +3557,14 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "in": "path",
             "name": "packageId",
-            "required": true
+            "required": true,
+            "description": "Integer ID"
           }
         ],
         "responses": {
