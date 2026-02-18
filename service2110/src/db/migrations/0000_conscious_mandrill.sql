@@ -2,7 +2,7 @@ CREATE TYPE "public"."currency_enum" AS ENUM('RUB', 'FOREIGN');--> statement-bre
 CREATE TYPE "public"."file_format_enum" AS ENUM('TXT', 'XLSX', 'XML');--> statement-breakpoint
 CREATE TYPE "public"."report_type_enum" AS ENUM('LSOZ', 'LSOS', 'LSOP', 'KROS_VOS', 'KROS_VZS', 'KROS');--> statement-breakpoint
 CREATE TABLE "branches" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "branches_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"code" varchar(10) NOT NULL,
 	"name" varchar(255) NOT NULL,
 	CONSTRAINT "branches_code_unique" UNIQUE("code")
@@ -15,10 +15,10 @@ CREATE TABLE "sources" (
 );
 --> statement-breakpoint
 CREATE TABLE "report_6406_tasks" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "report_6406_tasks_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"created_by" varchar(255),
-	"branch_id" uuid NOT NULL,
+	"branch_id" integer NOT NULL,
 	"branch_name" varchar(255) NOT NULL,
 	"period_start" date NOT NULL,
 	"period_end" date NOT NULL,
@@ -40,8 +40,8 @@ CREATE TABLE "report_6406_tasks" (
 );
 --> statement-breakpoint
 CREATE TABLE "report_6406_task_status_history" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"task_id" uuid NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "report_6406_task_status_history_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"task_id" integer NOT NULL,
 	"status" varchar(30) NOT NULL,
 	"previous_status" varchar(30),
 	"changed_at" timestamp DEFAULT now() NOT NULL,
@@ -52,8 +52,8 @@ CREATE TABLE "report_6406_task_status_history" (
 );
 --> statement-breakpoint
 CREATE TABLE "report_6406_task_files" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"task_id" uuid NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "report_6406_task_files_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"task_id" integer NOT NULL,
 	"file_name" varchar(255) NOT NULL,
 	"file_size" bigint NOT NULL,
 	"file_type" varchar(100) NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE "report_6406_task_files" (
 );
 --> statement-breakpoint
 CREATE TABLE "report_6406_packages" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "report_6406_packages_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"name" varchar(255) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"created_by" varchar(255) NOT NULL,
@@ -79,15 +79,15 @@ CREATE TABLE "report_6406_packages" (
 );
 --> statement-breakpoint
 CREATE TABLE "report_6406_package_tasks" (
-	"package_id" uuid NOT NULL,
-	"task_id" uuid NOT NULL,
+	"package_id" integer NOT NULL,
+	"task_id" integer NOT NULL,
 	"added_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "report_6406_package_tasks_package_id_task_id_pk" PRIMARY KEY("package_id","task_id")
 );
 --> statement-breakpoint
 CREATE TABLE "report_6406_task_branches" (
-	"task_id" uuid NOT NULL,
-	"branch_id" uuid NOT NULL,
+	"task_id" integer NOT NULL,
+	"branch_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "report_6406_task_branches_task_id_branch_id_pk" PRIMARY KEY("task_id","branch_id")
 );
