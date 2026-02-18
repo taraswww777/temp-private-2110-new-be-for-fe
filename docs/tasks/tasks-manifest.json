@@ -833,11 +833,11 @@
     {
       "id": "TASK-068",
       "title": "Замена uuid на int",
-      "status": "backlog",
+      "status": "completed",
       "priority": "medium",
       "file": "TASK-068-uuid-int.md",
       "createdDate": "2026-02-17T16:03:17.912Z",
-      "completedDate": null,
+      "completedDate": "2026-02-18T13:59:17.823Z",
       "branch": null,
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72"
