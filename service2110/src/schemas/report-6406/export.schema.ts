@@ -3,6 +3,7 @@ import { reportTaskStatusSchema } from './tasks.schema.ts';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';
+import { zIdSchema } from '../common.schema.ts';
 
 /**
  * Схема для фильтров экспорта (расширенная)
@@ -12,7 +13,7 @@ export const exportFiltersSchema = z.object({
   statuses: z.array(reportTaskStatusSchema).optional().describe('Список статусов для фильтрации'),
 
   // Фильтры по филиалам (массив строк)
-  branchIds: z.array(z.uuid()).optional().describe('Список ИД филиалов для фильтрации'),
+  branchIds: z.array(zIdSchema).optional().describe('Список ИД филиалов для фильтрации'),
 
   // Фильтры по типам отчётов (массив)
   reportTypes: z.array(reportTypeSchema).optional().describe('Список типов отчётов для фильтрации'),

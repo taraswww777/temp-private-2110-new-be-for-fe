@@ -27,6 +27,8 @@ import { getStatusPermissions } from '../../types/status-model.ts';
 import { storageService } from './storage.service.ts';
 import { Currency } from '../../schemas/enums/CurrencyEnum';
 import { ID } from '../../schemas/common.schema.ts';
+import { Branch } from '../../schemas/report-6406/dictionary.schema.ts';
+import { Package } from '../../schemas/report-6406/packages.schema.ts';
 
 export class TasksService {
   /**
@@ -113,11 +115,7 @@ export class TasksService {
 
     // Подсчет общего количества
     const [{ count }] = await db
-      .select({
-        count: sql<number>`count
-            (*)
-            ::int`
-      })
+      .select({ count: sql<number>`count(*)::int` })
       .from(report6406Tasks)
       .where(whereClause);
 
@@ -189,8 +187,8 @@ export class TasksService {
           .innerJoin(branches, eq(report6406TaskBranches.branchId, branches.id))
           .where(inArray(report6406TaskBranches.taskId, taskIds))
         : [];
-    const taskIdToBranchIds = new Map<ID, string[]>();
-    const taskIdToBranchNames = new Map<ID, string[]>();
+    const taskIdToBranchIds = new Map<Task['id'], Branch['id'][]>();
+    const taskIdToBranchNames = new Map<Task['id'], Branch['name'][]>();
     for (const link of branchLinks) {
       const ids = taskIdToBranchIds.get(link.taskId) ?? [];
       ids.push(link.branchId);
@@ -718,8 +716,8 @@ export class TasksService {
    */
   private formatTaskDetails(
     task: typeof report6406Tasks.$inferSelect,
-    packagesList: Array<{ id: ID; name: string; addedAt: Date }>,
-    taskBranches: Array<{ branchId: string; branchName: string }> = [],
+    packagesList: Array<{ id: Package['id']; name: string; addedAt: Date }>,
+    taskBranches: Array<{ branchId: Branch['id']; branchName: string }> = [],
   ): TaskDetails {
     const permissions = getStatusPermissions(task.status as TaskStatus);
 
@@ -772,9 +770,9 @@ export class TasksService {
    */
   private formatTaskListItem(
     task: typeof report6406Tasks.$inferSelect,
-    packageIds: ID[] = [],
-    branchIds: string[] = [task.branchId],
-    branchNames: string[] = [task.branchName],
+    packageIds: Package['id'][] = [],
+    branchIds: Branch['id'][] = [task.branchId],
+    branchNames: Branch['name'][] = [task.branchName],
   ) {
     const permissions = getStatusPermissions(task.status as TaskStatus);
     return {

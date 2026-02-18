@@ -1,10 +1,11 @@
 import { z } from 'zod';
+import { zIdSchema } from '../common.schema.ts';
 
 /**
  * Схема для филиала
  */
 export const branchSchema = z.object({
-  id: z.number().int().describe('ИД филиала'),
+  id: zIdSchema.describe('ИД филиала'),
   codeCB: z.string().describe('Код ЦБ'),
   name: z.string().describe('Название филиала'),
 });

@@ -47,8 +47,8 @@ export type FileFormatType = z.infer<typeof fileFormatSchema>;
  * Поддерживает как branchId (для обратной совместимости), так и branchIds (новый формат)
  */
 export const createTaskSchema = z.object({
-  branchId: z.uuid().optional().describe('ИД филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(z.uuid()).min(1).optional().describe('Массив ИД филиалов'),
+  branchId: zIdSchema.optional().describe('ИД филиала (устаревшее поле, используйте branchIds)'),
+  branchIds: z.array(zIdSchema).min(1).optional().describe('Массив ИД филиалов'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
   accountMask: z.string().max(20).optional().describe('Маска счетов для фильтрации'),
@@ -101,8 +101,8 @@ export const taskSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchId: z.uuid().describe('ИД филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(z.uuid()).describe('Массив ИД филиалов'),
+  branchId: zIdSchema.describe('ИД филиала (устаревшее поле, используйте branchIds)'),
+  branchIds: z.array(zIdSchema).describe('Массив ИД филиалов'),
   branchName: z.string().describe('Название филиала (название первого филиала)'),
   branchNames: z.array(z.string()).describe('Массив названий филиалов'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
@@ -155,8 +155,8 @@ export const taskDetailsSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchId: z.uuid().describe('ИД филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(z.uuid()).describe('Массив ИД филиалов'),
+  branchId: zIdSchema.describe('ИД филиала (устаревшее поле, используйте branchIds)'),
+  branchIds: z.array(zIdSchema).describe('Массив ИД филиалов'),
   branchName: z.string().describe('Название филиала (название первого филиала)'),
   branchNames: z.array(z.string()).describe('Массив названий филиалов'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
@@ -201,8 +201,8 @@ export const taskListItemSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)'),
-  branchId: z.uuid().describe('ИД филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(z.uuid()).describe('Массив ИД филиалов'),
+  branchId: zIdSchema.describe('ИД филиала (устаревшее поле, используйте branchIds)'),
+  branchIds: z.array(zIdSchema).describe('Массив ИД филиалов'),
   branchName: z.string().describe('Название филиала (название первого филиала)'),
   branchNames: z.array(z.string()).describe('Массив названий филиалов'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
@@ -255,7 +255,7 @@ export const tasksListSortingSchema = z.object({
  */
 export const tasksListFilterSchema = z.object({
   packageId: zIdSchema.optional().describe('ID пакета (null — задания без пакета)'),
-  branchIds: z.array(z.uuid()).optional().describe('Массив ИД филиалов'),
+  branchIds: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
   branchName: z.string().optional().describe('Название филиала'),
   status: reportTaskStatusSchema.optional().describe('Статус задания'),
   reportType: reportTypeSchema.optional().describe('Тип отчёта'),
