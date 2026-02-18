@@ -249,7 +249,7 @@
       "createdDate": "2026-02-03T00:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium",
+      "priority": "low",
       "projectId": "2110-project-id",
       "tagIds": [
         "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
@@ -264,7 +264,7 @@
       "createdDate": "2026-02-03T00:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium",
+      "priority": "low",
       "projectId": "2110-project-id",
       "tagIds": [
         "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
@@ -322,7 +322,7 @@
     {
       "id": "TASK-031",
       "title": "Добавление эндпоинта справочника счетов первого и второго порядка",
-      "status": "backlog",
+      "status": "planned",
       "file": "TASK-031-add-accounts-reference-endpoint.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
@@ -342,7 +342,7 @@
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium",
+      "priority": "low",
       "projectId": "2110-project-id",
       "tagIds": [
         "0d01c73e-9472-499b-84ac-19f8405bb529",
@@ -357,7 +357,7 @@
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium",
+      "priority": "low",
       "projectId": "2110-project-id",
       "tagIds": [
         "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
@@ -371,7 +371,7 @@
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium",
+      "priority": "low",
       "projectId": "2110-project-id",
       "tagIds": [
         "0d01c73e-9472-499b-84ac-19f8405bb529"
@@ -414,12 +414,12 @@
     {
       "id": "TASK-038",
       "title": "Улучшение мок данных для Backend",
-      "status": "backlog",
+      "status": "planned",
       "file": "TASK-038-improve-mock-data-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium",
+      "priority": "critical",
       "projectId": "2110-project-id",
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72"
@@ -500,10 +500,10 @@
     {
       "id": "TASK-044",
       "title": "Улучшения формы \"Список файлов\" в универсальном отчёте",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-044-universal-report-file-list-improvements.md",
       "createdDate": "2026-02-06T12:00:00Z",
-      "completedDate": null,
+      "completedDate": "2026-02-18T15:52:53.738Z",
       "branch": null,
       "priority": "medium",
       "projectId": "2110-project-id",
@@ -528,21 +528,23 @@
     {
       "id": "TASK-046",
       "title": "История статусов пакета - Backend",
-      "status": "backlog",
+      "status": "planned",
       "file": "TASK-046-package-status-history-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
       "priority": "medium",
       "tagIds": [
-        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
+        "f15ee308-9732-448c-a102-a3a5bf631e72",
+        "a6c4234b-0e26-4760-bfd2-9b9bb6792531"
       ],
       "projectId": "2110-project-id"
     },
     {
       "id": "TASK-047",
       "title": "Улучшения детализации пакета - Backend",
-      "status": "backlog",
+      "status": "planned",
       "file": "TASK-047-package-details-improvements-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
@@ -550,7 +552,8 @@
       "priority": "medium",
       "tagIds": [
         "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
-        "f15ee308-9732-448c-a102-a3a5bf631e72"
+        "f15ee308-9732-448c-a102-a3a5bf631e72",
+        "a6c4234b-0e26-4760-bfd2-9b9bb6792531"
       ],
       "projectId": "2110-project-id"
     },
@@ -562,7 +565,7 @@
       "createdDate": "2026-02-06T12:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium",
+      "priority": "low",
       "youtrackIssueIds": [
         "VTB-543"
       ],
@@ -576,10 +579,10 @@
     {
       "id": "TASK-049",
       "title": "Добавление задания в пакеты - макеты UI",
-      "status": "backlog",
+      "status": "completed",
       "file": "TASK-049-add-task-to-packages-ui-mockups.md",
       "createdDate": "2026-02-06T12:00:00Z",
-      "completedDate": null,
+      "completedDate": "2026-02-18T15:46:57.482Z",
       "branch": null,
       "priority": "medium",
       "youtrackIssueIds": [
@@ -779,7 +782,7 @@
     {
       "id": "TASK-064",
       "title": "Обновление Frontend для рефакторинга endpoint получения деталей пакета",
-      "status": "backlog",
+      "status": "planned",
       "file": "TASK-064-frontend-refactor-package-details-endpoint.md",
       "createdDate": "2026-02-12T00:00:00Z",
       "completedDate": null,
@@ -794,7 +797,7 @@
     {
       "id": "TASK-065",
       "title": "Обновление Frontend для использования поля code в DTO хранилища",
-      "status": "backlog",
+      "status": "planned",
       "file": "TASK-065-frontend-storage-volume-code-field.md",
       "createdDate": "2026-02-12T00:00:00Z",
       "completedDate": null,
