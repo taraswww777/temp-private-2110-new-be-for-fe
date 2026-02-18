@@ -843,6 +843,20 @@
         "f15ee308-9732-448c-a102-a3a5bf631e72"
       ],
       "projectId": "2110-project-id"
+    },
+    {
+      "id": "TASK-069",
+      "title": "Рефакторинг. унификация использования типов в сервисах",
+      "status": "backlog",
+      "priority": "medium",
+      "file": "TASK-069-refactoring-services.md",
+      "createdDate": "2026-02-18T11:06:16.056Z",
+      "completedDate": null,
+      "branch": "feature/TASK-069-refactoring-services",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ],
+      "projectId": "2110-project-id"
     }
   ]
 }
