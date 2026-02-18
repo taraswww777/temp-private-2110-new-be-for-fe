@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema';
+import { paginationQuerySchema, paginationMetadataSchema, zIdSchema } from '../common.schema';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**
@@ -25,7 +25,7 @@ export type UpdatePackageInput = z.infer<typeof updatePackageSchema>;
  * Схема для полного пакета
  */
 export const packageSchema = z.object({
-  id: z.uuid().describe('Уникальный идентификатор пакета'),
+  id: zIdSchema.describe('ИД пакета'),
   name: z.string().describe('Название пакета'),
   createdAt: z.iso.datetime().describe('Дата создания пакета'),
   createdBy: z.string().describe('Создатель пакета'),
@@ -66,7 +66,7 @@ export type PackagesListResponse = z.infer<typeof packagesListResponseSchema>;
  * Схема для массового удаления пакетов
  */
 export const bulkDeletePackagesSchema = z.object({
-  packageIds: z.array(z.uuid()).min(1),
+  packageIds: z.array(zIdSchema).min(1),
 });
 
 export type BulkDeletePackagesInput = z.infer<typeof bulkDeletePackagesSchema>;
@@ -78,7 +78,7 @@ export const bulkDeletePackagesResponseSchema = z.object({
   deleted: z.number().int().min(0),
   failed: z.number().int().min(0),
   results: z.array(z.object({
-    packageId: z.uuid(),
+    packageId: zIdSchema,
     success: z.boolean(),
     reason: z.string().optional(),
   })),
@@ -90,7 +90,7 @@ export type BulkDeletePackagesResponse = z.infer<typeof bulkDeletePackagesRespon
  * Схема для ответа при обновлении пакета
  */
 export const updatePackageResponseSchema = z.object({
-  id: z.uuid(),
+  id: zIdSchema.describe('ИД пакета'),
   name: z.string(),
   updatedAt: z.iso.datetime(),
 });
@@ -149,7 +149,7 @@ export type BulkRemoveTasksResponse = z.infer<typeof bulkRemoveTasksResponseSche
  * Схема для ответа при копировании пакета в ТФР
  */
 export const copyToTfrResponseSchema = z.object({
-  id: z.uuid(),
+  id: zIdSchema.describe('ИД пакета'),
   lastCopiedToTfrAt: z.iso.datetime(),
   message: z.string(),
 });

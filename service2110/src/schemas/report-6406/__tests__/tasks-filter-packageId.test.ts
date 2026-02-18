@@ -7,7 +7,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       pagination: { number: 1, size: 20 },
       sorting: { direction: 'desc' as const, column: 'createdAt' },
       filter: {
-        packageId: 'a1b2c3d4-e5f6-4789-a012-345678901234',
+        packageId: 123,
       },
     };
     const result = getTasksRequestSchema.safeParse(body);
@@ -127,7 +127,7 @@ describe('TaskListItemSchema / packageIds', () => {
       canCancel: true,
       canDelete: true,
       canStart: true,
-      packageIds: ['b2c3d4e5-f6a7-4890-b123-456789012345'],
+      packageIds: [123],
     };
     const result = taskListItemSchema.safeParse(item);
     expect(result.success).toBe(true);

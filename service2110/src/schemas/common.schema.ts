@@ -50,15 +50,15 @@ export type PaginatedResponse = z.infer<typeof paginatedResponseSchema>;
  * Переиспользуемая схема для integer ID
  * Используется, для создания ссылок в OpenAPI спецификации
  */
-export const idSchema = z.number().int().positive().describe('Integer ID').min(1);
+export const zIdSchema = z.number().int().positive().describe('Integer ID').min(1);
 
-export type Id = z.infer<typeof idSchema>;
+export type ID = z.infer<typeof zIdSchema>;
 
 /**
  * Схема для integer ID параметров
  */
 export const idParamSchema = z.object({
-  id: idSchema,
+  id: zIdSchema,
 });
 
 export type IdParam = z.infer<typeof idParamSchema>;

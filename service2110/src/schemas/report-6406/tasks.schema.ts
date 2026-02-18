@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, } from '../common.schema.ts';
+import { zIdSchema, paginationQuerySchema, } from '../common.schema.ts';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';
@@ -87,7 +87,7 @@ export type CreateTaskInput = z.infer<typeof createTaskSchema>;
  * Схема для ответа с информацией о пакете в задании
  */
 export const taskPackageInfoSchema = z.object({
-  id: z.uuid(),
+  id: zIdSchema,
   name: z.string(),
   addedAt: z.iso.datetime(),
 });
@@ -152,7 +152,7 @@ export type TaskDetail = z.infer<typeof taskDetailSchema>;
  * Без лишних полей errorMessage, fileUrl. С полями s3FolderId, type, accounts для UI.
  */
 export const taskDetailsSchema = z.object({
-  id: z.uuid().describe('Уникальный идентификатор задания'),
+  id: z.uuid().describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
   branchId: z.uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
@@ -198,7 +198,7 @@ export type TaskDetails = z.infer<typeof taskDetailsSchema>;
  * Схема для элемента списка заданий (TaskListItemDto)
  */
 export const taskListItemSchema = z.object({
-  id: z.uuid().describe('Уникальный идентификатор задания'),
+  id: z.uuid().describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)'),
   branchId: z.uuid().describe('Идентификатор филиала (устаревшее поле, используйте branchIds)'),
@@ -220,9 +220,7 @@ export const taskListItemSchema = z.object({
   canCancel: z.boolean().describe('Можно ли отменить задание'),
   canDelete: z.boolean().describe('Можно ли удалить задание'),
   canStart: z.boolean().describe('Можно ли запустить задание'),
-  packageIds: z
-    .array(z.uuid())
-    .describe('ID пакетов, в которые входит задание (пустой массив = не в пакете)'),
+  packageIds: z.array(zIdSchema).describe('ID пакетов, в которые входит задание (пустой массив = не в пакете)'),
 });
 
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
@@ -256,7 +254,7 @@ export const tasksListSortingSchema = z.object({
  * Все поля опциональны, можно комбинировать несколько фильтров одновременно
  */
 export const tasksListFilterSchema = z.object({
-  packageId: z.uuid().nullable().optional().describe('ID пакета (null — задания без пакета)'),
+  packageId: zIdSchema.optional().describe('ID пакета (null — задания без пакета)'),
   branchIds: z.array(z.uuid()).optional().describe('Массив идентификаторов филиалов'),
   branchName: z.string().optional().describe('Название филиала'),
   status: reportTaskStatusSchema.optional().describe('Статус задания'),
@@ -279,8 +277,8 @@ export const getTasksRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
   filter: tasksListFilterSchema.describe('Фильтры для списка заданий (объект с опциональными полями)'),
-  includedInPackage: z.uuid().optional().describe('UUID пакета - вернуть только задачи, входящие в указанный пакет'),
-  excludedInPackage: z.uuid().optional().describe('UUID пакета - вернуть только задачи, НЕ входящие в указанный пакет'),
+  includedInPackage: zIdSchema.optional().describe('ID пакета - вернуть только задачи, входящие в указанный пакет'),
+  excludedInPackage: zIdSchema.optional().describe('ID пакета - вернуть только задачи, НЕ входящие в указанный пакет'),
 }).refine(
   (data) => {
     // Параметры взаимоисключающие

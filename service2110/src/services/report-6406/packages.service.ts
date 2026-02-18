@@ -22,12 +22,13 @@ import type {
   BulkRemoveTasksResponse,
   CopyToTfrResponse,
 } from '../../schemas/report-6406/packages.schema';
+import { ID, zIdSchema } from '../../schemas/common.schema.ts';
 
 export class PackagesService {
   /**
    * Проверить уникальность имени пакета
    */
-  private async checkPackageNameUniqueness(name: string, excludeId?: string): Promise<string | null> {
+  private async checkPackageNameUniqueness(name: string, excludeId?: ID): Promise<ID | null> {
     const result = await db
       .select({ id: report6406Packages.id })
       .from(report6406Packages)
@@ -137,7 +138,7 @@ export class PackagesService {
   /**
    * Получить детальную информацию о пакете
    */
-  async getPackageById(id: string): Promise<Package> {
+  async getPackageById(id: ID): Promise<Package> {
     const [pkg] = await db
       .select()
       .from(report6406Packages)
@@ -154,7 +155,7 @@ export class PackagesService {
   /**
    * Обновить название пакета
    */
-  async updatePackage(id: string, input: UpdatePackageInput): Promise<UpdatePackageResponse> {
+  async updatePackage(id: ID, input: UpdatePackageInput): Promise<UpdatePackageResponse> {
     const [pkg] = await db
       .select()
       .from(report6406Packages)
@@ -196,7 +197,7 @@ export class PackagesService {
   /**
    * Удалить пакет
    */
-  async deletePackage(id: string): Promise<void> {
+  async deletePackage(id: ID): Promise<void> {
     const [pkg] = await db
       .select()
       .from(report6406Packages)
@@ -215,7 +216,7 @@ export class PackagesService {
    */
   async bulkDeletePackages(input: BulkDeletePackagesInput): Promise<BulkDeletePackagesResponse> {
     let deleted = 0;
-    const results: Array<{ packageId: string; success: boolean; reason?: string }> = [];
+    const results: Array<{ packageId: ID; success: boolean; reason?: string }> = [];
 
     for (const packageId of input.packageIds) {
       try {
@@ -244,7 +245,7 @@ export class PackagesService {
   /**
    * Добавить задания в пакет
    */
-  async addTasksToPackage(packageId: string, input: AddTasksToPackageInput): Promise<AddTasksToPackageResponse> {
+  async addTasksToPackage(packageId: ID, input: AddTasksToPackageInput): Promise<AddTasksToPackageResponse> {
     // Проверить существование пакета
     const [pkg] = await db
       .select()
@@ -325,7 +326,7 @@ export class PackagesService {
   /**
    * Удалить задание из пакета
    */
-  async removeTaskFromPackage(packageId: string, taskId: string): Promise<void> {
+  async removeTaskFromPackage(packageId: ID, taskId: string): Promise<void> {
     const [relation] = await db
       .select()
       .from(report6406PackageTasks)
@@ -358,7 +359,7 @@ export class PackagesService {
    * Массовое удаление заданий из пакета (универсальный метод для одного или нескольких)
    */
   async bulkRemoveTasksFromPackage(
-    packageId: string,
+    packageId: ID,
     input: BulkRemoveTasksFromPackageInput
   ): Promise<BulkRemoveTasksResponse> {
     let removed = 0;
@@ -391,7 +392,7 @@ export class PackagesService {
   /**
    * Скопировать пакет в ТФР
    */
-  async copyToTfr(packageId: string): Promise<CopyToTfrResponse> {
+  async copyToTfr(packageId: ID): Promise<CopyToTfrResponse> {
     const [pkg] = await db
       .select()
       .from(report6406Packages)
@@ -425,7 +426,7 @@ export class PackagesService {
   /**
    * Обновить денормализованные поля пакета (tasksCount и totalSize)
    */
-  private async updatePackageStats(packageId: string): Promise<void> {
+  private async updatePackageStats(packageId: ID): Promise<void> {
     const [stats] = await db
       .select({
         count: sql<number>`count(*)::int`,

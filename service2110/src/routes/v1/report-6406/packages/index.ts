@@ -18,7 +18,7 @@ import {
   bulkRemoveTasksResponseSchema,
   copyToTfrResponseSchema,
 } from '../../../../schemas/report-6406/packages.schema';
-import { uuidParamSchema } from '../../../../schemas/common.schema';
+import { idParamSchema, uuidParamSchema } from '../../../../schemas/common.schema';
 
 export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -193,7 +193,7 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Report 6406 - Packages'],
       summary: 'Добавить задания в пакет',
-      params: uuidParamSchema.extend({ packageId: uuidParamSchema.shape.id }).pick({ packageId: true }),
+      params: idParamSchema.extend({ packageId: idParamSchema.shape.id }).pick({ packageId: true }),
       body: addTasksToPackageSchema,
       response: {
         200: addTasksToPackageResponseSchema,
@@ -225,7 +225,7 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Packages'],
       summary: 'Удалить одно или несколько заданий из пакета',
       description: 'Удаляет задания из пакета. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
-      params: uuidParamSchema.extend({ packageId: uuidParamSchema.shape.id }).pick({ packageId: true }),
+      params: idParamSchema.extend({ packageId: idParamSchema.shape.id }).pick({ packageId: true }),
       body: bulkRemoveTasksFromPackageSchema,
       response: {
         200: bulkRemoveTasksResponseSchema,
@@ -244,7 +244,7 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Report 6406 - Packages'],
       summary: 'Скопировать пакет в ТФР',
-      params: uuidParamSchema.extend({ packageId: uuidParamSchema.shape.id }).pick({ packageId: true }),
+      params: idParamSchema.extend({ packageId: idParamSchema.shape.id }).pick({ packageId: true }),
       response: {
         200: copyToTfrResponseSchema,
       },

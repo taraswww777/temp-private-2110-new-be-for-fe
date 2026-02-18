@@ -26,6 +26,7 @@ import type {
 import { getStatusPermissions } from '../../types/status-model.ts';
 import { storageService } from './storage.service.ts';
 import { Currency } from '../../schemas/enums/CurrencyEnum';
+import { ID } from '../../schemas/common.schema.ts';
 
 export class TasksService {
   /**
@@ -168,7 +169,7 @@ export class TasksService {
           .from(report6406PackageTasks)
           .where(inArray(report6406PackageTasks.taskId, taskIds))
         : [];
-    const taskIdToPackageIds = new Map<string, string[]>();
+    const taskIdToPackageIds = new Map<string, ID[]>();
     for (const link of packageLinks) {
       const arr = taskIdToPackageIds.get(link.taskId) ?? [];
       arr.push(link.packageId);
@@ -220,8 +221,8 @@ export class TasksService {
    */
   private buildFilterConditions(
     filter: GetTasksRequest['filter'],
-    includedInPackage?: string,
-    excludedInPackage?: string,
+    includedInPackage?: ID,
+    excludedInPackage?: ID,
   ) {
     const conditions: Array<ReturnType<typeof eq> | ReturnType<typeof sql>> = [];
 
@@ -717,7 +718,7 @@ export class TasksService {
    */
   private formatTaskDetails(
     task: typeof report6406Tasks.$inferSelect,
-    packagesList: Array<{ id: string; name: string; addedAt: Date }>,
+    packagesList: Array<{ id: ID; name: string; addedAt: Date }>,
     taskBranches: Array<{ branchId: string; branchName: string }> = [],
   ): TaskDetails {
     const permissions = getStatusPermissions(task.status as TaskStatus);
@@ -771,7 +772,7 @@ export class TasksService {
    */
   private formatTaskListItem(
     task: typeof report6406Tasks.$inferSelect,
-    packageIds: string[] = [],
+    packageIds: ID[] = [],
     branchIds: string[] = [task.branchId],
     branchNames: string[] = [task.branchName],
   ) {
