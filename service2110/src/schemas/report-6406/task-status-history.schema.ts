@@ -1,11 +1,12 @@
 import { z } from 'zod';
 import { reportTaskStatusSchema } from './tasks.schema.ts';
+import { zIdSchema } from '../common.schema.ts';
 
 /**
  * Схема для записи истории статуса
  */
 export const statusHistoryItemSchema = z.object({
-  id: z.uuid(),
+  id: zIdSchema,
   status: reportTaskStatusSchema,
   previousStatus: reportTaskStatusSchema.nullable(),
   changedAt: z.iso.datetime(),

@@ -13,7 +13,7 @@ export type StorageCode = z.infer<typeof storageCodeSchema>;
 export const storageVolumeItemSchema = z.object({
   id: z
     .string()
-    .describe('Уникальный идентификатор хранилища для key в JSX'),
+    .describe('ИД хранилища для key в JSX'),
   name: z
     .string()
     .describe('Имя хранилища (например, "Корзина 1", "ТФР")'),

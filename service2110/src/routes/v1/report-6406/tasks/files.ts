@@ -9,12 +9,12 @@ import {
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
 } from '../../../../schemas/report-6406/task-files.schema.ts';
-import { uuidParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.ts';
+import { idParamSchema, httpErrorSchema, zIdSchema } from '../../../../schemas/common.schema.ts';
 
 // Схема для параметров с двумя UUID
 const taskFileParamsSchema = z.object({
-  taskId: z.uuid(),
-  fileId: z.uuid(),
+  taskId: zIdSchema,
+  fileId: zIdSchema,
 });
 
 export const filesRoutes: FastifyPluginAsync = async (fastify) => {
@@ -29,7 +29,7 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Tasks'],
       summary: 'Получить список файлов задания',
       description: 'Возвращает список файлов с pre-signed URLs для скачивания. URLs генерируются автоматически для файлов в статусе COMPLETED.',
-      params: uuidParamSchema,
+      params: idParamSchema,
       querystring: taskFilesQuerySchema,
       response: {
         200: taskFilesResponseSchema,

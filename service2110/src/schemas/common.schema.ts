@@ -45,22 +45,23 @@ export const paginatedResponseSchema = z.object({
 
 export type PaginatedResponse = z.infer<typeof paginatedResponseSchema>;
 
-/**
- * Переиспользуемая схема для UUID
- * Используется для создания ссылок в OpenAPI спецификации
- */
-export const uuidSchema = z.uuid().describe('UUID в формате RFC 4122');
-
-export type Uuid = z.infer<typeof uuidSchema>;
 
 /**
- * Схема для UUID параметров
+ * Переиспользуемая схема для integer ID
+ * Используется, для создания ссылок в OpenAPI спецификации
  */
-export const uuidParamSchema = z.object({
-  id: uuidSchema,
+export const zIdSchema = z.number().int().positive().describe('Integer ID').min(1);
+
+export type ID = z.infer<typeof zIdSchema>;
+
+/**
+ * Схема для integer ID параметров
+ */
+export const idParamSchema = z.object({
+  id: zIdSchema,
 });
 
-export type UuidParam = z.infer<typeof uuidParamSchema>;
+export type IdParam = z.infer<typeof idParamSchema>;
 
 /**
  * Схема для RFC 7807 Problem Details ошибок

@@ -1,13 +1,14 @@
-import { pgTable, uuid, timestamp, primaryKey, index } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, primaryKey, index } from 'drizzle-orm/pg-core';
 import { report6406Tasks } from './report-6406-tasks.schema.ts';
 import { branches } from './branches.schema.ts';
+import { idColumn } from './base.schema.ts';
 
 /**
  * Связующая таблица many-to-many между заданиями и филиалами
  */
 export const report6406TaskBranches = pgTable('report_6406_task_branches', {
-  taskId: uuid('task_id').notNull().references(() => report6406Tasks.id, { onDelete: 'cascade' }),
-  branchId: uuid('branch_id').notNull().references(() => branches.id, { onDelete: 'cascade' }),
+  taskId: idColumn('task_id').references(() => report6406Tasks.id, { onDelete: 'cascade' }),
+  branchId: idColumn('branch_id').references(() => branches.id, { onDelete: 'cascade' }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 }, (table) => ({
   pk: primaryKey({ columns: [table.taskId, table.branchId] }),

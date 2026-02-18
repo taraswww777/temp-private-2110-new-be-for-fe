@@ -7,7 +7,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       pagination: { number: 1, size: 20 },
       sorting: { direction: 'desc' as const, column: 'createdAt' },
       filter: {
-        packageId: 'a1b2c3d4-e5f6-4789-a012-345678901234',
+        packageId: 123,
       },
     };
     const result = getTasksRequestSchema.safeParse(body);
@@ -31,7 +31,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       pagination: { number: 1, size: 20 },
       sorting: { direction: 'asc' as const, column: 'createdAt' },
       filter: {
-        branchIds: ['550e8400-e29b-41d4-a716-446655440001'],
+        branchIds: [550],
       },
     };
     const result = getTasksRequestSchema.safeParse(body);
@@ -44,9 +44,9 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       sorting: { direction: 'asc' as const, column: 'createdAt' },
       filter: {
         branchIds: [
-          '550e8400-e29b-41d4-a716-446655440001',
-          '550e8400-e29b-41d4-a716-446655440002',
-          '550e8400-e29b-41d4-a716-446655440003',
+          550,
+          551,
+          552,
         ],
       },
     };
@@ -62,7 +62,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
         status: 'created',
         reportType: 'LSOZ',
         format: 'TXT',
-        branchIds: ['550e8400-e29b-41d4-a716-446655440001'],
+        branchIds: [550],
       },
     };
     const result = getTasksRequestSchema.safeParse(body);
@@ -80,13 +80,13 @@ describe('GetTasksRequestSchema / filter packageId', () => {
 });
 
 describe('TaskListItemSchema / packageIds', () => {
-  it('содержит поле packageIds (массив uuid)', () => {
+  it('содержит поле packageIds (массив id)', () => {
     const item = {
-      id: 'a1b2c3d4-e5f6-4789-a012-345678901234',
+      id: 123,
       createdAt: '2026-01-30T12:00:00.000Z',
       createdBy: 'Test',
-      branchId: '550e8400-e29b-41d4-a716-446655440001',
-      branchIds: ['550e8400-e29b-41d4-a716-446655440001'],
+      branchId: 550,
+      branchIds: [550],
       branchName: 'Branch 1',
       branchNames: ['Branch 1'],
       periodStart: '2026-01-01',
@@ -108,13 +108,13 @@ describe('TaskListItemSchema / packageIds', () => {
     }
   });
 
-  it('принимает packageIds с одним или несколькими uuid', () => {
+  it('принимает packageIds с одним или несколькими id', () => {
     const item = {
-      id: 'a1b2c3d4-e5f6-4789-a012-345678901234',
+      id: 123,
       createdAt: '2026-01-30T12:00:00.000Z',
       createdBy: 'Test',
-      branchId: '550e8400-e29b-41d4-a716-446655440001',
-      branchIds: ['550e8400-e29b-41d4-a716-446655440001'],
+      branchId: 550,
+      branchIds: [550],
       branchName: 'Branch 1',
       branchNames: ['Branch 1'],
       periodStart: '2026-01-01',
@@ -127,7 +127,7 @@ describe('TaskListItemSchema / packageIds', () => {
       canCancel: true,
       canDelete: true,
       canStart: true,
-      packageIds: ['b2c3d4e5-f6a7-4890-b123-456789012345'],
+      packageIds: [123],
     };
     const result = taskListItemSchema.safeParse(item);
     expect(result.success).toBe(true);

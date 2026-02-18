@@ -5,12 +5,13 @@ import type {
   StatusHistoryResponse,
 } from '../../schemas/report-6406/task-status-history.schema.ts';
 import type { TaskStatus } from '../../types/status-model.ts';
+import { ID } from '../../schemas/common.schema.ts';
 
 export class TaskStatusHistoryService {
   /**
    * Получить полную историю статусов задания (без пагинации)
    */
-  async getTaskStatusHistory(taskId: string): Promise<StatusHistoryResponse> {
+  async getTaskStatusHistory(taskId: ID): Promise<StatusHistoryResponse> {
     // Проверяем существование задания
     const [task] = await db
       .select()

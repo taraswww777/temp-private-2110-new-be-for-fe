@@ -1,10 +1,11 @@
-import { pgTable, uuid, timestamp, varchar, integer, bigint, index } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, varchar, integer, bigint, index } from 'drizzle-orm/pg-core';
+import { idColumnPrimary } from './base.schema.ts';
 
 /**
  * Пакеты заданий для формы 6406
  */
 export const report6406Packages = pgTable('report_6406_packages', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: idColumnPrimary(),
   name: varchar('name', { length: 255 }).notNull().unique(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   createdBy: varchar('created_by', { length: 255 }).notNull(),

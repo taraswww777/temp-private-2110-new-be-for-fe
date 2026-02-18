@@ -8,10 +8,10 @@ import type { Report6406Task } from '../db/schema/report-6406-tasks.schema.ts';
  * Интерфейс для строки CSV реестра заданий
  */
 export interface TaskCsvRecord {
-  ID: string;
+  ID: number;
   'Created At': string;
   'Created By': string;
-  'Branch ID': string;
+  'Branch ID': number;
   'Branch Name': string;
   'Period Start': string;
   'Period End': string;
@@ -31,7 +31,7 @@ export interface TaskCsvRecord {
 
 /**
  * Преобразует задание в строку CSV
- * 
+ *
  * @param task - задание
  * @returns объект с полями для CSV
  */
@@ -61,7 +61,7 @@ export function taskToCsvRecord(task: Report6406Task): TaskCsvRecord {
 
 /**
  * Генерирует CSV строку из массива заданий
- * 
+ *
  * @param tasks - массив заданий
  * @returns CSV строка
  */
@@ -69,14 +69,14 @@ export function generateTasksCsv(tasks: Report6406Task[]): string {
   if (tasks.length === 0) {
     return '';
   }
-  
+
   // Преобразуем задания в записи CSV
   const records = tasks.map(taskToCsvRecord);
-  
+
   // Формируем заголовки
   const headers = Object.keys(records[0]);
   const headerRow = headers.map(escapeCSVField).join(',');
-  
+
   // Формируем строки данных
   const dataRows = records.map(record => {
     return headers.map(header => {
@@ -84,14 +84,14 @@ export function generateTasksCsv(tasks: Report6406Task[]): string {
       return escapeCSVField(String(value));
     }).join(',');
   });
-  
+
   // Объединяем заголовки и данные
   return [headerRow, ...dataRows].join('\n');
 }
 
 /**
  * Экранирует поле CSV (добавляет кавычки если нужно)
- * 
+ *
  * @param field - значение поля
  * @returns экранированное значение
  */
@@ -102,13 +102,13 @@ function escapeCSVField(field: string): string {
     const escaped = field.replace(/"/g, '""');
     return `"${escaped}"`;
   }
-  
+
   return field;
 }
 
 /**
  * Генерирует имя файла для экспорта CSV
- * 
+ *
  * @returns имя файла с временной меткой
  */
 export function generateCsvFileName(): string {

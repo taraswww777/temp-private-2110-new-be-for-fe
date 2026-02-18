@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema.ts';
+import { paginationQuerySchema, paginationMetadataSchema, zIdSchema } from '../common.schema.ts';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 
 /**
@@ -13,7 +13,7 @@ export type FileStatusType = z.infer<typeof fileStatusSchema>;
  * Схема для файла задания
  */
 export const taskFileSchema = z.object({
-  id: z.uuid(),
+  id: zIdSchema,
   fileName: z.string(),
   fileSize: z
     .number()
@@ -46,7 +46,7 @@ export type TaskFilesQuery = z.infer<typeof taskFilesQuerySchema>;
  * Схема для ответа со списком файлов
  */
 export const taskFilesResponseSchema = z.object({
-  taskId: z.uuid(),
+  taskId: zIdSchema,
   files: z.array(taskFileSchema),
   pagination: paginationMetadataSchema,
 });
@@ -57,7 +57,7 @@ export type TaskFilesResponse = z.infer<typeof taskFilesResponseSchema>;
  * Схема для ответа при повторе конвертации файла
  */
 export const retryFileConversionResponseSchema = z.object({
-  id: z.uuid(),
+  id: zIdSchema,
   status: fileStatusSchema,
   message: z.string(),
 });

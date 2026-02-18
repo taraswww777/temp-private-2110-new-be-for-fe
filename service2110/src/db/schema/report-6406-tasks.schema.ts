@@ -1,8 +1,9 @@
-import { bigint, date, index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { bigint, date, index, integer, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { branches } from './branches.schema.ts';
 import { ReportTypeEnum } from '../../schemas/enums/ReportTypeEnum';
 import { FileFormat } from '../../schemas/enums/FileFormatEnum';
 import { Currency } from '../../schemas/enums/CurrencyEnum';
+import { idColumn, idColumnPrimary } from './base.schema.ts';
 
 /**
  * PostgreSQL enum для типа отчёта
@@ -33,14 +34,14 @@ export const currencyPgEnum = pgEnum('currency_enum', [
  * Задания на построение отчёта для формы 6406
  */
 export const report6406Tasks = pgTable('report_6406_tasks', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: idColumnPrimary(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 
   // Информация о создателе
   createdBy: varchar('created_by', { length: 255 }),
 
   // Информация о филиале и периоде
-  branchId: uuid('branch_id').notNull().references(() => branches.id),
+  branchId: idColumn('branch_id').references(() => branches.id),
   branchName: varchar('branch_name', { length: 255 }).notNull(),
   periodStart: date('period_start').notNull(),
   periodEnd: date('period_end').notNull(),

@@ -1,14 +1,15 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
+import { zIdSchema } from '../schemas/common.schema.ts';
 
 const mockFileParamsSchema = z.object({
-  fileId: z.uuid(),
+  fileId: zIdSchema,
   fileName: z.string(),
 });
 
 /**
  * Моковые маршруты для скачивания файлов
- * 
+ *
  * Используются для разработки и тестирования.
  * В продакшене будут заменены на реальное хранилище (S3 или аналог).
  */

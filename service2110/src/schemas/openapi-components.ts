@@ -12,7 +12,6 @@ import {
   paginationMetadataSchema,
   paginationQuerySchema,
   sortingRequestSchema,
-  uuidSchema,
 } from './common.schema.ts';
 import {
   bulkCancelResponseSchema,
@@ -85,7 +84,6 @@ export function getOpenApiComponents() {
     FilterDto: zodToJsonSchema(filterSchema, 'FilterDto'),
     DateSchema: zodToJsonSchema(dateSchema, 'DateSchema'),
     DateTimeSchema: zodToJsonSchema(dateTimeSchema, 'DateTimeSchema'),
-    UuidSchema: zodToJsonSchema(uuidSchema, 'UuidSchema'),
     FileFormatEnumSchema: zodToJsonSchema(fileFormatSchema, 'FileFormatEnumSchema'),
     ReportTaskStatusEnumSchema: zodToJsonSchema(reportTaskStatusSchema, 'ReportTaskStatusEnumSchema'),
     CurrencyEnumSchema: zodToJsonSchema(currencySchema, 'CurrencyEnumSchema'),

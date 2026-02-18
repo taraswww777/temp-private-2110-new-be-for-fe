@@ -1,10 +1,11 @@
-import { pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, varchar } from 'drizzle-orm/pg-core';
+import { idColumnPrimary } from './base.schema.ts';
 
 /**
  * Справочник филиалов
  */
 export const branches = pgTable('branches', {
-  id: uuid('id').primaryKey(),
+  id: idColumnPrimary(),
   code: varchar('code', { length: 10 }).notNull().unique(),
   name: varchar('name', { length: 255 }).notNull(),
 });
