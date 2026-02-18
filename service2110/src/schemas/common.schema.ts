@@ -45,9 +45,30 @@ export const paginatedResponseSchema = z.object({
 
 export type PaginatedResponse = z.infer<typeof paginatedResponseSchema>;
 
+
+/**
+ * Переиспользуемая схема для integer ID
+ * Используется, для создания ссылок в OpenAPI спецификации
+ */
+export const idSchema = z.number().int().positive().describe('Integer ID').min(1);
+
+export type Id = z.infer<typeof idSchema>;
+
+/**
+ * Схема для integer ID параметров
+ */
+export const idParamSchema = z.object({
+  id: idSchema,
+});
+
+export type IdParam = z.infer<typeof idParamSchema>;
+
+
 /**
  * Переиспользуемая схема для UUID
  * Используется для создания ссылок в OpenAPI спецификации
+ *
+ * @deprecated
  */
 export const uuidSchema = z.uuid().describe('UUID в формате RFC 4122');
 
@@ -55,6 +76,8 @@ export type Uuid = z.infer<typeof uuidSchema>;
 
 /**
  * Схема для UUID параметров
+ *
+ * @deprecated
  */
 export const uuidParamSchema = z.object({
   id: uuidSchema,
