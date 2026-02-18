@@ -13,7 +13,7 @@ export type FileStatusType = z.infer<typeof fileStatusSchema>;
  * Схема для файла задания
  */
 export const taskFileSchema = z.object({
-  id: z.uuid(),
+  id: zIdSchema,
   fileName: z.string(),
   fileSize: z
     .number()
@@ -57,7 +57,7 @@ export type TaskFilesResponse = z.infer<typeof taskFilesResponseSchema>;
  * Схема для ответа при повторе конвертации файла
  */
 export const retryFileConversionResponseSchema = z.object({
-  id: z.uuid(),
+  id: zIdSchema,
   status: fileStatusSchema,
   message: z.string(),
 });

@@ -9,6 +9,7 @@ import type {
 import { FileStatus } from '../../types/status-model.ts';
 import { generateMockPresignedUrl } from '../../utils/presigned-url-generator.ts';
 import { ID } from '../../schemas/common.schema.ts';
+import { TaskFile } from '../../schemas/report-6406/task-files.schema.ts';
 
 export class TaskFilesService {
   /**
@@ -105,7 +106,7 @@ export class TaskFilesService {
    */
   async retryFileConversion(
     taskId: ID,
-    fileId: string
+    fileId: TaskFile['id']
   ): Promise<RetryFileConversionResponse> {
     // Проверяем существование задания
     const [task] = await db

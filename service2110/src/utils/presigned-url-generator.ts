@@ -4,6 +4,7 @@
 
 import { env } from '../config/env.ts';
 import { ID } from '../schemas/common.schema.ts';
+import { TaskFile } from '../schemas/report-6406/task-files.schema.ts';
 
 /**
  * Результат генерации pre-signed URL
@@ -24,7 +25,7 @@ export interface PresignedUrlResult {
  * @returns объект с URL и временем истечения
  */
 export function generateMockPresignedUrl(
-  fileId: string,
+  fileId: TaskFile['id'],
   fileName: string
 ): PresignedUrlResult {
   const baseUrl = env.MOCK_FILE_STORAGE_URL || 'http://localhost:3000/mock-files';
