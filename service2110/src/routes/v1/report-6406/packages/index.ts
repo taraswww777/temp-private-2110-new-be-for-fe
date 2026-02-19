@@ -3,6 +3,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { packagesService } from '../../../../services/report-6406/packages.service.ts';
+import { packageStatusHistoryRoutes } from './status-history';
 import {
   createPackageSchema,
   updatePackageSchema,
@@ -22,6 +23,9 @@ import { idParamSchema } from '../../../../schemas/common.schema';
 
 export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
+
+  // Регистрируем маршрут истории статусов
+  app.register(packageStatusHistoryRoutes);
 
   /**
    * POST /api/v1/report-6406/packages

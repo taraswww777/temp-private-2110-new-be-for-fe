@@ -47,6 +47,7 @@ import {
   bulkRemoveTasksResponseSchema,
   copyToTfrResponseSchema,
 } from './report-6406/packages.schema.ts';
+import { packetStatusSchema } from './enums/PacketStatusEnum';
 import {
   exportTasksRequestSchema,
   exportTasksResponseSchema,
@@ -55,6 +56,10 @@ import {
   statusHistoryItemSchema,
   statusHistoryResponseSchema,
 } from './report-6406/task-status-history.schema.ts';
+import {
+  packageStatusHistoryItemSchema,
+  packageStatusHistoryResponseSchema,
+} from './report-6406/package-status-history.schema.ts';
 import { storageCodeSchema, storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.ts';
 import {
   taskFileSchema,
@@ -121,11 +126,14 @@ export const schemaRegistry = new Map<string, unknown>([
   ['UpdatePackageDto', updatePackageSchema],
   ['PackageDto', packageSchema],
   ['PackagesListResponseDto', packagesListResponseSchema],
+  ['PacketStatusEnumSchema', packetStatusSchema],
   ['BulkDeletePackagesResponseDto', bulkDeletePackagesResponseSchema],
   ['UpdatePackageResponseDto', updatePackageResponseSchema],
   ['AddTasksToPackageResponseDto', addTasksToPackageResponseSchema],
   ['BulkRemoveTasksResponseDto', bulkRemoveTasksResponseSchema],
   ['CopyToTfrResponseDto', copyToTfrResponseSchema],
+  ['PackageStatusHistoryItemDto', packageStatusHistoryItemSchema],
+  ['PackageStatusHistoryResponseDto', packageStatusHistoryResponseSchema],
 
   // Экспорт
   ['ExportTasksRequestDto', exportTasksRequestSchema],

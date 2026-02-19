@@ -47,8 +47,10 @@ import {
   updatePackageResponseSchema,
   updatePackageSchema,
 } from './report-6406/packages.schema.ts';
+import { PacketStatusEnumSchema } from './enums/PacketStatusEnum';
 import { exportTasksRequestSchema, exportTasksResponseSchema, } from './report-6406/export.schema.ts';
 import { statusHistoryItemSchema, statusHistoryResponseSchema, } from './report-6406/task-status-history.schema.ts';
+import { packageStatusHistoryItemSchema, packageStatusHistoryResponseSchema } from './report-6406/package-status-history.schema.ts';
 import {
   storageCodeSchema,
   storageVolumeItemSchema,
@@ -129,6 +131,8 @@ export function getOpenApiComponents() {
     AddTasksToPackageResponseDto: zodToJsonSchema(addTasksToPackageResponseSchema, 'AddTasksToPackageResponseDto'),
     BulkRemoveTasksResponseDto: zodToJsonSchema(bulkRemoveTasksResponseSchema, 'BulkRemoveTasksResponseDto'),
     CopyToTfrResponseDto: zodToJsonSchema(copyToTfrResponseSchema, 'CopyToTfrResponseDto'),
+    PackageStatusHistoryItemDto: zodToJsonSchema(packageStatusHistoryItemSchema, 'PackageStatusHistoryItemDto'),
+    PackageStatusHistoryResponseDto: zodToJsonSchema(packageStatusHistoryResponseSchema, 'PackageStatusHistoryResponseDto'),
 
     // Экспорт
     ExportTasksRequestDto: zodToJsonSchema(exportTasksRequestSchema, 'ExportTasksRequestDto'),

@@ -1,12 +1,11 @@
-import { db } from '../../db/index.ts';
+import { db } from '../../db';
 import {
   report6406Packages,
   report6406PackageTasks,
   report6406Tasks,
-  report6406TaskBranches,
-  branches,
-} from '../../db/schema/index.ts';
-import { eq, sql, desc, asc, like, and, inArray } from 'drizzle-orm';
+  report6406PackageStatusHistory
+} from '../../db/schema';
+import { eq, sql, desc, asc, like, and } from 'drizzle-orm';
 import type {
   CreatePackageInput,
   UpdatePackageInput,
@@ -22,9 +21,44 @@ import type {
   BulkRemoveTasksResponse,
   CopyToTfrResponse,
 } from '../../schemas/report-6406/packages.schema';
-import { ID, zIdSchema } from '../../schemas/common.schema.ts';
+import { ID } from '../../schemas/common.schema.ts';
+import { PackageStatusHistoryResponse } from '../../schemas/report-6406/package-status-history.schema';
 
 export class PackagesService {
+  /**
+   * Получить историю статусов пакета
+   */
+  async getPackageStatusHistory(packageId: ID): Promise<PackageStatusHistoryResponse> {
+    // Проверить существование пакета
+    const [pkg] = await db
+      .select()
+      .from(report6406Packages)
+      .where(eq(report6406Packages.id, packageId))
+      .limit(1);
+
+    if (!pkg) {
+      throw new Error(`Package with id '${packageId}' not found`);
+    }
+
+    // Получить историю статусов из таблицы истории
+    const history = await db
+      .select({
+        status: report6406PackageStatusHistory.status,
+        changedAt: report6406PackageStatusHistory.changedAt,
+        changedBy: report6406PackageStatusHistory.changedBy,
+      })
+      .from(report6406PackageStatusHistory)
+      .where(eq(report6406PackageStatusHistory.packetId, packageId))
+      .orderBy(desc(report6406PackageStatusHistory.changedAt));
+
+    // Преобразовать данные в нужный формат
+    return history.map(item => ({
+      status: item.status,
+      changedAt: item.changedAt.toISOString(),
+      changedBy: item.changedBy,
+    }));
+  }
+
   /**
    * Проверить уникальность имени пакета
    */
@@ -459,6 +493,7 @@ export class PackagesService {
       tasksCount: pkg.tasksCount,
       totalSize: pkg.totalSize,
       updatedAt: pkg.updatedAt.toISOString(),
+      status: pkg.status
     };
   }
 }
