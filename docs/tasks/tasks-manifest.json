@@ -528,11 +528,11 @@
     {
       "id": "TASK-046",
       "title": "История статусов пакета - Backend",
-      "status": "planned",
+      "status": "completed",
       "file": "TASK-046-package-status-history-backend.md",
       "createdDate": "2026-02-06T12:00:00Z",
-      "completedDate": null,
-      "branch": null,
+      "completedDate": "2026-02-19T12:17:34.969Z",
+      "branch": "feature/TASK-046-package-status-history-backend",
       "priority": "medium",
       "tagIds": [
         "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",

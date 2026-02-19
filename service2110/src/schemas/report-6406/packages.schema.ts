@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { paginationQuerySchema, paginationMetadataSchema, zIdSchema } from '../common.schema';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
+import { reportTaskStatusSchema } from './tasks.schema';
+import { packetStatusSchema } from '../enums/PacketStatusEnum';
 
 /**
  * Схема для создания пакета
@@ -37,6 +39,7 @@ export const packageSchema = z.object({
     .min(0)
     .describe('Общий размер пакета в байтах (сумма размеров всех файлов). Всегда число; 0 при пустом пакете.'),
   updatedAt: z.iso.datetime().describe('Дата последнего обновления'),
+  status: packetStatusSchema.describe('Текущий статус пакета'),
 });
 
 export type Package = z.infer<typeof packageSchema>;

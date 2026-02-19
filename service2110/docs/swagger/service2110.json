@@ -1966,6 +1966,18 @@
           },
           "updatedAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pack_create",
+              "pack_transfer",
+              "pack_done",
+              "pack_fail",
+              "pack_cancel",
+              "pack_delete"
+            ],
+            "description": "Текущий статус пакета"
           }
         },
         "required": [
@@ -1976,7 +1988,8 @@
           "lastCopiedToTfrAt",
           "tasksCount",
           "totalSize",
-          "updatedAt"
+          "updatedAt",
+          "status"
         ],
         "additionalProperties": false,
         "title": "PackageDto"
@@ -2192,6 +2205,50 @@
         ],
         "additionalProperties": false,
         "title": "CopyToTfrResponseDto"
+      },
+      "PackageStatusHistoryItemDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pack_create",
+              "pack_transfer",
+              "pack_done",
+              "pack_fail",
+              "pack_cancel",
+              "pack_delete"
+            ],
+            "description": "Статус пакета"
+          },
+          "changedAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "changedBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "changedAt",
+          "changedBy"
+        ],
+        "additionalProperties": false,
+        "title": "PackageStatusHistoryItemDto"
+      },
+      "PackageStatusHistoryResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PackageStatusHistoryItemDto"
+        },
+        "title": "PackageStatusHistoryResponseDto"
       },
       "ExportTasksRequestDto": {
         "type": "object",
@@ -3574,6 +3631,66 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CopyToTfrResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/{id}/status-history": {
+      "get": {
+        "summary": "Получить историю статусов пакета",
+        "tags": [
+          "Report 6406 - Packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Integer ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageStatusHistoryResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "instance": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
