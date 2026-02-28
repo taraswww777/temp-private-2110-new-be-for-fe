@@ -123,6 +123,152 @@
         ],
         "title": "SortOrderEnumSchema"
       },
+      "PacketStatusEnum": {
+        "type": "string",
+        "enum": [
+          "pack_create",
+          "pack_transfer",
+          "pack_done",
+          "pack_fail",
+          "pack_cancel",
+          "pack_delete"
+        ],
+        "description": "Статус пакета",
+        "title": "PacketStatusEnum",
+        "x-enum-descriptions": [
+          "Создано",
+          "Копирование",
+          "Выполнено",
+          "Не выполнено",
+          "Отменено",
+          "Удалено"
+        ],
+        "x-enum-varnames": [
+          "CREATE",
+          "TRANSFER",
+          "DONE",
+          "FAIL",
+          "CANCEL",
+          "DELETE"
+        ],
+        "oneOf": [
+          {
+            "description": "Создано",
+            "title": "CREATE",
+            "enum": [
+              "pack_create"
+            ]
+          },
+          {
+            "description": "Копирование",
+            "title": "TRANSFER",
+            "enum": [
+              "pack_transfer"
+            ]
+          },
+          {
+            "description": "Выполнено",
+            "title": "DONE",
+            "enum": [
+              "pack_done"
+            ]
+          },
+          {
+            "description": "Не выполнено",
+            "title": "FAIL",
+            "enum": [
+              "pack_fail"
+            ]
+          },
+          {
+            "description": "Отменено",
+            "title": "CANCEL",
+            "enum": [
+              "pack_cancel"
+            ]
+          },
+          {
+            "description": "Удалено",
+            "title": "DELETE",
+            "enum": [
+              "pack_delete"
+            ]
+          }
+        ]
+      },
+      "ReportTypeEnum": {
+        "type": "string",
+        "enum": [
+          "LSOZ",
+          "LSOS",
+          "LSOP",
+          "KROS_VOS",
+          "KROS_VZS",
+          "KROS"
+        ],
+        "description": "Тип отчёта",
+        "title": "ReportTypeEnum",
+        "x-enum-descriptions": [
+          "LSOZ",
+          "LSOS",
+          "LSOP",
+          "KROS_VOS",
+          "KROS_VZS",
+          "KROS"
+        ],
+        "x-enum-varnames": [
+          "LSOZ",
+          "LSOS",
+          "LSOP",
+          "KROS_VOS",
+          "KROS_VZS",
+          "KROS"
+        ],
+        "oneOf": [
+          {
+            "description": "LSOZ",
+            "title": "LSOZ",
+            "enum": [
+              "LSOZ"
+            ]
+          },
+          {
+            "description": "LSOS",
+            "title": "LSOS",
+            "enum": [
+              "LSOS"
+            ]
+          },
+          {
+            "description": "LSOP",
+            "title": "LSOP",
+            "enum": [
+              "LSOP"
+            ]
+          },
+          {
+            "description": "KROS_VOS",
+            "title": "KROS_VOS",
+            "enum": [
+              "KROS_VOS"
+            ]
+          },
+          {
+            "description": "KROS_VZS",
+            "title": "KROS_VZS",
+            "enum": [
+              "KROS_VZS"
+            ]
+          },
+          {
+            "description": "KROS",
+            "title": "KROS",
+            "enum": [
+              "KROS"
+            ]
+          }
+        ]
+      },
       "SortOrderEnum": {
         "$ref": "#/components/schemas/SortOrderEnumSchema"
       },
@@ -472,16 +618,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "type": "string",
-            "enum": [
-              "LSOZ",
-              "LSOS",
-              "LSOP",
-              "KROS_VOS",
-              "KROS_VZS",
-              "KROS"
-            ],
-            "description": "Тип отчёта"
+            "$ref": "#/components/schemas/ReportTypeEnum"
           },
           "source": {
             "description": "Ссылка на справочник или ИД источника данных",
@@ -576,16 +713,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "description": "Тип отчёта",
-            "type": "string",
-            "enum": [
-              "LSOZ",
-              "LSOS",
-              "LSOP",
-              "KROS_VOS",
-              "KROS_VZS",
-              "KROS"
-            ]
+            "$ref": "#/components/schemas/ReportTypeEnum"
           },
           "source": {
             "anyOf": [
@@ -783,16 +911,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "description": "Тип отчёта",
-            "type": "string",
-            "enum": [
-              "LSOZ",
-              "LSOS",
-              "LSOP",
-              "KROS_VOS",
-              "KROS_VZS",
-              "KROS"
-            ]
+            "$ref": "#/components/schemas/ReportTypeEnum"
           },
           "updatedAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -852,12 +971,7 @@
             "type": "object",
             "properties": {
               "direction": {
-                "type": "string",
-                "enum": [
-                  "asc",
-                  "desc"
-                ],
-                "description": "Направление сортировки"
+                "$ref": "#/components/schemas/SortOrderEnumSchema"
               },
               "column": {
                 "type": "string",
@@ -919,16 +1033,7 @@
                 "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
               },
               "reportType": {
-                "description": "Тип отчёта",
-                "type": "string",
-                "enum": [
-                  "LSOZ",
-                  "LSOS",
-                  "LSOP",
-                  "KROS_VOS",
-                  "KROS_VZS",
-                  "KROS"
-                ]
+                "$ref": "#/components/schemas/ReportTypeEnum"
               },
               "format": {
                 "$ref": "#/components/schemas/FileFormatEnumSchema"
@@ -1078,16 +1183,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "description": "Тип отчёта",
-            "type": "string",
-            "enum": [
-              "LSOZ",
-              "LSOS",
-              "LSOP",
-              "KROS_VOS",
-              "KROS_VZS",
-              "KROS"
-            ]
+            "$ref": "#/components/schemas/ReportTypeEnum"
           },
           "source": {
             "anyOf": [
@@ -1321,16 +1417,7 @@
             "$ref": "#/components/schemas/FileFormatEnumSchema"
           },
           "reportType": {
-            "description": "Тип отчёта",
-            "type": "string",
-            "enum": [
-              "LSOZ",
-              "LSOS",
-              "LSOP",
-              "KROS_VOS",
-              "KROS_VZS",
-              "KROS"
-            ]
+            "$ref": "#/components/schemas/ReportTypeEnum"
           },
           "source": {
             "anyOf": [
@@ -1968,16 +2055,7 @@
             "$ref": "#/components/schemas/DateTimeSchema"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "pack_create",
-              "pack_transfer",
-              "pack_done",
-              "pack_fail",
-              "pack_cancel",
-              "pack_delete"
-            ],
-            "description": "Текущий статус пакета"
+            "$ref": "#/components/schemas/PacketStatusEnum"
           }
         },
         "required": [
@@ -2210,16 +2288,7 @@
         "type": "object",
         "properties": {
           "status": {
-            "type": "string",
-            "enum": [
-              "pack_create",
-              "pack_transfer",
-              "pack_done",
-              "pack_fail",
-              "pack_cancel",
-              "pack_delete"
-            ],
-            "description": "Статус пакета"
+            "$ref": "#/components/schemas/PacketStatusEnum"
           },
           "changedAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -2277,16 +2346,7 @@
                 "description": "Список типов отчётов для фильтрации",
                 "type": "array",
                 "items": {
-                  "type": "string",
-                  "enum": [
-                    "LSOZ",
-                    "LSOS",
-                    "LSOP",
-                    "KROS_VOS",
-                    "KROS_VZS",
-                    "KROS"
-                  ],
-                  "description": "Тип отчёта"
+                  "$ref": "#/components/schemas/ReportTypeEnum"
                 }
               },
               "formats": {

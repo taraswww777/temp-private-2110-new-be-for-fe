@@ -66,6 +66,7 @@ import { ReportFormTypeEnumSchema } from './enums/ReportFormTypeEnum';
 import { SortOrderEnumSchema, sortOrderSchema } from './enums/SortOrderEnum';
 import { CurrencyEnumSchema, currencySchema } from './enums/CurrencyEnum';
 import { FileFormatEnumSchema, fileFormatSchema } from './enums/FileFormatEnum';
+import { ReportTypeEnumSchema } from './enums/ReportTypeEnum.ts';
 
 /**
  * Получить все переиспользуемые компоненты для OpenAPI
@@ -73,6 +74,8 @@ import { FileFormatEnumSchema, fileFormatSchema } from './enums/FileFormatEnum';
 export function getOpenApiComponents() {
   return {
     // Enums
+    PacketStatusEnum: PacketStatusEnumSchema,
+    ReportTypeEnum: ReportTypeEnumSchema,
     ReportFormTypeEnum: ReportFormTypeEnumSchema,
     SortOrderEnum: SortOrderEnumSchema,
     CurrencyEnum: CurrencyEnumSchema,
