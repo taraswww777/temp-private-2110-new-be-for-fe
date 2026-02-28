@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { getTasksRequestSchema, taskListItemSchema } from '../tasks.schema.ts';
+import { SortOrderEnum } from '../../enums/SortOrderEnum.ts';
 
 describe('GetTasksRequestSchema / filter packageId', () => {
   it('принимает фильтр packageId (задания в указанном пакете)', () => {
     const body = {
       pagination: { number: 1, size: 20 },
-      sorting: { direction: 'desc' as const, column: 'createdAt' },
+      sorting: { direction: SortOrderEnum.DESC as const, column: 'createdAt' },
       filter: {
         packageId: 123,
       },
@@ -17,7 +18,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
   it('принимает фильтр packageId null (задания без пакета)', () => {
     const body = {
       pagination: { number: 1, size: 20 },
-      sorting: { direction: 'asc' as const, column: 'branchId' },
+      sorting: { direction: SortOrderEnum.ASC as const, column: 'branchId' },
       filter: {
         packageId: null,
       },
@@ -29,7 +30,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
   it('принимает фильтр branchIds с одним UUID', () => {
     const body = {
       pagination: { number: 1, size: 20 },
-      sorting: { direction: 'asc' as const, column: 'createdAt' },
+      sorting: { direction: SortOrderEnum.ASC as const, column: 'createdAt' },
       filter: {
         branchIds: [550],
       },
@@ -41,7 +42,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
   it('принимает фильтр branchIds с несколькими UUID', () => {
     const body = {
       pagination: { number: 1, size: 20 },
-      sorting: { direction: 'asc' as const, column: 'createdAt' },
+      sorting: { direction: SortOrderEnum.ASC as const, column: 'createdAt' },
       filter: {
         branchIds: [
           550,
@@ -57,7 +58,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
   it('принимает комбинацию нескольких фильтров', () => {
     const body = {
       pagination: { number: 1, size: 20 },
-      sorting: { direction: 'asc' as const, column: 'createdAt' },
+      sorting: { direction: SortOrderEnum.ASC as const, column: 'createdAt' },
       filter: {
         status: 'created',
         reportType: 'LSOZ',
@@ -72,7 +73,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
   it('принимает запрос без фильтров (filter опционален)', () => {
     const body = {
       pagination: { number: 1, size: 20 },
-      sorting: { direction: 'asc' as const, column: 'createdAt' },
+      sorting: { direction: SortOrderEnum.ASC as const, column: 'createdAt' },
     };
     const result = getTasksRequestSchema.safeParse(body);
     expect(result.success).toBe(true);

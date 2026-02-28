@@ -3,6 +3,7 @@ import { paginationQuerySchema, zIdSchema, } from '../common.schema.ts';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';
+import { sortOrderSchema } from '../enums/SortOrderEnum.ts';
 
 /**
  * Enum схемы для валидации
@@ -245,7 +246,7 @@ export type TaskListSortColumn = z.infer<typeof taskListSortColumnSchema>;
 
 /** Схема сортировки для списка заданий (колонка — enum) */
 export const tasksListSortingSchema = z.object({
-  direction: z.enum(['asc', 'desc']).describe('Направление сортировки'),
+  direction: sortOrderSchema,
   column: taskListSortColumnSchema.describe('Колонка для сортировки'),
 });
 

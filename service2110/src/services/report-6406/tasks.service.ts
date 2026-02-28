@@ -29,6 +29,7 @@ import { Currency } from '../../schemas/enums/CurrencyEnum';
 import { ID } from '../../schemas/common.schema.ts';
 import { Branch } from '../../schemas/report-6406/dictionary.schema.ts';
 import { Package } from '../../schemas/report-6406/packages.schema.ts';
+import { SortOrderEnum } from '../../schemas/enums/SortOrderEnum.ts';
 
 export class TasksService {
   /**
@@ -144,7 +145,7 @@ export class TasksService {
       createdBy: report6406Tasks.createdBy,
     };
     const orderByColumn = sortColumnMap[sorting.column] ?? report6406Tasks.createdAt;
-    const orderByClause = sorting.direction === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
+    const orderByClause = sorting.direction === SortOrderEnum.ASC ? asc(orderByColumn) : desc(orderByColumn);
 
     // Получение данных
     const tasks = await db
