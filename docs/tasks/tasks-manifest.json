@@ -860,6 +860,21 @@
         "f15ee308-9732-448c-a102-a3a5bf631e72"
       ],
       "projectId": "2110-project-id"
+    },
+    {
+      "id": "TASK-070",
+      "title": "Исправление enum в Swagger",
+      "status": "backlog",
+      "priority": "critical",
+      "file": "TASK-070-enum-swagger.md",
+      "createdDate": "2026-02-28T08:37:59.622Z",
+      "completedDate": null,
+      "branch": null,
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72",
+        "2579ec4b-e9a4-4347-addc-6e9097e8b51d"
+      ],
+      "projectId": "2110-project-id"
     }
   ]
 }
