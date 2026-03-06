@@ -3,11 +3,17 @@ import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithD
 
 // Enum для типов отчётов
 export enum ReportTypeEnum {
+  /** LSOZ */
   LSOZ = 'LSOZ',
+  /** LSOS */
   LSOS = 'LSOS',
+  /** LSOP */
   LSOP = 'LSOP',
+  /** KROS_VOS */
   KROS_VOS = 'KROS_VOS',
+  /** KROS_VZS */
   KROS_VZS = 'KROS_VZS',
+  /** KROS */
   KROS = 'KROS',
 }
 

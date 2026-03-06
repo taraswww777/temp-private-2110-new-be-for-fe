@@ -3,8 +3,11 @@ import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithD
 
 // Enum для форматов
 export enum FileFormat {
+  /** Текстовый формат */
   TXT = 'TXT',
+  /** Excel формат */
   XLSX = 'XLSX',
+  /** XML формат */
   XML = 'XML',
 }
 

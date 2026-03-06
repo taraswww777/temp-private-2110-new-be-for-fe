@@ -3,11 +3,17 @@ import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithD
 
 // Enum для статусов пакета
 export enum PacketStatusEnum {
+  /** Создано */
   CREATE = 'pack_create',
+  /** Копирование */
   TRANSFER = 'pack_transfer',
+  /** Выполнено */
   DONE = 'pack_done',
+  /** Не выполнено */
   FAIL = 'pack_fail',
+  /** Отменено */
   CANCEL = 'pack_cancel',
+  /** Удалено */
   DELETE = 'pack_delete',
 }
 
