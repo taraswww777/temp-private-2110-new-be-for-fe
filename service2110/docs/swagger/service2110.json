@@ -24,16 +24,6 @@
         "description": "Дата и время в формате ISO 8601",
         "title": "DateTimeSchema"
       },
-      "FileFormatEnumSchema": {
-        "type": "string",
-        "enum": [
-          "TXT",
-          "XLSX",
-          "XML"
-        ],
-        "description": "Формат файла",
-        "title": "FileFormatEnumSchema"
-      },
       "ReportFormTypeEnum": {
         "type": "string",
         "enum": [
@@ -76,52 +66,6 @@
             ]
           }
         ]
-      },
-      "ReportTaskStatusEnumSchema": {
-        "type": "string",
-        "enum": [
-          "upload_generation",
-          "registered",
-          "failed",
-          "upload_not_formed",
-          "upload_formed",
-          "accepted_dapp",
-          "submitted_dapp",
-          "killed_dapp",
-          "new_dapp",
-          "saving_dapp",
-          "created",
-          "deleted",
-          "started",
-          "start_failed",
-          "converting",
-          "completed",
-          "convert_stopped",
-          "in_queue",
-          "file_success_not_exist",
-          "failed_fc",
-          "have_broken_files"
-        ],
-        "title": "ReportTaskStatusEnumSchema"
-      },
-      "CurrencyEnumSchema": {
-        "type": "string",
-        "enum": [
-          "RUB",
-          "FOREIGN"
-        ],
-        "description": "Валюта",
-        "title": "CurrencyEnumSchema"
-      },
-      "SortOrderEnumSchema": {
-        "default": "DESC",
-        "description": "Направление сортировки",
-        "type": "string",
-        "enum": [
-          "ASC",
-          "DESC"
-        ],
-        "title": "SortOrderEnumSchema"
       },
       "PacketStatusEnum": {
         "type": "string",
@@ -270,13 +214,236 @@
         ]
       },
       "SortOrderEnum": {
-        "$ref": "#/components/schemas/SortOrderEnumSchema"
+        "type": "string",
+        "enum": [
+          "ASC",
+          "DESC"
+        ],
+        "description": "Направление сортировки",
+        "title": "SortOrderEnum",
+        "x-enum-descriptions": [
+          "Сортировка от А до Я",
+          "Сортировка От я до а"
+        ],
+        "x-enum-varnames": [
+          "ASC",
+          "DESC"
+        ],
+        "oneOf": [
+          {
+            "description": "Сортировка от А до Я",
+            "title": "ASC",
+            "enum": [
+              "ASC"
+            ]
+          },
+          {
+            "description": "Сортировка От я до а",
+            "title": "DESC",
+            "enum": [
+              "DESC"
+            ]
+          }
+        ]
       },
       "CurrencyEnum": {
-        "$ref": "#/components/schemas/CurrencyEnumSchema"
+        "type": "string",
+        "enum": [
+          "RUB",
+          "FOREIGN"
+        ],
+        "description": "Валюта отчёта",
+        "title": "CurrencyEnum",
+        "x-enum-descriptions": [
+          "Рубли",
+          "Иностранная валюта"
+        ],
+        "x-enum-varnames": [
+          "RUB",
+          "FOREIGN"
+        ],
+        "oneOf": [
+          {
+            "description": "Рубли",
+            "title": "RUB",
+            "enum": [
+              "RUB"
+            ]
+          },
+          {
+            "description": "Иностранная валюта",
+            "title": "FOREIGN",
+            "enum": [
+              "FOREIGN"
+            ]
+          }
+        ]
       },
       "FileFormatEnum": {
-        "$ref": "#/components/schemas/FileFormatEnumSchema"
+        "type": "string",
+        "enum": [
+          "TXT",
+          "XLSX",
+          "XML"
+        ],
+        "description": "Формат файла отчёта",
+        "title": "FileFormatEnum",
+        "x-enum-descriptions": [
+          "Текстовый формат",
+          "Excel формат",
+          "XML формат"
+        ],
+        "x-enum-varnames": [
+          "TXT",
+          "XLSX",
+          "XML"
+        ],
+        "oneOf": [
+          {
+            "description": "Текстовый формат",
+            "title": "TXT",
+            "enum": [
+              "TXT"
+            ]
+          },
+          {
+            "description": "Excel формат",
+            "title": "XLSX",
+            "enum": [
+              "XLSX"
+            ]
+          },
+          {
+            "description": "XML формат",
+            "title": "XML",
+            "enum": [
+              "XML"
+            ]
+          }
+        ]
+      },
+      "TaskStatusEnum": {
+        "type": "string",
+        "enum": [
+          "task_create",
+          "task_loading",
+          "task_data",
+          "task_empty_data",
+          "task_fail_data",
+          "task_cancel_data",
+          "task_conversion",
+          "task_done",
+          "task_fail_generation",
+          "task_cancel_generation",
+          "task_delete"
+        ],
+        "description": "Статус задания",
+        "title": "TaskStatusEnum",
+        "x-enum-descriptions": [
+          "Создано",
+          "Готовится к запуску",
+          "Выборка данных",
+          "Нет данных по заданным параметрам",
+          "Выборка не выполнена",
+          "Выборка данных отменена",
+          "Генерация",
+          "Выполнено",
+          "Генерация не выполнена",
+          "Генерация отменена",
+          "Удалено"
+        ],
+        "x-enum-varnames": [
+          "CREATE",
+          "LOADING",
+          "DATA",
+          "EMPTY_DATA",
+          "FAIL_DATA",
+          "CANCEL_DATA",
+          "CONVERSION",
+          "DONE",
+          "FAIL_GENERATION",
+          "CANCEL_GENERATION",
+          "DELETE"
+        ],
+        "oneOf": [
+          {
+            "description": "Создано",
+            "title": "CREATE",
+            "enum": [
+              "task_create"
+            ]
+          },
+          {
+            "description": "Готовится к запуску",
+            "title": "LOADING",
+            "enum": [
+              "task_loading"
+            ]
+          },
+          {
+            "description": "Выборка данных",
+            "title": "DATA",
+            "enum": [
+              "task_data"
+            ]
+          },
+          {
+            "description": "Нет данных по заданным параметрам",
+            "title": "EMPTY_DATA",
+            "enum": [
+              "task_empty_data"
+            ]
+          },
+          {
+            "description": "Выборка не выполнена",
+            "title": "FAIL_DATA",
+            "enum": [
+              "task_fail_data"
+            ]
+          },
+          {
+            "description": "Выборка данных отменена",
+            "title": "CANCEL_DATA",
+            "enum": [
+              "task_cancel_data"
+            ]
+          },
+          {
+            "description": "Генерация",
+            "title": "CONVERSION",
+            "enum": [
+              "task_conversion"
+            ]
+          },
+          {
+            "description": "Выполнено",
+            "title": "DONE",
+            "enum": [
+              "task_done"
+            ]
+          },
+          {
+            "description": "Генерация не выполнена",
+            "title": "FAIL_GENERATION",
+            "enum": [
+              "task_fail_generation"
+            ]
+          },
+          {
+            "description": "Генерация отменена",
+            "title": "CANCEL_GENERATION",
+            "enum": [
+              "task_cancel_generation"
+            ]
+          },
+          {
+            "description": "Удалено",
+            "title": "DELETE",
+            "enum": [
+              "task_delete"
+            ]
+          }
+        ]
       },
       "PaginationRequestDto": {
         "type": "object",
@@ -612,10 +779,10 @@
             "maxLength": 2
           },
           "currency": {
-            "$ref": "#/components/schemas/CurrencyEnumSchema"
+            "$ref": "#/components/schemas/CurrencyEnum"
           },
           "format": {
-            "$ref": "#/components/schemas/FileFormatEnumSchema"
+            "$ref": "#/components/schemas/FileFormatEnum"
           },
           "reportType": {
             "$ref": "#/components/schemas/ReportTypeEnum"
@@ -707,10 +874,10 @@
             "description": "Счета второго порядка"
           },
           "currency": {
-            "$ref": "#/components/schemas/CurrencyEnumSchema"
+            "$ref": "#/components/schemas/CurrencyEnum"
           },
           "format": {
-            "$ref": "#/components/schemas/FileFormatEnumSchema"
+            "$ref": "#/components/schemas/FileFormatEnum"
           },
           "reportType": {
             "$ref": "#/components/schemas/ReportTypeEnum"
@@ -727,7 +894,7 @@
             "description": "Ссылка на справочник или ИД источника данных"
           },
           "status": {
-            "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+            "$ref": "#/components/schemas/TaskStatusEnum"
           },
           "canCancel": {
             "type": "boolean",
@@ -892,7 +1059,7 @@
             "$ref": "#/components/schemas/DateSchema"
           },
           "status": {
-            "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+            "$ref": "#/components/schemas/TaskStatusEnum"
           },
           "fileSize": {
             "anyOf": [
@@ -908,7 +1075,7 @@
             ]
           },
           "format": {
-            "$ref": "#/components/schemas/FileFormatEnumSchema"
+            "$ref": "#/components/schemas/FileFormatEnum"
           },
           "reportType": {
             "$ref": "#/components/schemas/ReportTypeEnum"
@@ -971,7 +1138,7 @@
             "type": "object",
             "properties": {
               "direction": {
-                "$ref": "#/components/schemas/SortOrderEnumSchema"
+                "$ref": "#/components/schemas/SortOrderEnum"
               },
               "column": {
                 "type": "string",
@@ -1030,13 +1197,13 @@
                 "type": "string"
               },
               "status": {
-                "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+                "$ref": "#/components/schemas/TaskStatusEnum"
               },
               "reportType": {
                 "$ref": "#/components/schemas/ReportTypeEnum"
               },
               "format": {
-                "$ref": "#/components/schemas/FileFormatEnumSchema"
+                "$ref": "#/components/schemas/FileFormatEnum"
               },
               "source": {
                 "description": "Источник данных",
@@ -1177,10 +1344,10 @@
             "description": "Счета второго порядка"
           },
           "currency": {
-            "$ref": "#/components/schemas/CurrencyEnumSchema"
+            "$ref": "#/components/schemas/CurrencyEnum"
           },
           "format": {
-            "$ref": "#/components/schemas/FileFormatEnumSchema"
+            "$ref": "#/components/schemas/FileFormatEnum"
           },
           "reportType": {
             "$ref": "#/components/schemas/ReportTypeEnum"
@@ -1197,7 +1364,7 @@
             "description": "Ссылка на справочник или ИД источника данных"
           },
           "status": {
-            "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+            "$ref": "#/components/schemas/TaskStatusEnum"
           },
           "canCancel": {
             "type": "boolean",
@@ -1411,10 +1578,10 @@
             "description": "Счета второго порядка"
           },
           "currency": {
-            "$ref": "#/components/schemas/CurrencyEnumSchema"
+            "$ref": "#/components/schemas/CurrencyEnum"
           },
           "format": {
-            "$ref": "#/components/schemas/FileFormatEnumSchema"
+            "$ref": "#/components/schemas/FileFormatEnum"
           },
           "reportType": {
             "$ref": "#/components/schemas/ReportTypeEnum"
@@ -1431,7 +1598,7 @@
             "description": "Ссылка на справочник или ИД источника данных"
           },
           "status": {
-            "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+            "$ref": "#/components/schemas/TaskStatusEnum"
           },
           "canCancel": {
             "type": "boolean",
@@ -1657,7 +1824,7 @@
                   "type": "boolean"
                 },
                 "status": {
-                  "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+                  "$ref": "#/components/schemas/TaskStatusEnum"
                 },
                 "updatedAt": {
                   "$ref": "#/components/schemas/DateTimeSchema"
@@ -1707,7 +1874,7 @@
                   "description": "Integer ID"
                 },
                 "status": {
-                  "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+                  "$ref": "#/components/schemas/TaskStatusEnum"
                 },
                 "startedAt": {
                   "$ref": "#/components/schemas/DateTimeSchema"
@@ -1763,17 +1930,7 @@
             "description": "Integer ID"
           },
           "status": {
-            "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
-          },
-          "previousStatus": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
-              },
-              {
-                "type": "null"
-              }
-            ]
+            "$ref": "#/components/schemas/TaskStatusEnum"
           },
           "changedAt": {
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -1814,7 +1971,6 @@
         "required": [
           "id",
           "status",
-          "previousStatus",
           "changedAt",
           "changedBy",
           "comment",
@@ -2329,7 +2485,7 @@
                 "description": "Список статусов для фильтрации",
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/ReportTaskStatusEnumSchema"
+                  "$ref": "#/components/schemas/TaskStatusEnum"
                 }
               },
               "branchIds": {
@@ -2353,7 +2509,7 @@
                 "description": "Список форматов для фильтрации",
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/FileFormatEnumSchema"
+                  "$ref": "#/components/schemas/FileFormatEnum"
                 }
               },
               "periodStartFrom": {
@@ -2397,7 +2553,7 @@
             ]
           },
           "sortOrder": {
-            "$ref": "#/components/schemas/SortOrderEnumSchema"
+            "$ref": "#/components/schemas/SortOrderEnum"
           }
         },
         "required": [

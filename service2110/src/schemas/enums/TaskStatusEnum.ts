@@ -82,6 +82,5 @@ export const TaskStatusEnumSchema = createEnumSchemaWithDescriptions(
   TaskStatusEnum,
   TaskStatusDescriptions,
   'TaskStatusEnum',
-  'Статус задания (локальная модель task_*)',
+  'Статус задания',
 );
-

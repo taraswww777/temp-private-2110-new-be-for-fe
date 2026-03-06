@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-//@ts-nocheck
+// @ts-nocheck
 import { db } from '../../db/index.ts';
 import { report6406Tasks, report6406TaskBranches } from '../../db/schema/index.ts';
 import { and, inArray, gte, lte, desc, asc, exists, eq, sql } from 'drizzle-orm';
@@ -8,6 +8,7 @@ import type {
   ExportTasksResponse,
 } from '../../schemas/report-6406/export.schema.ts';
 import { generateTasksCsv, generateCsvFileName } from '../../utils/csv-generator.ts';
+import { apiStatusToTaskStatuses } from '../../types/status-mapping.ts';
 import { env } from '../../config/env.ts';
 import { randomUUID } from 'crypto';
 
@@ -23,7 +24,10 @@ export class ExportService {
 
     if (filters) {
       if (filters.statuses && filters.statuses.length > 0) {
-        conditions.push(inArray(report6406Tasks.status, filters.statuses));
+        const dbStatuses = filters.statuses.flatMap(apiStatusToTaskStatuses);
+        if (dbStatuses.length > 0) {
+          conditions.push(inArray(report6406Tasks.status, dbStatuses));
+        }
       }
 
       if (filters.branchIds && filters.branchIds.length > 0) {

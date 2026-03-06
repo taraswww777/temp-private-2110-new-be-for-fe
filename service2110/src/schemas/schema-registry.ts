@@ -24,7 +24,6 @@ import {
   bulkDeleteResponseSchema,
   bulkCancelResponseSchema,
   startTasksResponseSchema,
-  reportTaskStatusSchema,
 } from './report-6406/tasks.schema.ts';
 import {
   branchSchema,
@@ -70,6 +69,7 @@ import { reportFormTypeSchema } from './enums/ReportFormTypeEnum';
 import { SortOrderEnum, sortOrderSchema } from './enums/SortOrderEnum';
 import { fileFormatSchema } from './enums/FileFormatEnum';
 import { currencySchema } from './enums/CurrencyEnum';
+import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 
 /**
  * Маппинг имён схем на Zod схемы
@@ -88,7 +88,7 @@ export const schemaRegistry = new Map<string, unknown>([
   ['DateSchema', dateSchema],
   ['DateTimeSchema', dateTimeSchema],
   ['FileFormatEnumSchema', fileFormatSchema],
-  ['ReportTaskStatusEnumSchema', reportTaskStatusSchema],
+  ['TaskStatusEnumSchema', taskStatusSchema],
   ['CurrencyEnumSchema', currencySchema],
   ['StorageCodeEnumSchema', storageCodeSchema],
   ['HealthResponseDto', healthResponseSchema],

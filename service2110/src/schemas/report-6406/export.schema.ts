@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { reportTaskStatusSchema } from './tasks.schema.ts';
+import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';
@@ -10,7 +10,7 @@ import { zIdSchema } from '../common.schema.ts';
  */
 export const exportFiltersSchema = z.object({
   // Фильтры по статусам (массив)
-  statuses: z.array(reportTaskStatusSchema).optional().describe('Список статусов для фильтрации'),
+  statuses: z.array(taskStatusSchema).optional().describe('Список статусов для фильтрации'),
 
   // Фильтры по филиалам (массив строк)
   branchIds: z.array(zIdSchema).optional().describe('Список ИД филиалов для фильтрации'),

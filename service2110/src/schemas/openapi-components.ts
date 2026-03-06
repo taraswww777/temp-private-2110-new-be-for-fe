@@ -18,7 +18,6 @@ import {
   bulkDeleteResponseSchema,
   createTaskSchema,
   getTasksRequestSchema,
-  reportTaskStatusSchema,
   startTasksResponseSchema,
   taskDetailSchema,
   taskDetailsSchema,
@@ -63,10 +62,11 @@ import {
 } from './report-6406/task-files.schema.ts';
 import { zodToJsonSchema } from './utils/zodToJsonSchema';
 import { ReportFormTypeEnumSchema } from './enums/ReportFormTypeEnum';
-import { SortOrderEnumSchema, sortOrderSchema } from './enums/SortOrderEnum';
-import { CurrencyEnumSchema, currencySchema } from './enums/CurrencyEnum';
-import { FileFormatEnumSchema, fileFormatSchema } from './enums/FileFormatEnum';
+import { SortOrderEnumSchema } from './enums/SortOrderEnum';
+import { CurrencyEnumSchema } from './enums/CurrencyEnum';
+import { FileFormatEnumSchema } from './enums/FileFormatEnum';
 import { ReportTypeEnumSchema } from './enums/ReportTypeEnum.ts';
+import { TaskStatusEnumSchema } from './enums/TaskStatusEnum.ts';
 
 /**
  * Получить все переиспользуемые компоненты для OpenAPI
@@ -80,7 +80,8 @@ export function getOpenApiComponents() {
     SortOrderEnum: SortOrderEnumSchema,
     CurrencyEnum: CurrencyEnumSchema,
     FileFormatEnum: FileFormatEnumSchema,
-
+    TaskStatusEnum: TaskStatusEnumSchema,
+    
     // Общие схемы
     PaginationRequestDto: zodToJsonSchema(paginationQuerySchema, 'PaginationRequestDto'),
     PaginationMetadataDto: zodToJsonSchema(paginationMetadataSchema, 'PaginationMetadataDto'),
@@ -89,10 +90,7 @@ export function getOpenApiComponents() {
     FilterDto: zodToJsonSchema(filterSchema, 'FilterDto'),
     DateSchema: zodToJsonSchema(dateSchema, 'DateSchema'),
     DateTimeSchema: zodToJsonSchema(dateTimeSchema, 'DateTimeSchema'),
-    FileFormatEnumSchema: zodToJsonSchema(fileFormatSchema, 'FileFormatEnumSchema'),
-    ReportTaskStatusEnumSchema: zodToJsonSchema(reportTaskStatusSchema, 'ReportTaskStatusEnumSchema'),
-    CurrencyEnumSchema: zodToJsonSchema(currencySchema, 'CurrencyEnumSchema'),
-    SortOrderEnumSchema: zodToJsonSchema(sortOrderSchema, 'SortOrderEnumSchema'),
+
     StorageCodeEnumSchema: zodToJsonSchema(storageCodeSchema, 'StorageCodeEnumSchema'),
     HealthResponseDto: zodToJsonSchema(healthResponseSchema, 'HealthResponseDto'),
     HttpErrorWithInstanceDto: zodToJsonSchema(httpErrorWithInstanceSchema, 'HttpErrorWithInstanceDto'),
