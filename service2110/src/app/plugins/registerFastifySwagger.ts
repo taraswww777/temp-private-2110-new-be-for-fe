@@ -1,93 +1,24 @@
-import Fastify from 'fastify';
+import { FastifyBaseLogger, FastifyInstance } from 'fastify';
+import * as http from 'node:http';
+import { IncomingMessage, ServerResponse } from 'node:http';
+import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import fastifySwagger from '@fastify/swagger';
+import { env } from '../../config/env.ts';
+import { getOpenApiComponents } from '../../schemas/openapi-components.ts';
+import { getSchemaName } from '../../schemas/schema-registry.ts';
 import fastifySwaggerUi from '@fastify/swagger-ui';
-import fastifyCors from '@fastify/cors';
-import {
-  serializerCompiler,
-  validatorCompiler,
-  type ZodTypeProvider,
-} from 'fastify-type-provider-zod';
-import { writeFileSync } from 'fs';
 import { join } from 'path';
-import { env } from './config/env.ts';
-import { routes } from './routes/index.ts';
-import { errorHandler } from './plugins/error-handler.ts';
-import userContextPlugin from './plugins/user-context.ts';
-import { getOpenApiComponents } from './schemas/openapi-components.ts';
-import { getSchemaName, schemaRegistry } from './schemas/schema-registry.ts';
+import { writeFileSync } from 'fs';
 
-export async function buildApp() {
-  const app = Fastify({
-    logger: {
-      level: env.NODE_ENV === 'development' ? 'info' : 'warn',
-      transport: env.NODE_ENV === 'development'
-        ? {
-            target: 'pino-pretty',
-            options: {
-              translateTime: 'HH:MM:ss Z',
-              ignore: 'pid,hostname',
-            },
-          }
-        : undefined,
-    },
-    requestIdLogLabel: 'reqId',
-    disableRequestLogging: false,
-    requestIdHeader: 'x-request-id',
-  }).withTypeProvider<ZodTypeProvider>();
+type CustomFastifyInstance =  FastifyInstance<
+  http.Server<typeof IncomingMessage, typeof ServerResponse>,
+  http.IncomingMessage,
+  http.ServerResponse<IncomingMessage>,
+  FastifyBaseLogger,
+  ZodTypeProvider
+>;
 
-  // Установка валидаторов Zod
-  app.setValidatorCompiler(validatorCompiler);
-  app.setSerializerCompiler(serializerCompiler);
-
-  // Настройка обработки ошибок валидации в формате RFC 7807
-  app.setErrorHandler((error: Error, request, reply) => {
-    // Обработка ошибок валидации Fastify
-    if ('validation' in error && (error as { validation?: unknown }).validation) {
-      return reply.status(400).send({
-        type: 'https://httpstatuses.com/400',
-        title: 'Bad Request',
-        status: 400,
-        detail: 'Request validation failed',
-        instance: request.url,
-        errors: ((error as { validation: Array<{ instancePath?: string; params?: { missingProperty?: string }; message?: string }> }).validation).map((err) => ({
-          path: err.instancePath || err.params?.missingProperty || 'unknown',
-          message: err.message || 'Validation error',
-        })),
-      });
-    }
-
-    // Передаем остальные ошибки в глобальный обработчик
-    throw error;
-  });
-
-  // CORS плагин - разрешаем все запросы с localhost
-  await app.register(fastifyCors, {
-    origin: (origin, cb) => {
-      // Разрешаем запросы без origin (например, Postman, curl)
-      if (!origin) {
-        cb(null, true);
-        return;
-      }
-
-      // Разрешаем localhost и 127.0.0.1 с любым портом
-      const localhostPattern = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
-      if (localhostPattern.test(origin)) {
-        cb(null, true);
-        return;
-      }
-
-      // Запрещаем остальные origins
-      cb(new Error('Not allowed by CORS'), false);
-    },
-    credentials: true,
-  });
-
-  // Регистрация обработчика ошибок
-  await app.register(errorHandler);
-
-  // Регистрация плагина для контекста пользователя
-  await app.register(userContextPlugin);
-
+export const registerFastifySwagger = async (app:  CustomFastifyInstance) => {
   // Swagger плагин (OpenAPI 3.1)
   await app.register(fastifySwagger, {
     openapi: {
@@ -601,7 +532,6 @@ export async function buildApp() {
       return { schema: transformed, url };
     },
   });
-
   // Swagger UI (тёмная тема по умолчанию + переключатель)
   await app.register(fastifySwaggerUi, {
     routePrefix: '/docs',
@@ -641,27 +571,6 @@ export async function buildApp() {
       ],
     },
   });
-
-  // Логирование всех запросов в dev режиме
-  if (env.NODE_ENV === 'development') {
-    app.addHook('onRequest', async (request, reply) => {
-      request.log.info({ url: request.url, method: request.method }, 'incoming request');
-    });
-
-    app.addHook('onResponse', async (request, reply) => {
-      request.log.info(
-        {
-          url: request.url,
-          method: request.method,
-          statusCode: reply.statusCode,
-        },
-        'request completed'
-      );
-    });
-  }
-
-  // Регистрация маршрутов
-  await app.register(routes);
 
   // Хук для сохранения service2110.json после старта
   app.addHook('onReady', async () => {
@@ -805,6 +714,4 @@ export async function buildApp() {
     writeFileSync(swaggerPath, JSON.stringify(swaggerJson, null, 2));
     app.log.info(`Swagger JSON saved to ${swaggerPath}`);
   });
-
-  return app;
 }

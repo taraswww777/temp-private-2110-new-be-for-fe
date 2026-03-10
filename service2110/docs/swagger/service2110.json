@@ -140,6 +140,59 @@
           }
         ]
       },
+      "FileStatusEnum": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "CONVERTING",
+          "COMPLETED",
+          "FAILED"
+        ],
+        "description": "Статус конвертации файла",
+        "title": "FileStatusEnum",
+        "x-enum-descriptions": [
+          "Ожидает обработки",
+          "Идёт конвертация файла",
+          "Конвертация успешно завершена",
+          "Конвертация завершилась ошибкой"
+        ],
+        "x-enum-varnames": [
+          "PENDING",
+          "CONVERTING",
+          "COMPLETED",
+          "FAILED"
+        ],
+        "oneOf": [
+          {
+            "description": "Ожидает обработки",
+            "title": "PENDING",
+            "enum": [
+              "PENDING"
+            ]
+          },
+          {
+            "description": "Идёт конвертация файла",
+            "title": "CONVERTING",
+            "enum": [
+              "CONVERTING"
+            ]
+          },
+          {
+            "description": "Конвертация успешно завершена",
+            "title": "COMPLETED",
+            "enum": [
+              "COMPLETED"
+            ]
+          },
+          {
+            "description": "Конвертация завершилась ошибкой",
+            "title": "FAILED",
+            "enum": [
+              "FAILED"
+            ]
+          }
+        ]
+      },
       "ReportTypeEnum": {
         "type": "string",
         "enum": [
@@ -1196,8 +1249,12 @@
                 "description": "Название филиала",
                 "type": "string"
               },
-              "status": {
-                "$ref": "#/components/schemas/TaskStatusEnum"
+              "statuses": {
+                "description": "Статус задания",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TaskStatusEnum"
+                }
               },
               "reportType": {
                 "$ref": "#/components/schemas/ReportTypeEnum"
@@ -2008,13 +2065,7 @@
             "type": "string"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "CONVERTING",
-              "COMPLETED",
-              "FAILED"
-            ]
+            "$ref": "#/components/schemas/FileStatusEnum"
           },
           "downloadUrl": {
             "anyOf": [
@@ -2105,13 +2156,7 @@
             "description": "Integer ID"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "CONVERTING",
-              "COMPLETED",
-              "FAILED"
-            ]
+            "$ref": "#/components/schemas/FileStatusEnum"
           },
           "message": {
             "type": "string"
@@ -2573,11 +2618,7 @@
             "description": "ИД экспорта"
           },
           "status": {
-            "type": "string",
-            "description": "Статус экспорта",
-            "enum": [
-              "COMPLETED"
-            ]
+            "$ref": "#/components/schemas/TaskStatusEnum"
           },
           "fileUrl": {
             "type": "string",
