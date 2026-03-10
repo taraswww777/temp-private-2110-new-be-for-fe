@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { packetStatusSchema } from '../enums/PacketStatusEnum';
+import { packetStatusSchema } from '../enums/PackageStatusEnum.ts';
 
 /**
  * Схема для записи истории статуса пакета

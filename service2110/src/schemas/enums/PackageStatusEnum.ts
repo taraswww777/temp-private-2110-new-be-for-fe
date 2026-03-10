@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
 
 // Enum для статусов пакета
-export enum PacketStatusEnum {
+export enum PackageStatusEnum {
   /** Создано */
   CREATE = 'pack_create',
   /** Копирование */
@@ -19,20 +19,20 @@ export enum PacketStatusEnum {
 
 // Мапа описаний для каждого значения enum
 const PacketStatusDescriptions = {
-  [PacketStatusEnum.CREATE]: { value: PacketStatusEnum.CREATE, description: 'Создано' },
-  [PacketStatusEnum.TRANSFER]: { value: PacketStatusEnum.TRANSFER, description: 'Копирование' },
-  [PacketStatusEnum.DONE]: { value: PacketStatusEnum.DONE, description: 'Выполнено' },
-  [PacketStatusEnum.FAIL]: { value: PacketStatusEnum.FAIL, description: 'Не выполнено' },
-  [PacketStatusEnum.CANCEL]: { value: PacketStatusEnum.CANCEL, description: 'Отменено' },
-  [PacketStatusEnum.DELETE]: { value: PacketStatusEnum.DELETE, description: 'Удалено' },
+  [PackageStatusEnum.CREATE]: { value: PackageStatusEnum.CREATE, description: 'Создано' },
+  [PackageStatusEnum.TRANSFER]: { value: PackageStatusEnum.TRANSFER, description: 'Копирование' },
+  [PackageStatusEnum.DONE]: { value: PackageStatusEnum.DONE, description: 'Выполнено' },
+  [PackageStatusEnum.FAIL]: { value: PackageStatusEnum.FAIL, description: 'Не выполнено' },
+  [PackageStatusEnum.CANCEL]: { value: PackageStatusEnum.CANCEL, description: 'Отменено' },
+  [PackageStatusEnum.DELETE]: { value: PackageStatusEnum.DELETE, description: 'Удалено' },
 } as const;
 
 // Создаем схему через enum (который возвращает ZodEnum)
-export const packetStatusSchema = z.enum(PacketStatusEnum).describe('Статус пакета');
+export const packetStatusSchema = z.enum(PackageStatusEnum).describe('Статус пакета');
 
 // Добавляем метаданные через describe (некоторые генераторы поддерживают)
-export const PacketStatusEnumSchema = createEnumSchemaWithDescriptions(
-  PacketStatusEnum,
+export const PackageStatusEnumSchema = createEnumSchemaWithDescriptions(
+  PackageStatusEnum,
   PacketStatusDescriptions,
   'PacketStatusEnum',
   'Статус пакета'

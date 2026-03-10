@@ -1,19 +1,19 @@
 import { pgTable, timestamp, varchar, integer, index, pgEnum } from 'drizzle-orm/pg-core';
 import { idColumn, idColumnPrimary } from './base.schema.ts';
 import { report6406Packages } from './report-6406-packages.schema.ts';
-import { PacketStatusEnum } from '../../schemas/enums/PacketStatusEnum';
+import { PackageStatusEnum } from '../../schemas/enums/PackageStatusEnum.ts';
 
 
 /**
  * PostgreSQL enum для статусов пакета
  */
 export const packetStatusPgEnum = pgEnum('packet_status_enum', [
-  PacketStatusEnum.CREATE,
-  PacketStatusEnum.TRANSFER,
-  PacketStatusEnum.DONE,
-  PacketStatusEnum.FAIL,
-  PacketStatusEnum.CANCEL,
-  PacketStatusEnum.DELETE
+  PackageStatusEnum.CREATE,
+  PackageStatusEnum.TRANSFER,
+  PackageStatusEnum.DONE,
+  PackageStatusEnum.FAIL,
+  PackageStatusEnum.CANCEL,
+  PackageStatusEnum.DELETE
 ]);
 
 /**

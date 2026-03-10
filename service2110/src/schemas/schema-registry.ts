@@ -46,7 +46,7 @@ import {
   bulkRemoveTasksResponseSchema,
   copyToTfrResponseSchema,
 } from './report-6406/packages.schema.ts';
-import { packetStatusSchema } from './enums/PacketStatusEnum';
+import { packetStatusSchema } from './enums/PackageStatusEnum.ts';
 import {
   exportTasksRequestSchema,
   exportTasksResponseSchema,
