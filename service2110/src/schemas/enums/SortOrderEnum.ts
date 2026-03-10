@@ -5,7 +5,9 @@ import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithD
  * Направление сортировки (enum ASC/DESC)
  */
 export enum SortOrderEnum {
+  /** Сортировка от А до Я */
   ASC = 'ASC',
+  /** Сортировка от Я до А */
   DESC = 'DESC',
 }
 

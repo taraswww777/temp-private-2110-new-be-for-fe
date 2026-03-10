@@ -4,42 +4,8 @@ import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';
 import { sortOrderSchema } from '../enums/SortOrderEnum.ts';
+import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
 
-/**
- * Enum схемы для валидации
- *
- * 21 статус согласно новой статусной модели:
- * - 10 DAPP статусов (Data Application Processing)
- * - 11 FC статусов (File Conversion)
- */
-export const reportTaskStatusSchema = z.enum([
-  // DAPP статусы
-  'upload_generation',
-  'registered',
-  'failed',
-  'upload_not_formed',
-  'upload_formed',
-  'accepted_dapp',
-  'submitted_dapp',
-  'killed_dapp',
-  'new_dapp',
-  'saving_dapp',
-  // FC статусы
-  'created',
-  'deleted',
-  'started',
-  'start_failed',
-  'converting',
-  'completed',
-  'convert_stopped',
-  'in_queue',
-  'file_success_not_exist',
-  'failed_fc',
-  'have_broken_files',
-]);
-
-
-export type ReportTaskStatusType = z.infer<typeof reportTaskStatusSchema>;
 export type CurrencyType = z.infer<typeof currencySchema>;
 export type FileFormatType = z.infer<typeof fileFormatSchema>;
 
@@ -114,7 +80,7 @@ export const taskSchema = z.object({
   format: fileFormatSchema,
   reportType: reportTypeSchema.optional().describe('Тип отчёта'),
   source: z.string().nullable().describe('Ссылка на справочник или ИД источника данных'),
-  status: reportTaskStatusSchema,
+  status: taskStatusSchema,
   canCancel: z.boolean().describe('Возможность отмены задания'),
   canDelete: z.boolean().describe('Возможность удаления задания'),
   canStart: z.boolean().describe('Возможность запуска задания'),
@@ -168,7 +134,7 @@ export const taskDetailsSchema = z.object({
   format: fileFormatSchema,
   reportType: reportTypeSchema.optional().describe('Тип отчёта'),
   source: z.string().nullable().describe('Ссылка на справочник или ИД источника данных'),
-  status: reportTaskStatusSchema.describe('Статус задания'),
+  status: taskStatusSchema.describe('Статус задания'),
   canCancel: z.boolean().describe('Возможность отмены задания'),
   canDelete: z.boolean().describe('Возможность удаления задания'),
   canStart: z.boolean().describe('Возможность запуска задания'),
@@ -208,7 +174,7 @@ export const taskListItemSchema = z.object({
   branchNames: z.array(z.string()).describe('Массив названий филиалов'),
   periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
   periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
-  status: reportTaskStatusSchema.describe('Статус задания'),
+  status: taskStatusSchema.describe('Статус задания'),
   fileSize: z
     .number()
     .int()
@@ -258,7 +224,7 @@ export const tasksListFilterSchema = z.object({
   packageId: zIdSchema.optional().nullable().describe('ID пакета (null — задания без пакета)'),
   branchIds: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
   branchName: z.string().optional().describe('Название филиала'),
-  status: reportTaskStatusSchema.optional().describe('Статус задания'),
+  status: taskStatusSchema.optional().describe('Статус задания'),
   reportType: reportTypeSchema.optional().describe('Тип отчёта'),
   format: fileFormatSchema.optional().describe('Формат файла'),
   source: z.string().optional().describe('Источник данных'),
@@ -348,7 +314,7 @@ export const bulkCancelResponseSchema = z.object({
   results: z.array(z.object({
     taskId: zIdSchema,
     success: z.boolean(),
-    status: reportTaskStatusSchema.optional(),
+    status: taskStatusSchema.optional(),
     updatedAt: z.iso.datetime().optional(),
     reason: z.string().optional(),
   })),
@@ -361,7 +327,7 @@ export type BulkCancelResponse = z.infer<typeof bulkCancelResponseSchema>;
  */
 export const cancelTaskResponseSchema = z.object({
   id: zIdSchema,
-  status: reportTaskStatusSchema,
+  status: taskStatusSchema,
   updatedAt: z.iso.datetime(),
 });
 
@@ -381,7 +347,7 @@ export type StartTasksInput = z.infer<typeof startTasksSchema>;
  */
 export const startTaskResultSchema = z.object({
   taskId: zIdSchema,
-  status: reportTaskStatusSchema,
+  status: taskStatusSchema,
   startedAt: z.iso.datetime(),
 });
 

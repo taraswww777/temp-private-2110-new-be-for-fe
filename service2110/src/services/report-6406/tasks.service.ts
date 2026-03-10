@@ -24,6 +24,7 @@ import type {
   TasksListResponse,
 } from '../../schemas/report-6406/tasks.schema.ts';
 import { getStatusPermissions } from '../../types/status-model.ts';
+import { apiStatusToTaskStatuses, taskStatusToApiStatus } from '../../types/status-mapping.ts';
 import { storageService } from './storage.service.ts';
 import { Currency } from '../../schemas/enums/CurrencyEnum';
 import { ID } from '../../schemas/common.schema.ts';
@@ -314,7 +315,13 @@ export class TasksService {
       conditions.push(eq(report6406Tasks.branchName, filter.branchName));
     }
     if (filter.status !== undefined) {
-      conditions.push(eq(report6406Tasks.status, filter.status));
+      const dbStatuses = apiStatusToTaskStatuses(filter.status);
+      if (dbStatuses.length > 0) {
+        conditions.push(inArray(report6406Tasks.status, dbStatuses));
+      } else {
+        // Нет маппинга — статус не найден в БД (например task_data)
+        conditions.push(sql`1 = 0`);
+      }
     }
     if (filter.reportType !== undefined) {
       conditions.push(eq(report6406Tasks.reportType, filter.reportType));
@@ -486,7 +493,7 @@ export class TasksService {
 
     return {
       id: updatedTask.id,
-      status: updatedTask.status as TaskStatus,
+      status: taskStatusToApiStatus(updatedTask.status as TaskStatus),
       updatedAt: updatedTask.updatedAt.toISOString(),
     };
   }
@@ -496,13 +503,7 @@ export class TasksService {
    */
   async bulkCancelTasks(input: BulkCancelTasksInput, cancelledBy?: string): Promise<BulkCancelResponse> {
     let cancelled = 0;
-    const results: Array<{
-      taskId: ID;
-      success: boolean;
-      status?: TaskStatus;
-      updatedAt?: string;
-      reason?: string;
-    }> = [];
+    const results: BulkCancelResponse['results'] = [];
 
     for (const taskId of input.taskIds) {
       try {
@@ -511,8 +512,7 @@ export class TasksService {
         results.push({
           taskId,
           success: true,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          status: result.status as any,
+          status: result.status,
           updatedAt: result.updatedAt,
         });
       } catch (error) {
@@ -605,7 +605,7 @@ export class TasksService {
 
         results.push({
           taskId: updatedTask.id,
-          status: updatedTask.status as TaskStatus,
+          status: taskStatusToApiStatus(updatedTask.status as TaskStatus),
           startedAt: updatedTask.startedAt!.toISOString(),
         });
         started++;
@@ -696,7 +696,7 @@ export class TasksService {
       format: task.format,
       reportType: task.reportType,
       source: task.source,
-      status: task.status as TaskStatus,
+      status: taskStatusToApiStatus(task.status as TaskStatus),
       canCancel: permissions.canCancel,
       canDelete: permissions.canDelete,
       canStart: permissions.canStart,
@@ -745,7 +745,7 @@ export class TasksService {
       format: task.format,
       reportType: task.reportType,
       source: task.source,
-      status: task.status as TaskStatus,
+      status: taskStatusToApiStatus(task.status as TaskStatus),
       canCancel: permissions.canCancel,
       canDelete: permissions.canDelete,
       canStart: permissions.canStart,
@@ -786,7 +786,7 @@ export class TasksService {
       branchNames,
       periodStart: task.periodStart,
       periodEnd: task.periodEnd,
-      status: task.status as TaskStatus,
+      status: taskStatusToApiStatus(task.status as TaskStatus),
       fileSize: task.fileSize,
       format: task.format,
       reportType: task.reportType,

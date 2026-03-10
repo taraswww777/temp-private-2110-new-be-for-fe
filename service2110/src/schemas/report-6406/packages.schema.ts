@@ -1,8 +1,7 @@
 import { z } from 'zod';
 import { paginationQuerySchema, paginationMetadataSchema, zIdSchema } from '../common.schema';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
-import { reportTaskStatusSchema } from './tasks.schema';
-import { packetStatusSchema } from '../enums/PacketStatusEnum';
+import { packetStatusSchema } from '../enums/PackageStatusEnum.ts';
 
 /**
  * Схема для создания пакета

@@ -1,7 +1,5 @@
 import { z } from 'zod';
-import { reportTaskStatusSchema } from './tasks.schema';
-import { zIdSchema } from '../common.schema';
-import { packetStatusSchema } from '../enums/PacketStatusEnum';
+import { packetStatusSchema } from '../enums/PackageStatusEnum.ts';
 
 /**
  * Схема для записи истории статуса пакета

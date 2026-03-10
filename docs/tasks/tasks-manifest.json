@@ -879,12 +879,12 @@
     {
       "id": "TASK-071",
       "title": "Улучшение скриптов Swagger — локальный кэш, fallback и манифест",
-      "status": "backlog",
+      "status": "in-progress",
       "priority": "medium",
       "file": "TASK-071-swagger-local-cache-and-manifest.md",
       "createdDate": "2026-03-05T00:00:00.000Z",
       "completedDate": null,
-      "branch": null,
+      "branch": "feature/TASK-071-swagger-local-cache-and-manifest",
       "projectId": "2110-project-id",
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72"

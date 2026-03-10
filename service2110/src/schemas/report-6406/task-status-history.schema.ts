@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { reportTaskStatusSchema } from './tasks.schema.ts';
+import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
 import { zIdSchema } from '../common.schema.ts';
 
 /**
@@ -7,8 +7,7 @@ import { zIdSchema } from '../common.schema.ts';
  */
 export const statusHistoryItemSchema = z.object({
   id: zIdSchema,
-  status: reportTaskStatusSchema,
-  previousStatus: reportTaskStatusSchema.nullable(),
+  status: taskStatusSchema,
   changedAt: z.iso.datetime(),
   changedBy: z.string().nullable(),
   comment: z.string().nullable(),

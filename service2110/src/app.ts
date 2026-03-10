@@ -287,7 +287,7 @@ export async function buildApp() {
           const componentNames = Object.keys(componentsRecord);
 
           const simpleTypes = ['DateSchema', 'DateTimeSchema', 'UuidSchema'];
-          const enumTypes = ['FileFormatEnumSchema', 'ReportFormTypeEnum', 'ReportTaskStatusEnumSchema', 'CurrencyEnumSchema', 'SortOrderEnumSchema'];
+          const enumTypes = ['FileFormatEnumSchema', 'ReportFormTypeEnum', 'TaskStatusEnumSchema', 'CurrencyEnumSchema', 'SortOrderEnumSchema'];
           const objectTypes = componentNames.filter(name => !simpleTypes.includes(name) && !enumTypes.includes(name));
 
           for (const name of [...simpleTypes, ...enumTypes]) {

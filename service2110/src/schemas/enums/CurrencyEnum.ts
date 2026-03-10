@@ -3,7 +3,9 @@ import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithD
 
 // Enum для валют
 export enum Currency {
+  /** Рубли */
   RUB = 'RUB',
+  /** Иностранная валюта */
   FOREIGN = 'FOREIGN',
 }
 

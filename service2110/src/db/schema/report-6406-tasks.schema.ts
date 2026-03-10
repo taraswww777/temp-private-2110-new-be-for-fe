@@ -1,7 +1,7 @@
 import { bigint, date, index, integer, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { branches } from './branches.schema.ts';
 import { ReportTypeEnum } from '../../schemas/enums/ReportTypeEnum';
-import { FileFormat } from '../../schemas/enums/FileFormatEnum';
+import { FileFormatEnum } from '../../schemas/enums/FileFormatEnum';
 import { Currency } from '../../schemas/enums/CurrencyEnum';
 import { idColumn, idColumnPrimary } from './base.schema.ts';
 
@@ -20,9 +20,9 @@ export const reportTypePgEnum = pgEnum('report_type_enum', [
 
 
 export const fileFormatPgEnum = pgEnum('file_format_enum', [
-  FileFormat.TXT,
-  FileFormat.XLSX,
-  FileFormat.XML,
+  FileFormatEnum.TXT,
+  FileFormatEnum.XLSX,
+  FileFormatEnum.XML,
 ]);
 
 export const currencyPgEnum = pgEnum('currency_enum', [

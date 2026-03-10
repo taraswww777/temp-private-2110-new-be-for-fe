@@ -5,6 +5,7 @@ import type {
   StatusHistoryResponse,
 } from '../../schemas/report-6406/task-status-history.schema.ts';
 import type { TaskStatus } from '../../types/status-model.ts';
+import { taskStatusToApiStatus } from '../../types/status-mapping.ts';
 import { ID } from '../../schemas/common.schema.ts';
 
 export class TaskStatusHistoryService {
@@ -32,8 +33,8 @@ export class TaskStatusHistoryService {
 
     return history.map(item => ({
       id: item.id,
-      status: item.status as TaskStatus,
-      previousStatus: item.previousStatus as TaskStatus | null,
+      status: taskStatusToApiStatus(item.status as TaskStatus),
+      previousStatus: item.previousStatus != null ? taskStatusToApiStatus(item.previousStatus as TaskStatus) : null,
       changedAt: item.changedAt.toISOString(),
       changedBy: item.changedBy,
       comment: item.comment,

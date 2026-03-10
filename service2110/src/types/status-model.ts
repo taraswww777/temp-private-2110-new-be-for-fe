@@ -35,9 +35,6 @@ export enum TaskStatus {
   HAVE_BROKEN_FILES = 'have_broken_files',
 }
 
-// Типы для статусов
-export type TaskStatusType = `${TaskStatus}`;
-
 // Статусы для файлов
 export enum FileStatus {
   PENDING = 'PENDING',
