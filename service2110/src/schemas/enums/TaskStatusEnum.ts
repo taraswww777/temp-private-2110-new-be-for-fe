@@ -30,50 +30,17 @@ export enum TaskStatusEnum {
 }
 
 const TaskStatusDescriptions = {
-  [TaskStatusEnum.CREATE]: {
-    value: TaskStatusEnum.CREATE,
-    description: 'Создано',
-  },
-  [TaskStatusEnum.LOADING]: {
-    value: TaskStatusEnum.LOADING,
-    description: 'Готовится к запуску',
-  },
-  [TaskStatusEnum.DATA]: {
-    value: TaskStatusEnum.DATA,
-    description: 'Выборка данных',
-  },
-  [TaskStatusEnum.EMPTY_DATA]: {
-    value: TaskStatusEnum.EMPTY_DATA,
-    description: 'Нет данных по заданным параметрам',
-  },
-  [TaskStatusEnum.FAIL_DATA]: {
-    value: TaskStatusEnum.FAIL_DATA,
-    description: 'Выборка не выполнена',
-  },
-  [TaskStatusEnum.CANCEL_DATA]: {
-    value: TaskStatusEnum.CANCEL_DATA,
-    description: 'Выборка данных отменена',
-  },
-  [TaskStatusEnum.CONVERSION]: {
-    value: TaskStatusEnum.CONVERSION,
-    description: 'Генерация',
-  },
-  [TaskStatusEnum.DONE]: {
-    value: TaskStatusEnum.DONE,
-    description: 'Выполнено',
-  },
-  [TaskStatusEnum.FAIL_GENERATION]: {
-    value: TaskStatusEnum.FAIL_GENERATION,
-    description: 'Генерация не выполнена',
-  },
-  [TaskStatusEnum.CANCEL_GENERATION]: {
-    value: TaskStatusEnum.CANCEL_GENERATION,
-    description: 'Генерация отменена',
-  },
-  [TaskStatusEnum.DELETE]: {
-    value: TaskStatusEnum.DELETE,
-    description: 'Удалено',
-  },
+  [TaskStatusEnum.CREATE]: { value: TaskStatusEnum.CREATE, description: 'Создано' },
+  [TaskStatusEnum.LOADING]: { value: TaskStatusEnum.LOADING, description: 'Готовится к запуску' },
+  [TaskStatusEnum.DATA]: { value: TaskStatusEnum.DATA, description: 'Выборка данных' },
+  [TaskStatusEnum.EMPTY_DATA]: { value: TaskStatusEnum.EMPTY_DATA, description: 'Нет данных по заданным параметрам' },
+  [TaskStatusEnum.FAIL_DATA]: { value: TaskStatusEnum.FAIL_DATA, description: 'Выборка не выполнена' },
+  [TaskStatusEnum.CANCEL_DATA]: { value: TaskStatusEnum.CANCEL_DATA, description: 'Выборка данных отменена' },
+  [TaskStatusEnum.CONVERSION]: { value: TaskStatusEnum.CONVERSION, description: 'Генерация' },
+  [TaskStatusEnum.DONE]: { value: TaskStatusEnum.DONE, description: 'Выполнено' },
+  [TaskStatusEnum.FAIL_GENERATION]: { value: TaskStatusEnum.FAIL_GENERATION, description: 'Генерация не выполнена' },
+  [TaskStatusEnum.CANCEL_GENERATION]: { value: TaskStatusEnum.CANCEL_GENERATION, description: 'Генерация отменена' },
+  [TaskStatusEnum.DELETE]: { value: TaskStatusEnum.DELETE, description: 'Удалено' },
 } as const;
 
 export const taskStatusSchema = z.enum(TaskStatusEnum).describe('Статус задания (локальная модель task_*)');

@@ -84,6 +84,3 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
 export type Report6406Task = typeof report6406Tasks.$inferSelect;
 export type NewReport6406Task = typeof report6406Tasks.$inferInsert;
 
-
-// Re-export TaskStatus from status-model
-export { TaskStatus } from '../../types/status-model.ts';

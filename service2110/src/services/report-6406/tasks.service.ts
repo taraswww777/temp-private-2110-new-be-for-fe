@@ -1,4 +1,4 @@
-import { db } from '../../db/index.ts';
+import { db } from '../../db';
 import {
   branches,
   report6406Packages,
@@ -6,8 +6,7 @@ import {
   report6406TaskBranches,
   report6406Tasks,
   report6406TaskStatusHistory,
-  TaskStatus,
-} from '../../db/schema/index.ts';
+} from '../../db/schema';
 import { and, asc, desc, eq, exists, inArray, not, sql } from 'drizzle-orm';
 import type {
   BulkCancelResponse,
@@ -23,14 +22,15 @@ import type {
   TaskDetails,
   TasksListResponse,
 } from '../../schemas/report-6406/tasks.schema.ts';
-import { getStatusPermissions } from '../../types/status-model.ts';
-import { apiStatusToTaskStatuses, taskStatusToApiStatus } from '../../types/status-mapping.ts';
+import { getStatusPermissions } from '../../types/task-status-rules.ts';
 import { storageService } from './storage.service.ts';
 import { Currency } from '../../schemas/enums/CurrencyEnum';
 import { ID } from '../../schemas/common.schema.ts';
 import { Branch } from '../../schemas/report-6406/dictionary.schema.ts';
 import { Package } from '../../schemas/report-6406/packages.schema.ts';
 import { SortOrderEnum } from '../../schemas/enums/SortOrderEnum.ts';
+import { FileStatusEnum } from '../../schemas/enums/FileStatusEnum.ts';
+import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
 
 export class TasksService {
   /**
@@ -74,7 +74,7 @@ export class TasksService {
           format: input.format,
           reportType: input.reportType,
           source: input.source || null,
-          status: TaskStatus.CREATED,
+          status: TaskStatusEnum.CREATE,
           createdBy,
           filesCount: 0,
         })
@@ -91,7 +91,7 @@ export class TasksService {
       // Добавить запись в историю статусов
       await trx.insert(report6406TaskStatusHistory).values({
         taskId: task.id,
-        status: TaskStatus.CREATED,
+        status: TaskStatusEnum.CREATE,
         previousStatus: null,
         changedAt: new Date(),
         changedBy: createdBy,
@@ -117,7 +117,9 @@ export class TasksService {
 
     // Подсчет общего количества
     const [{ count }] = await db
-      .select({ count: sql<number>`count(*)::int` })
+      .select({
+        count: sql<number>`count(*)::int`
+      })
       .from(report6406Tasks)
       .where(whereClause);
 
@@ -315,13 +317,7 @@ export class TasksService {
       conditions.push(eq(report6406Tasks.branchName, filter.branchName));
     }
     if (filter.status !== undefined) {
-      const dbStatuses = apiStatusToTaskStatuses(filter.status);
-      if (dbStatuses.length > 0) {
-        conditions.push(inArray(report6406Tasks.status, dbStatuses));
-      } else {
-        // Нет маппинга — статус не найден в БД (например task_data)
-        conditions.push(sql`1 = 0`);
-      }
+      conditions.push(inArray(report6406Tasks.status, filter.status));
     }
     if (filter.reportType !== undefined) {
       conditions.push(eq(report6406Tasks.reportType, filter.reportType));
@@ -471,7 +467,7 @@ export class TasksService {
       const [updated] = await trx
         .update(report6406Tasks)
         .set({
-          status: TaskStatus.KILLED_DAPP, // Используем статус killed_dapp для отмены
+          status: TaskStatusEnum.CANCEL_GENERATION, // Используем статус killed_dapp для отмены
           lastStatusChangedAt: new Date(),
           updatedAt: new Date(),
         })
@@ -481,8 +477,8 @@ export class TasksService {
       // Добавляем запись в историю
       await trx.insert(report6406TaskStatusHistory).values({
         taskId: taskId,
-        status: TaskStatus.KILLED_DAPP,
-        previousStatus: task.status as TaskStatus,
+        status: TaskStatusEnum.CANCEL_GENERATION,
+        previousStatus: task.status as TaskStatusEnum,
         changedAt: new Date(),
         changedBy: cancelledBy || null,
         comment: 'Task cancelled by user',
@@ -493,7 +489,7 @@ export class TasksService {
 
     return {
       id: updatedTask.id,
-      status: taskStatusToApiStatus(updatedTask.status as TaskStatus),
+      status: updatedTask.status as TaskStatusEnum,
       updatedAt: updatedTask.updatedAt.toISOString(),
     };
   }
@@ -557,7 +553,7 @@ export class TasksService {
         }
 
         // Проверяем права на запуск
-        const permissions = getStatusPermissions(task.status as TaskStatus);
+        const permissions = getStatusPermissions(task.status);
         if (!permissions.canStart) {
           errors.push({
             taskId,
@@ -582,7 +578,7 @@ export class TasksService {
           const [updated] = await trx
             .update(report6406Tasks)
             .set({
-              status: TaskStatus.STARTED,
+              status: TaskStatusEnum.LOADING,
               startedAt: new Date(),
               lastStatusChangedAt: new Date(),
               updatedAt: new Date(),
@@ -593,8 +589,8 @@ export class TasksService {
           // Добавляем запись в историю
           await trx.insert(report6406TaskStatusHistory).values({
             taskId,
-            status: TaskStatus.STARTED,
-            previousStatus: task.status as TaskStatus,
+            status: TaskStatusEnum.LOADING,
+            previousStatus: task.status as TaskStatusEnum,
             changedAt: new Date(),
             changedBy: startedBy || null,
             comment: 'Task started by user',
@@ -605,7 +601,7 @@ export class TasksService {
 
         results.push({
           taskId: updatedTask.id,
-          status: taskStatusToApiStatus(updatedTask.status as TaskStatus),
+          status: updatedTask.status as TaskStatusEnum,
           startedAt: updatedTask.startedAt!.toISOString(),
         });
         started++;
@@ -629,7 +625,7 @@ export class TasksService {
    * Проверка возможности отмены задания
    */
   private canCancel(status: string): boolean {
-    const permissions = getStatusPermissions(status as TaskStatus);
+    const permissions = getStatusPermissions(status);
     return permissions.canCancel;
   }
 
@@ -637,30 +633,30 @@ export class TasksService {
    * Проверка возможности удаления задания
    */
   private canDelete(status: string): boolean {
-    const permissions = getStatusPermissions(status as TaskStatus);
+    const permissions = getStatusPermissions(status);
     return permissions.canDelete;
   }
 
   /**
    * Проверка возможности запуска задания
    */
-  private canStart(status: string): boolean {
-    const permissions = getStatusPermissions(status as TaskStatus);
+  private canStart(status: FileStatusEnum): boolean {
+    const permissions = getStatusPermissions(status);
     return permissions.canStart;
   }
 
   /**
    * Проверка возможности добавления в пакет
    */
-  canAddToPackage(status: string): boolean {
-    return status === TaskStatus.COMPLETED;
+  canAddToPackage(status: TaskStatusEnum): boolean {
+    return status === TaskStatusEnum.DONE;
   }
 
   /**
    * Форматирование задания для API
    */
   private async formatTask(task: typeof report6406Tasks.$inferSelect): Promise<Task> {
-    const permissions = getStatusPermissions(task.status as TaskStatus);
+    const permissions = getStatusPermissions(task.status as TaskStatusEnum);
 
     // Получить филиалы, связанные с заданием
     const taskBranches = await db
@@ -696,7 +692,7 @@ export class TasksService {
       format: task.format,
       reportType: task.reportType,
       source: task.source,
-      status: taskStatusToApiStatus(task.status as TaskStatus),
+      status: task.status as TaskStatusEnum,
       canCancel: permissions.canCancel,
       canDelete: permissions.canDelete,
       canStart: permissions.canStart,
@@ -720,7 +716,7 @@ export class TasksService {
     packagesList: Array<{ id: Package['id']; name: string; addedAt: Date }>,
     taskBranches: Array<{ branchId: Branch['id']; branchName: string }> = [],
   ): TaskDetails {
-    const permissions = getStatusPermissions(task.status as TaskStatus);
+    const permissions = getStatusPermissions(task.status as TaskStatusEnum);
 
     const branchIds = taskBranches.length > 0
       ? taskBranches.map(b => b.branchId)
@@ -745,7 +741,7 @@ export class TasksService {
       format: task.format,
       reportType: task.reportType,
       source: task.source,
-      status: taskStatusToApiStatus(task.status as TaskStatus),
+      status: task.status as TaskStatusEnum,
       canCancel: permissions.canCancel,
       canDelete: permissions.canDelete,
       canStart: permissions.canStart,
@@ -775,7 +771,7 @@ export class TasksService {
     branchIds: Branch['id'][] = [task.branchId],
     branchNames: Branch['name'][] = [task.branchName],
   ) {
-    const permissions = getStatusPermissions(task.status as TaskStatus);
+    const permissions = getStatusPermissions(task.status);
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
@@ -786,7 +782,7 @@ export class TasksService {
       branchNames,
       periodStart: task.periodStart,
       periodEnd: task.periodEnd,
-      status: taskStatusToApiStatus(task.status as TaskStatus),
+      status: task.status,
       fileSize: task.fileSize,
       format: task.format,
       reportType: task.reportType,
