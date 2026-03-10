@@ -1,3 +1,4 @@
+CREATE TYPE "public"."packet_status_enum" AS ENUM('pack_create', 'pack_transfer', 'pack_done', 'pack_fail', 'pack_cancel', 'pack_delete');--> statement-breakpoint
 CREATE TYPE "public"."currency_enum" AS ENUM('RUB', 'FOREIGN');--> statement-breakpoint
 CREATE TYPE "public"."file_format_enum" AS ENUM('TXT', 'XLSX', 'XML');--> statement-breakpoint
 CREATE TYPE "public"."report_type_enum" AS ENUM('LSOZ', 'LSOS', 'LSOP', 'KROS_VOS', 'KROS_VZS', 'KROS');--> statement-breakpoint
@@ -75,6 +76,7 @@ CREATE TABLE "report_6406_packages" (
 	"tasks_count" integer DEFAULT 0 NOT NULL,
 	"total_size" bigint DEFAULT 0 NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"status" "packet_status_enum" DEFAULT 'pack_create' NOT NULL,
 	CONSTRAINT "report_6406_packages_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
@@ -92,6 +94,16 @@ CREATE TABLE "report_6406_task_branches" (
 	CONSTRAINT "report_6406_task_branches_task_id_branch_id_pk" PRIMARY KEY("task_id","branch_id")
 );
 --> statement-breakpoint
+CREATE TABLE "report_6406_package_status_history" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "report_6406_package_status_history_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"packet_id" integer NOT NULL,
+	"status" "packet_status_enum" NOT NULL,
+	"previous_status" "packet_status_enum",
+	"changed_at" timestamp DEFAULT now() NOT NULL,
+	"changed_by" varchar(255) NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 ALTER TABLE "report_6406_tasks" ADD CONSTRAINT "report_6406_tasks_branch_id_branches_id_fk" FOREIGN KEY ("branch_id") REFERENCES "public"."branches"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "report_6406_task_status_history" ADD CONSTRAINT "report_6406_task_status_history_task_id_report_6406_tasks_id_fk" FOREIGN KEY ("task_id") REFERENCES "public"."report_6406_tasks"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "report_6406_task_files" ADD CONSTRAINT "report_6406_task_files_task_id_report_6406_tasks_id_fk" FOREIGN KEY ("task_id") REFERENCES "public"."report_6406_tasks"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -99,6 +111,7 @@ ALTER TABLE "report_6406_package_tasks" ADD CONSTRAINT "report_6406_package_task
 ALTER TABLE "report_6406_package_tasks" ADD CONSTRAINT "report_6406_package_tasks_task_id_report_6406_tasks_id_fk" FOREIGN KEY ("task_id") REFERENCES "public"."report_6406_tasks"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "report_6406_task_branches" ADD CONSTRAINT "report_6406_task_branches_task_id_report_6406_tasks_id_fk" FOREIGN KEY ("task_id") REFERENCES "public"."report_6406_tasks"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "report_6406_task_branches" ADD CONSTRAINT "report_6406_task_branches_branch_id_branches_id_fk" FOREIGN KEY ("branch_id") REFERENCES "public"."branches"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "report_6406_package_status_history" ADD CONSTRAINT "report_6406_package_status_history_packet_id_report_6406_packages_id_fk" FOREIGN KEY ("packet_id") REFERENCES "public"."report_6406_packages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "idx_report_6406_tasks_created_at" ON "report_6406_tasks" USING btree ("created_at" DESC NULLS LAST);--> statement-breakpoint
 CREATE INDEX "idx_report_6406_tasks_branch_id" ON "report_6406_tasks" USING btree ("branch_id");--> statement-breakpoint
 CREATE INDEX "idx_report_6406_tasks_status" ON "report_6406_tasks" USING btree ("status");--> statement-breakpoint
@@ -116,4 +129,7 @@ CREATE INDEX "idx_report_6406_packages_name" ON "report_6406_packages" USING btr
 CREATE INDEX "idx_report_6406_package_tasks_package_id" ON "report_6406_package_tasks" USING btree ("package_id");--> statement-breakpoint
 CREATE INDEX "idx_report_6406_package_tasks_task_id" ON "report_6406_package_tasks" USING btree ("task_id");--> statement-breakpoint
 CREATE INDEX "idx_report_6406_task_branches_task_id" ON "report_6406_task_branches" USING btree ("task_id");--> statement-breakpoint
-CREATE INDEX "idx_report_6406_task_branches_branch_id" ON "report_6406_task_branches" USING btree ("branch_id");
+CREATE INDEX "idx_report_6406_task_branches_branch_id" ON "report_6406_task_branches" USING btree ("branch_id");--> statement-breakpoint
+CREATE INDEX "idx_package_status_history_packet_id" ON "report_6406_package_status_history" USING btree ("packet_id");--> statement-breakpoint
+CREATE INDEX "idx_package_status_history_changed_at" ON "report_6406_package_status_history" USING btree ("changed_at" DESC NULLS LAST);--> statement-breakpoint
+CREATE INDEX "idx_package_status_history_status" ON "report_6406_package_status_history" USING btree ("status");

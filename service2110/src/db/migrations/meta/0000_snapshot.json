@@ -1,5 +1,5 @@
 {
-  "id": "af97a67d-fb0c-4bf9-b1d9-ee6812427385",
+  "id": "17476fc3-8ff4-4e0f-a63e-c4e348269257",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -719,6 +719,14 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "status": {
+          "name": "status",
+          "type": "packet_status_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pack_create'"
         }
       },
       "indexes": {
@@ -963,9 +971,151 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.report_6406_package_status_history": {
+      "name": "report_6406_package_status_history",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "report_6406_package_status_history_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "packet_id": {
+          "name": "packet_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "packet_status_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "previous_status": {
+          "name": "previous_status",
+          "type": "packet_status_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "changed_at": {
+          "name": "changed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "changed_by": {
+          "name": "changed_by",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "idx_package_status_history_packet_id": {
+          "name": "idx_package_status_history_packet_id",
+          "columns": [
+            {
+              "expression": "packet_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_package_status_history_changed_at": {
+          "name": "idx_package_status_history_changed_at",
+          "columns": [
+            {
+              "expression": "changed_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_package_status_history_status": {
+          "name": "idx_package_status_history_status",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "report_6406_package_status_history_packet_id_report_6406_packages_id_fk": {
+          "name": "report_6406_package_status_history_packet_id_report_6406_packages_id_fk",
+          "tableFrom": "report_6406_package_status_history",
+          "tableTo": "report_6406_packages",
+          "columnsFrom": [
+            "packet_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
+    "public.packet_status_enum": {
+      "name": "packet_status_enum",
+      "schema": "public",
+      "values": [
+        "pack_create",
+        "pack_transfer",
+        "pack_done",
+        "pack_fail",
+        "pack_cancel",
+        "pack_delete"
+      ]
+    },
     "public.currency_enum": {
       "name": "currency_enum",
       "schema": "public",
