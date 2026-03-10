@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
 
 // Enum для форматов
-export enum FileFormat {
+export enum FileFormatEnum {
   /** Текстовый формат */
   TXT = 'TXT',
   /** Excel формат */
@@ -13,17 +13,17 @@ export enum FileFormat {
 
 // Мапа описаний для каждого значения enum
 const FileFormatDescriptions = {
-  [FileFormat.TXT]: { value: FileFormat.TXT, description: 'Текстовый формат' },
-  [FileFormat.XLSX]: { value: FileFormat.XLSX, description: 'Excel формат' },
-  [FileFormat.XML]: { value: FileFormat.XML, description: 'XML формат' },
+  [FileFormatEnum.TXT]: { value: FileFormatEnum.TXT, description: 'Текстовый формат' },
+  [FileFormatEnum.XLSX]: { value: FileFormatEnum.XLSX, description: 'Excel формат' },
+  [FileFormatEnum.XML]: { value: FileFormatEnum.XML, description: 'XML формат' },
 } as const;
 
 // Создаем простую схему через enum
-export const fileFormatSchema = z.enum(FileFormat).describe('Формат файла');
+export const fileFormatSchema = z.enum(FileFormatEnum).describe('Формат файла');
 
 // Создаем расширенную схему с описаниями
 export const FileFormatEnumSchema = createEnumSchemaWithDescriptions(
-  FileFormat,
+  FileFormatEnum,
   FileFormatDescriptions,
   'FileFormatEnum',
   'Формат файла отчёта'

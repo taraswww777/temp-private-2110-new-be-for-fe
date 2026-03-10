@@ -1,6 +1,25 @@
 import { describe, it, expect } from 'vitest';
+import type { SafeParseReturnType } from 'zod';
 import { getTasksRequestSchema, taskListItemSchema } from '../tasks.schema.ts';
 import { SortOrderEnum } from '../../enums/SortOrderEnum.ts';
+import { FileFormatEnum } from '../../enums/FileFormatEnum.ts';
+import { ReportTypeEnum } from '../../enums/ReportTypeEnum.ts';
+import { TaskStatusEnum } from '../../enums/TaskStatusEnum.ts';
+
+function expectZodSuccess<TInput, TOutput>(
+  result: SafeParseReturnType<TInput, TOutput>,
+  context?: string,
+) {
+  if (!result.success) {
+    // Более информативный вывод ошибок Zod
+    console.error(
+      `Zod validation failed${context ? ` in ${context}` : ''}:`,
+      JSON.stringify(result.error.format(), null, 2),
+    );
+  }
+
+  expect(result.success, context).toBe(true);
+}
 
 describe('GetTasksRequestSchema / filter packageId', () => {
   it('принимает фильтр packageId (задания в указанном пакете)', () => {
@@ -12,7 +31,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       },
     };
     const result = getTasksRequestSchema.safeParse(body);
-    expect(result.success).toBe(true);
+    expectZodSuccess(result, 'filter: packageId = 123');
   });
 
   it('принимает фильтр packageId null (задания без пакета)', () => {
@@ -24,7 +43,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       },
     };
     const result = getTasksRequestSchema.safeParse(body);
-    expect(result.success).toBe(true);
+    expectZodSuccess(result, 'filter: packageId = null');
   });
 
   it('принимает фильтр branchIds с одним UUID', () => {
@@ -36,7 +55,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       },
     };
     const result = getTasksRequestSchema.safeParse(body);
-    expect(result.success).toBe(true);
+    expectZodSuccess(result, 'filter: branchIds = [550]');
   });
 
   it('принимает фильтр branchIds с несколькими UUID', () => {
@@ -52,7 +71,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       },
     };
     const result = getTasksRequestSchema.safeParse(body);
-    expect(result.success).toBe(true);
+    expectZodSuccess(result, 'filter: branchIds = [550, 551, 552]');
   });
 
   it('принимает комбинацию нескольких фильтров', () => {
@@ -60,14 +79,14 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       pagination: { number: 1, size: 20 },
       sorting: { direction: SortOrderEnum.ASC as const, column: 'createdAt' },
       filter: {
-        status: 'created',
-        reportType: 'LSOZ',
-        format: 'TXT',
+        status: TaskStatusEnum.CREATE,
+        reportType: ReportTypeEnum.LSOZ,
+        format: FileFormatEnum.TXT,
         branchIds: [550],
       },
     };
     const result = getTasksRequestSchema.safeParse(body);
-    expect(result.success).toBe(true);
+    expectZodSuccess(result, 'filter: status + reportType + format + branchIds');
   });
 
   it('принимает запрос без фильтров (filter опционален)', () => {
@@ -76,7 +95,7 @@ describe('GetTasksRequestSchema / filter packageId', () => {
       sorting: { direction: SortOrderEnum.ASC as const, column: 'createdAt' },
     };
     const result = getTasksRequestSchema.safeParse(body);
-    expect(result.success).toBe(true);
+    expectZodSuccess(result, 'без filter');
   });
 });
 
@@ -92,10 +111,10 @@ describe('TaskListItemSchema / packageIds', () => {
       branchNames: ['Branch 1'],
       periodStart: '2026-01-01',
       periodEnd: '2026-01-31',
-      status: 'created',
+      status: TaskStatusEnum.CREATE,
       fileSize: null,
-      format: 'TXT',
-      reportType: 'LSOZ',
+      format: FileFormatEnum.TXT,
+      reportType: ReportTypeEnum.LSOZ,
       updatedAt: '2026-01-30T12:00:00.000Z',
       canCancel: true,
       canDelete: true,
@@ -103,7 +122,8 @@ describe('TaskListItemSchema / packageIds', () => {
       packageIds: [],
     };
     const result = taskListItemSchema.safeParse(item);
-    expect(result.success).toBe(true);
+    expectZodSuccess(result, 'TaskListItemSchema / packageIds: пустой массив');
+
     if (result.success) {
       expect(result.data.packageIds).toEqual([]);
     }
@@ -120,10 +140,10 @@ describe('TaskListItemSchema / packageIds', () => {
       branchNames: ['Branch 1'],
       periodStart: '2026-01-01',
       periodEnd: '2026-01-31',
-      status: 'created',
+      status: TaskStatusEnum.CREATE,
       fileSize: null,
-      format: 'TXT',
-      reportType: 'LSOZ',
+      format: FileFormatEnum.TXT,
+      reportType: ReportTypeEnum.LSOZ,
       updatedAt: '2026-01-30T12:00:00.000Z',
       canCancel: true,
       canDelete: true,
@@ -131,7 +151,8 @@ describe('TaskListItemSchema / packageIds', () => {
       packageIds: [123],
     };
     const result = taskListItemSchema.safeParse(item);
-    expect(result.success).toBe(true);
+    expectZodSuccess(result, 'TaskListItemSchema / packageIds: один id');
+
     if (result.success) {
       expect(result.data.packageIds).toHaveLength(1);
     }
