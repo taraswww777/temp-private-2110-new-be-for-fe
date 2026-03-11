@@ -14,19 +14,10 @@ export type FileStatusType = z.infer<typeof fileStatusSchema>;
  */
 export const taskFileSchema = z.object({
   id: zIdSchema,
+  fileNumber: z.number().int().min(1),
   fileName: z.string(),
-  fileSize: z
-    .number()
-    .int()
-    .min(0)
-    .describe('Размер файла в байтах (например, 10485760 = 10 MB)'),
-  fileType: z.string(),
-  status: fileStatusSchema,
+  fileSize: z.number().int().min(0).describe('Размер файла в байтах (например, 10485760 = 10 MB)'),
   downloadUrl: z.string().nullable(),
-  downloadUrlExpiresAt: z.iso.datetime().nullable(),
-  errorMessage: z.string().nullable(),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
 });
 
 export type TaskFile = z.infer<typeof taskFileSchema>;

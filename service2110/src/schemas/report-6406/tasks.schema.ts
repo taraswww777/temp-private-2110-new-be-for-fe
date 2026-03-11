@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { paginationQuerySchema, zIdSchema, } from '../common.schema.ts';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
-import { fileFormatSchema } from '../enums/FileFormatEnum';
+import { FileFormatEnum, fileFormatSchema } from '../enums/FileFormatEnum';
 import { sortOrderSchema } from '../enums/SortOrderEnum.ts';
 import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
 
@@ -122,13 +122,14 @@ export const taskDetailsSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchIdsList: z.array(zIdSchema).describe('Массив ИД филиалов'),
-  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода YYYY-MM-DD'),
-  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода YYYY-MM-DD'),
+  branchIdsList: z.array(zIdSchema).nonoptional().describe('Массив ИД филиалов'),
+  reportType: reportTypeSchema.nonoptional().describe('Тип отчёта'),
+  periodFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода YYYY-MM-DD'),
+  periodTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода YYYY-MM-DD'),
   account: z.array(z.string().length(20)).nullable().describe('Список счетов'),
   accountSecondOrderList: z.array(z.string().length(5)).describe('Счета второго порядка'),
   currencyCode: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
-  format: fileFormatSchema,
+  fileType: fileFormatSchema.nonoptional().default(FileFormatEnum.TXT),
   sourcesList: z.array(z.number().min(1)).nullable().describe('Ссылка на справочник или ИД источника данных'),
   status: taskStatusSchema.describe('Статус задания'),
   fileSize: z
@@ -147,7 +148,13 @@ export const taskDetailsSchema = z.object({
   s3FolderId: z.string().nullable().describe('ID папки в S3'),
   operationTypesList: z.string().nullable().describe('Код типа операции'),
   packageId: z.number().nullable().describe('Пакет, в которые входит задание'),
-});
+}).refine(
+  (data) => !!data.periodFrom || !!data.periodTo,
+  {
+    message: 'Должен быть указан хотя бы один из periodFrom или periodTo',
+    path: ['periodFrom', 'periodTo'],
+  },
+);
 
 export type TaskDetails = z.infer<typeof taskDetailsSchema>;
 
