@@ -903,6 +903,22 @@
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72"
       ]
+    },
+    {
+      "id": "TASK-072",
+      "title": "Унификации DTO и описаний схем БД для заданий отчёта 6406",
+      "status": "in-progress",
+      "priority": "critical",
+      "file": "TASK-072-dto-6406.md",
+      "createdDate": "2026-03-11T14:11:51.328Z",
+      "completedDate": null,
+      "branch": "feature/TASK-072",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72",
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14",
+        "2579ec4b-e9a4-4347-addc-6e9097e8b51d"
+      ],
+      "projectId": "2110-project-id"
     }
   ]
 }
