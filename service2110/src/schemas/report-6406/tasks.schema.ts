@@ -122,41 +122,31 @@ export const taskDetailsSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchId: zIdSchema.describe('ИД филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(zIdSchema).describe('Массив ИД филиалов'),
-  branchName: z.string().describe('Название филиала (название первого филиала)'),
-  branchNames: z.array(z.string()).describe('Массив названий филиалов'),
-  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
-  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
-  accountMask: z.string().nullable().describe('Маска счетов для фильтрации'),
-  accountSecondOrder: z.string().nullable().describe('Счета второго порядка'),
-  currency: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
+  branchIdsList: z.array(zIdSchema).describe('Массив ИД филиалов'),
+  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода YYYY-MM-DD'),
+  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода YYYY-MM-DD'),
+  account: z.array(z.string().length(20)).nullable().describe('Список счетов'),
+  accountSecondOrderList: z.array(z.string().length(5)).describe('Счета второго порядка'),
+  currencyCode: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
   format: fileFormatSchema,
-  reportType: reportTypeSchema.optional().describe('Тип отчёта'),
-  source: z.string().nullable().describe('Ссылка на справочник или ИД источника данных'),
+  sourcesList: z.array(z.number().min(1)).nullable().describe('Ссылка на справочник или ИД источника данных'),
   status: taskStatusSchema.describe('Статус задания'),
-  canCancel: z.boolean().describe('Возможность отмены задания'),
-  canDelete: z.boolean().describe('Возможность удаления задания'),
-  canStart: z.boolean().describe('Возможность запуска задания'),
   fileSize: z
     .number()
     .int()
     .min(0)
-    .describe('Размер файла в байтах. null — размер ещё не рассчитан.')
-    .nullable(),
+    .describe('Размер файла в мегабайтах. 0 — размер ещё не рассчитан.')
+    .default(0),
   filesCount: z
     .number()
     .int()
     .min(0)
-    .describe('Количество файлов в задании'),
-  lastStatusChangedAt: z.iso.datetime().describe('Дата и время последнего изменения статуса'),
-  startedAt: z.iso.datetime().nullable().describe('Дата и время начала обработки'),
-  completedAt: z.iso.datetime().nullable().describe('Дата и время завершения'),
-  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
+    .describe('Количество файлов в задании')
+    .default(0),
+  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления 2023-05-15 18:23:58'),
   s3FolderId: z.string().nullable().describe('ID папки в S3'),
-  type: z.string().nullable().describe('Тип задания'),
-  accounts: z.array(z.string()).describe('Список счетов'),
-  packages: z.array(taskPackageInfoSchema).describe('Пакеты, в которые входит задание'),
+  operationTypesList: z.string().nullable().describe('Код типа операции'),
+  packageId: z.number().nullable().describe('Пакет, в которые входит задание'),
 });
 
 export type TaskDetails = z.infer<typeof taskDetailsSchema>;

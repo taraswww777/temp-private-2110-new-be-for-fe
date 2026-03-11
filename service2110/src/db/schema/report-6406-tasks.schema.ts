@@ -41,8 +41,8 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
   createdBy: varchar('created_by', { length: 255 }),
 
   // Информация о филиале и периоде
-  branchId: idColumn('branch_id').references(() => branches.id),
-  branchName: varchar('branch_name', { length: 255 }).notNull(),
+  // branchId: idColumn('branch_id').references(() => branches.id),
+  // branchName: varchar('branch_name', { length: 255 }).notNull(),
   periodStart: date('period_start').notNull(),
   periodEnd: date('period_end').notNull(),
 
@@ -74,7 +74,7 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (table) => ({
   createdAtIdx: index('idx_report_6406_tasks_created_at').on(table.createdAt.desc()),
-  branchIdIdx: index('idx_report_6406_tasks_branch_id').on(table.branchId),
+  // branchIdIdx: index('idx_report_6406_tasks_branch_id').on(table.branchId),
   statusIdx: index('idx_report_6406_tasks_status').on(table.status),
   periodStartIdx: index('idx_report_6406_tasks_period_start').on(table.periodStart),
   createdByIdx: index('idx_report_6406_tasks_created_by').on(table.createdBy),
