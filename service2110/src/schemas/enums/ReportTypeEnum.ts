@@ -26,7 +26,8 @@ const ReportTypeDescriptions = {
   [ReportTypeEnum.KROS_VZS]: { value: ReportTypeEnum.KROS_VZS, description: 'KROS_VZS' },
   [ReportTypeEnum.KROS]: { value: ReportTypeEnum.KROS, description: 'KROS' },
 } as const;
-// Создаем схему через enum (который возвращает ZodEnum)
+/**  Создаем схему через enum (который возвращает ZodEnum)
+ * @deprecated */
 export const reportTypeSchema = z.enum(ReportTypeEnum).describe('Тип отчёта');
 
 // Добавляем метаданные через describe (некоторые генераторы поддерживают)

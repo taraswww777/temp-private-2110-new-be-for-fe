@@ -213,16 +213,15 @@ export const tasksListSortingSchema = z.object({
 export const tasksListFilterSchema = z.object({
   packageId: zIdSchema.optional().nullable().describe('ID пакета (null — задания без пакета)'),
   branchIds: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
-  branchName: z.string().optional().describe('Название филиала'),
-  status: taskStatusSchema.optional().describe('Статус задания'),
-  reportType: reportTypeSchema.optional().describe('Тип отчёта'),
-  format: fileFormatSchema.optional().describe('Формат файла'),
-  source: z.string().optional().describe('Источник данных'),
-  createdBy: z.string().optional().describe('ФИО создателя задания'),
-  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
-  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
-  createdAt: z.iso.datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
-  updatedAt: z.iso.datetime().optional().describe('Дата и время обновления (формат: ISO 8601)'),
+  statuses: z.array(taskStatusSchema).optional().describe('Статус задания'),
+  operationType: z.array(zIdSchema).optional().describe('Тип операции'),
+  format: z.array(fileFormatSchema).optional().describe('Формат файла'),
+  sourcesList: z.array(zIdSchema).optional().describe('Источник данных'),
+  createdBy: z.array(z.string()).optional().describe('ФИО создателя задания'),
+  periodFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
+  periodTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
+  createdAtFrom: z.iso.datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
+  createdAtTo: z.iso.datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
 }).optional();
 
 export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
