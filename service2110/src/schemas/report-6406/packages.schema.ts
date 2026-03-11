@@ -30,13 +30,14 @@ export const packageSchema = z.object({
   name: z.string().describe('Название пакета'),
   createdAt: z.iso.datetime().describe('Дата создания пакета'),
   createdBy: z.string().describe('Создатель пакета'),
-  lastCopiedToTfrAt: z.iso.datetime().nullable().describe('Дата последнего копирования в ТФР'),
-  tasksCount: z.number().int().min(0).describe('Количество заданий в пакете'),
+  lastCopiedToTfrAt: z.iso.datetime().nullable().describe('Дата последнего копирования в ТФР YYYY-MM-DD HH-MM-SS'),
+  tasksCount: z.number().int().min(0).describe('Количество заданий в пакете').default(0),
   totalSize: z
     .number()
     .int()
     .min(0)
-    .describe('Общий размер пакета в байтах (сумма размеров всех файлов). Всегда число; 0 при пустом пакете.'),
+    .describe('Общий размер пакета в мегабайтах (сумма размеров всех файлов). Всегда число; 0 при пустом пакете.')
+    .default(0),
   updatedAt: z.iso.datetime().describe('Дата последнего обновления'),
   status: packetStatusSchema.describe('Текущий статус пакета'),
 });
