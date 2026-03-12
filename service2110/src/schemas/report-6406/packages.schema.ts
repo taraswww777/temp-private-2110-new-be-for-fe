@@ -44,10 +44,16 @@ export const packageSchema = z.object({
 export type Package = z.infer<typeof packageSchema>;
 
 /**
+ * Допустимые колонки для сортировки пакетов
+ */
+export const packageSortBySchema = z.enum(['createdAt', 'name', 'tasksCount', 'totalSize']);
+export type PackageSortBy = z.infer<typeof packageSortBySchema>;
+
+/**
  * Схема для query параметров списка пакетов
  */
 export const packagesQuerySchema = paginationQuerySchema.extend({
-  sortBy: z.enum(['createdAt', 'name', 'tasksCount', 'totalSize']).default('createdAt'),
+  sortBy: packageSortBySchema.default('createdAt'),
   sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
   search: z.string().optional(),
 });

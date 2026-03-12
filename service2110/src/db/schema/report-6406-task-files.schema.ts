@@ -1,6 +1,8 @@
 import { pgTable, timestamp, varchar, bigint, text, index } from 'drizzle-orm/pg-core';
 import { report6406Tasks } from './report-6406-tasks.schema.ts';
 import { idColumn, idColumnPrimary } from './base.schema.ts';
+import { FileStatusEnum } from '../../schemas/enums/FileStatusEnum.ts';
+import { fileStatusPgEnum } from './enums.schema.ts';
 
 /**
  * Файлы отчётов формы 6406
@@ -21,7 +23,7 @@ export const report6406TaskFiles = pgTable('report_6406_task_files', {
   fileType: varchar('file_type', { length: 100 }).notNull(),
 
   // Статус конвертации файла
-  status: varchar('status', { length: 20 }).notNull().default('PENDING'),
+  status: fileStatusPgEnum('status').notNull().default(FileStatusEnum.PENDING),
 
   // URL файлов
   storageUrl: text('storage_url').notNull(),

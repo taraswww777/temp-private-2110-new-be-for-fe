@@ -1,15 +1,15 @@
-import { db } from '../../db/index.ts';
-import { report6406Tasks } from '../../db/schema/index.ts';
+import { db } from '../../db';
+import { report6406Tasks } from '../../db/schema';
 import { sql, ne } from 'drizzle-orm';
 import type { StorageVolumeItem } from '../../schemas/report-6406/storage.schema.ts';
-import { StorageCode } from '../../schemas/report-6406/storage.schema.ts';
+import { StorageCodeEnum } from '../../schemas/enums/StorageCodeEnum.ts';
 import { formatBytesFixed } from '../../utils/file-size-formatter.ts';
 import { env } from '../../config/env.ts';
-import { TaskStatus } from '../../types/status-model.ts';
+import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
 
 const DEFAULT_STORAGE_ID = 'default';
 const DEFAULT_STORAGE_NAME = 'Корзина 1';
-const DEFAULT_STORAGE_CODE: StorageCode = 'LOCAL';
+const DEFAULT_STORAGE_CODE = StorageCodeEnum.LOCAL;
 
 export class StorageService {
   /**
@@ -24,7 +24,7 @@ export class StorageService {
         usedBytes: sql<number>`COALESCE(SUM(${report6406Tasks.fileSize}), 0)::bigint`,
       })
       .from(report6406Tasks)
-      .where(ne(report6406Tasks.status, TaskStatus.DELETED));
+      .where(ne(report6406Tasks.status, TaskStatusEnum.DELETE));
 
     const usedBytes = Number(result.usedBytes) || 0;
     const freeBytes = totalBytes - usedBytes;
@@ -58,7 +58,7 @@ export class StorageService {
         usedBytes: sql<number>`COALESCE(SUM(${report6406Tasks.fileSize}), 0)::bigint`,
       })
       .from(report6406Tasks)
-      .where(ne(report6406Tasks.status, TaskStatus.DELETED));
+      .where(ne(report6406Tasks.status, TaskStatusEnum.DELETE));
 
     const usedBytes = Number(result.usedBytes) || 0;
     return Math.max(0, totalBytes - usedBytes);

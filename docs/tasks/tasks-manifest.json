@@ -864,11 +864,11 @@
     {
       "id": "TASK-070",
       "title": "Исправление enum в Swagger",
-      "status": "in-progress",
+      "status": "completed",
       "priority": "critical",
       "file": "TASK-070-enum-swagger.md",
       "createdDate": "2026-02-28T08:37:59.622Z",
-      "completedDate": null,
+      "completedDate": "2026-03-12T16:58:48.034Z",
       "branch": "feature/TASK-070-fix-swagger-file",
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72",
@@ -887,7 +887,7 @@
       "branch": "feature/TASK-071-swagger-local-cache-and-manifest",
       "projectId": "2110-project-id",
       "tagIds": [
-        "f15ee308-9732-448c-a102-a3a5bf631e72"
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
       ]
     }
   ]

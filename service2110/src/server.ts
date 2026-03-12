@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { buildApp } from './app.ts';
+import { buildApp } from './app';
 import { env } from './config/env.ts';
-import { client } from './db/index.ts';
+import { client } from './db';
 
 async function start() {
   let app;

@@ -37,12 +37,18 @@ export const exportFiltersSchema = z.object({
 export type ExportFilters = z.infer<typeof exportFiltersSchema>;
 
 /**
+ * Допустимые колонки для сортировки экспорта
+ */
+export const exportSortBySchema = z.enum(['createdAt', 'branchId', 'status', 'periodStart', 'updatedAt']);
+export type ExportSortBy = z.infer<typeof exportSortBySchema>;
+
+/**
  * Схема для запроса экспорта (с дополнительными опциями)
  */
 export const exportTasksRequestSchema = z.object({
   filters: exportFiltersSchema,
   columns: z.array(z.string()).optional().describe('Список колонок для включения в экспорт'),
-  sortBy: z.enum(['createdAt', 'branchId', 'status', 'periodStart', 'updatedAt']).default('createdAt').describe('Поле для сортировки'),
+  sortBy: exportSortBySchema.default('createdAt').describe('Поле для сортировки'),
   sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
 });
 
@@ -53,7 +59,7 @@ export type ExportTasksRequest = z.infer<typeof exportTasksRequestSchema>;
  */
 export const exportTasksResponseSchema = z.object({
   exportId:zIdSchema.describe('ИД экспорта'),
-  status: z.literal('COMPLETED').describe('Статус экспорта'),
+  status: taskStatusSchema.describe('Статус экспорта'),
   fileUrl: z.string().describe('URL для скачивания файла'),
   fileSize: z
     .number()

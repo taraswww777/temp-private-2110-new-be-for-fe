@@ -1,11 +1,9 @@
-import { db } from '../../db/index.ts';
-import { report6406TaskStatusHistory, report6406Tasks } from '../../db/schema/index.ts';
+import { db } from '../../db';
+import { report6406TaskStatusHistory, report6406Tasks } from '../../db/schema';
 import { eq, desc } from 'drizzle-orm';
 import type {
   StatusHistoryResponse,
 } from '../../schemas/report-6406/task-status-history.schema.ts';
-import type { TaskStatus } from '../../types/status-model.ts';
-import { taskStatusToApiStatus } from '../../types/status-mapping.ts';
 import { ID } from '../../schemas/common.schema.ts';
 
 export class TaskStatusHistoryService {
@@ -33,8 +31,8 @@ export class TaskStatusHistoryService {
 
     return history.map(item => ({
       id: item.id,
-      status: taskStatusToApiStatus(item.status as TaskStatus),
-      previousStatus: item.previousStatus != null ? taskStatusToApiStatus(item.previousStatus as TaskStatus) : null,
+      status: item.status,
+      previousStatus: item.previousStatus,
       changedAt: item.changedAt.toISOString(),
       changedBy: item.changedBy,
       comment: item.comment,

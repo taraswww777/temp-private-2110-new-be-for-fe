@@ -43,6 +43,7 @@ Desktop.ini
 
 # Временные файлы
 *.log
+*.log.md
 *.tmp
 *.temp
 *.swp

@@ -6,10 +6,10 @@ import type {
   TaskFilesResponse,
   RetryFileConversionResponse,
 } from '../../schemas/report-6406/task-files.schema.ts';
-import { FileStatus } from '../../types/status-model.ts';
 import { generateMockPresignedUrl } from '../../utils/presigned-url-generator.ts';
 import { ID } from '../../schemas/common.schema.ts';
 import { TaskFile } from '../../schemas/report-6406/task-files.schema.ts';
+import { FileStatusEnum } from '../../schemas/enums/FileStatusEnum.ts';
 
 export class TaskFilesService {
   /**
@@ -67,7 +67,7 @@ export class TaskFilesService {
       let downloadUrlExpiresAt: string | null = null;
 
       // Генерируем pre-signed URL только для завершённых файлов
-      if (file.status === FileStatus.COMPLETED) {
+      if (file.status === FileStatusEnum.COMPLETED) {
         const presigned = generateMockPresignedUrl(file.id, file.fileName);
         downloadUrl = presigned.url;
         downloadUrlExpiresAt = presigned.expiresAt.toISOString();
@@ -78,7 +78,7 @@ export class TaskFilesService {
         fileName: file.fileName,
         fileSize: file.fileSize,
         fileType: file.fileType,
-        status: file.status as FileStatus,
+        status: file.status as FileStatusEnum,
         downloadUrl,
         downloadUrlExpiresAt,
         errorMessage: file.errorMessage,
@@ -135,7 +135,7 @@ export class TaskFilesService {
     }
 
     // Проверяем что файл в статусе FAILED
-    if (file.status !== FileStatus.FAILED) {
+    if (file.status !== FileStatusEnum.FAILED) {
       throw new Error(`File must be in FAILED status to retry. Current status: ${file.status}`);
     }
 
@@ -153,7 +153,7 @@ export class TaskFilesService {
         fileName: 'report_part_1.txt',
         fileSize: 10485760, // 10MB
         fileType: 'text/plain',
-        status: FileStatus.COMPLETED,
+        status: FileStatusEnum.COMPLETED,
         storageUrl: `s3://mock-reports-bucket/reports/${taskId}/report_part_1.txt`,
       },
       {
@@ -161,7 +161,7 @@ export class TaskFilesService {
         fileName: 'report_part_2.txt',
         fileSize: 12582912, // 12MB
         fileType: 'text/plain',
-        status: FileStatus.COMPLETED,
+        status: FileStatusEnum.COMPLETED,
         storageUrl: `s3://mock-reports-bucket/reports/${taskId}/report_part_2.txt`,
       },
       {
@@ -169,7 +169,7 @@ export class TaskFilesService {
         fileName: 'report_summary.txt',
         fileSize: 1048576, // 1MB
         fileType: 'text/plain',
-        status: FileStatus.COMPLETED,
+        status: FileStatusEnum.COMPLETED,
         storageUrl: `s3://mock-reports-bucket/reports/${taskId}/report_summary.txt`,
       },
     ];

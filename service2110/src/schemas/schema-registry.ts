@@ -1,12 +1,17 @@
 /**
- * Реестр Zod схем для создания ссылок в OpenAPI
+ * Реестр Zod-схем для автоматической генерации $ref в OpenAPI.
+ *
+ * Используется fastify-type-provider-zod: зарегистрированные здесь схемы
+ * автоматически попадают в components.schemas и заменяются на $ref-ссылки
+ * в описаниях роутов.
  */
+
+import { z } from 'zod';
 
 import {
   paginationQuerySchema,
   paginationMetadataSchema,
   paginatedResponseSchema,
-  sortingRequestSchema,
   filterSchema,
   dateSchema,
   dateTimeSchema,
@@ -46,7 +51,6 @@ import {
   bulkRemoveTasksResponseSchema,
   copyToTfrResponseSchema,
 } from './report-6406/packages.schema.ts';
-import { packetStatusSchema } from './enums/PackageStatusEnum.ts';
 import {
   exportTasksRequestSchema,
   exportTasksResponseSchema,
@@ -59,106 +63,90 @@ import {
   packageStatusHistoryItemSchema,
   packageStatusHistoryResponseSchema,
 } from './report-6406/package-status-history.schema.ts';
-import { storageCodeSchema, storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.ts';
+import {
+  storageVolumeItemSchema,
+  storageVolumeListResponseSchema,
+} from './report-6406/storage.schema.ts';
 import {
   taskFileSchema,
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
 } from './report-6406/task-files.schema.ts';
-import { reportFormTypeSchema } from './enums/ReportFormTypeEnum';
-import { SortOrderEnum, sortOrderSchema } from './enums/SortOrderEnum';
-import { fileFormatSchema } from './enums/FileFormatEnum';
+import { sortOrderSchema } from './enums/SortOrderEnum';
 import { currencySchema } from './enums/CurrencyEnum';
+import { fileFormatSchema } from './enums/FileFormatEnum';
+import { reportTypeSchema } from './enums/ReportTypeEnum.ts';
 import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
+import { packetStatusSchema } from './enums/PackageStatusEnum.ts';
+import { fileStatusZodSchema } from './enums/FileStatusEnum.ts';
+import { storageCodeZodSchema } from './enums/StorageCodeEnum.ts';
 
-/**
- * Маппинг имён схем на Zod схемы
- */
-export const schemaRegistry = new Map<string, unknown>([
-  // enums
-  ['SortOrderEnum', sortOrderSchema],
-  ['ReportFormTypeEnum', reportFormTypeSchema],
+export const openApiRegistry = z.registry<{ id: string }>();
 
-  // Общие схемы
-  ['PaginationRequestDto', paginationQuerySchema],
-  ['PaginationMetadataDto', paginationMetadataSchema],
-  ['PaginatedResponseDto', paginatedResponseSchema],
-  ['SortingRequestDto', sortingRequestSchema],
-  ['FilterDto', filterSchema],
-  ['DateSchema', dateSchema],
-  ['DateTimeSchema', dateTimeSchema],
-  ['FileFormatEnumSchema', fileFormatSchema],
-  ['TaskStatusEnumSchema', taskStatusSchema],
-  ['CurrencyEnumSchema', currencySchema],
-  ['StorageCodeEnumSchema', storageCodeSchema],
-  ['HealthResponseDto', healthResponseSchema],
-  ['HttpErrorWithInstanceDto', httpErrorWithInstanceSchema],
+// Enums
+openApiRegistry.add(sortOrderSchema, { id: 'SortOrderEnum' });
+openApiRegistry.add(currencySchema, { id: 'CurrencyEnum' });
+openApiRegistry.add(fileFormatSchema, { id: 'FileFormatEnum' });
+openApiRegistry.add(reportTypeSchema, { id: 'ReportTypeEnum' });
+openApiRegistry.add(taskStatusSchema, { id: 'TaskStatusEnum' });
+openApiRegistry.add(packetStatusSchema, { id: 'PacketStatusEnum' });
+openApiRegistry.add(fileStatusZodSchema, { id: 'FileStatusEnum' });
+openApiRegistry.add(storageCodeZodSchema, { id: 'StorageCodeEnum' });
 
-  // Справочники
-  ['BranchDto', branchSchema],
-  ['CurrencyDto', currencyReferenceSchema],
-  ['FormatDto', formatReferenceSchema],
-  ['SourceDto', sourceSchema],
-  ['BranchesResponseDto', branchesResponseSchema],
-  ['CurrenciesResponseDto', currenciesResponseSchema],
-  ['FormatsResponseDto', formatsResponseSchema],
-  ['SourcesResponseDto', sourcesResponseSchema],
+// Общие схемы
+openApiRegistry.add(paginationQuerySchema, { id: 'PaginationRequestDto' });
+openApiRegistry.add(paginationMetadataSchema, { id: 'PaginationMetadataDto' });
+openApiRegistry.add(paginatedResponseSchema, { id: 'PaginatedResponseDto' });
+openApiRegistry.add(filterSchema, { id: 'FilterDto' });
+openApiRegistry.add(dateSchema, { id: 'DateSchema' });
+openApiRegistry.add(dateTimeSchema, { id: 'DateTimeSchema' });
+openApiRegistry.add(healthResponseSchema, { id: 'HealthResponseDto' });
+openApiRegistry.add(httpErrorWithInstanceSchema, { id: 'HttpErrorWithInstanceDto' });
 
-  // Задания
-  ['CreateTaskDto', createTaskSchema],
-  ['TaskDto', taskSchema],
-  ['TaskListItemDto', taskListItemSchema],
-  ['GetTasksRequestDto', getTasksRequestSchema],
-  ['TasksListResponseDto', tasksListResponseSchema],
-  ['TaskDetailDto', taskDetailSchema],
-  ['TaskDetailsDto', taskDetailsSchema],
-  ['BulkDeleteTasksResponseDto', bulkDeleteResponseSchema],
-  ['BulkCancelTasksResponseDto', bulkCancelResponseSchema],
-  ['StartTasksResponseDto', startTasksResponseSchema],
-  ['StatusHistoryItemDto', statusHistoryItemSchema],
-  ['StatusHistoryResponseDto', statusHistoryResponseSchema],
-  ['TaskFileDto', taskFileSchema],
-  ['TaskFilesResponseDto', taskFilesResponseSchema],
-  ['RetryFileConversionResponseDto', retryFileConversionResponseSchema],
+// Справочники
+openApiRegistry.add(branchSchema, { id: 'BranchDto' });
+openApiRegistry.add(currencyReferenceSchema, { id: 'CurrencyDto' });
+openApiRegistry.add(formatReferenceSchema, { id: 'FormatDto' });
+openApiRegistry.add(sourceSchema, { id: 'SourceDto' });
+openApiRegistry.add(branchesResponseSchema, { id: 'BranchesResponseDto' });
+openApiRegistry.add(currenciesResponseSchema, { id: 'CurrenciesResponseDto' });
+openApiRegistry.add(formatsResponseSchema, { id: 'FormatsResponseDto' });
+openApiRegistry.add(sourcesResponseSchema, { id: 'SourcesResponseDto' });
 
-  // Пакеты
-  ['CreatePackageDto', createPackageSchema],
-  ['UpdatePackageDto', updatePackageSchema],
-  ['PackageDto', packageSchema],
-  ['PackagesListResponseDto', packagesListResponseSchema],
-  ['PacketStatusEnumSchema', packetStatusSchema],
-  ['BulkDeletePackagesResponseDto', bulkDeletePackagesResponseSchema],
-  ['UpdatePackageResponseDto', updatePackageResponseSchema],
-  ['AddTasksToPackageResponseDto', addTasksToPackageResponseSchema],
-  ['BulkRemoveTasksResponseDto', bulkRemoveTasksResponseSchema],
-  ['CopyToTfrResponseDto', copyToTfrResponseSchema],
-  ['PackageStatusHistoryItemDto', packageStatusHistoryItemSchema],
-  ['PackageStatusHistoryResponseDto', packageStatusHistoryResponseSchema],
+// Задания
+openApiRegistry.add(createTaskSchema, { id: 'CreateTaskDto' });
+openApiRegistry.add(taskSchema, { id: 'TaskDto' });
+openApiRegistry.add(taskListItemSchema, { id: 'TaskListItemDto' });
+openApiRegistry.add(getTasksRequestSchema, { id: 'GetTasksRequestDto' });
+openApiRegistry.add(tasksListResponseSchema, { id: 'TasksListResponseDto' });
+openApiRegistry.add(taskDetailSchema, { id: 'TaskDetailDto' });
+openApiRegistry.add(taskDetailsSchema, { id: 'TaskDetailsDto' });
+openApiRegistry.add(bulkDeleteResponseSchema, { id: 'BulkDeleteTasksResponseDto' });
+openApiRegistry.add(bulkCancelResponseSchema, { id: 'BulkCancelTasksResponseDto' });
+openApiRegistry.add(startTasksResponseSchema, { id: 'StartTasksResponseDto' });
+openApiRegistry.add(statusHistoryItemSchema, { id: 'StatusHistoryItemDto' });
+openApiRegistry.add(statusHistoryResponseSchema, { id: 'StatusHistoryResponseDto' });
+openApiRegistry.add(taskFileSchema, { id: 'TaskFileDto' });
+openApiRegistry.add(taskFilesResponseSchema, { id: 'TaskFilesResponseDto' });
+openApiRegistry.add(retryFileConversionResponseSchema, { id: 'RetryFileConversionResponseDto' });
 
-  // Экспорт
-  ['ExportTasksRequestDto', exportTasksRequestSchema],
-  ['ExportTasksResponseDto', exportTasksResponseSchema],
+// Пакеты
+openApiRegistry.add(createPackageSchema, { id: 'CreatePackageDto' });
+openApiRegistry.add(updatePackageSchema, { id: 'UpdatePackageDto' });
+openApiRegistry.add(packageSchema, { id: 'PackageDto' });
+openApiRegistry.add(packagesListResponseSchema, { id: 'PackagesListResponseDto' });
+openApiRegistry.add(bulkDeletePackagesResponseSchema, { id: 'BulkDeletePackagesResponseDto' });
+openApiRegistry.add(updatePackageResponseSchema, { id: 'UpdatePackageResponseDto' });
+openApiRegistry.add(addTasksToPackageResponseSchema, { id: 'AddTasksToPackageResponseDto' });
+openApiRegistry.add(bulkRemoveTasksResponseSchema, { id: 'BulkRemoveTasksResponseDto' });
+openApiRegistry.add(copyToTfrResponseSchema, { id: 'CopyToTfrResponseDto' });
+openApiRegistry.add(packageStatusHistoryItemSchema, { id: 'PackageStatusHistoryItemDto' });
+openApiRegistry.add(packageStatusHistoryResponseSchema, { id: 'PackageStatusHistoryResponseDto' });
 
-  // Storage
-  ['StorageVolumeItemDto', storageVolumeItemSchema],
-  ['StorageVolumeListResponseDto', storageVolumeListResponseSchema],
-]);
+// Экспорт
+openApiRegistry.add(exportTasksRequestSchema, { id: 'ExportTasksRequestDto' });
+openApiRegistry.add(exportTasksResponseSchema, { id: 'ExportTasksResponseDto' });
 
-/**
- * Обратный маппинг - поиск имени по схеме
- */
-export function getSchemaName(schema: unknown): string | null {
-  for (const [name, registeredSchema] of schemaRegistry.entries()) {
-    if (registeredSchema === schema) {
-      return name;
-    }
-  }
-  return null;
-}
-
-/**
- * Проверка, зарегистрирована ли схема
- */
-export function isRegisteredSchema(schema: unknown): boolean {
-  return getSchemaName(schema) !== null;
-}
+// Storage
+openApiRegistry.add(storageVolumeItemSchema, { id: 'StorageVolumeItemDto' });
+openApiRegistry.add(storageVolumeListResponseSchema, { id: 'StorageVolumeListResponseDto' });
