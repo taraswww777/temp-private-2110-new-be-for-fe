@@ -106,19 +106,9 @@ export const taskSchema = z.object({
 export type Task = z.infer<typeof taskSchema>;
 
 /**
- * Схема для детального задания (с пакетами)
- */
-export const taskDetailSchema = taskSchema.extend({
-  packages: z.array(taskPackageInfoSchema),
-});
-
-export type TaskDetail = z.infer<typeof taskDetailSchema>;
-
-/**
  * Единая схема для детальной информации о задании (POST 201 и GET /{id} 200).
- * Без лишних полей errorMessage, fileUrl. С полями s3FolderId, type, accounts для UI.
  */
-export const taskDetailsSchema = z.object({
+export const taskDetailSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
@@ -147,7 +137,7 @@ export const taskDetailsSchema = z.object({
   updatedAt: z.iso.datetime().describe('Дата и время последнего обновления 2023-05-15 18:23:58'),
   s3FolderId: z.string().nullable().describe('ID папки в S3'),
   operationTypesList: z.string().nullable().describe('Код типа операции'),
-  packageId: z.number().nullable().describe('Пакет, в которые входит задание'),
+  packageId: zIdSchema.nullable().describe('Пакет, в которые входит задание'),
 }).refine(
   (data) => !!data.periodFrom || !!data.periodTo,
   {
@@ -156,7 +146,7 @@ export const taskDetailsSchema = z.object({
   },
 );
 
-export type TaskDetails = z.infer<typeof taskDetailsSchema>;
+export type TaskDetails = z.infer<typeof taskDetailSchema>;
 
 /**
  * Схема для элемента списка заданий (TaskListItemDto)

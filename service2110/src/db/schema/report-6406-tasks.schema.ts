@@ -27,13 +27,8 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
   format: fileFormatPgEnum('format').notNull(),
   reportType: reportTypePgEnum('report_type').notNull(),
   source: varchar('source', { length: 20 }),
-
   // Статус задания (локальная статусная модель task_*)
-  status: taskStatusPgEnum('status')
-    .$type<TaskStatusEnum>()          // тип поля в TS – TaskStatusEnum
-    .notNull()
-    .default(TaskStatusEnum.CREATE),
-
+  status: taskStatusPgEnum('status').$type<TaskStatusEnum>().notNull(),
   // Информация о результате
   /**
    * Размер файла в байтах.

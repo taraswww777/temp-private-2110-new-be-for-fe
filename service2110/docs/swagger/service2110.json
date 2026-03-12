@@ -1361,240 +1361,6 @@
             "type": "string",
             "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
           },
-          "branchId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД филиала (устаревшее поле, используйте branchIds)"
-          },
-          "branchIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            },
-            "description": "Массив ИД филиалов"
-          },
-          "branchName": {
-            "type": "string",
-            "description": "Название филиала (название первого филиала)"
-          },
-          "branchNames": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Массив названий филиалов"
-          },
-          "periodStart": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "periodEnd": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "accountMask": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Маска счетов для фильтрации"
-          },
-          "accountSecondOrder": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Счета второго порядка"
-          },
-          "currency": {
-            "$ref": "#/components/schemas/CurrencyEnum"
-          },
-          "format": {
-            "$ref": "#/components/schemas/FileFormatEnum"
-          },
-          "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnum"
-          },
-          "source": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Ссылка на справочник или ИД источника данных"
-          },
-          "status": {
-            "$ref": "#/components/schemas/TaskStatusEnum"
-          },
-          "canCancel": {
-            "type": "boolean",
-            "description": "Возможность отмены задания"
-          },
-          "canDelete": {
-            "type": "boolean",
-            "description": "Возможность удаления задания"
-          },
-          "canStart": {
-            "type": "boolean",
-            "description": "Возможность запуска задания"
-          },
-          "fileSize": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 9007199254740991,
-                "description": "Размер файла в байтах. null — размер ещё не рассчитан (задание не завершено)."
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "filesCount": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество файлов в задании"
-          },
-          "fileUrl": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "URL для скачивания файла"
-          },
-          "errorMessage": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Сообщение об ошибке"
-          },
-          "lastStatusChangedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "startedAt": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeSchema"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Дата и время начала обработки"
-          },
-          "completedAt": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeSchema"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Дата и время завершения"
-          },
-          "updatedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "packages": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "Integer ID"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "addedAt": {
-                  "$ref": "#/components/schemas/DateTimeSchema"
-                }
-              },
-              "required": [
-                "id",
-                "name",
-                "addedAt"
-              ],
-              "additionalProperties": false
-            }
-          }
-        },
-        "required": [
-          "id",
-          "createdAt",
-          "createdBy",
-          "branchId",
-          "branchIds",
-          "branchName",
-          "branchNames",
-          "periodStart",
-          "periodEnd",
-          "accountMask",
-          "accountSecondOrder",
-          "currency",
-          "format",
-          "source",
-          "status",
-          "canCancel",
-          "canDelete",
-          "canStart",
-          "fileSize",
-          "filesCount",
-          "fileUrl",
-          "errorMessage",
-          "lastStatusChangedAt",
-          "startedAt",
-          "completedAt",
-          "updatedAt",
-          "packages"
-        ],
-        "additionalProperties": false,
-        "title": "TaskDetailDto"
-      },
-      "TaskDetailsDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД задания"
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "createdBy": {
-            "type": "string",
-            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
-          },
           "branchIdsList": {
             "description": "Массив ИД филиалов",
             "type": "array",
@@ -1705,7 +1471,10 @@
           "packageId": {
             "anyOf": [
               {
-                "type": "number"
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991,
+                "description": "Integer ID"
               },
               {
                 "type": "null"
@@ -1736,7 +1505,7 @@
           "packageId"
         ],
         "additionalProperties": false,
-        "title": "TaskDetailsDto"
+        "title": "TaskDetailDto"
       },
       "BulkDeleteTasksResponseDto": {
         "type": "object",
@@ -2886,7 +2655,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TaskDetailsDto"
+                  "$ref": "#/components/schemas/TaskDetailDto"
                 }
               }
             }
@@ -2994,7 +2763,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TaskDetailsDto"
+                  "$ref": "#/components/schemas/TaskDetailDto"
                 }
               }
             }

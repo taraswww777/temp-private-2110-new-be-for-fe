@@ -25,7 +25,6 @@ import {
   getTasksRequestSchema,
   tasksListResponseSchema,
   taskDetailSchema,
-  taskDetailsSchema,
   bulkDeleteResponseSchema,
   bulkCancelResponseSchema,
   startTasksResponseSchema,
@@ -120,7 +119,6 @@ openApiRegistry.add(taskListItemSchema, { id: 'TaskListItemDto' });
 openApiRegistry.add(getTasksRequestSchema, { id: 'GetTasksRequestDto' });
 openApiRegistry.add(tasksListResponseSchema, { id: 'TasksListResponseDto' });
 openApiRegistry.add(taskDetailSchema, { id: 'TaskDetailDto' });
-openApiRegistry.add(taskDetailsSchema, { id: 'TaskDetailsDto' });
 openApiRegistry.add(bulkDeleteResponseSchema, { id: 'BulkDeleteTasksResponseDto' });
 openApiRegistry.add(bulkCancelResponseSchema, { id: 'BulkCancelTasksResponseDto' });
 openApiRegistry.add(startTasksResponseSchema, { id: 'StartTasksResponseDto' });
