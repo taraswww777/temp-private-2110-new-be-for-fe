@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paginationQuerySchema, zIdSchema, } from '../common.schema.ts';
+import { dateSchema, paginationQuerySchema, zIdSchema, } from '../common.schema.ts';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
 import { FileFormatEnum, fileFormatSchema } from '../enums/FileFormatEnum';
@@ -8,6 +8,24 @@ import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
 
 export type CurrencyType = z.infer<typeof currencySchema>;
 export type FileFormatType = z.infer<typeof fileFormatSchema>;
+
+/**
+ * Базовая схема задания — все поля, общие для detail, list и create.
+ */
+export const baseTaskSchema = z.object({
+  id: zIdSchema.describe('ИД задания'),
+  createdAt: z.iso.datetime().describe('Дата и время создания'),
+  createdBy: z.string().describe('ФИО сотрудника, создавшего задание'),
+  branchIdsList: z.array(zIdSchema).min(1).describe('Массив ИД филиалов'),
+  reportType: reportTypeSchema.describe('Тип отчёта'),
+  periodFrom: dateSchema.describe('Дата начала отчётного периода YYYY-MM-DD'),
+  periodTo: dateSchema.describe('Дата окончания отчётного периода YYYY-MM-DD'),
+  currencyCode: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
+  fileType: fileFormatSchema.describe('Формат файла'),
+  status: taskStatusSchema.describe('Статус задания'),
+  fileSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан'),
+  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
+});
 
 /**
  * Схема для создания задания
