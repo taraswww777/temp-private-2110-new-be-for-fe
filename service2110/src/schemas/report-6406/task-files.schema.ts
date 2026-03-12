@@ -27,10 +27,16 @@ export const taskFileSchema = z.object({
 export type TaskFile = z.infer<typeof taskFileSchema>;
 
 /**
+ * Допустимые колонки для сортировки файлов задания
+ */
+export const taskFileSortBySchema = z.enum(['status', 'fileName', 'fileSize', 'createdAt']);
+export type TaskFileSortBy = z.infer<typeof taskFileSortBySchema>;
+
+/**
  * Схема для query параметров списка файлов
  */
 export const taskFilesQuerySchema = paginationQuerySchema.extend({
-  sortBy: z.enum(['status', 'fileName', 'fileSize', 'createdAt']).default('status'),
+  sortBy: taskFileSortBySchema.default('status'),
   sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
   status: z.array(fileStatusZodSchema).optional(),
 });

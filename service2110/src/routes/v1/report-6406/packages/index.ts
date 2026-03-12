@@ -4,6 +4,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { packagesService } from '../../../../services/report-6406/packages.service.ts';
 import { packageStatusHistoryRoutes } from './status-history';
+import { z } from 'zod';
 import {
   createPackageSchema,
   updatePackageSchema,
@@ -20,6 +21,15 @@ import {
   copyToTfrResponseSchema,
 } from '../../../../schemas/report-6406/packages.schema';
 import { idParamSchema } from '../../../../schemas/common.schema';
+
+const duplicatePackageErrorSchema = z.object({
+  error: z.string(),
+  message: z.string(),
+  details: z.object({
+    name: z.string(),
+    existingPacketId: z.string(),
+  }).optional(),
+});
 
 export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -38,20 +48,7 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
       body: createPackageSchema,
       response: {
         201: packageSchema,
-        400: {
-          type: 'object',
-          properties: {
-            error: { type: 'string' },
-            message: { type: 'string' },
-            details: {
-              type: 'object',
-              properties: {
-                name: { type: 'string' },
-                existingPacketId: { type: 'string' }
-              }
-            }
-          }
-        }
+        400: duplicatePackageErrorSchema,
       },
     },
   }, async (request, reply) => {
@@ -130,20 +127,7 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
       body: updatePackageSchema,
       response: {
         200: updatePackageResponseSchema,
-        400: {
-          type: 'object',
-          properties: {
-            error: { type: 'string' },
-            message: { type: 'string' },
-            details: {
-              type: 'object',
-              properties: {
-                name: { type: 'string' },
-                existingPacketId: { type: 'string' }
-              }
-            }
-          }
-        }
+        400: duplicatePackageErrorSchema,
       },
     },
   }, async (request, reply) => {

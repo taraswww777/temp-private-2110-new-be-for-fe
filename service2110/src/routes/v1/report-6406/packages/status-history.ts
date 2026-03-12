@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { packagesService } from '../../../../services/report-6406/packages.service';
-import { idParamSchema } from '../../../../schemas/common.schema';
+import { idParamSchema, httpErrorWithInstanceSchema } from '../../../../schemas/common.schema';
 import { packageStatusHistoryResponseSchema } from '../../../../schemas/report-6406/package-status-history.schema';
 
 export const packageStatusHistoryRoutes: FastifyPluginAsync = async (fastify) => {
@@ -18,16 +18,7 @@ export const packageStatusHistoryRoutes: FastifyPluginAsync = async (fastify) =>
       params: idParamSchema,
       response: {
         200: packageStatusHistoryResponseSchema,
-        404: {
-          type: 'object',
-          properties: {
-            type: { type: 'string' },
-            title: { type: 'string' },
-            status: { type: 'number' },
-            detail: { type: 'string' },
-            instance: { type: 'string' }
-          }
-        }
+        404: httpErrorWithInstanceSchema,
       },
     },
   }, async (request, reply) => {
