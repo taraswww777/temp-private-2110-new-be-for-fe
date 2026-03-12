@@ -25,6 +25,9 @@ export const baseTaskSchema = z.object({
   status: taskStatusSchema.describe('Статус задания'),
   fileSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан'),
   updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
+  sourcesList: z.array(zIdSchema).nullable().describe('Источники данных'),
+  filesCount: z.number().int().min(0).describe('Количество файлов').default(0),
+  packageId: zIdSchema.nullable().describe('Пакет, в который входит задание'),
 });
 
 /**
