@@ -218,7 +218,7 @@ export const registerFastifySwagger = async (app:  CustomFastifyInstance) => {
           const componentNames = Object.keys(componentsRecord);
 
           const simpleTypes = ['DateSchema', 'DateTimeSchema', 'UuidSchema'];
-          const enumTypes = ['FileFormatEnumSchema', 'ReportFormTypeEnum', 'TaskStatusEnumSchema', 'CurrencyEnumSchema', 'SortOrderEnumSchema'];
+          const enumTypes = ['FileFormatEnumSchema', 'TaskStatusEnumSchema', 'CurrencyEnumSchema', 'SortOrderEnumSchema'];
           const objectTypes = componentNames.filter(name => !simpleTypes.includes(name) && !enumTypes.includes(name));
 
           for (const name of [...simpleTypes, ...enumTypes]) {
@@ -475,8 +475,10 @@ export const registerFastifySwagger = async (app:  CustomFastifyInstance) => {
       // Преобразуем response
       if (schema.response) {
         transformed.response = {};
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        for (const [statusCode, responseSchema] of Object.entries(schema.response as Record<string, any>)) {
+        for (const [statusCode, responseSchema] of Object.entries(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          schema.response as Record<string, any>,
+        )) {
           if (isZodSchema(responseSchema)) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (transformed.response as any)[statusCode] = convertSchema(responseSchema);
@@ -503,8 +505,10 @@ export const registerFastifySwagger = async (app:  CustomFastifyInstance) => {
           '503': 'Service Unavailable',
         };
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        for (const statusCode of Object.keys(transformed.response as Record<string, any>)) {
+        for (const statusCode of Object.keys(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          transformed.response as Record<string, any>,
+        )) {
           if (statusDescriptions[statusCode]) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (transformed.response as any)[statusCode] = {

@@ -1,6 +1,8 @@
 import { pgTable, timestamp, varchar, text, jsonb, index } from 'drizzle-orm/pg-core';
 import { report6406Tasks } from './report-6406-tasks.schema.ts';
 import { idColumn, idColumnPrimary } from './base.schema.ts';
+import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
+import { taskStatusPgEnum } from './enums.schema.ts';
 
 /**
  * История изменений статусов заданий отчётов формы 6406
@@ -12,7 +14,8 @@ export const report6406TaskStatusHistory = pgTable('report_6406_task_status_hist
   taskId: idColumn('task_id').references(() => report6406Tasks.id, { onDelete: 'cascade' }),
 
   // Информация о статусах
-  status: varchar('status', { length: 30 }).notNull(),
+  status: taskStatusPgEnum('status').$type<TaskStatusEnum>().notNull(),
+
   previousStatus: varchar('previous_status', { length: 30 }),
 
   // Информация об изменении

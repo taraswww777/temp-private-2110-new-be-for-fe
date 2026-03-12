@@ -1,20 +1,8 @@
-import { pgTable, timestamp, varchar, integer, index, pgEnum } from 'drizzle-orm/pg-core';
+import { index, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { idColumn, idColumnPrimary } from './base.schema.ts';
 import { report6406Packages } from './report-6406-packages.schema.ts';
-import { PackageStatusEnum } from '../../schemas/enums/PackageStatusEnum.ts';
+import { packetStatusPgEnum } from './enums.schema.ts';
 
-
-/**
- * PostgreSQL enum для статусов пакета
- */
-export const packetStatusPgEnum = pgEnum('packet_status_enum', [
-  PackageStatusEnum.CREATE,
-  PackageStatusEnum.TRANSFER,
-  PackageStatusEnum.DONE,
-  PackageStatusEnum.FAIL,
-  PackageStatusEnum.CANCEL,
-  PackageStatusEnum.DELETE
-]);
 
 /**
  * История изменений статусов пакетов отчётов формы 6406

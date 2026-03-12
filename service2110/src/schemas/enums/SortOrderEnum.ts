@@ -2,33 +2,44 @@ import { z } from 'zod';
 import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
 
 /**
- * Направление сортировки (enum ASC/DESC)
+ * Направление сортировки.
+ *
+ * - ASC — по возрастанию (от А до Я, от старых к новым);
+ * - DESC — по убыванию (от Я до А, от новых к старым).
  */
 export enum SortOrderEnum {
-  /** Сортировка от А до Я */
+  /** Сортировка по возрастанию. */
   ASC = 'ASC',
-  /** Сортировка от Я до А */
+
+  /** Сортировка по убыванию. */
   DESC = 'DESC',
 }
 
-// Мапа описаний для каждого значения enum
-const ReportFormTypeDescriptions = {
-  [SortOrderEnum.ASC]: {
-    value: SortOrderEnum.ASC,
-    description: 'Сортировка от А до Я'
-  },
-  [SortOrderEnum.DESC]: {
-    value: SortOrderEnum.DESC,
-    description: 'Сортировка От я до а'
-  }
+/**
+ * Мапа описаний для каждого значения `SortOrderEnum`.
+ * Используется для генерации расширенной OpenAPI-схемы с `x-enum-*` метаданными.
+ */
+const SortOrderDescriptions = {
+  [SortOrderEnum.ASC]:  { value: SortOrderEnum.ASC,  description: 'Сортировка по возрастанию' },
+  [SortOrderEnum.DESC]: { value: SortOrderEnum.DESC, description: 'Сортировка по убыванию' },
 } as const;
 
-export const sortOrderSchema = z.enum(SortOrderEnum).default(SortOrderEnum.DESC).describe('Направление сортировки');
+/**
+ * Zod-схема для направления сортировки.
+ * Используется в схемах API как тип поля `direction`.
+ */
+export const sortOrderSchema = z
+  .enum(SortOrderEnum)
+  .default(SortOrderEnum.DESC)
+  .describe('Направление сортировки');
 
-// Добавляем метаданные через describe (некоторые генераторы поддерживают)
+/**
+ * Расширенная JSON Schema для OpenAPI (`components.schemas.SortOrderEnum`).
+ * Содержит значения enum, описания и varnames, используемые генераторами клиентов.
+ */
 export const SortOrderEnumSchema = createEnumSchemaWithDescriptions(
   SortOrderEnum,
-  ReportFormTypeDescriptions,
+  SortOrderDescriptions,
   'SortOrderEnum',
-  'Направление сортировки'
+  'Направление сортировки',
 );

@@ -1,11 +1,8 @@
 import { z } from 'zod';
+import { storageCodeZodSchema, StorageCodeEnum } from '../enums/StorageCodeEnum.ts';
 
-/**
- * Enum кодов хранилищ
- */
-export const storageCodeSchema = z.enum(['TFR', 'S3', 'LOCAL']);
-
-export type StorageCode = z.infer<typeof storageCodeSchema>;
+export const storageCodeSchema = storageCodeZodSchema;
+export type StorageCode = `${StorageCodeEnum}`;
 
 /**
  * Схема элемента массива хранилищ (корзина, ТФР и т.д.)

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
+import { TaskStatusEnum, taskStatusSchema } from '../enums/TaskStatusEnum.ts';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';
@@ -53,7 +53,7 @@ export type ExportTasksRequest = z.infer<typeof exportTasksRequestSchema>;
  */
 export const exportTasksResponseSchema = z.object({
   exportId:zIdSchema.describe('ИД экспорта'),
-  status: z.literal('COMPLETED').describe('Статус экспорта'),
+  status: z.enum(TaskStatusEnum).describe('Статус экспорта'),
   fileUrl: z.string().describe('URL для скачивания файла'),
   fileSize: z
     .number()

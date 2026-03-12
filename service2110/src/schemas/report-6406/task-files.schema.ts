@@ -1,13 +1,8 @@
 import { z } from 'zod';
 import { paginationQuerySchema, paginationMetadataSchema, zIdSchema } from '../common.schema.ts';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
+import { fileStatusZodSchema } from '../enums/FileStatusEnum.ts';
 
-/**
- * Enum для статусов файлов
- */
-export const fileStatusSchema = z.enum(['PENDING', 'CONVERTING', 'COMPLETED', 'FAILED']);
-
-export type FileStatusType = z.infer<typeof fileStatusSchema>;
 
 /**
  * Схема для файла задания
@@ -21,7 +16,7 @@ export const taskFileSchema = z.object({
     .min(0)
     .describe('Размер файла в байтах (например, 10485760 = 10 MB)'),
   fileType: z.string(),
-  status: fileStatusSchema,
+  status: fileStatusZodSchema,
   downloadUrl: z.string().nullable(),
   downloadUrlExpiresAt: z.iso.datetime().nullable(),
   errorMessage: z.string().nullable(),
@@ -37,7 +32,7 @@ export type TaskFile = z.infer<typeof taskFileSchema>;
 export const taskFilesQuerySchema = paginationQuerySchema.extend({
   sortBy: z.enum(['status', 'fileName', 'fileSize', 'createdAt']).default('status'),
   sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
-  status: z.array(fileStatusSchema).optional(),
+  status: z.array(fileStatusZodSchema).optional(),
 });
 
 export type TaskFilesQuery = z.infer<typeof taskFilesQuerySchema>;
@@ -58,7 +53,7 @@ export type TaskFilesResponse = z.infer<typeof taskFilesResponseSchema>;
  */
 export const retryFileConversionResponseSchema = z.object({
   id: zIdSchema,
-  status: fileStatusSchema,
+  status: fileStatusZodSchema,
   message: z.string(),
 });
 

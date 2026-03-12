@@ -207,6 +207,7 @@ export const taskListSortColumnSchema = z.enum([
   'format',
   'createdBy',
 ]);
+
 export type TaskListSortColumn = z.infer<typeof taskListSortColumnSchema>;
 
 
@@ -224,7 +225,7 @@ export const tasksListFilterSchema = z.object({
   packageId: zIdSchema.optional().nullable().describe('ID пакета (null — задания без пакета)'),
   branchIds: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
   branchName: z.string().optional().describe('Название филиала'),
-  status: taskStatusSchema.optional().describe('Статус задания'),
+  statuses: z.array(taskStatusSchema).optional().describe('Статус задания'),
   reportType: reportTypeSchema.optional().describe('Тип отчёта'),
   format: fileFormatSchema.optional().describe('Формат файла'),
   source: z.string().optional().describe('Источник данных'),

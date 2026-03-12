@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-import { db } from '../../db/index.ts';
-import { report6406Tasks, report6406TaskBranches } from '../../db/schema/index.ts';
+import { db } from '../../db';
+import { report6406Tasks, report6406TaskBranches } from '../../db/schema';
 import { and, inArray, gte, lte, desc, asc, exists, eq, sql } from 'drizzle-orm';
 import type {
   ExportTasksRequest,
   ExportTasksResponse,
 } from '../../schemas/report-6406/export.schema.ts';
 import { generateTasksCsv, generateCsvFileName } from '../../utils/csv-generator.ts';
-import { apiStatusToTaskStatuses } from '../../types/status-mapping.ts';
 import { env } from '../../config/env.ts';
 import { randomUUID } from 'crypto';
+import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
 
 export class ExportService {
   /**
@@ -24,10 +24,7 @@ export class ExportService {
 
     if (filters) {
       if (filters.statuses && filters.statuses.length > 0) {
-        const dbStatuses = filters.statuses.flatMap(apiStatusToTaskStatuses);
-        if (dbStatuses.length > 0) {
-          conditions.push(inArray(report6406Tasks.status, dbStatuses));
-        }
+        conditions.push(inArray(report6406Tasks.status, filters.statuses));
       }
 
       if (filters.branchIds && filters.branchIds.length > 0) {
@@ -84,20 +81,20 @@ export class ExportService {
     // Генерация CSV
     const csvContent = generateTasksCsv(tasks);
     const fileName = generateCsvFileName();
-    
+
     // В реальной реализации здесь был бы upload в S3 и генерация pre-signed URL
     // Для моковой реализации используем mock URL
     const fileSize = Buffer.byteLength(csvContent, 'utf8');
     const exportId = randomUUID();
     const fileUrl = `${env.MOCK_FILE_STORAGE_URL}/exports/${fileName}`;
-    
+
     // Срок действия URL - 1 час
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + 1);
 
     return {
       exportId,
-      status: 'COMPLETED',
+      status: TaskStatusEnum.DONE,
       fileUrl,
       fileSize,
       downloadUrlExpiresAt: expiresAt.toISOString(),

@@ -1,34 +1,8 @@
-import { bigint, date, index, integer, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { bigint, date, index, integer, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { branches } from './branches.schema.ts';
-import { ReportTypeEnum } from '../../schemas/enums/ReportTypeEnum';
-import { FileFormatEnum } from '../../schemas/enums/FileFormatEnum';
-import { Currency } from '../../schemas/enums/CurrencyEnum';
 import { idColumn, idColumnPrimary } from './base.schema.ts';
-
-/**
- * PostgreSQL enum для типа отчёта
- * Создаётся на основе TypeScript enum ReportTypeEnum
- */
-export const reportTypePgEnum = pgEnum('report_type_enum', [
-  ReportTypeEnum.LSOZ,
-  ReportTypeEnum.LSOS,
-  ReportTypeEnum.LSOP,
-  ReportTypeEnum.KROS_VOS,
-  ReportTypeEnum.KROS_VZS,
-  ReportTypeEnum.KROS,
-]);
-
-
-export const fileFormatPgEnum = pgEnum('file_format_enum', [
-  FileFormatEnum.TXT,
-  FileFormatEnum.XLSX,
-  FileFormatEnum.XML,
-]);
-
-export const currencyPgEnum = pgEnum('currency_enum', [
-  Currency.RUB,
-  Currency.FOREIGN
-]);
+import { currencyPgEnum, fileFormatPgEnum, reportTypePgEnum, taskStatusPgEnum } from './enums.schema.ts';
+import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
 
 /**
  * Задания на построение отчёта для формы 6406
@@ -54,8 +28,11 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
   reportType: reportTypePgEnum('report_type').notNull(),
   source: varchar('source', { length: 20 }),
 
-  // Статус задания (21 статус)
-  status: varchar('status', { length: 30 }).notNull().default('created'),
+  // Статус задания (локальная статусная модель task_*)
+  status: taskStatusPgEnum('status')
+    .$type<TaskStatusEnum>()          // тип поля в TS – TaskStatusEnum
+    .notNull()
+    .default(TaskStatusEnum.CREATE),
 
   // Информация о результате
   /**
@@ -83,7 +60,3 @@ export const report6406Tasks = pgTable('report_6406_tasks', {
 
 export type Report6406Task = typeof report6406Tasks.$inferSelect;
 export type NewReport6406Task = typeof report6406Tasks.$inferInsert;
-
-
-// Re-export TaskStatus from status-model
-export { TaskStatus } from '../../types/status-model.ts';

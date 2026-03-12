@@ -11,7 +11,6 @@ import {
   paginatedResponseSchema,
   paginationMetadataSchema,
   paginationQuerySchema,
-  sortingRequestSchema,
 } from './common.schema.ts';
 import {
   bulkCancelResponseSchema,
@@ -49,24 +48,24 @@ import {
 import { PackageStatusEnumSchema } from './enums/PackageStatusEnum.ts';
 import { exportTasksRequestSchema, exportTasksResponseSchema, } from './report-6406/export.schema.ts';
 import { statusHistoryItemSchema, statusHistoryResponseSchema, } from './report-6406/task-status-history.schema.ts';
-import { packageStatusHistoryItemSchema, packageStatusHistoryResponseSchema } from './report-6406/package-status-history.schema.ts';
 import {
-  storageCodeSchema,
-  storageVolumeItemSchema,
-  storageVolumeListResponseSchema
-} from './report-6406/storage.schema.ts';
+  packageStatusHistoryItemSchema,
+  packageStatusHistoryResponseSchema
+} from './report-6406/package-status-history.schema.ts';
+import { storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.ts';
+import { StorageCodeEnumSwaggerSchema } from './enums/StorageCodeEnum.ts';
 import {
   retryFileConversionResponseSchema,
   taskFileSchema,
   taskFilesResponseSchema,
 } from './report-6406/task-files.schema.ts';
 import { zodToJsonSchema } from './utils/zodToJsonSchema';
-import { ReportFormTypeEnumSchema } from './enums/ReportFormTypeEnum';
 import { SortOrderEnumSchema } from './enums/SortOrderEnum';
 import { CurrencyEnumSchema } from './enums/CurrencyEnum';
 import { FileFormatEnumSchema } from './enums/FileFormatEnum';
 import { ReportTypeEnumSchema } from './enums/ReportTypeEnum.ts';
 import { TaskStatusEnumSchema } from './enums/TaskStatusEnum.ts';
+import { FileStatusEnumSwaggerSchema } from './enums/FileStatusEnum.ts';
 
 /**
  * Получить все переиспользуемые компоненты для OpenAPI
@@ -75,23 +74,22 @@ export function getOpenApiComponents() {
   return {
     // Enums
     PacketStatusEnum: PackageStatusEnumSchema,
+    FileStatusEnum: FileStatusEnumSwaggerSchema,
     ReportTypeEnum: ReportTypeEnumSchema,
-    ReportFormTypeEnum: ReportFormTypeEnumSchema,
     SortOrderEnum: SortOrderEnumSchema,
     CurrencyEnum: CurrencyEnumSchema,
     FileFormatEnum: FileFormatEnumSchema,
     TaskStatusEnum: TaskStatusEnumSchema,
+    StorageCodeEnum: StorageCodeEnumSwaggerSchema,
 
     // Общие схемы
     PaginationRequestDto: zodToJsonSchema(paginationQuerySchema, 'PaginationRequestDto'),
     PaginationMetadataDto: zodToJsonSchema(paginationMetadataSchema, 'PaginationMetadataDto'),
     PaginatedResponseDto: zodToJsonSchema(paginatedResponseSchema, 'PaginatedResponseDto'),
-    SortingRequestDto: zodToJsonSchema(sortingRequestSchema, 'SortingRequestDto'),
     FilterDto: zodToJsonSchema(filterSchema, 'FilterDto'),
     DateSchema: zodToJsonSchema(dateSchema, 'DateSchema'),
     DateTimeSchema: zodToJsonSchema(dateTimeSchema, 'DateTimeSchema'),
 
-    StorageCodeEnumSchema: zodToJsonSchema(storageCodeSchema, 'StorageCodeEnumSchema'),
     HealthResponseDto: zodToJsonSchema(healthResponseSchema, 'HealthResponseDto'),
     HttpErrorWithInstanceDto: zodToJsonSchema(httpErrorWithInstanceSchema, 'HttpErrorWithInstanceDto'),
 

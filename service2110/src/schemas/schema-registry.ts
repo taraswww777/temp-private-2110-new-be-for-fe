@@ -6,7 +6,6 @@ import {
   paginationQuerySchema,
   paginationMetadataSchema,
   paginatedResponseSchema,
-  sortingRequestSchema,
   filterSchema,
   dateSchema,
   dateTimeSchema,
@@ -59,13 +58,13 @@ import {
   packageStatusHistoryItemSchema,
   packageStatusHistoryResponseSchema,
 } from './report-6406/package-status-history.schema.ts';
-import { storageCodeSchema, storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.ts';
+import { storageVolumeItemSchema, storageVolumeListResponseSchema } from './report-6406/storage.schema.ts';
+import { storageCodeZodSchema } from './enums/StorageCodeEnum.ts';
 import {
   taskFileSchema,
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
 } from './report-6406/task-files.schema.ts';
-import { reportFormTypeSchema } from './enums/ReportFormTypeEnum';
 import { SortOrderEnum, sortOrderSchema } from './enums/SortOrderEnum';
 import { fileFormatSchema } from './enums/FileFormatEnum';
 import { currencySchema } from './enums/CurrencyEnum';
@@ -77,20 +76,18 @@ import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 export const schemaRegistry = new Map<string, unknown>([
   // enums
   ['SortOrderEnum', sortOrderSchema],
-  ['ReportFormTypeEnum', reportFormTypeSchema],
 
   // Общие схемы
   ['PaginationRequestDto', paginationQuerySchema],
   ['PaginationMetadataDto', paginationMetadataSchema],
   ['PaginatedResponseDto', paginatedResponseSchema],
-  ['SortingRequestDto', sortingRequestSchema],
   ['FilterDto', filterSchema],
   ['DateSchema', dateSchema],
   ['DateTimeSchema', dateTimeSchema],
   ['FileFormatEnumSchema', fileFormatSchema],
   ['TaskStatusEnumSchema', taskStatusSchema],
   ['CurrencyEnumSchema', currencySchema],
-  ['StorageCodeEnumSchema', storageCodeSchema],
+  ['StorageCodeEnum', storageCodeZodSchema],
   ['HealthResponseDto', healthResponseSchema],
   ['HttpErrorWithInstanceDto', httpErrorWithInstanceSchema],
 

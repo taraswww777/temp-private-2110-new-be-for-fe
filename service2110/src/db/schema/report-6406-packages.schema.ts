@@ -1,7 +1,7 @@
 import { pgTable, timestamp, varchar, integer, bigint, index } from 'drizzle-orm/pg-core';
 import { idColumnPrimary } from './base.schema.ts';
-import { packetStatusPgEnum } from './report-6406-package-status-history.schema';
 import { PackageStatusEnum } from '../../schemas/enums/PackageStatusEnum.ts';
+import { packetStatusPgEnum } from './enums.schema.ts';
 
 /**
  * Пакеты заданий для формы 6406

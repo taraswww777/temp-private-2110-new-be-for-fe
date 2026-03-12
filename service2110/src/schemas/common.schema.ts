@@ -12,18 +12,6 @@ export const paginationQuerySchema = z.object({
 export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
 
 /**
- * Схема для сортировки (SortingRequestDto): direction + column
- */
-export const sortingRequestSchema = z.object({
-  direction: z.enum(['asc', 'desc']).describe('Направление сортировки'),
-  column: z.string().describe('Колонка для сортировки'),
-});
-
-export type SortingRequest = z.infer<typeof sortingRequestSchema>;
-
-export type SortOrder = z.infer<typeof sortOrderSchema>;
-
-/**
  * Метаданные пагинации в ответе (number, size, totalItems, totalPages)
  */
 export const paginationMetadataSchema = z.object({
