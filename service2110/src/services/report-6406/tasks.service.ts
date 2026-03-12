@@ -7,7 +7,7 @@ import {
   report6406Tasks,
   report6406TaskStatusHistory,
 } from '../../db/schema';
-import { and, asc, desc, eq, exists, inArray, not, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, exists, gte, inArray, lte, not, sql } from 'drizzle-orm';
 import type {
   BulkCancelResponse,
   BulkCancelTasksInput,
@@ -312,42 +312,32 @@ export class TasksService {
       );
     }
 
-    // Фильтры по строковым полям
-    if (filter.branchName !== undefined) {
-      conditions.push(eq(report6406Tasks.branchName, filter.branchName));
-    }
     if (filter?.statuses?.length) {
       conditions.push(inArray(report6406Tasks.status, filter.statuses));
     }
-    if (filter.reportType !== undefined) {
-      conditions.push(eq(report6406Tasks.reportType, filter.reportType));
+    if (filter.format?.length) {
+      conditions.push(inArray(report6406Tasks.format, filter.format));
     }
-    if (filter.format !== undefined) {
-      conditions.push(eq(report6406Tasks.format, filter.format));
+    if (filter.sourcesList?.length) {
+      const sourceStrings = filter.sourcesList.map(String);
+      conditions.push(inArray(report6406Tasks.source, sourceStrings));
     }
-    if (filter.source !== undefined) {
-      conditions.push(eq(report6406Tasks.source, filter.source));
-    }
-    if (filter.createdBy !== undefined) {
-      conditions.push(eq(report6406Tasks.createdBy, filter.createdBy));
+    if (filter.createdBy?.length) {
+      conditions.push(inArray(report6406Tasks.createdBy, filter.createdBy));
     }
 
-    // Фильтры по датам (YYYY-MM-DD)
-    if (filter.periodStart !== undefined) {
-      conditions.push(eq(report6406Tasks.periodStart, filter.periodStart));
+    if (filter.periodFrom !== undefined) {
+      conditions.push(gte(report6406Tasks.periodStart, filter.periodFrom));
     }
-    if (filter.periodEnd !== undefined) {
-      conditions.push(eq(report6406Tasks.periodEnd, filter.periodEnd));
+    if (filter.periodTo !== undefined) {
+      conditions.push(lte(report6406Tasks.periodEnd, filter.periodTo));
     }
 
-    // Фильтры по дате-времени (ISO 8601)
-    if (filter.createdAt !== undefined) {
-      const d = new Date(filter.createdAt);
-      conditions.push(eq(report6406Tasks.createdAt, d));
+    if (filter.createdAtFrom !== undefined) {
+      conditions.push(gte(report6406Tasks.createdAt, new Date(filter.createdAtFrom)));
     }
-    if (filter.updatedAt !== undefined) {
-      const d = new Date(filter.updatedAt);
-      conditions.push(eq(report6406Tasks.updatedAt, d));
+    if (filter.createdAtTo !== undefined) {
+      conditions.push(lte(report6406Tasks.createdAt, new Date(filter.createdAtTo)));
     }
 
     return conditions;
@@ -709,56 +699,38 @@ export class TasksService {
 
   /**
    * Форматирование задания для TaskDetailsDto (POST 201 и GET /:id 200).
-   * Без fileUrl, errorMessage; с s3FolderId, type, accounts, packages.
    */
   private formatTaskDetails(
     task: typeof report6406Tasks.$inferSelect,
     packagesList: Array<{ id: Package['id']; name: string; addedAt: Date }>,
     taskBranches: Array<{ branchId: Branch['id']; branchName: string }> = [],
   ): TaskDetails {
-    const permissions = getStatusPermissions(task.status as TaskStatusEnum);
-
-    const branchIds = taskBranches.length > 0
+    const branchIdsList = taskBranches.length > 0
       ? taskBranches.map(b => b.branchId)
       : [task.branchId];
-    const branchNames = taskBranches.length > 0
-      ? taskBranches.map(b => b.branchName)
-      : [task.branchName];
+
+    const firstPackage = packagesList.length > 0 ? packagesList[0] : null;
 
     return {
       id: task.id,
       createdAt: task.createdAt.toISOString(),
       createdBy: task.createdBy ?? '',
-      branchId: task.branchId,
-      branchIds,
-      branchName: task.branchName,
-      branchNames,
-      periodStart: task.periodStart,
-      periodEnd: task.periodEnd,
-      accountMask: task.accountMask,
-      accountSecondOrder: task.accountSecondOrder,
-      currency: task.currency,
-      format: task.format,
+      branchIdsList,
       reportType: task.reportType,
-      source: task.source,
+      periodFrom: task.periodStart,
+      periodTo: task.periodEnd,
+      account: task.accountMask ? [task.accountMask] : null,
+      accountSecondOrderList: task.accountSecondOrder ? [task.accountSecondOrder] : [],
+      currencyCode: task.currency,
+      fileType: task.format,
+      sourcesList: task.source ? [Number(task.source)] : null,
       status: task.status as TaskStatusEnum,
-      canCancel: permissions.canCancel,
-      canDelete: permissions.canDelete,
-      canStart: permissions.canStart,
-      fileSize: task.fileSize,
+      fileSize: task.fileSize ?? 0,
       filesCount: task.filesCount,
-      lastStatusChangedAt: task.lastStatusChangedAt.toISOString(),
-      startedAt: task.startedAt?.toISOString() ?? null,
-      completedAt: task.completedAt?.toISOString() ?? null,
       updatedAt: task.updatedAt.toISOString(),
       s3FolderId: null,
-      type: task.reportType,
-      accounts: [],
-      packages: packagesList.map((pkg) => ({
-        id: pkg.id,
-        name: pkg.name,
-        addedAt: pkg.addedAt.toISOString(),
-      })),
+      operationTypesList: null,
+      packageId: firstPackage?.id ?? null,
     };
   }
 

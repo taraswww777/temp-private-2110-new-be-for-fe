@@ -62,28 +62,22 @@ export class TaskFilesService {
       .offset((pageNumber - 1) * pageSize);
 
     // Форматирование файлов с генерацией pre-signed URLs
-    const formattedFiles = files.map(file => {
+    const formattedFiles = files.map((file, index) => {
       let downloadUrl: string | null = null;
-      let downloadUrlExpiresAt: string | null = null;
 
-      // Генерируем pre-signed URL только для завершённых файлов
       if (file.status === FileStatusEnum.COMPLETED) {
         const presigned = generateMockPresignedUrl(file.id, file.fileName);
         downloadUrl = presigned.url;
-        downloadUrlExpiresAt = presigned.expiresAt.toISOString();
       }
 
       return {
         id: file.id,
+        fileNumber: index + 1,
         fileName: file.fileName,
         fileSize: file.fileSize,
         fileType: file.fileType,
         status: file.status as FileStatusEnum,
         downloadUrl,
-        downloadUrlExpiresAt,
-        errorMessage: file.errorMessage,
-        createdAt: file.createdAt.toISOString(),
-        updatedAt: file.updatedAt.toISOString(),
       };
     });
 

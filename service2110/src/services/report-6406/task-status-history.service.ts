@@ -5,6 +5,7 @@ import type {
   StatusHistoryResponse,
 } from '../../schemas/report-6406/task-status-history.schema.ts';
 import { ID } from '../../schemas/common.schema.ts';
+import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
 
 export class TaskStatusHistoryService {
   /**
@@ -32,7 +33,7 @@ export class TaskStatusHistoryService {
     return history.map(item => ({
       id: item.id,
       status: item.status,
-      previousStatus: item.previousStatus,
+      previousStatus: item.previousStatus as TaskStatusEnum | null,
       changedAt: item.changedAt.toISOString(),
       changedBy: item.changedBy,
       comment: item.comment,
