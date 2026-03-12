@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { dateSchema, paginationQuerySchema, zIdSchema, } from '../common.schema.ts';
+import { dateRangeRefinement, dateSchema, paginationQuerySchema, zIdSchema, } from '../common.schema.ts';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
 import { FileFormatEnum, fileFormatSchema } from '../enums/FileFormatEnum';
@@ -18,56 +18,47 @@ export const baseTaskSchema = z.object({
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание'),
   branchIdsList: z.array(zIdSchema).min(1).describe('Массив ИД филиалов'),
   reportType: reportTypeSchema.describe('Тип отчёта'),
-  periodFrom: dateSchema.describe('Дата начала отчётного периода YYYY-MM-DD'),
-  periodTo: dateSchema.describe('Дата окончания отчётного периода YYYY-MM-DD'),
+  periodFrom: dateSchema.nullable().describe('Дата начала отчётного периода YYYY-MM-DD'),
+  periodTo: dateSchema.nullable().describe('Дата окончания отчётного периода YYYY-MM-DD'),
   currencyCode: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
   fileType: fileFormatSchema.describe('Формат файла'),
   status: taskStatusSchema.describe('Статус задания'),
   fileSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан'),
   updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
+  accountsList: z.array(z.string().length(20).regex(/^\d+$/)).nullable().describe('Список счетов (20-значные номера)'),
+  accountSecondOrderList: z.array(z.string().length(5).regex(/^\d+$/)).nullable().describe('Счета второго порядка (5-значные номера)'),
+  operationTypesList: z.array(zIdSchema).nullable().describe('Типы операций'),
   sourcesList: z.array(zIdSchema).nullable().describe('Источники данных'),
   filesCount: z.number().int().min(0).describe('Количество файлов').default(0),
   packageId: zIdSchema.nullable().describe('Пакет, в который входит задание'),
 });
 
 /**
- * Схема для создания задания
- * Поддерживает как branchId (для обратной совместимости), так и branchIds (новый формат)
+ * Схема для создания задания.
+ * Выведена из baseTaskSchema: omit автогенерируемых полей, currencyCode — optional (по умолчанию RUB).
+ * Обязательные: branchIdsList, reportType, fileType.
+ * periodFrom / periodTo — optional (поддержка открытых интервалов).
  */
-export const createTaskSchema = z.object({
-  branchId: zIdSchema.optional().describe('ИД филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(zIdSchema).min(1).optional().describe('Массив ИД филиалов'),
-  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
-  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
-  accountMask: z.string().max(20).optional().describe('Маска счетов для фильтрации'),
-  accountSecondOrder: z.string().max(2).optional().describe('Счета второго порядка'),
-  currency: currencySchema.optional().describe('Валюта (опционально при создании; по умолчанию RUB)'),
-  format: fileFormatSchema,
-  reportType: reportTypeSchema,
-  source: z.string().max(20).optional().describe('Ссылка на справочник или ИД источника данных'),
-}).refine(
-  (data) => {
-    // Должен быть указан либо branchId, либо branchIds
-    if (!data.branchId && !data.branchIds) {
-      return false;
-    }
-    return true;
-  },
-  {
-    message: 'Either branchId or branchIds must be provided',
-    path: ['branchId'],
-  }
-).refine(
-  (data) => {
-    const start = new Date(data.periodStart);
-    const end = new Date(data.periodEnd);
-    return end >= start;
-  },
-  {
-    message: 'periodEnd must be greater than or equal to periodStart',
-    path: ['periodEnd'],
-  }
-);
+export const createTaskSchema = baseTaskSchema
+  .omit({
+    id: true,
+    createdAt: true,
+    createdBy: true,
+    status: true,
+    fileSize: true,
+    updatedAt: true,
+    filesCount: true,
+    packageId: true,
+  })
+  .extend({
+    periodFrom: dateSchema.optional().describe('Дата начала отчётного периода YYYY-MM-DD'),
+    periodTo: dateSchema.optional().describe('Дата окончания отчётного периода YYYY-MM-DD'),
+    currencyCode: currencySchema.optional().describe('Валюта (опционально; по умолчанию RUB)'),
+    accountsList: z.array(z.string().length(20).regex(/^\d+$/)).optional().describe('Список счетов (20-значные номера)'),
+    accountSecondOrderList: z.array(z.string().length(5).regex(/^\d+$/)).optional().describe('Счета второго порядка (5-значные номера)'),
+    operationTypesList: z.array(zIdSchema).optional().describe('Типы операций'),
+  })
+  .superRefine(dateRangeRefinement());
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 
@@ -83,7 +74,9 @@ export const taskPackageInfoSchema = z.object({
 export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
 
 /**
- * Схема для полного задания
+ * @deprecated Устаревшая схема задания со старыми полями (branchId, branchName, periodStart/End и др.).
+ * Используйте taskDetailSchema (деталь) или taskListItemSchema (список) вместо неё.
+ * Будет удалена после перевода всех потребителей на новые DTO.
  */
 export const taskSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
@@ -124,79 +117,26 @@ export const taskSchema = z.object({
   updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
 });
 
+/** @deprecated Используйте TaskDetails или TaskListItem */
 export type Task = z.infer<typeof taskSchema>;
 
 /**
  * Единая схема для детальной информации о задании (POST 201 и GET /{id} 200).
+ * Расширяет baseTaskSchema дополнительными полями, специфичными для детального представления.
  */
-export const taskDetailSchema = z.object({
-  id: zIdSchema.describe('ИД задания'),
-  createdAt: z.iso.datetime().describe('Дата и время создания'),
-  createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchIdsList: z.array(zIdSchema).nonoptional().describe('Массив ИД филиалов'),
-  reportType: reportTypeSchema.nonoptional().describe('Тип отчёта'),
-  periodFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода YYYY-MM-DD'),
-  periodTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода YYYY-MM-DD'),
-  account: z.array(z.string().length(20)).nullable().describe('Список счетов'),
-  accountSecondOrderList: z.array(z.string().length(5)).describe('Счета второго порядка'),
-  currencyCode: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
-  fileType: fileFormatSchema.nonoptional().default(FileFormatEnum.TXT),
-  sourcesList: z.array(z.number().min(1)).nullable().describe('Ссылка на справочник или ИД источника данных'),
-  status: taskStatusSchema.describe('Статус задания'),
-  fileSize: z
-    .number()
-    .int()
-    .min(0)
-    .describe('Размер файла в мегабайтах. 0 — размер ещё не рассчитан.')
-    .default(0),
-  filesCount: z
-    .number()
-    .int()
-    .min(0)
-    .describe('Количество файлов в задании')
-    .default(0),
-  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления 2023-05-15 18:23:58'),
+export const taskDetailSchema = baseTaskSchema.extend({
+  fileSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан').default(0),
+  fileType: fileFormatSchema.describe('Формат файла').default(FileFormatEnum.TXT),
   s3FolderId: z.string().nullable().describe('ID папки в S3'),
-  operationTypesList: z.string().nullable().describe('Код типа операции'),
-  packageId: zIdSchema.nullable().describe('Пакет, в которые входит задание'),
-}).refine(
-  (data) => !!data.periodFrom || !!data.periodTo,
-  {
-    message: 'Должен быть указан хотя бы один из periodFrom или periodTo',
-    path: ['periodFrom', 'periodTo'],
-  },
-);
+}).superRefine(dateRangeRefinement());
 
 export type TaskDetails = z.infer<typeof taskDetailSchema>;
 
 /**
- * Схема для элемента списка заданий (TaskListItemDto)
+ * Схема для элемента списка заданий (TaskListItemDto).
+ * Проекция baseTaskSchema — все поля базы, без дополнительных detail-полей.
  */
-export const taskListItemSchema = z.object({
-  id: zIdSchema.describe('ИД задания'),
-  createdAt: z.iso.datetime().describe('Дата и время создания'),
-  createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)'),
-  branchId: zIdSchema.describe('ИД филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(zIdSchema).describe('Массив ИД филиалов'),
-  branchName: z.string().describe('Название филиала (название первого филиала)'),
-  branchNames: z.array(z.string()).describe('Массив названий филиалов'),
-  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
-  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
-  status: taskStatusSchema.describe('Статус задания'),
-  fileSize: z
-    .number()
-    .int()
-    .min(0)
-    .describe('Размер файла в байтах; null — размер ещё не рассчитан.')
-    .nullable(),
-  format: fileFormatSchema,
-  reportType: reportTypeSchema.optional().describe('Тип отчёта'),
-  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
-  canCancel: z.boolean().describe('Можно ли отменить задание'),
-  canDelete: z.boolean().describe('Можно ли удалить задание'),
-  canStart: z.boolean().describe('Можно ли запустить задание'),
-  packageIds: z.array(zIdSchema).describe('ID пакетов, в которые входит задание (пустой массив = не в пакете)'),
-});
+export const taskListItemSchema = baseTaskSchema;
 
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
 
@@ -226,21 +166,22 @@ export const tasksListSortingSchema = z.object({
 });
 
 /**
- * Схема фильтров для списка заданий (объект с заранее определённой структурой)
- * Все поля опциональны, можно комбинировать несколько фильтров одновременно
+ * Схема фильтров для списка заданий.
+ * Имена полей согласованы с baseTaskSchema.
+ * Все поля optional — отсутствие поля (undefined/null) означает, что оно не участвует в фильтрации.
  */
 export const tasksListFilterSchema = z.object({
-  packageId: zIdSchema.optional().nullable().describe('ID пакета (null — задания без пакета)'),
-  branchIds: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
-  statuses: z.array(taskStatusSchema).optional().describe('Статус задания'),
-  operationType: z.array(zIdSchema).optional().describe('Тип операции'),
-  format: z.array(fileFormatSchema).optional().describe('Формат файла'),
-  sourcesList: z.array(zIdSchema).optional().describe('Источник данных'),
+  packageId: zIdSchema.optional().describe('ID пакета'),
+  branchIdsList: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
+  statuses: z.array(taskStatusSchema).optional().describe('Статусы заданий'),
+  operationTypesList: z.array(zIdSchema).optional().describe('Типы операций'),
+  fileType: z.array(fileFormatSchema).optional().describe('Формат файла'),
+  sourcesList: z.array(zIdSchema).optional().describe('Источники данных'),
   createdBy: z.array(z.string()).optional().describe('ФИО создателя задания'),
-  periodFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
-  periodTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
-  createdAtFrom: z.iso.datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
-  createdAtTo: z.iso.datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
+  periodFrom: dateSchema.optional().describe('Дата начала отчётного периода YYYY-MM-DD'),
+  periodTo: dateSchema.optional().describe('Дата окончания отчётного периода YYYY-MM-DD'),
+  createdAtFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601)'),
+  createdAtTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601)'),
 }).optional();
 
 export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
@@ -252,21 +193,7 @@ export const getTasksRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
   filter: tasksListFilterSchema.describe('Фильтры для списка заданий (объект с опциональными полями)'),
-  includedInPackage: zIdSchema.optional().describe('ID пакета - вернуть только задачи, входящие в указанный пакет'),
-  excludedInPackage: zIdSchema.optional().describe('ID пакета - вернуть только задачи, НЕ входящие в указанный пакет'),
-}).refine(
-  (data) => {
-    // Параметры взаимоисключающие
-    if (data.includedInPackage && data.excludedInPackage) {
-      return false;
-    }
-    return true;
-  },
-  {
-    message: 'includedInPackage and excludedInPackage cannot be used together',
-    path: ['includedInPackage'],
-  }
-);
+});
 
 export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;
 
