@@ -83,19 +83,6 @@ import { storageCodeZodSchema } from './enums/StorageCodeEnum.ts';
 
 export const openApiRegistry = z.registry<{ id: string }>();
 
-/**
- * Обратная совместимость: обратный поиск имени схемы по Zod-объекту.
- * Используется в src/app.ts (старая версия).
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getSchemaName(schema: any): string | null {
-  const entry = openApiRegistry.get(schema);
-  return entry?.id ?? null;
-}
-
-/** @deprecated Используйте openApiRegistry */
-export const schemaRegistry = openApiRegistry;
-
 // Enums
 openApiRegistry.add(sortOrderSchema, { id: 'SortOrderEnum' });
 openApiRegistry.add(currencySchema, { id: 'CurrencyEnum' });
