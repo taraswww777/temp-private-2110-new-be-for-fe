@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { paginationQuerySchema, zIdSchema, } from '../common.schema.ts';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
-import { fileFormatSchema } from '../enums/FileFormatEnum';
+import { FileFormatEnum, fileFormatSchema } from '../enums/FileFormatEnum';
 import { sortOrderSchema } from '../enums/SortOrderEnum.ts';
 import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
 
@@ -122,42 +122,39 @@ export const taskDetailsSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
   createdAt: z.iso.datetime().describe('Дата и время создания'),
   createdBy: z.string().describe('ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)'),
-  branchId: zIdSchema.describe('ИД филиала (устаревшее поле, используйте branchIds)'),
-  branchIds: z.array(zIdSchema).describe('Массив ИД филиалов'),
-  branchName: z.string().describe('Название филиала (название первого филиала)'),
-  branchNames: z.array(z.string()).describe('Массив названий филиалов'),
-  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода'),
-  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода'),
-  accountMask: z.string().nullable().describe('Маска счетов для фильтрации'),
-  accountSecondOrder: z.string().nullable().describe('Счета второго порядка'),
-  currency: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
-  format: fileFormatSchema,
-  reportType: reportTypeSchema.optional().describe('Тип отчёта'),
-  source: z.string().nullable().describe('Ссылка на справочник или ИД источника данных'),
+  branchIdsList: z.array(zIdSchema).nonoptional().describe('Массив ИД филиалов'),
+  reportType: reportTypeSchema.nonoptional().describe('Тип отчёта'),
+  periodFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата начала отчётного периода YYYY-MM-DD'),
+  periodTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата окончания отчётного периода YYYY-MM-DD'),
+  account: z.array(z.string().length(20)).nullable().describe('Список счетов'),
+  accountSecondOrderList: z.array(z.string().length(5)).describe('Счета второго порядка'),
+  currencyCode: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
+  fileType: fileFormatSchema.nonoptional().default(FileFormatEnum.TXT),
+  sourcesList: z.array(z.number().min(1)).nullable().describe('Ссылка на справочник или ИД источника данных'),
   status: taskStatusSchema.describe('Статус задания'),
-  canCancel: z.boolean().describe('Возможность отмены задания'),
-  canDelete: z.boolean().describe('Возможность удаления задания'),
-  canStart: z.boolean().describe('Возможность запуска задания'),
   fileSize: z
     .number()
     .int()
     .min(0)
-    .describe('Размер файла в байтах. null — размер ещё не рассчитан.')
-    .nullable(),
+    .describe('Размер файла в мегабайтах. 0 — размер ещё не рассчитан.')
+    .default(0),
   filesCount: z
     .number()
     .int()
     .min(0)
-    .describe('Количество файлов в задании'),
-  lastStatusChangedAt: z.iso.datetime().describe('Дата и время последнего изменения статуса'),
-  startedAt: z.iso.datetime().nullable().describe('Дата и время начала обработки'),
-  completedAt: z.iso.datetime().nullable().describe('Дата и время завершения'),
-  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
+    .describe('Количество файлов в задании')
+    .default(0),
+  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления 2023-05-15 18:23:58'),
   s3FolderId: z.string().nullable().describe('ID папки в S3'),
-  type: z.string().nullable().describe('Тип задания'),
-  accounts: z.array(z.string()).describe('Список счетов'),
-  packages: z.array(taskPackageInfoSchema).describe('Пакеты, в которые входит задание'),
-});
+  operationTypesList: z.string().nullable().describe('Код типа операции'),
+  packageId: z.number().nullable().describe('Пакет, в которые входит задание'),
+}).refine(
+  (data) => !!data.periodFrom || !!data.periodTo,
+  {
+    message: 'Должен быть указан хотя бы один из periodFrom или periodTo',
+    path: ['periodFrom', 'periodTo'],
+  },
+);
 
 export type TaskDetails = z.infer<typeof taskDetailsSchema>;
 
@@ -224,16 +221,15 @@ export const tasksListSortingSchema = z.object({
 export const tasksListFilterSchema = z.object({
   packageId: zIdSchema.optional().nullable().describe('ID пакета (null — задания без пакета)'),
   branchIds: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
-  branchName: z.string().optional().describe('Название филиала'),
   statuses: z.array(taskStatusSchema).optional().describe('Статус задания'),
-  reportType: reportTypeSchema.optional().describe('Тип отчёта'),
-  format: fileFormatSchema.optional().describe('Формат файла'),
-  source: z.string().optional().describe('Источник данных'),
-  createdBy: z.string().optional().describe('ФИО создателя задания'),
-  periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
-  periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
-  createdAt: z.iso.datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
-  updatedAt: z.iso.datetime().optional().describe('Дата и время обновления (формат: ISO 8601)'),
+  operationType: z.array(zIdSchema).optional().describe('Тип операции'),
+  format: z.array(fileFormatSchema).optional().describe('Формат файла'),
+  sourcesList: z.array(zIdSchema).optional().describe('Источник данных'),
+  createdBy: z.array(z.string()).optional().describe('ФИО создателя задания'),
+  periodFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата начала отчётного периода (формат: YYYY-MM-DD)'),
+  periodTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Дата окончания отчётного периода (формат: YYYY-MM-DD)'),
+  createdAtFrom: z.iso.datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
+  createdAtTo: z.iso.datetime().optional().describe('Дата и время создания (формат: ISO 8601)'),
 }).optional();
 
 export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;

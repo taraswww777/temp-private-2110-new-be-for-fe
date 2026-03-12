@@ -8,6 +8,7 @@ import { zIdSchema } from '../common.schema.ts';
 export const statusHistoryItemSchema = z.object({
   id: zIdSchema,
   status: taskStatusSchema,
+  previousStatus: taskStatusSchema.nullable(),
   changedAt: z.iso.datetime(),
   changedBy: z.string().nullable(),
   comment: z.string().nullable(),
