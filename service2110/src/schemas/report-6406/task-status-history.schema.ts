@@ -7,12 +7,12 @@ import { zIdSchema } from '../common.schema.ts';
  */
 export const statusHistoryItemSchema = z.object({
   id: zIdSchema,
-  status: taskStatusSchema,
-  previousStatus: taskStatusSchema.nullable(),
-  changedAt: z.iso.datetime(),
-  changedBy: z.string().nullable(),
-  comment: z.string().nullable(),
-  metadata: z.record(z.string(), z.any()).nullable().describe('Дополнительные метаданные в формате ключ-значение'),
+  taskId: zIdSchema,
+  taskStatus: taskStatusSchema,
+  changeAt: z.iso.datetime().describe('Дата и время изменения'),
+  changeBy: z.string().describe('Инициатор изменения. Логин или ФИО'),
+  note: z.string().optional(),
+  metadata: z.record(z.string(), z.any()).optional().describe('Дополнительные метаданные в формате ключ-значение'),
 });
 
 export type StatusHistoryItem = z.infer<typeof statusHistoryItemSchema>;

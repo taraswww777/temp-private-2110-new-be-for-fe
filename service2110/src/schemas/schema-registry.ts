@@ -20,7 +20,6 @@ import {
 } from './common.schema.ts';
 import {
   createTaskSchema,
-  taskSchema,
   taskListItemSchema,
   getTasksRequestSchema,
   tasksListResponseSchema,
@@ -114,7 +113,6 @@ openApiRegistry.add(sourcesResponseSchema, { id: 'SourcesResponseDto' });
 
 // Задания
 openApiRegistry.add(createTaskSchema, { id: 'CreateTaskDto' });
-openApiRegistry.add(taskSchema, { id: 'TaskDto' });
 openApiRegistry.add(taskListItemSchema, { id: 'TaskListItemDto' });
 openApiRegistry.add(getTasksRequestSchema, { id: 'GetTasksRequestDto' });
 openApiRegistry.add(tasksListResponseSchema, { id: 'TasksListResponseDto' });
