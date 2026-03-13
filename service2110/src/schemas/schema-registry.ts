@@ -24,8 +24,11 @@ import {
   getTasksRequestSchema,
   tasksListResponseSchema,
   taskDetailSchema,
+  bulkDeleteTasksSchema,
   bulkDeleteResponseSchema,
+  bulkCancelTasksSchema,
   bulkCancelResponseSchema,
+  startTasksSchema,
   startTasksResponseSchema,
 } from './report-6406/tasks.schema.ts';
 import {
@@ -43,9 +46,12 @@ import {
   updatePackageSchema,
   packageSchema,
   packagesListResponseSchema,
+  bulkDeletePackagesSchema,
   bulkDeletePackagesResponseSchema,
   updatePackageResponseSchema,
+  addTasksToPackageSchema,
   addTasksToPackageResponseSchema,
+  bulkRemoveTasksFromPackageSchema,
   bulkRemoveTasksResponseSchema,
   copyToTfrResponseSchema,
 } from './report-6406/packages.schema.ts';
@@ -117,8 +123,11 @@ openApiRegistry.add(taskListItemSchema, { id: 'TaskListItemDto' });
 openApiRegistry.add(getTasksRequestSchema, { id: 'GetTasksRequestDto' });
 openApiRegistry.add(tasksListResponseSchema, { id: 'TasksListResponseDto' });
 openApiRegistry.add(taskDetailSchema, { id: 'TaskDetailDto' });
+openApiRegistry.add(bulkDeleteTasksSchema, { id: 'BulkDeleteTasksRequestDto' });
 openApiRegistry.add(bulkDeleteResponseSchema, { id: 'BulkDeleteTasksResponseDto' });
+openApiRegistry.add(bulkCancelTasksSchema, { id: 'BulkCancelTasksRequestDto' });
 openApiRegistry.add(bulkCancelResponseSchema, { id: 'BulkCancelTasksResponseDto' });
+openApiRegistry.add(startTasksSchema, { id: 'StartTasksRequestDto' });
 openApiRegistry.add(startTasksResponseSchema, { id: 'StartTasksResponseDto' });
 openApiRegistry.add(statusHistoryItemSchema, { id: 'StatusHistoryItemDto' });
 openApiRegistry.add(statusHistoryResponseSchema, { id: 'StatusHistoryResponseDto' });
@@ -131,9 +140,12 @@ openApiRegistry.add(createPackageSchema, { id: 'CreatePackageDto' });
 openApiRegistry.add(updatePackageSchema, { id: 'UpdatePackageDto' });
 openApiRegistry.add(packageSchema, { id: 'PackageDto' });
 openApiRegistry.add(packagesListResponseSchema, { id: 'PackagesListResponseDto' });
+openApiRegistry.add(bulkDeletePackagesSchema, { id: 'BulkDeletePackagesRequestDto' });
 openApiRegistry.add(bulkDeletePackagesResponseSchema, { id: 'BulkDeletePackagesResponseDto' });
 openApiRegistry.add(updatePackageResponseSchema, { id: 'UpdatePackageResponseDto' });
+openApiRegistry.add(addTasksToPackageSchema, { id: 'AddTasksToPackageRequestDto' });
 openApiRegistry.add(addTasksToPackageResponseSchema, { id: 'AddTasksToPackageResponseDto' });
+openApiRegistry.add(bulkRemoveTasksFromPackageSchema, { id: 'BulkRemoveTasksFromPackageRequestDto' });
 openApiRegistry.add(bulkRemoveTasksResponseSchema, { id: 'BulkRemoveTasksResponseDto' });
 openApiRegistry.add(copyToTfrResponseSchema, { id: 'CopyToTfrResponseDto' });
 openApiRegistry.add(packageStatusHistoryItemSchema, { id: 'PackageStatusHistoryItemDto' });

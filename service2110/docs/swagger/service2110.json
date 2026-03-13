@@ -11,272 +11,19 @@
   },
   "components": {
     "schemas": {
-      "DateSchema": {
-        "type": "string",
-        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-        "description": "Дата в формате YYYY-MM-DD",
-        "title": "DateSchema"
-      },
-      "DateTimeSchema": {
-        "type": "string",
-        "format": "date-time",
-        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-        "description": "Дата и время в формате ISO 8601",
-        "title": "DateTimeSchema"
-      },
-      "ReportFormTypeEnum": {
-        "type": "string",
-        "enum": [
-          "N3462D",
-          "KROS",
-          "N6406D"
-        ],
-        "description": "Тип формы отчетности",
-        "title": "ReportFormTypeEnum",
-        "x-enum-descriptions": [
-          "3462у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
-          "КРОС: КРОС, Ведомость открытых счетов, Ведомость закрытых счетов",
-          "6406у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции"
-        ],
-        "x-enum-varnames": [
-          "N3462D",
-          "KROS",
-          "N6406D"
-        ],
-        "oneOf": [
-          {
-            "description": "3462у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
-            "title": "N3462D",
-            "enum": [
-              "N3462D"
-            ]
-          },
-          {
-            "description": "КРОС: КРОС, Ведомость открытых счетов, Ведомость закрытых счетов",
-            "title": "KROS",
-            "enum": [
-              "KROS"
-            ]
-          },
-          {
-            "description": "6406у: Информация об открытых и закрытых счетах, Информация о счетах. Остатки, Информация о счетах. Операции",
-            "title": "N6406D",
-            "enum": [
-              "N6406D"
-            ]
-          }
-        ]
-      },
-      "PacketStatusEnum": {
-        "type": "string",
-        "enum": [
-          "pack_create",
-          "pack_transfer",
-          "pack_done",
-          "pack_fail",
-          "pack_cancel",
-          "pack_delete"
-        ],
-        "description": "Статус пакета",
-        "title": "PacketStatusEnum",
-        "x-enum-descriptions": [
-          "Создано",
-          "Копирование",
-          "Выполнено",
-          "Не выполнено",
-          "Отменено",
-          "Удалено"
-        ],
-        "x-enum-varnames": [
-          "CREATE",
-          "TRANSFER",
-          "DONE",
-          "FAIL",
-          "CANCEL",
-          "DELETE"
-        ],
-        "oneOf": [
-          {
-            "description": "Создано",
-            "title": "CREATE",
-            "enum": [
-              "pack_create"
-            ]
-          },
-          {
-            "description": "Копирование",
-            "title": "TRANSFER",
-            "enum": [
-              "pack_transfer"
-            ]
-          },
-          {
-            "description": "Выполнено",
-            "title": "DONE",
-            "enum": [
-              "pack_done"
-            ]
-          },
-          {
-            "description": "Не выполнено",
-            "title": "FAIL",
-            "enum": [
-              "pack_fail"
-            ]
-          },
-          {
-            "description": "Отменено",
-            "title": "CANCEL",
-            "enum": [
-              "pack_cancel"
-            ]
-          },
-          {
-            "description": "Удалено",
-            "title": "DELETE",
-            "enum": [
-              "pack_delete"
-            ]
-          }
-        ]
-      },
-      "FileStatusEnum": {
-        "type": "string",
-        "enum": [
-          "PENDING",
-          "CONVERTING",
-          "COMPLETED",
-          "FAILED"
-        ],
-        "description": "Статус конвертации файла",
-        "title": "FileStatusEnum",
-        "x-enum-descriptions": [
-          "Ожидает обработки",
-          "Идёт конвертация файла",
-          "Конвертация успешно завершена",
-          "Конвертация завершилась ошибкой"
-        ],
-        "x-enum-varnames": [
-          "PENDING",
-          "CONVERTING",
-          "COMPLETED",
-          "FAILED"
-        ],
-        "oneOf": [
-          {
-            "description": "Ожидает обработки",
-            "title": "PENDING",
-            "enum": [
-              "PENDING"
-            ]
-          },
-          {
-            "description": "Идёт конвертация файла",
-            "title": "CONVERTING",
-            "enum": [
-              "CONVERTING"
-            ]
-          },
-          {
-            "description": "Конвертация успешно завершена",
-            "title": "COMPLETED",
-            "enum": [
-              "COMPLETED"
-            ]
-          },
-          {
-            "description": "Конвертация завершилась ошибкой",
-            "title": "FAILED",
-            "enum": [
-              "FAILED"
-            ]
-          }
-        ]
-      },
-      "ReportTypeEnum": {
-        "type": "string",
-        "enum": [
-          "LSOZ",
-          "LSOS",
-          "LSOP",
-          "KROS_VOS",
-          "KROS_VZS",
-          "KROS"
-        ],
-        "description": "Тип отчёта",
-        "title": "ReportTypeEnum",
-        "x-enum-descriptions": [
-          "LSOZ",
-          "LSOS",
-          "LSOP",
-          "KROS_VOS",
-          "KROS_VZS",
-          "KROS"
-        ],
-        "x-enum-varnames": [
-          "LSOZ",
-          "LSOS",
-          "LSOP",
-          "KROS_VOS",
-          "KROS_VZS",
-          "KROS"
-        ],
-        "oneOf": [
-          {
-            "description": "LSOZ",
-            "title": "LSOZ",
-            "enum": [
-              "LSOZ"
-            ]
-          },
-          {
-            "description": "LSOS",
-            "title": "LSOS",
-            "enum": [
-              "LSOS"
-            ]
-          },
-          {
-            "description": "LSOP",
-            "title": "LSOP",
-            "enum": [
-              "LSOP"
-            ]
-          },
-          {
-            "description": "KROS_VOS",
-            "title": "KROS_VOS",
-            "enum": [
-              "KROS_VOS"
-            ]
-          },
-          {
-            "description": "KROS_VZS",
-            "title": "KROS_VZS",
-            "enum": [
-              "KROS_VZS"
-            ]
-          },
-          {
-            "description": "KROS",
-            "title": "KROS",
-            "enum": [
-              "KROS"
-            ]
-          }
-        ]
-      },
       "SortOrderEnum": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/SortOrderEnum",
+        "default": "DESC",
+        "description": "Направление сортировки",
         "type": "string",
         "enum": [
           "ASC",
           "DESC"
         ],
-        "description": "Направление сортировки",
-        "title": "SortOrderEnum",
         "x-enum-descriptions": [
-          "Сортировка от А до Я",
-          "Сортировка От я до а"
+          "Сортировка по возрастанию",
+          "Сортировка по убыванию"
         ],
         "x-enum-varnames": [
           "ASC",
@@ -284,29 +31,26 @@
         ],
         "oneOf": [
           {
-            "description": "Сортировка от А до Я",
-            "title": "ASC",
-            "enum": [
-              "ASC"
-            ]
+            "const": "ASC",
+            "description": "Сортировка по возрастанию",
+            "title": "ASC"
           },
           {
-            "description": "Сортировка От я до а",
-            "title": "DESC",
-            "enum": [
-              "DESC"
-            ]
+            "const": "DESC",
+            "description": "Сортировка по убыванию",
+            "title": "DESC"
           }
         ]
       },
       "CurrencyEnum": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/CurrencyEnum",
         "type": "string",
         "enum": [
           "RUB",
           "FOREIGN"
         ],
-        "description": "Валюта отчёта",
-        "title": "CurrencyEnum",
+        "description": "Валюта",
         "x-enum-descriptions": [
           "Рубли",
           "Иностранная валюта"
@@ -317,30 +61,27 @@
         ],
         "oneOf": [
           {
+            "const": "RUB",
             "description": "Рубли",
-            "title": "RUB",
-            "enum": [
-              "RUB"
-            ]
+            "title": "RUB"
           },
           {
+            "const": "FOREIGN",
             "description": "Иностранная валюта",
-            "title": "FOREIGN",
-            "enum": [
-              "FOREIGN"
-            ]
+            "title": "FOREIGN"
           }
         ]
       },
       "FileFormatEnum": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/FileFormatEnum",
         "type": "string",
         "enum": [
           "TXT",
           "XLSX",
           "XML"
         ],
-        "description": "Формат файла отчёта",
-        "title": "FileFormatEnum",
+        "description": "Формат файла",
         "x-enum-descriptions": [
           "Текстовый формат",
           "Excel формат",
@@ -353,29 +94,63 @@
         ],
         "oneOf": [
           {
+            "const": "TXT",
             "description": "Текстовый формат",
-            "title": "TXT",
-            "enum": [
-              "TXT"
-            ]
+            "title": "TXT"
           },
           {
+            "const": "XLSX",
             "description": "Excel формат",
-            "title": "XLSX",
-            "enum": [
-              "XLSX"
-            ]
+            "title": "XLSX"
           },
           {
+            "const": "XML",
             "description": "XML формат",
-            "title": "XML",
-            "enum": [
-              "XML"
-            ]
+            "title": "XML"
+          }
+        ]
+      },
+      "ReportTypeEnum": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/ReportTypeEnum",
+        "type": "string",
+        "enum": [
+          "LSOZ",
+          "LSOS",
+          "LSOP"
+        ],
+        "description": "Тип отчёта",
+        "x-enum-descriptions": [
+          "LSOZ",
+          "LSOS",
+          "LSOP"
+        ],
+        "x-enum-varnames": [
+          "LSOZ",
+          "LSOS",
+          "LSOP"
+        ],
+        "oneOf": [
+          {
+            "const": "LSOZ",
+            "description": "LSOZ",
+            "title": "LSOZ"
+          },
+          {
+            "const": "LSOS",
+            "description": "LSOS",
+            "title": "LSOS"
+          },
+          {
+            "const": "LSOP",
+            "description": "LSOP",
+            "title": "LSOP"
           }
         ]
       },
       "TaskStatusEnum": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/TaskStatusEnum",
         "type": "string",
         "enum": [
           "task_create",
@@ -390,8 +165,7 @@
           "task_cancel_generation",
           "task_delete"
         ],
-        "description": "Статус задания",
-        "title": "TaskStatusEnum",
+        "description": "Статус задания (локальная модель task_*)",
         "x-enum-descriptions": [
           "Создано",
           "Готовится к запуску",
@@ -420,95 +194,221 @@
         ],
         "oneOf": [
           {
+            "const": "task_create",
             "description": "Создано",
-            "title": "CREATE",
-            "enum": [
-              "task_create"
-            ]
+            "title": "CREATE"
           },
           {
+            "const": "task_loading",
             "description": "Готовится к запуску",
-            "title": "LOADING",
-            "enum": [
-              "task_loading"
-            ]
+            "title": "LOADING"
           },
           {
+            "const": "task_data",
             "description": "Выборка данных",
-            "title": "DATA",
-            "enum": [
-              "task_data"
-            ]
+            "title": "DATA"
           },
           {
+            "const": "task_empty_data",
             "description": "Нет данных по заданным параметрам",
-            "title": "EMPTY_DATA",
-            "enum": [
-              "task_empty_data"
-            ]
+            "title": "EMPTY_DATA"
           },
           {
+            "const": "task_fail_data",
             "description": "Выборка не выполнена",
-            "title": "FAIL_DATA",
-            "enum": [
-              "task_fail_data"
-            ]
+            "title": "FAIL_DATA"
           },
           {
+            "const": "task_cancel_data",
             "description": "Выборка данных отменена",
-            "title": "CANCEL_DATA",
-            "enum": [
-              "task_cancel_data"
-            ]
+            "title": "CANCEL_DATA"
           },
           {
+            "const": "task_conversion",
             "description": "Генерация",
-            "title": "CONVERSION",
-            "enum": [
-              "task_conversion"
-            ]
+            "title": "CONVERSION"
           },
           {
+            "const": "task_done",
             "description": "Выполнено",
-            "title": "DONE",
-            "enum": [
-              "task_done"
-            ]
+            "title": "DONE"
           },
           {
+            "const": "task_fail_generation",
             "description": "Генерация не выполнена",
-            "title": "FAIL_GENERATION",
-            "enum": [
-              "task_fail_generation"
-            ]
+            "title": "FAIL_GENERATION"
           },
           {
+            "const": "task_cancel_generation",
             "description": "Генерация отменена",
-            "title": "CANCEL_GENERATION",
-            "enum": [
-              "task_cancel_generation"
-            ]
+            "title": "CANCEL_GENERATION"
           },
           {
+            "const": "task_delete",
             "description": "Удалено",
-            "title": "DELETE",
-            "enum": [
-              "task_delete"
-            ]
+            "title": "DELETE"
+          }
+        ]
+      },
+      "PacketStatusEnum": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/PacketStatusEnum",
+        "type": "string",
+        "enum": [
+          "pack_create",
+          "pack_transfer",
+          "pack_done",
+          "pack_fail",
+          "pack_cancel",
+          "pack_delete"
+        ],
+        "description": "Статус пакета",
+        "x-enum-descriptions": [
+          "Создано",
+          "Копирование",
+          "Выполнено",
+          "Не выполнено",
+          "Отменено",
+          "Удалено"
+        ],
+        "x-enum-varnames": [
+          "CREATE",
+          "TRANSFER",
+          "DONE",
+          "FAIL",
+          "CANCEL",
+          "DELETE"
+        ],
+        "oneOf": [
+          {
+            "const": "pack_create",
+            "description": "Создано",
+            "title": "CREATE"
+          },
+          {
+            "const": "pack_transfer",
+            "description": "Копирование",
+            "title": "TRANSFER"
+          },
+          {
+            "const": "pack_done",
+            "description": "Выполнено",
+            "title": "DONE"
+          },
+          {
+            "const": "pack_fail",
+            "description": "Не выполнено",
+            "title": "FAIL"
+          },
+          {
+            "const": "pack_cancel",
+            "description": "Отменено",
+            "title": "CANCEL"
+          },
+          {
+            "const": "pack_delete",
+            "description": "Удалено",
+            "title": "DELETE"
+          }
+        ]
+      },
+      "FileStatusEnum": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/FileStatusEnum",
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "CONVERTING",
+          "COMPLETED",
+          "FAILED"
+        ],
+        "description": "Статус конвертации файла",
+        "x-enum-descriptions": [
+          "Ожидает обработки",
+          "Идёт конвертация файла",
+          "Конвертация успешно завершена",
+          "Конвертация завершилась ошибкой"
+        ],
+        "x-enum-varnames": [
+          "PENDING",
+          "CONVERTING",
+          "COMPLETED",
+          "FAILED"
+        ],
+        "oneOf": [
+          {
+            "const": "PENDING",
+            "description": "Ожидает обработки",
+            "title": "PENDING"
+          },
+          {
+            "const": "CONVERTING",
+            "description": "Идёт конвертация файла",
+            "title": "CONVERTING"
+          },
+          {
+            "const": "COMPLETED",
+            "description": "Конвертация успешно завершена",
+            "title": "COMPLETED"
+          },
+          {
+            "const": "FAILED",
+            "description": "Конвертация завершилась ошибкой",
+            "title": "FAILED"
+          }
+        ]
+      },
+      "StorageCodeEnum": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/StorageCodeEnum",
+        "type": "string",
+        "enum": [
+          "TFR",
+          "S3",
+          "LOCAL"
+        ],
+        "description": "Код хранилища",
+        "x-enum-descriptions": [
+          "Территориальный финансовый репозиторий",
+          "Объектное хранилище (S3)",
+          "Локальное хранилище"
+        ],
+        "x-enum-varnames": [
+          "TFR",
+          "S3",
+          "LOCAL"
+        ],
+        "oneOf": [
+          {
+            "const": "TFR",
+            "description": "Территориальный финансовый репозиторий",
+            "title": "TFR"
+          },
+          {
+            "const": "S3",
+            "description": "Объектное хранилище (S3)",
+            "title": "S3"
+          },
+          {
+            "const": "LOCAL",
+            "description": "Локальное хранилище",
+            "title": "LOCAL"
           }
         ]
       },
       "PaginationRequestDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/PaginationRequestDto",
         "type": "object",
         "properties": {
-          "number": {
+          "page": {
             "default": 1,
             "description": "Номер страницы (начиная с 1)",
             "type": "integer",
             "minimum": 1,
             "maximum": 9007199254740991
           },
-          "size": {
+          "limit": {
             "default": 20,
             "description": "Размер страницы",
             "type": "integer",
@@ -517,13 +417,14 @@
           }
         },
         "required": [
-          "number",
-          "size"
+          "page",
+          "limit"
         ],
-        "additionalProperties": false,
-        "title": "PaginationRequestDto"
+        "additionalProperties": false
       },
       "PaginationMetadataDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/PaginationMetadataDto",
         "type": "object",
         "properties": {
           "number": {
@@ -557,10 +458,11 @@
           "totalItems",
           "totalPages"
         ],
-        "additionalProperties": false,
-        "title": "PaginationMetadataDto"
+        "additionalProperties": false
       },
       "PaginatedResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/PaginatedResponseDto",
         "type": "object",
         "properties": {
           "items": {
@@ -579,33 +481,11 @@
           "items",
           "totalItems"
         ],
-        "additionalProperties": false,
-        "title": "PaginatedResponseDto"
-      },
-      "SortingRequestDto": {
-        "type": "object",
-        "properties": {
-          "direction": {
-            "type": "string",
-            "enum": [
-              "asc",
-              "desc"
-            ],
-            "description": "Направление сортировки"
-          },
-          "column": {
-            "type": "string",
-            "description": "Колонка для сортировки"
-          }
-        },
-        "required": [
-          "direction",
-          "column"
-        ],
-        "additionalProperties": false,
-        "title": "SortingRequestDto"
+        "additionalProperties": false
       },
       "FilterDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/FilterDto",
         "type": "object",
         "properties": {
           "column": {
@@ -621,19 +501,26 @@
           "column",
           "value"
         ],
-        "additionalProperties": false,
-        "title": "FilterDto"
+        "additionalProperties": false
       },
-      "StorageCodeEnumSchema": {
+      "DateSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/DateSchema",
         "type": "string",
-        "enum": [
-          "TFR",
-          "S3",
-          "LOCAL"
-        ],
-        "title": "StorageCodeEnumSchema"
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+        "description": "Дата в формате YYYY-MM-DD"
+      },
+      "DateTimeSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/DateTimeSchema",
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+        "description": "Дата и время в формате ISO 8601"
       },
       "HealthResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/HealthResponseDto",
         "type": "object",
         "properties": {
           "status": {
@@ -654,10 +541,11 @@
           "timestamp",
           "database"
         ],
-        "additionalProperties": false,
-        "title": "HealthResponseDto"
+        "additionalProperties": false
       },
       "HttpErrorWithInstanceDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/HttpErrorWithInstanceDto",
         "type": "object",
         "properties": {
           "type": {
@@ -690,10 +578,11 @@
           "detail",
           "instance"
         ],
-        "additionalProperties": false,
-        "title": "HttpErrorWithInstanceDto"
+        "additionalProperties": false
       },
       "BranchDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BranchDto",
         "type": "object",
         "properties": {
           "id": {
@@ -716,10 +605,11 @@
           "code",
           "name"
         ],
-        "additionalProperties": false,
-        "title": "BranchDto"
+        "additionalProperties": false
       },
       "CurrencyDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/CurrencyDto",
         "type": "object",
         "properties": {
           "code": {
@@ -733,13 +623,29 @@
           "code",
           "name"
         ],
-        "additionalProperties": false,
-        "title": "CurrencyDto"
+        "additionalProperties": false
       },
       "FormatDto": {
-        "$ref": "#/components/schemas/CurrencyDto"
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/FormatDto",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ],
+        "additionalProperties": false
       },
       "SourceDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/SourceDto",
         "type": "object",
         "properties": {
           "code": {
@@ -764,49 +670,77 @@
           "name",
           "ris"
         ],
-        "additionalProperties": false,
-        "title": "SourceDto"
+        "additionalProperties": false
       },
       "BranchesResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BranchesResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/BranchDto"
-        },
-        "title": "BranchesResponseDto"
+        }
       },
       "CurrenciesResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/CurrenciesResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/CurrencyDto"
-        },
-        "title": "CurrenciesResponseDto"
+        }
       },
       "FormatsResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/FormatsResponseDto",
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/CurrencyDto"
-        },
-        "title": "FormatsResponseDto"
+          "$ref": "#/components/schemas/FormatDto"
+        }
       },
       "SourcesResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/SourcesResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/SourceDto"
-        },
-        "title": "SourcesResponseDto"
+        }
       },
       "CreateTaskDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/CreateTaskDto",
         "type": "object",
         "properties": {
-          "branchId": {
-            "description": "ИД филиала (устаревшее поле, используйте branchIds)",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "branchIds": {
-            "description": "Массив ИД филиалов",
+          "branchIdsList": {
             "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            },
+            "description": "Массив ИД филиалов"
+          },
+          "reportType": {
+            "$ref": "#/components/schemas/ReportTypeEnum"
+          },
+          "periodFrom": {
+            "description": "Дата начала отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "periodTo": {
+            "description": "Дата окончания отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "currencyCode": {
+            "description": "Валюта (например: RUB, FOREIGN)",
+            "$ref": "#/components/schemas/CurrencyEnum"
+          },
+          "fileFormat": {
+            "default": "TXT",
+            "$ref": "#/components/schemas/FileFormatEnum"
+          },
+          "sourceList": {
+            "description": "Источники данных",
             "type": "array",
             "items": {
               "type": "integer",
@@ -815,47 +749,56 @@
               "description": "Integer ID"
             }
           },
-          "periodStart": {
-            "$ref": "#/components/schemas/DateSchema"
+          "accountList": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 20,
+                  "maxLength": 20,
+                  "pattern": "^\\d+$",
+                  "description": "Счёт (20-значный номер)"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Список счетов (20-значные номера)"
           },
-          "periodEnd": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "accountMask": {
-            "description": "Маска счетов для фильтрации",
-            "type": "string",
-            "maxLength": 20
-          },
-          "accountSecondOrder": {
-            "description": "Счета второго порядка",
-            "type": "string",
-            "maxLength": 2
-          },
-          "currency": {
-            "$ref": "#/components/schemas/CurrencyEnum"
-          },
-          "format": {
-            "$ref": "#/components/schemas/FileFormatEnum"
-          },
-          "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnum"
-          },
-          "source": {
-            "description": "Ссылка на справочник или ИД источника данных",
-            "type": "string",
-            "maxLength": 20
+          "accountSecondOrderList": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 5,
+                  "pattern": "^\\d+$",
+                  "description": "Счёт второго порядка (5-значный номер)"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Счета второго порядка (5-значные номера)"
           }
         },
         "required": [
-          "periodStart",
-          "periodEnd",
-          "format",
-          "reportType"
+          "branchIdsList",
+          "reportType",
+          "currencyCode",
+          "fileFormat",
+          "accountList",
+          "accountSecondOrderList"
         ],
-        "additionalProperties": false,
-        "title": "CreateTaskDto"
+        "additionalProperties": false
       },
-      "TaskDto": {
+      "TaskListItemDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/TaskListItemDto",
         "type": "object",
         "properties": {
           "id": {
@@ -865,19 +808,17 @@
             "description": "ИД задания"
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время создания"
           },
           "createdBy": {
             "type": "string",
-            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
+            "description": "ФИО сотрудника, создавшего задание"
           },
-          "branchId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД филиала (устаревшее поле, используйте branchIds)"
-          },
-          "branchIds": {
+          "branchIdsList": {
+            "minItems": 1,
             "type": "array",
             "items": {
               "type": "integer",
@@ -887,304 +828,87 @@
             },
             "description": "Массив ИД филиалов"
           },
-          "branchName": {
-            "type": "string",
-            "description": "Название филиала (название первого филиала)"
-          },
-          "branchNames": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Массив названий филиалов"
-          },
-          "periodStart": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "periodEnd": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "accountMask": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Маска счетов для фильтрации"
-          },
-          "accountSecondOrder": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Счета второго порядка"
-          },
-          "currency": {
-            "$ref": "#/components/schemas/CurrencyEnum"
-          },
-          "format": {
-            "$ref": "#/components/schemas/FileFormatEnum"
-          },
           "reportType": {
             "$ref": "#/components/schemas/ReportTypeEnum"
           },
-          "source": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Ссылка на справочник или ИД источника данных"
+          "periodFrom": {
+            "description": "Дата начала отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
           },
-          "status": {
+          "periodTo": {
+            "description": "Дата окончания отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "currencyCode": {
+            "description": "Валюта (например: RUB, FOREIGN)",
+            "$ref": "#/components/schemas/CurrencyEnum"
+          },
+          "fileFormat": {
+            "default": "TXT",
+            "$ref": "#/components/schemas/FileFormatEnum"
+          },
+          "taskStatus": {
+            "description": "Статус задания",
             "$ref": "#/components/schemas/TaskStatusEnum"
           },
-          "canCancel": {
-            "type": "boolean",
-            "description": "Возможность отмены задания"
-          },
-          "canDelete": {
-            "type": "boolean",
-            "description": "Возможность удаления задания"
-          },
-          "canStart": {
-            "type": "boolean",
-            "description": "Возможность запуска задания"
-          },
           "fileSize": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 9007199254740991,
-                "description": "Размер файла в байтах. null — размер ещё не рассчитан (задание не завершено)."
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "filesCount": {
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "description": "Количество файлов в задании"
-          },
-          "fileUrl": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "URL для скачивания файла"
-          },
-          "errorMessage": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Сообщение об ошибке"
-          },
-          "lastStatusChangedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "startedAt": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeSchema"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Дата и время начала обработки"
-          },
-          "completedAt": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeSchema"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Дата и время завершения"
+            "description": "Размер файла; 0 — ещё не рассчитан"
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          }
-        },
-        "required": [
-          "id",
-          "createdAt",
-          "createdBy",
-          "branchId",
-          "branchIds",
-          "branchName",
-          "branchNames",
-          "periodStart",
-          "periodEnd",
-          "accountMask",
-          "accountSecondOrder",
-          "currency",
-          "format",
-          "source",
-          "status",
-          "canCancel",
-          "canDelete",
-          "canStart",
-          "fileSize",
-          "filesCount",
-          "fileUrl",
-          "errorMessage",
-          "lastStatusChangedAt",
-          "startedAt",
-          "completedAt",
-          "updatedAt"
-        ],
-        "additionalProperties": false,
-        "title": "TaskDto"
-      },
-      "TaskListItemDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД задания"
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "createdBy": {
             "type": "string",
-            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при возврате)"
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время последнего обновления"
           },
-          "branchId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД филиала (устаревшее поле, используйте branchIds)"
-          },
-          "branchIds": {
+          "sourceList": {
+            "description": "Источники данных",
             "type": "array",
             "items": {
               "type": "integer",
               "minimum": 1,
               "maximum": 9007199254740991,
               "description": "Integer ID"
-            },
-            "description": "Массив ИД филиалов"
+            }
           },
-          "branchName": {
-            "type": "string",
-            "description": "Название филиала (название первого филиала)"
+          "filesCount": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Количество файлов"
           },
-          "branchNames": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Массив названий филиалов"
-          },
-          "periodStart": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "periodEnd": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "status": {
-            "$ref": "#/components/schemas/TaskStatusEnum"
-          },
-          "fileSize": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 9007199254740991,
-                "description": "Размер файла в байтах; null — размер ещё не рассчитан."
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "format": {
-            "$ref": "#/components/schemas/FileFormatEnum"
-          },
-          "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnum"
-          },
-          "updatedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "canCancel": {
-            "type": "boolean",
-            "description": "Можно ли отменить задание"
-          },
-          "canDelete": {
-            "type": "boolean",
-            "description": "Можно ли удалить задание"
-          },
-          "canStart": {
-            "type": "boolean",
-            "description": "Можно ли запустить задание"
-          },
-          "packageIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            },
-            "description": "ID пакетов, в которые входит задание (пустой массив = не в пакете)"
+          "packageId": {
+            "description": "ИД Пакета, в который входит задание",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
           }
         },
         "required": [
           "id",
           "createdAt",
           "createdBy",
-          "branchId",
-          "branchIds",
-          "branchName",
-          "branchNames",
-          "periodStart",
-          "periodEnd",
-          "status",
+          "branchIdsList",
+          "reportType",
+          "currencyCode",
+          "fileFormat",
+          "taskStatus",
           "fileSize",
-          "format",
           "updatedAt",
-          "canCancel",
-          "canDelete",
-          "canStart",
-          "packageIds"
+          "filesCount"
         ],
-        "additionalProperties": false,
-        "title": "TaskListItemDto"
+        "additionalProperties": false
       },
       "GetTasksRequestDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/GetTasksRequestDto",
         "type": "object",
         "properties": {
           "pagination": {
+            "description": "Параметры пагинации",
             "$ref": "#/components/schemas/PaginationRequestDto"
           },
           "sorting": {
@@ -1197,14 +921,10 @@
                 "type": "string",
                 "enum": [
                   "createdAt",
-                  "branchId",
-                  "status",
-                  "periodStart",
-                  "periodEnd",
-                  "updatedAt",
-                  "branchName",
+                  "taskStatus",
                   "reportType",
-                  "format",
+                  "periodFrom",
+                  "periodTo",
                   "createdBy"
                 ],
                 "description": "Колонка для сортировки"
@@ -1222,20 +942,12 @@
             "type": "object",
             "properties": {
               "packageId": {
-                "anyOf": [
-                  {
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 9007199254740991,
-                    "description": "Integer ID"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ],
-                "description": "ID пакета (null — задания без пакета)"
+                "description": "ID пакета",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
               },
-              "branchIds": {
+              "branchIdsList": {
                 "description": "Массив ИД филиалов",
                 "type": "array",
                 "items": {
@@ -1245,32 +957,29 @@
                   "description": "Integer ID"
                 }
               },
-              "statuses": {
-                "description": "Статус задания",
+              "taskStatusList": {
+                "description": "Статусы заданий",
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/TaskStatusEnum"
                 }
               },
-              "operationType": {
-                "description": "Тип операции",
+              "reportTypeList": {
+                "description": "Типы отчётов",
                 "type": "array",
                 "items": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "Integer ID"
+                  "$ref": "#/components/schemas/ReportTypeEnum"
                 }
               },
-              "format": {
-                "description": "Формат файла",
+              "fileFormatList": {
+                "description": "Форматы файла",
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/FileFormatEnum"
                 }
               },
-              "sourcesList": {
-                "description": "Источник данных",
+              "sourceIdList": {
+                "description": "Идентификаторы источников данных",
                 "type": "array",
                 "items": {
                   "type": "integer",
@@ -1279,7 +988,7 @@
                   "description": "Integer ID"
                 }
               },
-              "createdBy": {
+              "createdByList": {
                 "description": "ФИО создателя задания",
                 "type": "array",
                 "items": {
@@ -1287,41 +996,38 @@
                 }
               },
               "periodFrom": {
+                "description": "Дата начала отчётного периода YYYY-MM-DD",
                 "$ref": "#/components/schemas/DateSchema"
               },
               "periodTo": {
+                "description": "Дата окончания отчётного периода YYYY-MM-DD",
                 "$ref": "#/components/schemas/DateSchema"
               },
               "createdAtFrom": {
-                "$ref": "#/components/schemas/DateTimeSchema"
+                "description": "Дата создания от (ISO 8601)",
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
               },
               "createdAtTo": {
-                "$ref": "#/components/schemas/DateTimeSchema"
+                "description": "Дата создания до (ISO 8601)",
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
               }
             },
             "additionalProperties": false
-          },
-          "includedInPackage": {
-            "description": "ID пакета - вернуть только задачи, входящие в указанный пакет",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "excludedInPackage": {
-            "description": "ID пакета - вернуть только задачи, НЕ входящие в указанный пакет",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
           }
         },
         "required": [
           "pagination",
           "sorting"
         ],
-        "additionalProperties": false,
-        "title": "GetTasksRequestDto"
+        "additionalProperties": false
       },
       "TasksListResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/TasksListResponseDto",
         "type": "object",
         "properties": {
           "items": {
@@ -1342,10 +1048,11 @@
           "items",
           "totalItems"
         ],
-        "additionalProperties": false,
-        "title": "TasksListResponseDto"
+        "additionalProperties": false
       },
       "TaskDetailDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/TaskDetailDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1355,14 +1062,63 @@
             "description": "ИД задания"
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время создания"
           },
           "createdBy": {
             "type": "string",
-            "description": "ФИО сотрудника, создавшего задание (всегда заполняется на BE при создании)"
+            "description": "ФИО сотрудника, создавшего задание"
           },
           "branchIdsList": {
-            "description": "Массив ИД филиалов",
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            },
+            "description": "Массив ИД филиалов"
+          },
+          "reportType": {
+            "$ref": "#/components/schemas/ReportTypeEnum"
+          },
+          "periodFrom": {
+            "description": "Дата начала отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "periodTo": {
+            "description": "Дата окончания отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "currencyCode": {
+            "description": "Валюта (например: RUB, FOREIGN)",
+            "$ref": "#/components/schemas/CurrencyEnum"
+          },
+          "fileFormat": {
+            "default": "TXT",
+            "$ref": "#/components/schemas/FileFormatEnum"
+          },
+          "taskStatus": {
+            "description": "Статус задания",
+            "$ref": "#/components/schemas/TaskStatusEnum"
+          },
+          "fileSize": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Размер файла; 0 — ещё не рассчитан"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время последнего обновления"
+          },
+          "sourceList": {
+            "description": "Источники данных",
             "type": "array",
             "items": {
               "type": "integer",
@@ -1371,116 +1127,58 @@
               "description": "Integer ID"
             }
           },
-          "reportType": {
-            "$ref": "#/components/schemas/ReportTypeEnum"
+          "filesCount": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Количество файлов"
           },
-          "periodFrom": {
-            "$ref": "#/components/schemas/DateSchema"
+          "packageId": {
+            "description": "ИД Пакета, в который входит задание",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
           },
-          "periodTo": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "account": {
+          "accountList": {
             "anyOf": [
               {
                 "type": "array",
                 "items": {
                   "type": "string",
                   "minLength": 20,
-                  "maxLength": 20
+                  "maxLength": 20,
+                  "pattern": "^\\d+$",
+                  "description": "Счёт (20-значный номер)"
                 }
               },
               {
                 "type": "null"
               }
             ],
-            "description": "Список счетов"
+            "description": "Список счетов (20-значные номера)"
           },
           "accountSecondOrderList": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 5,
-              "maxLength": 5
-            },
-            "description": "Счета второго порядка"
-          },
-          "currencyCode": {
-            "$ref": "#/components/schemas/CurrencyEnum"
-          },
-          "fileType": {
-            "$ref": "#/components/schemas/FileFormatEnum"
-          },
-          "sourcesList": {
             "anyOf": [
               {
                 "type": "array",
                 "items": {
-                  "type": "number",
-                  "minimum": 1
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 5,
+                  "pattern": "^\\d+$",
+                  "description": "Счёт второго порядка (5-значный номер)"
                 }
               },
               {
                 "type": "null"
               }
             ],
-            "description": "Ссылка на справочник или ИД источника данных"
-          },
-          "status": {
-            "$ref": "#/components/schemas/TaskStatusEnum"
-          },
-          "fileSize": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Размер файла в мегабайтах. 0 — размер ещё не рассчитан."
-          },
-          "filesCount": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество файлов в задании"
-          },
-          "updatedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+            "description": "Счета второго порядка (5-значные номера)"
           },
           "s3FolderId": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "ID папки в S3"
-          },
-          "operationTypesList": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Код типа операции"
-          },
-          "packageId": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 9007199254740991,
-                "description": "Integer ID"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Пакет, в которые входит задание"
+            "description": "ID папки в S3",
+            "type": "string"
           }
         },
         "required": [
@@ -1489,36 +1187,45 @@
           "createdBy",
           "branchIdsList",
           "reportType",
-          "periodFrom",
-          "periodTo",
-          "account",
-          "accountSecondOrderList",
           "currencyCode",
-          "fileType",
-          "sourcesList",
-          "status",
+          "fileFormat",
+          "taskStatus",
           "fileSize",
-          "filesCount",
           "updatedAt",
-          "s3FolderId",
-          "operationTypesList",
-          "packageId"
+          "filesCount",
+          "accountList",
+          "accountSecondOrderList"
         ],
-        "additionalProperties": false,
-        "title": "TaskDetailDto"
+        "additionalProperties": false
+      },
+      "BulkDeleteTasksRequestDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BulkDeleteTasksRequestDto",
+        "minItems": 1,
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "description": "Integer ID"
+        }
       },
       "BulkDeleteTasksResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BulkDeleteTasksResponseDto",
         "type": "object",
         "properties": {
-          "deleted": {
+          "succeeded": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество успешно удалённых заданий"
           },
           "failed": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество заданий, которые не удалось удалить"
           },
           "results": {
             "type": "array",
@@ -1547,25 +1254,40 @@
           }
         },
         "required": [
-          "deleted",
+          "succeeded",
           "failed",
           "results"
         ],
-        "additionalProperties": false,
-        "title": "BulkDeleteTasksResponseDto"
+        "additionalProperties": false
+      },
+      "BulkCancelTasksRequestDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BulkCancelTasksRequestDto",
+        "minItems": 1,
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "description": "Integer ID"
+        }
       },
       "BulkCancelTasksResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BulkCancelTasksResponseDto",
         "type": "object",
         "properties": {
-          "cancelled": {
+          "succeeded": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество успешно отменённых заданий"
           },
           "failed": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество заданий, которые не удалось отменить"
           },
           "results": {
             "type": "array",
@@ -1581,11 +1303,13 @@
                 "success": {
                   "type": "boolean"
                 },
-                "status": {
+                "taskStatus": {
                   "$ref": "#/components/schemas/TaskStatusEnum"
                 },
                 "updatedAt": {
-                  "$ref": "#/components/schemas/DateTimeSchema"
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                 },
                 "reason": {
                   "type": "string"
@@ -1600,25 +1324,40 @@
           }
         },
         "required": [
-          "cancelled",
+          "succeeded",
           "failed",
           "results"
         ],
-        "additionalProperties": false,
-        "title": "BulkCancelTasksResponseDto"
+        "additionalProperties": false
+      },
+      "StartTasksRequestDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/StartTasksRequestDto",
+        "minItems": 1,
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "description": "Integer ID"
+        }
       },
       "StartTasksResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/StartTasksResponseDto",
         "type": "object",
         "properties": {
-          "started": {
+          "succeeded": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество успешно запущенных заданий"
           },
           "failed": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество заданий, которые не удалось запустить"
           },
           "results": {
             "type": "array",
@@ -1630,32 +1369,17 @@
                   "minimum": 1,
                   "maximum": 9007199254740991,
                   "description": "Integer ID"
+                },
+                "success": {
+                  "type": "boolean"
                 },
                 "status": {
                   "$ref": "#/components/schemas/TaskStatusEnum"
                 },
                 "startedAt": {
-                  "$ref": "#/components/schemas/DateTimeSchema"
-                }
-              },
-              "required": [
-                "taskId",
-                "status",
-                "startedAt"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "taskId": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "Integer ID"
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                 },
                 "reason": {
                   "type": "string"
@@ -1663,22 +1387,22 @@
               },
               "required": [
                 "taskId",
-                "reason"
+                "success"
               ],
               "additionalProperties": false
             }
           }
         },
         "required": [
-          "started",
+          "succeeded",
           "failed",
-          "results",
-          "errors"
+          "results"
         ],
-        "additionalProperties": false,
-        "title": "StartTasksResponseDto"
+        "additionalProperties": false
       },
       "StatusHistoryItemDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/StatusHistoryItemDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1687,75 +1411,57 @@
             "maximum": 9007199254740991,
             "description": "Integer ID"
           },
-          "status": {
+          "taskId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "taskStatus": {
             "$ref": "#/components/schemas/TaskStatusEnum"
           },
-          "previousStatus": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/TaskStatusEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
+          "changeAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время изменения"
           },
-          "changedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+          "changeBy": {
+            "type": "string",
+            "description": "Инициатор изменения. Логин или ФИО"
           },
-          "changedBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "comment": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
+          "note": {
+            "type": "string"
           },
           "metadata": {
-            "anyOf": [
-              {
-                "type": "object",
-                "additionalProperties": {}
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Дополнительные метаданные в формате ключ-значение"
+            "description": "Дополнительные метаданные в формате ключ-значение",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
           "id",
-          "status",
-          "previousStatus",
-          "changedAt",
-          "changedBy",
-          "comment",
-          "metadata"
+          "taskId",
+          "taskStatus",
+          "changeAt",
+          "changeBy"
         ],
-        "additionalProperties": false,
-        "title": "StatusHistoryItemDto"
+        "additionalProperties": false
       },
       "StatusHistoryResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/StatusHistoryResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/StatusHistoryItemDto"
-        },
-        "title": "StatusHistoryResponseDto"
+        }
       },
       "TaskFileDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/TaskFileDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1778,6 +1484,12 @@
             "maximum": 9007199254740991,
             "description": "Размер файла в байтах (например, 10485760 = 10 MB)"
           },
+          "fileType": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FileStatusEnum"
+          },
           "downloadUrl": {
             "anyOf": [
               {
@@ -1794,12 +1506,15 @@
           "fileNumber",
           "fileName",
           "fileSize",
+          "fileType",
+          "status",
           "downloadUrl"
         ],
-        "additionalProperties": false,
-        "title": "TaskFileDto"
+        "additionalProperties": false
       },
       "TaskFilesResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/TaskFilesResponseDto",
         "type": "object",
         "properties": {
           "taskId": {
@@ -1823,10 +1538,11 @@
           "files",
           "pagination"
         ],
-        "additionalProperties": false,
-        "title": "TaskFilesResponseDto"
+        "additionalProperties": false
       },
       "RetryFileConversionResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/RetryFileConversionResponseDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1847,10 +1563,11 @@
           "status",
           "message"
         ],
-        "additionalProperties": false,
-        "title": "RetryFileConversionResponseDto"
+        "additionalProperties": false
       },
       "CreatePackageDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/CreatePackageDto",
         "type": "object",
         "properties": {
           "name": {
@@ -1863,17 +1580,18 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 255,
-            "description": "Создатель пакета"
+            "description": "ФИО сотрудника, создавшего пакет"
           }
         },
         "required": [
           "name",
           "createdBy"
         ],
-        "additionalProperties": false,
-        "title": "CreatePackageDto"
+        "additionalProperties": false
       },
       "UpdatePackageDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/UpdatePackageDto",
         "type": "object",
         "properties": {
           "name": {
@@ -1886,10 +1604,11 @@
         "required": [
           "name"
         ],
-        "additionalProperties": false,
-        "title": "UpdatePackageDto"
+        "additionalProperties": false
       },
       "PackageDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/PackageDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1900,25 +1619,34 @@
           },
           "name": {
             "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
             "description": "Название пакета"
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время создания пакета"
           },
           "createdBy": {
             "type": "string",
-            "description": "Создатель пакета"
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "ФИО сотрудника, создавшего пакет"
           },
           "lastCopiedToTfrAt": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/DateTimeSchema"
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "Дата последнего копирования в ТФР YYYY-MM-DD HH-MM-SS"
+            "description": "Дата последнего копирования в ТФР (ISO 8601)"
           },
           "tasksCount": {
             "default": 0,
@@ -1932,12 +1660,16 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "description": "Общий размер пакета в мегабайтах (сумма размеров всех файлов). Всегда число; 0 при пустом пакете."
+            "description": "Общий размер пакета в байтах (сумма размеров всех файлов)"
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время последнего обновления"
           },
           "status": {
+            "description": "Текущий статус пакета",
             "$ref": "#/components/schemas/PacketStatusEnum"
           }
         },
@@ -1952,19 +1684,22 @@
           "updatedAt",
           "status"
         ],
-        "additionalProperties": false,
-        "title": "PackageDto"
+        "additionalProperties": false
       },
       "PackagesListResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/PackagesListResponseDto",
         "type": "object",
         "properties": {
           "packages": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PackageDto"
-            }
+            },
+            "description": "Список пакетов"
           },
           "pagination": {
+            "description": "Метаданные пагинации",
             "$ref": "#/components/schemas/PaginationMetadataDto"
           }
         },
@@ -1972,21 +1707,46 @@
           "packages",
           "pagination"
         ],
-        "additionalProperties": false,
-        "title": "PackagesListResponseDto"
+        "additionalProperties": false
+      },
+      "BulkDeletePackagesRequestDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BulkDeletePackagesRequestDto",
+        "type": "object",
+        "properties": {
+          "packageIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            },
+            "description": "Массив ИД пакетов для удаления (минимум 1)"
+          }
+        },
+        "required": [
+          "packageIds"
+        ],
+        "additionalProperties": false
       },
       "BulkDeletePackagesResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BulkDeletePackagesResponseDto",
         "type": "object",
         "properties": {
           "deleted": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество успешно удалённых пакетов"
           },
           "failed": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество пакетов, которые не удалось удалить"
           },
           "results": {
             "type": "array",
@@ -1997,12 +1757,14 @@
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 9007199254740991,
-                  "description": "Integer ID"
+                  "description": "ИД пакета"
                 },
                 "success": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Успешность операции"
                 },
                 "reason": {
+                  "description": "Причина ошибки (если success = false)",
                   "type": "string"
                 }
               },
@@ -2011,7 +1773,8 @@
                 "success"
               ],
               "additionalProperties": false
-            }
+            },
+            "description": "Детальные результаты по каждому пакету"
           }
         },
         "required": [
@@ -2019,10 +1782,11 @@
           "failed",
           "results"
         ],
-        "additionalProperties": false,
-        "title": "BulkDeletePackagesResponseDto"
+        "additionalProperties": false
       },
       "UpdatePackageResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/UpdatePackageResponseDto",
         "type": "object",
         "properties": {
           "id": {
@@ -2032,10 +1796,14 @@
             "description": "ИД пакета"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Обновлённое название пакета"
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время обновления"
           }
         },
         "required": [
@@ -2043,26 +1811,52 @@
           "name",
           "updatedAt"
         ],
-        "additionalProperties": false,
-        "title": "UpdatePackageResponseDto"
+        "additionalProperties": false
+      },
+      "AddTasksToPackageRequestDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/AddTasksToPackageRequestDto",
+        "type": "object",
+        "properties": {
+          "taskIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            },
+            "description": "Массив ИД заданий для добавления в пакет (минимум 1)"
+          }
+        },
+        "required": [
+          "taskIds"
+        ],
+        "additionalProperties": false
       },
       "AddTasksToPackageResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/AddTasksToPackageResponseDto",
         "type": "object",
         "properties": {
           "added": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество успешно добавленных заданий"
           },
           "alreadyInPackage": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество заданий, которые уже были в пакете"
           },
           "notFound": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество не найденных заданий"
           },
           "errors": {
             "type": "array",
@@ -2073,10 +1867,11 @@
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 9007199254740991,
-                  "description": "Integer ID"
+                  "description": "ИД задания"
                 },
                 "reason": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Причина ошибки"
                 }
               },
               "required": [
@@ -2084,7 +1879,8 @@
                 "reason"
               ],
               "additionalProperties": false
-            }
+            },
+            "description": "Список ошибок при добавлении заданий"
           }
         },
         "required": [
@@ -2093,21 +1889,46 @@
           "notFound",
           "errors"
         ],
-        "additionalProperties": false,
-        "title": "AddTasksToPackageResponseDto"
+        "additionalProperties": false
+      },
+      "BulkRemoveTasksFromPackageRequestDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BulkRemoveTasksFromPackageRequestDto",
+        "type": "object",
+        "properties": {
+          "taskIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            },
+            "description": "Массив ИД заданий для удаления из пакета (минимум 1)"
+          }
+        },
+        "required": [
+          "taskIds"
+        ],
+        "additionalProperties": false
       },
       "BulkRemoveTasksResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/BulkRemoveTasksResponseDto",
         "type": "object",
         "properties": {
           "removed": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество успешно удалённых заданий"
           },
           "failed": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Количество заданий, которые не удалось удалить"
           },
           "results": {
             "type": "array",
@@ -2118,12 +1939,14 @@
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 9007199254740991,
-                  "description": "Integer ID"
+                  "description": "ИД задания"
                 },
                 "success": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Успешность операции"
                 },
                 "reason": {
+                  "description": "Причина ошибки (если success = false)",
                   "type": "string"
                 }
               },
@@ -2132,7 +1955,8 @@
                 "success"
               ],
               "additionalProperties": false
-            }
+            },
+            "description": "Детальные результаты по каждому заданию"
           }
         },
         "required": [
@@ -2140,10 +1964,11 @@
           "failed",
           "results"
         ],
-        "additionalProperties": false,
-        "title": "BulkRemoveTasksResponseDto"
+        "additionalProperties": false
       },
       "CopyToTfrResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/CopyToTfrResponseDto",
         "type": "object",
         "properties": {
           "id": {
@@ -2153,10 +1978,14 @@
             "description": "ИД пакета"
           },
           "lastCopiedToTfrAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время последнего копирования в ТФР"
           },
           "message": {
-            "type": "string"
+            "type": "string",
+            "description": "Сообщение о результате операции"
           }
         },
         "required": [
@@ -2164,45 +1993,70 @@
           "lastCopiedToTfrAt",
           "message"
         ],
-        "additionalProperties": false,
-        "title": "CopyToTfrResponseDto"
+        "additionalProperties": false
       },
       "PackageStatusHistoryItemDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/PackageStatusHistoryItemDto",
         "type": "object",
         "properties": {
-          "status": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "packageId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "packageStatus": {
             "$ref": "#/components/schemas/PacketStatusEnum"
           },
-          "changedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+          "changeAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время изменения"
           },
-          "changedBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
+          "changeBy": {
+            "type": "string",
+            "description": "Инициатор изменения. Логин или ФИО"
+          },
+          "note": {
+            "type": "string"
+          },
+          "metadata": {
+            "description": "Дополнительные метаданные в формате ключ-значение",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "status",
-          "changedAt",
-          "changedBy"
+          "id",
+          "packageId",
+          "packageStatus",
+          "changeAt",
+          "changeBy"
         ],
-        "additionalProperties": false,
-        "title": "PackageStatusHistoryItemDto"
+        "additionalProperties": false
       },
       "PackageStatusHistoryResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/PackageStatusHistoryResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/PackageStatusHistoryItemDto"
-        },
-        "title": "PackageStatusHistoryResponseDto"
+        }
       },
       "ExportTasksRequestDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/ExportTasksRequestDto",
         "type": "object",
         "properties": {
           "filters": {
@@ -2240,22 +2094,36 @@
                 }
               },
               "periodStartFrom": {
-                "$ref": "#/components/schemas/DateSchema"
+                "description": "Начальная дата периода",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
               },
               "periodStartTo": {
-                "$ref": "#/components/schemas/DateSchema"
+                "description": "Конечная дата периода",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
               },
               "periodEndFrom": {
-                "$ref": "#/components/schemas/DateSchema"
+                "description": "Начальная дата окончания периода",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
               },
               "periodEndTo": {
-                "$ref": "#/components/schemas/DateSchema"
+                "description": "Конечная дата окончания периода",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
               },
               "createdAtFrom": {
-                "$ref": "#/components/schemas/DateTimeSchema"
+                "description": "Начальная дата создания",
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
               },
               "createdAtTo": {
-                "$ref": "#/components/schemas/DateTimeSchema"
+                "description": "Конечная дата создания",
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
               }
             },
             "additionalProperties": false
@@ -2287,10 +2155,11 @@
           "sortBy",
           "sortOrder"
         ],
-        "additionalProperties": false,
-        "title": "ExportTasksRequestDto"
+        "additionalProperties": false
       },
       "ExportTasksResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/ExportTasksResponseDto",
         "type": "object",
         "properties": {
           "exportId": {
@@ -2300,6 +2169,7 @@
             "description": "ИД экспорта"
           },
           "status": {
+            "description": "Статус экспорта",
             "$ref": "#/components/schemas/TaskStatusEnum"
           },
           "fileUrl": {
@@ -2313,7 +2183,10 @@
             "description": "Размер экспортированного файла в байтах (например, 52428800 = 50 MB)"
           },
           "downloadUrlExpiresAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата истечения срока действия ссылки"
           },
           "recordsCount": {
             "type": "integer",
@@ -2322,7 +2195,10 @@
             "description": "Количество записей в экспортированном файле"
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата создания экспорта"
           }
         },
         "required": [
@@ -2334,14 +2210,16 @@
           "recordsCount",
           "createdAt"
         ],
-        "additionalProperties": false,
-        "title": "ExportTasksResponseDto"
+        "additionalProperties": false
       },
       "StorageVolumeItemDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/StorageVolumeItemDto",
         "type": "object",
         "properties": {
           "code": {
-            "$ref": "#/components/schemas/StorageCodeEnumSchema"
+            "description": "Код хранилища (TFR, S3, LOCAL)",
+            "$ref": "#/components/schemas/StorageCodeEnum"
           },
           "totalSize": {
             "type": "number",
@@ -2369,15 +2247,15 @@
           "reservedSize",
           "percent"
         ],
-        "additionalProperties": false,
-        "title": "StorageVolumeItemDto"
+        "additionalProperties": false
       },
       "StorageVolumeListResponseDto": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#/components/schemas/StorageVolumeListResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/StorageVolumeItemDto"
-        },
-        "title": "StorageVolumeListResponseDto"
+        }
       }
     }
   },
@@ -2390,7 +2268,7 @@
         "description": "Проверка состояния приложения и подключения к БД",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2400,7 +2278,7 @@
             }
           },
           "503": {
-            "description": "Service Unavailable",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2466,7 +2344,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2477,16 +2355,13 @@
                       "id": {
                         "type": "integer",
                         "minimum": 1,
-                        "maximum": 9007199254740991,
-                        "description": "ИД филиала"
+                        "maximum": 9007199254740991
                       },
                       "codeCB": {
-                        "type": "string",
-                        "description": "Код ЦБ"
+                        "type": "string"
                       },
                       "name": {
-                        "type": "string",
-                        "description": "Название филиала"
+                        "type": "string"
                       }
                     },
                     "required": [
@@ -2511,13 +2386,26 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CurrencyDto"
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "name"
+                    ],
+                    "additionalProperties": false
                   }
                 }
               }
@@ -2534,13 +2422,37 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SourceDto"
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "ris": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "name",
+                      "ris"
+                    ],
+                    "additionalProperties": false
                   }
                 }
               }
@@ -2557,7 +2469,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2607,7 +2519,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2651,7 +2563,7 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2672,31 +2584,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "taskIds": {
-                    "minItems": 1,
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9007199254740991,
-                      "description": "Integer ID"
-                    }
-                  }
-                },
-                "required": [
-                  "taskIds"
-                ],
-                "additionalProperties": false
+                "$ref": "#/components/schemas/BulkDeleteTasksRequestDto"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2726,7 +2621,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2753,13 +2648,12 @@
             },
             "in": "path",
             "name": "id",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2782,31 +2676,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "taskIds": {
-                    "minItems": 1,
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9007199254740991,
-                      "description": "Integer ID"
-                    }
-                  }
-                },
-                "required": [
-                  "taskIds"
-                ],
-                "additionalProperties": false
+                "$ref": "#/components/schemas/BulkCancelTasksRequestDto"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2829,69 +2706,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "taskIds": {
-                    "minItems": 1,
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9007199254740991,
-                      "description": "Integer ID"
-                    }
-                  }
-                },
-                "required": [
-                  "taskIds"
-                ],
-                "additionalProperties": false
+                "$ref": "#/components/schemas/StartTasksRequestDto"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StartTasksResponseDto"
-                }
-              }
-            }
-          },
-          "507": {
-            "description": "Недостаточно места в хранилище",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
-                    },
-                    "detail": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "type",
-                    "title",
-                    "status",
-                    "detail"
-                  ],
-                  "additionalProperties": false,
-                  "description": "Недостаточно места в хранилище"
                 }
               }
             }
@@ -2915,13 +2741,12 @@
             },
             "in": "path",
             "name": "id",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2949,9 +2774,8 @@
               "maximum": 9007199254740991
             },
             "in": "query",
-            "name": "number",
-            "required": true,
-            "description": "Номер страницы (начиная с 1)"
+            "name": "page",
+            "required": false
           },
           {
             "schema": {
@@ -2961,9 +2785,8 @@
               "maximum": 100
             },
             "in": "query",
-            "name": "size",
-            "required": true,
-            "description": "Размер страницы"
+            "name": "limit",
+            "required": false
           },
           {
             "schema": {
@@ -2978,28 +2801,20 @@
             },
             "in": "query",
             "name": "sortBy",
-            "required": true
+            "required": false
           },
           {
             "schema": {
               "$ref": "#/components/schemas/SortOrderEnum"
             },
             "in": "query",
-            "name": "sortOrder",
-            "required": true,
-            "description": "Направление сортировки"
+            "name": "sortOrder"
           },
           {
             "schema": {
               "type": "array",
               "items": {
-                "type": "string",
-                "enum": [
-                  "PENDING",
-                  "CONVERTING",
-                  "COMPLETED",
-                  "FAILED"
-                ]
+                "$ref": "#/components/schemas/FileStatusEnum"
               }
             },
             "in": "query",
@@ -3014,13 +2829,12 @@
             },
             "in": "path",
             "name": "id",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -3048,8 +2862,7 @@
             },
             "in": "path",
             "name": "taskId",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           },
           {
             "schema": {
@@ -3059,51 +2872,16 @@
             },
             "in": "path",
             "name": "fileId",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RetryFileConversionResponseDto"
-                }
-              }
-            }
-          },
-          "501": {
-            "description": "Функциональность ещё не реализована",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
-                    },
-                    "detail": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "type",
-                    "title",
-                    "status",
-                    "detail"
-                  ],
-                  "additionalProperties": false,
-                  "description": "Функциональность ещё не реализована"
                 }
               }
             }
@@ -3129,7 +2907,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -3158,40 +2936,11 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PackageDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string"
-                        },
-                        "existingPacketId": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
                 }
               }
             }
@@ -3212,9 +2961,8 @@
               "maximum": 9007199254740991
             },
             "in": "query",
-            "name": "number",
-            "required": true,
-            "description": "Номер страницы (начиная с 1)"
+            "name": "page",
+            "required": false
           },
           {
             "schema": {
@@ -3224,9 +2972,8 @@
               "maximum": 100
             },
             "in": "query",
-            "name": "size",
-            "required": true,
-            "description": "Размер страницы"
+            "name": "limit",
+            "required": false
           },
           {
             "schema": {
@@ -3241,16 +2988,14 @@
             },
             "in": "query",
             "name": "sortBy",
-            "required": true
+            "required": false
           },
           {
             "schema": {
               "$ref": "#/components/schemas/SortOrderEnum"
             },
             "in": "query",
-            "name": "sortOrder",
-            "required": true,
-            "description": "Направление сортировки"
+            "name": "sortOrder"
           },
           {
             "schema": {
@@ -3263,7 +3008,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -3284,31 +3029,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "packageIds": {
-                    "minItems": 1,
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9007199254740991,
-                      "description": "Integer ID"
-                    }
-                  }
-                },
-                "required": [
-                  "packageIds"
-                ],
-                "additionalProperties": false
+                "$ref": "#/components/schemas/BulkDeletePackagesRequestDto"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -3335,13 +3063,12 @@
             },
             "in": "path",
             "name": "id",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -3375,46 +3102,16 @@
             },
             "in": "path",
             "name": "id",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UpdatePackageResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string"
-                        },
-                        "existingPacketId": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
                 }
               }
             }
@@ -3432,27 +3129,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "taskIds": {
-                    "minItems": 1,
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9007199254740991,
-                      "description": "Integer ID"
-                    }
-                  }
-                },
-                "required": [
-                  "taskIds"
-                ],
-                "additionalProperties": false
+                "$ref": "#/components/schemas/AddTasksToPackageRequestDto"
               }
             }
-          },
-          "required": true
+          }
         },
         "parameters": [
           {
@@ -3463,13 +3143,12 @@
             },
             "in": "path",
             "name": "packageId",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -3490,27 +3169,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "taskIds": {
-                    "minItems": 1,
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9007199254740991,
-                      "description": "Integer ID"
-                    }
-                  }
-                },
-                "required": [
-                  "taskIds"
-                ],
-                "additionalProperties": false
+                "$ref": "#/components/schemas/BulkRemoveTasksFromPackageRequestDto"
               }
             }
-          },
-          "required": true
+          }
         },
         "parameters": [
           {
@@ -3521,13 +3183,12 @@
             },
             "in": "path",
             "name": "packageId",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -3554,13 +3215,12 @@
             },
             "in": "path",
             "name": "packageId",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -3587,44 +3247,16 @@
             },
             "in": "path",
             "name": "id",
-            "required": true,
-            "description": "Integer ID"
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PackageStatusHistoryResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "type": "number"
-                    },
-                    "detail": {
-                      "type": "string"
-                    },
-                    "instance": {
-                      "type": "string"
-                    }
-                  }
                 }
               }
             }
@@ -3641,7 +3273,7 @@
         "description": "Возвращает массив сущностей по одному на каждое хранилище (корзина 1, корзина 2, ТФР). Каждый элемент содержит id, name, code, totalHuman, freeHuman, percent для отображения и key в JSX.",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
