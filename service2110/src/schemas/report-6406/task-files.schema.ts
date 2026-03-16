@@ -12,7 +12,7 @@ export const taskFileSchema = z.object({
   fileNumber: z.number().int().min(1),
   fileName: z.string(),
   fileSize: z.number().int().min(0).describe('Размер файла в байтах (например, 10485760 = 10 MB)'),
-  fileType: z.string(),
+  fileFormat: z.string(),
   status: fileStatusZodSchema,
   downloadUrl: z.string(),
 });

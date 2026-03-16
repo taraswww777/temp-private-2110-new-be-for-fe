@@ -10,7 +10,7 @@ export type CurrencyType = z.infer<typeof currencySchema>;
 export type FileFormatType = z.infer<typeof fileFormatSchema>;
 
 
- // TODO Проработать нейминг accountList/ accountPlansList/ accountNumbersList 
+ // TODO Проработать нейминг accountList/ accountPlansList/ accountNumbersList
 // Будет только в create и detail, в списке быть не должно
 const accountList = z.array(zAccountSchema).optional().describe('Список счетов (20-значные номера)');
 // Будет только в create и detail, в списке быть не должно
@@ -32,7 +32,7 @@ export const baseTaskSchema = z.object({
   taskStatus: taskStatusSchema.describe('Статус задания'),
   fileSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан'),
   updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
-  sourceList: z.array(zIdSchema).optional().describe('Источники данных'),
+  sourcesList: z.array(zIdSchema).optional().describe('Источники данных'),
   filesCount: z.number().int().min(0).describe('Количество файлов').default(0),
   packageId: zIdSchema.optional().describe('ИД Пакета, в который входит задание'),
 });

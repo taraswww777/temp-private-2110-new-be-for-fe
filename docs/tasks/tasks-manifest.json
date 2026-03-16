@@ -893,11 +893,11 @@
     {
       "id": "TASK-073",
       "title": "Рефакторинг DTO заданий — унификация через baseTaskSchema",
-      "status": "planned",
+      "status": "completed",
       "priority": "medium",
       "file": "TASK-073-refactor-tasks-dto.md",
       "createdDate": "2026-03-12T00:00:00.000Z",
-      "completedDate": null,
+      "completedDate": "2026-03-16T10:11:28.723Z",
       "branch": "feature/TASK-073-refactor-tasks-dto",
       "projectId": "2110-project-id",
       "tagIds": [

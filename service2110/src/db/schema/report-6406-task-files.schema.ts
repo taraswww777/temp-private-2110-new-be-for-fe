@@ -20,7 +20,7 @@ export const report6406TaskFiles = pgTable('report_6406_task_files', {
    * Обязательное поле - размер должен быть известен при создании файла.
    */
   fileSize: bigint('file_size', { mode: 'number' }).notNull(),
-  fileType: varchar('file_type', { length: 100 }).notNull(),
+  fileFormat: varchar('file_type', { length: 100 }).notNull(),
 
   // Статус конвертации файла
   status: fileStatusPgEnum('status').notNull().default(FileStatusEnum.PENDING),
