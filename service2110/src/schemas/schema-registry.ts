@@ -15,7 +15,6 @@ import {
   filterSchema,
   dateSchema,
   dateTimeSchema,
-  healthResponseSchema,
   httpErrorWithInstanceSchema,
 } from './common.schema.ts';
 import {
@@ -104,7 +103,6 @@ openApiRegistry.add(paginatedResponseSchema, { id: 'PaginatedResponseDto' });
 openApiRegistry.add(filterSchema, { id: 'FilterDto' });
 openApiRegistry.add(dateSchema, { id: 'DateSchema' });
 openApiRegistry.add(dateTimeSchema, { id: 'DateTimeSchema' });
-openApiRegistry.add(healthResponseSchema, { id: 'HealthResponseDto' });
 openApiRegistry.add(httpErrorWithInstanceSchema, { id: 'HttpErrorWithInstanceDto' });
 
 // Справочники

@@ -169,17 +169,6 @@ export function dateRangeRefinement(options: {
 }
 
 /**
- * Схема ответа GET /health (200 OK)
- */
-export const healthResponseSchema = z.object({
-  status: z.string().describe('Статус приложения'),
-  timestamp: z.string().describe('Время ответа в ISO 8601'),
-  database: z.string().describe('Статус подключения к БД'),
-});
-
-export type HealthResponse = z.infer<typeof healthResponseSchema>;
-
-/**
  * Схема ответа об ошибке с полем instance (503 и др.)
  */
 export const httpErrorWithInstanceSchema = z.object({

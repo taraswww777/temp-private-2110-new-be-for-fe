@@ -490,29 +490,6 @@
         "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
         "description": "Дата и время в формате ISO 8601"
       },
-      "HealthResponseDto": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "description": "Статус приложения"
-          },
-          "timestamp": {
-            "type": "string",
-            "description": "Время ответа в ISO 8601"
-          },
-          "database": {
-            "type": "string",
-            "description": "Статус подключения к БД"
-          }
-        },
-        "required": [
-          "status",
-          "timestamp",
-          "database"
-        ],
-        "additionalProperties": false
-      },
       "HttpErrorWithInstanceDto": {
         "type": "object",
         "properties": {
@@ -2099,36 +2076,6 @@
     }
   },
   "paths": {
-    "/health": {
-      "get": {
-        "tags": [
-          "Health"
-        ],
-        "description": "Проверка состояния приложения и подключения к БД",
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HealthResponseDto"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpErrorWithInstanceDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/mock-files/{fileId}/{fileName}": {
       "get": {
         "parameters": [
