@@ -1,5 +1,5 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.0.3",
   "info": {
     "title": "Backend API",
     "description": "API документация для Backend проекта на Fastify + TypeScript + PostgreSQL\n\n## Глоссарий терминов\n\n- **ТФР (Территориальный финансовый репозиторий)** - централизованное хранилище финансовых отчётов\n- **DAPP** - Data Application Processing - система обработки данных\n- **FC** - File Conversion - система конвертации файлов",
@@ -12,8 +12,6 @@
   "components": {
     "schemas": {
       "SortOrderEnum": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/SortOrderEnum",
         "default": "DESC",
         "description": "Направление сортировки",
         "type": "string",
@@ -43,8 +41,6 @@
         ]
       },
       "CurrencyEnum": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/CurrencyEnum",
         "type": "string",
         "enum": [
           "RUB",
@@ -73,8 +69,6 @@
         ]
       },
       "FileFormatEnum": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/FileFormatEnum",
         "type": "string",
         "enum": [
           "TXT",
@@ -111,8 +105,6 @@
         ]
       },
       "ReportTypeEnum": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/ReportTypeEnum",
         "type": "string",
         "enum": [
           "LSOZ",
@@ -149,8 +141,6 @@
         ]
       },
       "TaskStatusEnum": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/TaskStatusEnum",
         "type": "string",
         "enum": [
           "task_create",
@@ -251,8 +241,6 @@
         ]
       },
       "PacketStatusEnum": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/PacketStatusEnum",
         "type": "string",
         "enum": [
           "pack_create",
@@ -313,8 +301,6 @@
         ]
       },
       "FileStatusEnum": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/FileStatusEnum",
         "type": "string",
         "enum": [
           "PENDING",
@@ -359,8 +345,6 @@
         ]
       },
       "StorageCodeEnum": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/StorageCodeEnum",
         "type": "string",
         "enum": [
           "TFR",
@@ -397,8 +381,6 @@
         ]
       },
       "PaginationRequestDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/PaginationRequestDto",
         "type": "object",
         "properties": {
           "page": {
@@ -423,8 +405,6 @@
         "additionalProperties": false
       },
       "PaginationMetadataDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/PaginationMetadataDto",
         "type": "object",
         "properties": {
           "number": {
@@ -461,8 +441,6 @@
         "additionalProperties": false
       },
       "PaginatedResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/PaginatedResponseDto",
         "type": "object",
         "properties": {
           "items": {
@@ -484,8 +462,6 @@
         "additionalProperties": false
       },
       "FilterDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/FilterDto",
         "type": "object",
         "properties": {
           "column": {
@@ -504,23 +480,17 @@
         "additionalProperties": false
       },
       "DateSchema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/DateSchema",
         "type": "string",
         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
         "description": "Дата в формате YYYY-MM-DD"
       },
       "DateTimeSchema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/DateTimeSchema",
         "type": "string",
         "format": "date-time",
         "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
         "description": "Дата и время в формате ISO 8601"
       },
       "HealthResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/HealthResponseDto",
         "type": "object",
         "properties": {
           "status": {
@@ -544,8 +514,6 @@
         "additionalProperties": false
       },
       "HttpErrorWithInstanceDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/HttpErrorWithInstanceDto",
         "type": "object",
         "properties": {
           "type": {
@@ -581,8 +549,6 @@
         "additionalProperties": false
       },
       "BranchDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BranchDto",
         "type": "object",
         "properties": {
           "id": {
@@ -608,8 +574,6 @@
         "additionalProperties": false
       },
       "CurrencyDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/CurrencyDto",
         "type": "object",
         "properties": {
           "code": {
@@ -626,8 +590,6 @@
         "additionalProperties": false
       },
       "FormatDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/FormatDto",
         "type": "object",
         "properties": {
           "code": {
@@ -644,8 +606,6 @@
         "additionalProperties": false
       },
       "SourceDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/SourceDto",
         "type": "object",
         "properties": {
           "code": {
@@ -673,40 +633,30 @@
         "additionalProperties": false
       },
       "BranchesResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BranchesResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/BranchDto"
         }
       },
       "CurrenciesResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/CurrenciesResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/CurrencyDto"
         }
       },
       "FormatsResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/FormatsResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/FormatDto"
         }
       },
       "SourcesResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/SourcesResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/SourceDto"
         }
       },
       "CreateTaskDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/CreateTaskDto",
         "type": "object",
         "properties": {
           "branchIdsList": {
@@ -750,55 +700,37 @@
             }
           },
           "accountList": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 20,
-                  "maxLength": 20,
-                  "pattern": "^\\d+$",
-                  "description": "Счёт (20-значный номер)"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Список счетов (20-значные номера)"
+            "description": "Список счетов (20-значные номера)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 20,
+              "pattern": "^\\d+$",
+              "description": "Счёт (20-значный номер)"
+            }
           },
           "accountSecondOrderList": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 5,
-                  "maxLength": 5,
-                  "pattern": "^\\d+$",
-                  "description": "Счёт второго порядка (5-значный номер)"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Счета второго порядка (5-значные номера)"
+            "description": "Счета второго порядка (5-значные номера)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 5,
+              "pattern": "^\\d+$",
+              "description": "Счёт второго порядка (5-значный номер)"
+            }
           }
         },
         "required": [
           "branchIdsList",
           "reportType",
           "currencyCode",
-          "fileFormat",
-          "accountList",
-          "accountSecondOrderList"
+          "fileFormat"
         ],
         "additionalProperties": false
       },
       "TaskListItemDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/TaskListItemDto",
         "type": "object",
         "properties": {
           "id": {
@@ -903,8 +835,6 @@
         "additionalProperties": false
       },
       "GetTasksRequestDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/GetTasksRequestDto",
         "type": "object",
         "properties": {
           "pagination": {
@@ -1026,8 +956,6 @@
         "additionalProperties": false
       },
       "TasksListResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/TasksListResponseDto",
         "type": "object",
         "properties": {
           "items": {
@@ -1051,8 +979,6 @@
         "additionalProperties": false
       },
       "TaskDetailDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/TaskDetailDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1141,40 +1067,26 @@
             "maximum": 9007199254740991
           },
           "accountList": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 20,
-                  "maxLength": 20,
-                  "pattern": "^\\d+$",
-                  "description": "Счёт (20-значный номер)"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Список счетов (20-значные номера)"
+            "description": "Список счетов (20-значные номера)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 20,
+              "pattern": "^\\d+$",
+              "description": "Счёт (20-значный номер)"
+            }
           },
           "accountSecondOrderList": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 5,
-                  "maxLength": 5,
-                  "pattern": "^\\d+$",
-                  "description": "Счёт второго порядка (5-значный номер)"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Счета второго порядка (5-значные номера)"
+            "description": "Счета второго порядка (5-значные номера)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 5,
+              "pattern": "^\\d+$",
+              "description": "Счёт второго порядка (5-значный номер)"
+            }
           },
           "s3FolderId": {
             "description": "ID папки в S3",
@@ -1192,15 +1104,11 @@
           "taskStatus",
           "fileSize",
           "updatedAt",
-          "filesCount",
-          "accountList",
-          "accountSecondOrderList"
+          "filesCount"
         ],
         "additionalProperties": false
       },
       "BulkDeleteTasksRequestDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BulkDeleteTasksRequestDto",
         "minItems": 1,
         "type": "array",
         "items": {
@@ -1211,8 +1119,6 @@
         }
       },
       "BulkDeleteTasksResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BulkDeleteTasksResponseDto",
         "type": "object",
         "properties": {
           "succeeded": {
@@ -1261,8 +1167,6 @@
         "additionalProperties": false
       },
       "BulkCancelTasksRequestDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BulkCancelTasksRequestDto",
         "minItems": 1,
         "type": "array",
         "items": {
@@ -1273,8 +1177,6 @@
         }
       },
       "BulkCancelTasksResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BulkCancelTasksResponseDto",
         "type": "object",
         "properties": {
           "succeeded": {
@@ -1331,8 +1233,6 @@
         "additionalProperties": false
       },
       "StartTasksRequestDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/StartTasksRequestDto",
         "minItems": 1,
         "type": "array",
         "items": {
@@ -1343,8 +1243,6 @@
         }
       },
       "StartTasksResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/StartTasksResponseDto",
         "type": "object",
         "properties": {
           "succeeded": {
@@ -1401,8 +1299,6 @@
         "additionalProperties": false
       },
       "StatusHistoryItemDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/StatusHistoryItemDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1436,9 +1332,6 @@
           "metadata": {
             "description": "Дополнительные метаданные в формате ключ-значение",
             "type": "object",
-            "propertyNames": {
-              "type": "string"
-            },
             "additionalProperties": {}
           }
         },
@@ -1452,16 +1345,12 @@
         "additionalProperties": false
       },
       "StatusHistoryResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/StatusHistoryResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/StatusHistoryItemDto"
         }
       },
       "TaskFileDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/TaskFileDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1491,14 +1380,7 @@
             "$ref": "#/components/schemas/FileStatusEnum"
           },
           "downloadUrl": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
+            "type": "string"
           }
         },
         "required": [
@@ -1513,8 +1395,6 @@
         "additionalProperties": false
       },
       "TaskFilesResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/TaskFilesResponseDto",
         "type": "object",
         "properties": {
           "taskId": {
@@ -1541,8 +1421,6 @@
         "additionalProperties": false
       },
       "RetryFileConversionResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/RetryFileConversionResponseDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1566,8 +1444,6 @@
         "additionalProperties": false
       },
       "CreatePackageDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/CreatePackageDto",
         "type": "object",
         "properties": {
           "name": {
@@ -1590,8 +1466,6 @@
         "additionalProperties": false
       },
       "UpdatePackageDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/UpdatePackageDto",
         "type": "object",
         "properties": {
           "name": {
@@ -1607,8 +1481,6 @@
         "additionalProperties": false
       },
       "PackageDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/PackageDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1687,8 +1559,6 @@
         "additionalProperties": false
       },
       "PackagesListResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/PackagesListResponseDto",
         "type": "object",
         "properties": {
           "packages": {
@@ -1710,8 +1580,6 @@
         "additionalProperties": false
       },
       "BulkDeletePackagesRequestDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BulkDeletePackagesRequestDto",
         "type": "object",
         "properties": {
           "packageIds": {
@@ -1732,8 +1600,6 @@
         "additionalProperties": false
       },
       "BulkDeletePackagesResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BulkDeletePackagesResponseDto",
         "type": "object",
         "properties": {
           "deleted": {
@@ -1785,8 +1651,6 @@
         "additionalProperties": false
       },
       "UpdatePackageResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/UpdatePackageResponseDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1814,8 +1678,6 @@
         "additionalProperties": false
       },
       "AddTasksToPackageRequestDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/AddTasksToPackageRequestDto",
         "type": "object",
         "properties": {
           "taskIds": {
@@ -1836,8 +1698,6 @@
         "additionalProperties": false
       },
       "AddTasksToPackageResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/AddTasksToPackageResponseDto",
         "type": "object",
         "properties": {
           "added": {
@@ -1892,8 +1752,6 @@
         "additionalProperties": false
       },
       "BulkRemoveTasksFromPackageRequestDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BulkRemoveTasksFromPackageRequestDto",
         "type": "object",
         "properties": {
           "taskIds": {
@@ -1914,8 +1772,6 @@
         "additionalProperties": false
       },
       "BulkRemoveTasksResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/BulkRemoveTasksResponseDto",
         "type": "object",
         "properties": {
           "removed": {
@@ -1967,8 +1823,6 @@
         "additionalProperties": false
       },
       "CopyToTfrResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/CopyToTfrResponseDto",
         "type": "object",
         "properties": {
           "id": {
@@ -1996,8 +1850,6 @@
         "additionalProperties": false
       },
       "PackageStatusHistoryItemDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/PackageStatusHistoryItemDto",
         "type": "object",
         "properties": {
           "id": {
@@ -2031,9 +1883,6 @@
           "metadata": {
             "description": "Дополнительные метаданные в формате ключ-значение",
             "type": "object",
-            "propertyNames": {
-              "type": "string"
-            },
             "additionalProperties": {}
           }
         },
@@ -2047,16 +1896,12 @@
         "additionalProperties": false
       },
       "PackageStatusHistoryResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/PackageStatusHistoryResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/PackageStatusHistoryItemDto"
         }
       },
       "ExportTasksRequestDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/ExportTasksRequestDto",
         "type": "object",
         "properties": {
           "filters": {
@@ -2158,8 +2003,6 @@
         "additionalProperties": false
       },
       "ExportTasksResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/ExportTasksResponseDto",
         "type": "object",
         "properties": {
           "exportId": {
@@ -2213,8 +2056,6 @@
         "additionalProperties": false
       },
       "StorageVolumeItemDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/StorageVolumeItemDto",
         "type": "object",
         "properties": {
           "code": {
@@ -2250,8 +2091,6 @@
         "additionalProperties": false
       },
       "StorageVolumeListResponseDto": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "#/components/schemas/StorageVolumeListResponseDto",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/StorageVolumeItemDto"
@@ -2437,14 +2276,8 @@
                         "type": "string"
                       },
                       "ris": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ]
+                        "nullable": true,
+                        "type": "string"
                       }
                     },
                     "required": [
@@ -2805,10 +2638,15 @@
           },
           {
             "schema": {
-              "$ref": "#/components/schemas/SortOrderEnum"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/SortOrderEnum"
+                }
+              ]
             },
             "in": "query",
-            "name": "sortOrder"
+            "name": "sortOrder",
+            "required": false
           },
           {
             "schema": {
@@ -2992,10 +2830,15 @@
           },
           {
             "schema": {
-              "$ref": "#/components/schemas/SortOrderEnum"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/SortOrderEnum"
+                }
+              ]
             },
             "in": "query",
-            "name": "sortOrder"
+            "name": "sortOrder",
+            "required": false
           },
           {
             "schema": {

@@ -119,7 +119,7 @@ function createEnhancedTransformObject(): SwaggerTransformObject {
 export const registerFastifySwagger = async (app: CustomFastifyInstance) => {
   await app.register(fastifySwagger, {
     openapi: {
-      openapi: '3.1.0',
+      openapi: '3.0.3',
       info: {
         title: 'Backend API',
         description: 'API документация для Backend проекта на Fastify + TypeScript + PostgreSQL\n\n## Глоссарий терминов\n\n- **ТФР (Территориальный финансовый репозиторий)** - централизованное хранилище финансовых отчётов\n- **DAPP** - Data Application Processing - система обработки данных\n- **FC** - File Conversion - система конвертации файлов',

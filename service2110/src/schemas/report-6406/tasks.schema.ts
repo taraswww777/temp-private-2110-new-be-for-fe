@@ -12,9 +12,9 @@ export type FileFormatType = z.infer<typeof fileFormatSchema>;
 
  // TODO Проработать нейминг accountList/ accountPlansList/ accountNumbersList 
 // Будет только в create и detail, в списке быть не должно
-const accountList = z.array(zAccountSchema).nullable().describe('Список счетов (20-значные номера)');
+const accountList = z.array(zAccountSchema).optional().describe('Список счетов (20-значные номера)');
 // Будет только в create и detail, в списке быть не должно
-const accountSecondOrderList = z.array(zAccountSecondOrderSchema).nullable().describe('Счета второго порядка (5-значные номера)');
+const accountSecondOrderList = z.array(zAccountSecondOrderSchema).optional().describe('Счета второго порядка (5-значные номера)');
 
 /**
  * Базовая схема задания — все поля, общие для detail, list и create.
