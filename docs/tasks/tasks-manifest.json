@@ -907,11 +907,11 @@
     {
       "id": "TASK-072",
       "title": "Унификации DTO и описаний схем БД для заданий отчёта 6406",
-      "status": "in-progress",
+      "status": "completed",
       "priority": "critical",
       "file": "TASK-072-dto-6406.md",
       "createdDate": "2026-03-11T14:11:51.328Z",
-      "completedDate": null,
+      "completedDate": "2026-03-16T10:01:03.119Z",
       "branch": "feature/TASK-072",
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72",
