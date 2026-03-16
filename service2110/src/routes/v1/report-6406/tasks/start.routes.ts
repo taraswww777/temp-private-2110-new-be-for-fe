@@ -1,0 +1,30 @@
+import type { FastifyPluginAsync } from 'fastify';
+import type { ZodTypeProvider } from 'fastify-type-provider-zod';
+import {
+  startTasksSchema,
+  startTasksResponseSchema,
+} from '../../../../schemas/report-6406/tasks.schema.ts';
+
+/**
+ * POST /api/v1/report-6406/tasks/start
+ * Запустить одно или несколько заданий на выполнение
+ * 
+ * MOCK: Возвращает пустой результат для генерации Swagger-спецификации
+ */
+export const startTasksRoute: FastifyPluginAsync = async (fastify) => {
+  const app = fastify.withTypeProvider<ZodTypeProvider>();
+
+  app.post('/start', {
+    schema: {
+      tags: ['Report 6406 - Tasks'],
+      summary: 'Запустить задания на выполнение (переводит из статуса created в started)',
+      description: 'Запускает задания на генерацию отчётов. Проверяет наличие свободного места в хранилище. Поддерживает запуск одного или нескольких заданий.',
+      body: startTasksSchema,
+      response: {
+        200: startTasksResponseSchema,
+      },
+    },
+  }, async (_request, reply) => {
+    return reply.status(200).send({ succeeded: 0, failed: 0, results: [] });
+  });
+};

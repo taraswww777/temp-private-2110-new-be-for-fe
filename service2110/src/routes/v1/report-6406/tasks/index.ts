@@ -1,172 +1,20 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-//@ts-nocheck
 import type { FastifyPluginAsync } from 'fastify';
-import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { tasksService } from '../../../../services/report-6406/tasks.service.ts';
-import {
-  createTaskSchema,
-  taskDetailsSchema,
-  getTasksRequestSchema,
-  tasksListResponseSchema,
-  bulkDeleteTasksSchema,
-  bulkDeleteResponseSchema,
-  bulkCancelTasksSchema,
-  bulkCancelResponseSchema,
-  startTasksSchema,
-  startTasksResponseSchema,
-} from '../../../../schemas/report-6406/tasks.schema.ts';
-import { idParamSchema, httpErrorSchema } from '../../../../schemas/common.schema.ts';
+import { createTaskRoute } from './create.routes.ts';
+import { listTasksRoute } from './list.routes.ts';
+import { getTaskRoute } from './get.routes.ts';
+import { deleteTasksRoute } from './delete.routes.ts';
+import { cancelTasksRoute } from './cancel.routes.ts';
+import { startTasksRoute } from './start.routes.ts';
 
+/**
+ * Регистрация всех роутов для работы с заданиями (tasks)
+ * Все эндпоинты замокированы для генерации Swagger-спецификации
+ */
 export const tasksRoutes: FastifyPluginAsync = async (fastify) => {
-  const app = fastify.withTypeProvider<ZodTypeProvider>();
-
-  /**
-   * POST /api/v1/report-6406/tasks
-   * Создать новое задание на построение отчёта
-   */
-  app.post('/', {
-    schema: {
-      tags: ['Report 6406 - Tasks'],
-      summary: 'Создать новое задание на построение отчёта',
-      body: createTaskSchema,
-      response: {
-        201: taskDetailsSchema,
-      },
-    },
-  }, async (request, reply) => {
-    try {
-      const task = await tasksService.createTask(request.body, request.user.name);
-      return reply.status(201).send(task);
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('not found')) {
-        return reply.status(404).send({
-          type: 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
-          title: 'Not Found',
-          status: 404,
-          detail: error.message,
-        });
-      }
-      throw error;
-    }
-  });
-
-  /**
-   * POST /api/v1/report-6406/tasks/list
-   * Получить список заданий с пагинацией, сортировкой и фильтрацией (body: pagination, sorting, filter).
-   * Используется POST вместо GET, т.к. Fastify не поддерживает body для GET; структура запроса/ответа по TASK-011.
-   */
-  app.post('/list', {
-    schema: {
-      tags: ['Report 6406 - Tasks'],
-      summary: 'Получить список заданий (пагинация, сортировка, фильтрация)',
-      description: 'Тело запроса: pagination (number, size), sorting (direction, column), filter (опционально, объект с заранее определённой структурой). Ответ: items, totalItems. Фильтр — объект с опциональными полями: packageId (UUID или null для заданий без пакета), branchIds (массив UUID), branchName, status, reportType, format, source, createdBy, periodStart (YYYY-MM-DD), periodEnd (YYYY-MM-DD), createdAt (ISO 8601), updatedAt (ISO 8601). Можно комбинировать несколько фильтров одновременно.',
-      body: getTasksRequestSchema,
-      response: {
-        200: tasksListResponseSchema,
-      },
-    },
-  }, async (request, reply) => {
-    const result = await tasksService.getTasks(request.body);
-    return reply.status(200).send(result);
-  });
-
-  /**
-   * GET /api/v1/report-6406/tasks/:id
-   * Получить детальную информацию о задании
-   */
-  app.get('/:id', {
-    schema: {
-      tags: ['Report 6406 - Tasks'],
-      summary: 'Получить детальную информацию о задании',
-      params: idParamSchema,
-      response: {
-        200: taskDetailsSchema,
-      },
-    },
-  }, async (request, reply) => {
-    try {
-      const task = await tasksService.getTaskById(request.params.id);
-      return reply.status(200).send(task);
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('not found')) {
-        return reply.status(404).send({
-          type: 'https://tools.ietf.org/html/rfc7231#section-6.5.4',
-          title: 'Not Found',
-          status: 404,
-          detail: error.message,
-        });
-      }
-      throw error;
-    }
-  });
-
-  /**
-   * DELETE /api/v1/report-6406/tasks
-   * Универсальное удаление заданий (одного или нескольких)
-   */
-  app.delete('/', {
-    schema: {
-      tags: ['Report 6406 - Tasks'],
-      summary: 'Удалить одно или несколько заданий',
-      description: 'Удаляет задания. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
-      body: bulkDeleteTasksSchema,
-      response: {
-        200: bulkDeleteResponseSchema,
-      },
-    },
-  }, async (request, reply) => {
-    const result = await tasksService.bulkDeleteTasks(request.body);
-    return reply.status(200).send(result);
-  });
-
-  /**
-   * POST /api/v1/report-6406/tasks/cancel
-   * Универсальная отмена заданий (одного или нескольких)
-   */
-  app.post('/cancel', {
-    schema: {
-      tags: ['Report 6406 - Tasks'],
-      summary: 'Отменить одно или несколько заданий',
-      description: 'Отменяет задания на нашей стороне (переводит в статус «Задание отменено»). Синхронизация с внешней системой может в дальнейшем приводить к статусу KILLED_DAPP. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
-      body: bulkCancelTasksSchema,
-      response: {
-        200: bulkCancelResponseSchema,
-      },
-    },
-  }, async (request, reply) => {
-    const result = await tasksService.bulkCancelTasks(request.body, request.user.name);
-    return reply.status(200).send(result);
-  });
-
-  /**
-   * POST /api/v1/report-6406/tasks/start
-   * Запустить одно или несколько заданий на выполнение
-   */
-  app.post('/start', {
-    schema: {
-      tags: ['Report 6406 - Tasks'],
-      summary: 'Запустить задания на выполнение (переводит из статуса created в started)',
-      description: 'Запускает задания на генерацию отчётов. Проверяет наличие свободного места в хранилище. Поддерживает запуск одного или нескольких заданий.',
-      body: startTasksSchema,
-      response: {
-        200: startTasksResponseSchema,
-        507: httpErrorSchema.describe('Недостаточно места в хранилище'),
-      },
-    },
-  }, async (request, reply) => {
-    try {
-      const result = await tasksService.startTasks(request.body, request.user.name);
-      return reply.status(200).send(result);
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('Not enough storage')) {
-        return reply.status(507).send({
-          type: 'https://tools.ietf.org/html/rfc7231#section-6.6.8',
-          title: 'Insufficient Storage',
-          status: 507,
-          detail: error.message,
-        });
-      }
-      throw error;
-    }
-  });
+  await fastify.register(createTaskRoute);
+  await fastify.register(listTasksRoute);
+  await fastify.register(getTaskRoute);
+  await fastify.register(deleteTasksRoute);
+  await fastify.register(cancelTasksRoute);
+  await fastify.register(startTasksRoute);
 };

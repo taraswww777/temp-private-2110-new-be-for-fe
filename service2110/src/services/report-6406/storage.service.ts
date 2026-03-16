@@ -1,15 +1,12 @@
 import { db } from '../../db';
 import { report6406Tasks } from '../../db/schema';
-import { sql, ne } from 'drizzle-orm';
+import { ne, sql } from 'drizzle-orm';
 import type { StorageVolumeItem } from '../../schemas/report-6406/storage.schema.ts';
 import { StorageCodeEnum } from '../../schemas/enums/StorageCodeEnum.ts';
-import { formatBytesFixed } from '../../utils/file-size-formatter.ts';
 import { env } from '../../config/env.ts';
 import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
 
-const DEFAULT_STORAGE_ID = 'default';
-const DEFAULT_STORAGE_NAME = 'Корзина 1';
-const DEFAULT_STORAGE_CODE = StorageCodeEnum.LOCAL;
+const DEFAULT_STORAGE_CODE: StorageCodeEnum = StorageCodeEnum.LOCAL;
 
 export class StorageService {
   /**
@@ -17,7 +14,7 @@ export class StorageService {
    * Пока хранилище одно — возвращается массив из одного элемента.
    */
   async getStorageVolume(): Promise<StorageVolumeItem[]> {
-    const totalBytes = env.STORAGE_MAX_SIZE_BYTES || 1099511627776; // 1TB по умолчанию
+    const totalSize = env.STORAGE_MAX_SIZE_BYTES || 1048576; // 1TB по умолчанию
 
     const [result] = await db
       .select({
@@ -27,19 +24,16 @@ export class StorageService {
       .where(ne(report6406Tasks.status, TaskStatusEnum.DELETE));
 
     const usedBytes = Number(result.usedBytes) || 0;
-    const freeBytes = totalBytes - usedBytes;
-    const usedPercent = totalBytes > 0 ? (usedBytes / totalBytes) * 100 : 0;
+    const freeSize = totalSize - usedBytes;
+    const usedPercent = totalSize > 0 ? (usedBytes / totalSize) * 100 : 0;
     const percent = Math.round(usedPercent * 100) / 100;
 
-    const totalHuman = formatBytesFixed(totalBytes);
-    const freeHuman = formatBytesFixed(freeBytes);
 
     const item: StorageVolumeItem = {
-      id: DEFAULT_STORAGE_ID,
-      name: DEFAULT_STORAGE_NAME,
       code: DEFAULT_STORAGE_CODE,
-      totalHuman,
-      freeHuman,
+      totalSize,
+      freeSize,
+      reservedSize: 0,
       percent,
     };
 

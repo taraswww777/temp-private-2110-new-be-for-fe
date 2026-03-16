@@ -1,12 +1,11 @@
 import { z } from 'zod';
-import { sortOrderSchema } from './enums/SortOrderEnum';
 
 /**
  * Схема для пагинации в query параметрах (PaginationRequestDto по задаче: number, size)
  */
 export const paginationQuerySchema = z.object({
-  number: z.coerce.number().int().min(1).default(1).describe('Номер страницы (начиная с 1)'),
-  size: z.coerce.number().int().min(1).max(100).default(20).describe('Размер страницы'),
+  page: z.coerce.number().int().min(1).default(1).describe('Номер страницы (начиная с 1)'),
+  limit: z.coerce.number().int().min(1).max(100).default(20).describe('Размер страницы'),
 });
 
 export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
@@ -39,6 +38,28 @@ export type PaginatedResponse = z.infer<typeof paginatedResponseSchema>;
  * Используется, для создания ссылок в OpenAPI спецификации
  */
 export const zIdSchema = z.number().int().positive().describe('Integer ID').min(1);
+
+/**
+ * Переиспользуемая Zod-схема для номера счёта (ровно 20 цифр).
+ *
+ * Использование:
+ * - `z.array(zAccountSchema)` для списков счетов
+ * - `zAccountSchema.optional()` для опциональных полей
+ *
+ * Валидация:
+ * - длина: 20
+ * - только цифры: `^\d+$`
+ */
+export const zAccountSchema = z.string().length(20).regex(/^\d+$/).describe('Счёт (20-значный номер)');
+
+/**
+ * Переиспользуемая Zod-схема для счёта/кода второго порядка (ровно 5 цифр).
+ *
+ * Валидация:
+ * - длина: 5
+ * - только цифры: `^\d+$`
+ */
+export const zAccountSecondOrderSchema = z.string().length(5).regex(/^\d+$/).describe('Счёт второго порядка (5-значный номер)');
 
 export type ID = z.infer<typeof zIdSchema>;
 
@@ -105,6 +126,47 @@ export type DateString = z.infer<typeof dateSchema>;
 export const dateTimeSchema = z.iso.datetime().describe('Дата и время в формате ISO 8601');
 
 export type DateTimeString = z.infer<typeof dateTimeSchema>;
+
+/**
+ * Утилитная Zod superRefine-функция для валидации диапазона дат.
+ *
+ * Правила:
+ *  - atLeastOne (default true): хотя бы одно из полей должно быть задано
+ *  - если оба заданы: to >= from
+ *
+ * @param options.fromField  — имя поля «от» (по умолчанию 'periodFrom')
+ * @param options.toField    — имя поля «до» (по умолчанию 'periodTo')
+ * @param options.atLeastOne — требовать хотя бы одно из полей (default true)
+ */
+export function dateRangeRefinement(options: {
+  fromField?: string;
+  toField?: string;
+  atLeastOne?: boolean;
+} = {}) {
+  const { fromField = 'periodFrom', toField = 'periodTo', atLeastOne = true } = options;
+
+  return (data: Record<string, unknown>, ctx: z.RefinementCtx) => {
+    const from = data[fromField] as string | undefined;
+    const to = data[toField] as string | undefined;
+
+    if (atLeastOne && !from && !to) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Должен быть указан хотя бы один из ${fromField} или ${toField}`,
+        path: [fromField],
+      });
+      return;
+    }
+
+    if (from && to && new Date(to) < new Date(from)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `${toField} must be greater than or equal to ${fromField}`,
+        path: [toField],
+      });
+    }
+  };
+}
 
 /**
  * Схема ответа GET /health (200 OK)

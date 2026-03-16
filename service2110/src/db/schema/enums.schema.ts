@@ -15,9 +15,6 @@ export const reportTypePgEnum = pgEnum('report_type_enum', [
   ReportTypeEnum.LSOZ,
   ReportTypeEnum.LSOS,
   ReportTypeEnum.LSOP,
-  ReportTypeEnum.KROS_VOS,
-  ReportTypeEnum.KROS_VZS,
-  ReportTypeEnum.KROS,
 ]);
 export const fileFormatPgEnum = pgEnum('file_format_enum', [
   FileFormatEnum.TXT,
