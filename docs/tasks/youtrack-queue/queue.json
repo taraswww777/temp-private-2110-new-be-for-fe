@@ -15,6 +15,28 @@
       "result": {
         "youtrackIssueUrl": "http://dvuaod-00app001.innodev.local:8080/issue/VTB-538"
       }
+    },
+    {
+      "id": "c3569a73-b42d-40a2-9e2b-8b0b0718a961",
+      "status": "pending",
+      "createdAt": "2026-03-17T11:39:05.521Z",
+      "attempts": 0,
+      "type": "link_issue",
+      "data": {
+        "taskId": "TASK-033",
+        "youtrackIssueId": "VTB-559"
+      }
+    },
+    {
+      "id": "84ece5c3-5ac3-4073-bcb0-4b96dce5fe5e",
+      "status": "pending",
+      "createdAt": "2026-03-17T11:39:39.733Z",
+      "attempts": 0,
+      "type": "link_issue",
+      "data": {
+        "taskId": "TASK-075",
+        "youtrackIssueId": "VTB-559"
+      }
     }
   ]
 }

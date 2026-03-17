@@ -352,11 +352,11 @@
     {
       "id": "TASK-033",
       "title": "Улучшение навигации в React Router — решение проблемы с относительными путями",
-      "status": "backlog",
+      "status": "in-progress",
       "file": "TASK-033-react-router-navigation-improvement.md",
       "createdDate": "2026-02-04T00:00:00Z",
       "completedDate": null,
-      "branch": null,
+      "branch": "VTB-559/FE-Perehod-na-react-router-dom6.29.0",
       "priority": "low",
       "projectId": "2110-project-id",
       "tagIds": [
@@ -931,6 +931,20 @@
       "branch": "feature/TASK-074-inventory-api16-contracts",
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72"
+      ],
+      "projectId": "2110-project-id"
+    },
+    {
+      "id": "TASK-075",
+      "title": "Миграция на React Router 6.29.0 с модульной архитектурой и фича-флагами",
+      "status": "in-progress",
+      "priority": "high",
+      "file": "TASK-075-migrate-to-react-router-6.md",
+      "createdDate": "2026-03-17T00:00:00.000Z",
+      "completedDate": null,
+      "branch": "VTB-559/FE-Perehod-na-react-router-dom6.29.0",
+      "tagIds": [
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
       ],
       "projectId": "2110-project-id"
     }
