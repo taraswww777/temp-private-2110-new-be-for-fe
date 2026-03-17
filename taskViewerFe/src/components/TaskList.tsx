@@ -18,6 +18,7 @@ import { YouTrackConnectDialog } from './YouTrackConnectDialog';
 import { TagBadge } from '@/uiKit';
 import { tasksApi } from '@/api/tasks.api';
 import { youtrackApi, buildYouTrackIssueUrl } from '@/api/youtrack.api';
+import { copyToClipboard } from '@/lib/clipboard';
 import type { Project } from '@/api/projects.api';
 import type { Task, TaskStatus, TaskPriority } from '@/types/task.types';
 import type { YouTrackQueueStatus } from '@/types/youtrack.types';
@@ -609,13 +610,7 @@ export function TaskList({ tasks, onTaskUpdate, onTaskChange, showProjectColumn 
     e.preventDefault();
     e.stopPropagation();
     
-    try {
-      await navigator.clipboard.writeText(id);
-      toast.success(`ID "${id}" скопирован в буфер обмена`);
-    } catch (err) {
-      console.error('Failed to copy ID:', err);
-      toast.error('Не удалось скопировать ID');
-    }
+    await copyToClipboard(id, `ID: ${id}`);
   };
 
   const handlePageChange = (page: number) => {

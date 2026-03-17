@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
+  PillItem,
 } from '@/uiKit';
 import { TaskEditDialog } from '@/components/TaskEditDialog';
 import { TaskContentEditDialog } from '@/components/TaskContentEditDialog';
@@ -24,6 +25,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { tasksApi } from '@/api/tasks.api';
 import { projectsApi, type Project } from '@/api/projects.api';
 import { ApiError } from '@/api/apiError';
+import { copyToClipboard } from '@/lib/clipboard';
 import type { Task, TaskDetail, UpdateTaskMetaInput, TaskStatus, TaskPriority } from '@/types/task.types';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -141,13 +143,7 @@ export function TaskDetailPage() {
     e.preventDefault();
     e.stopPropagation();
     
-    try {
-      await navigator.clipboard.writeText(id);
-      toast.success(`ID "${id}" скопирован в буфер обмена`);
-    } catch (err) {
-      console.error('Failed to copy ID:', err);
-      toast.error('Не удалось скопировать ID');
-    }
+    await copyToClipboard(id, `ID: ${id}`);
   };
 
   if (loading) {
@@ -270,11 +266,15 @@ export function TaskDetailPage() {
                 </div>
                 <div>
                   <span className="font-semibold">Ветка:</span>{' '}
-                  <code className="text-sm bg-muted px-2 py-1 rounded">{task.branch || '—'}</code>
+                  {task.branch ? (
+                    <PillItem value={task.branch} />
+                  ) : (
+                    <span className="text-muted-foreground">—</span>
+                  )}
                 </div>
                 <div>
                   <span className="font-semibold">Файл:</span>{' '}
-                  <code className="text-sm bg-muted px-2 py-1 rounded">{task.file}</code>
+                  <PillItem value={task.file} />
                 </div>
               </div>
 
