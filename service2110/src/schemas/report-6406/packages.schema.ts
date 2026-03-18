@@ -13,8 +13,8 @@ export const basePackageSchema = z.object({
   createdAt: z.iso.datetime().describe('Дата и время создания пакета'),
   createdBy: z.string().min(1).max(255).describe('ФИО сотрудника, создавшего пакет'),
   lastCopiedToTfrAt: z.iso.datetime().nullable().describe('Дата последнего копирования в ТФР (ISO 8601)'),
-  tasksCount: z.number().int().min(0).describe('Количество заданий в пакете').default(0),
-  totalSize: z.number().int().min(0).describe('Общий размер пакета в байтах (сумма размеров всех файлов)').default(0),
+  totalTasksCount: z.number().int().min(0).describe('Количество заданий в пакете').default(0),
+  totalFilesSize: z.number().int().min(0).describe('Общий размер пакета в мегабайтах (сумма размеров всех файлов)').default(0),
   updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
   status: packetStatusSchema.describe('Текущий статус пакета'),
 });
