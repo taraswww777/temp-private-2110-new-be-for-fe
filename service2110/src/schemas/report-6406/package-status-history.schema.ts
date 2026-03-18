@@ -9,8 +9,8 @@ export const packageStatusHistoryItemSchema = z.object({
   id: zIdSchema,
   packageId: zIdSchema,
   packageStatus: packetStatusSchema,
-  changeAt: z.iso.datetime().describe('Дата и время изменения'),
-  changeBy: z.string().describe('Инициатор изменения. Логин или ФИО'),
+  changedAt: z.iso.datetime().describe('Дата и время изменения'),
+  changedBy: z.string().describe('Инициатор изменения. Логин или ФИО'),
   note: z.string().optional(),
   metadata: z.record(z.string(), z.any()).optional().describe('Дополнительные метаданные в формате ключ-значение'),
 });
