@@ -1,14 +1,14 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
-  statusHistoryResponseSchema,
+  taskStatusHistoryResponseSchema,
 } from '../../../../schemas/report-6406/task-status-history.schema.ts';
 import { idParamSchema } from '../../../../schemas/common.schema.ts';
 
 /**
  * GET /api/v1/report-6406/tasks/:id/status-history
  * Получить полную историю изменений статусов задания
- * 
+ *
  * MOCK: Возвращает пустой массив для генерации Swagger-спецификации
  */
 export const statusHistoryRoutes: FastifyPluginAsync = async (fastify) => {
@@ -21,7 +21,7 @@ export const statusHistoryRoutes: FastifyPluginAsync = async (fastify) => {
       description: 'Возвращает полную историю всех изменений статусов задания в виде простого массива (без пагинации)',
       params: idParamSchema,
       response: {
-        200: statusHistoryResponseSchema,
+        200: taskStatusHistoryResponseSchema,
       },
     },
   }, async (_request, reply) => {

@@ -1278,7 +1278,7 @@
         ],
         "additionalProperties": false
       },
-      "StatusHistoryItemDto": {
+      "TaskStatusHistoryItemDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1324,10 +1324,10 @@
         ],
         "additionalProperties": false
       },
-      "StatusHistoryResponseDto": {
+      "TaskStatusHistoryResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/StatusHistoryItemDto"
+          "$ref": "#/components/schemas/TaskStatusHistoryItemDto"
         }
       },
       "TaskFileDto": {
@@ -2532,7 +2532,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StatusHistoryResponseDto"
+                  "$ref": "#/components/schemas/TaskStatusHistoryResponseDto"
                 }
               }
             }
