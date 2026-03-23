@@ -59,8 +59,8 @@ import {
   exportTasksResponseSchema,
 } from './report-6406/export.schema.ts';
 import {
-  statusHistoryItemSchema,
-  statusHistoryResponseSchema,
+  taskStatusHistoryItemSchema,
+  taskStatusHistoryResponseSchema,
 } from './report-6406/task-status-history.schema.ts';
 import {
   packageStatusHistoryItemSchema,
@@ -127,8 +127,8 @@ openApiRegistry.add(bulkCancelTasksSchema, { id: 'BulkCancelTasksRequestDto' });
 openApiRegistry.add(bulkCancelResponseSchema, { id: 'BulkCancelTasksResponseDto' });
 openApiRegistry.add(startTasksSchema, { id: 'StartTasksRequestDto' });
 openApiRegistry.add(startTasksResponseSchema, { id: 'StartTasksResponseDto' });
-openApiRegistry.add(statusHistoryItemSchema, { id: 'StatusHistoryItemDto' });
-openApiRegistry.add(statusHistoryResponseSchema, { id: 'StatusHistoryResponseDto' });
+openApiRegistry.add(taskStatusHistoryItemSchema, { id: 'TaskStatusHistoryItemDto' });
+openApiRegistry.add(taskStatusHistoryResponseSchema, { id: 'TaskStatusHistoryResponseDto' });
 openApiRegistry.add(taskFileSchema, { id: 'TaskFileDto' });
 openApiRegistry.add(taskFilesResponseSchema, { id: 'TaskFilesResponseDto' });
 openApiRegistry.add(retryFileConversionResponseSchema, { id: 'RetryFileConversionResponseDto' });

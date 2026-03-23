@@ -5,7 +5,7 @@ import { zIdSchema } from '../common.schema.ts';
 /**
  * Схема для записи истории статуса
  */
-export const statusHistoryItemSchema = z.object({
+export const taskStatusHistoryItemSchema = z.object({
   id: zIdSchema,
   taskId: zIdSchema,
   taskStatus: taskStatusSchema,
@@ -15,12 +15,12 @@ export const statusHistoryItemSchema = z.object({
   metadata: z.record(z.string(), z.any()).optional().describe('Дополнительные метаданные в формате ключ-значение'),
 });
 
-export type StatusHistoryItem = z.infer<typeof statusHistoryItemSchema>;
+export type TaskStatusHistoryItem = z.infer<typeof taskStatusHistoryItemSchema>;
 
 /**
  * Схема для ответа со списком истории статусов (простой массив без пагинации)
  * История изменений статусов обычно небольшая (десятки записей), поэтому пагинация не требуется
  */
-export const statusHistoryResponseSchema = z.array(statusHistoryItemSchema);
+export const taskStatusHistoryResponseSchema = z.array(taskStatusHistoryItemSchema);
 
-export type StatusHistoryResponse = z.infer<typeof statusHistoryResponseSchema>;
+export type TaskStatusHistoryResponse = z.infer<typeof taskStatusHistoryResponseSchema>;
