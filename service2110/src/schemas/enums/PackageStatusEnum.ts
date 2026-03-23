@@ -34,6 +34,6 @@ export const packetStatusSchema = z.enum(PackageStatusEnum).describe('Стату
 export const PackageStatusEnumSchema = createEnumSchemaWithDescriptions(
   PackageStatusEnum,
   PacketStatusDescriptions,
-  'PacketStatusEnum',
+  'PackageStatusEnum',
   'Статус пакета'
 );

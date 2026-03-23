@@ -92,7 +92,7 @@ openApiRegistry.add(currencySchema, { id: 'CurrencyEnum' });
 openApiRegistry.add(fileFormatSchema, { id: 'FileFormatEnum' });
 openApiRegistry.add(reportTypeSchema, { id: 'ReportTypeEnum' });
 openApiRegistry.add(taskStatusSchema, { id: 'TaskStatusEnum' });
-openApiRegistry.add(packetStatusSchema, { id: 'PacketStatusEnum' });
+openApiRegistry.add(packetStatusSchema, { id: 'PackageStatusEnum' });
 openApiRegistry.add(fileStatusZodSchema, { id: 'FileStatusEnum' });
 openApiRegistry.add(storageCodeZodSchema, { id: 'StorageCodeEnum' });
 

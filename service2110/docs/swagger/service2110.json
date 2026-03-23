@@ -240,7 +240,7 @@
           }
         ]
       },
-      "PacketStatusEnum": {
+      "PackageStatusEnum": {
         "type": "string",
         "enum": [
           "pack_create",
@@ -648,6 +648,7 @@
             "description": "Массив ИД филиалов"
           },
           "reportType": {
+            "description": "Тип операции",
             "$ref": "#/components/schemas/ReportTypeEnum"
           },
           "periodFrom": {
@@ -738,6 +739,7 @@
             "description": "Массив ИД филиалов"
           },
           "reportType": {
+            "description": "Тип операции",
             "$ref": "#/components/schemas/ReportTypeEnum"
           },
           "periodFrom": {
@@ -760,7 +762,7 @@
             "description": "Статус задания",
             "$ref": "#/components/schemas/TaskStatusEnum"
           },
-          "fileSize": {
+          "totalFilesSize": {
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
@@ -805,7 +807,7 @@
           "currencyCode",
           "fileFormat",
           "taskStatus",
-          "fileSize",
+          "totalFilesSize",
           "updatedAt",
           "filesCount"
         ],
@@ -986,6 +988,7 @@
             "description": "Массив ИД филиалов"
           },
           "reportType": {
+            "description": "Тип операции",
             "$ref": "#/components/schemas/ReportTypeEnum"
           },
           "periodFrom": {
@@ -1008,7 +1011,7 @@
             "description": "Статус задания",
             "$ref": "#/components/schemas/TaskStatusEnum"
           },
-          "fileSize": {
+          "totalFilesSize": {
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
@@ -1079,7 +1082,7 @@
           "currencyCode",
           "fileFormat",
           "taskStatus",
-          "fileSize",
+          "totalFilesSize",
           "updatedAt",
           "filesCount"
         ],
@@ -1293,13 +1296,13 @@
           "taskStatus": {
             "$ref": "#/components/schemas/TaskStatusEnum"
           },
-          "changeAt": {
+          "changedAt": {
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
             "description": "Дата и время изменения"
           },
-          "changeBy": {
+          "changedBy": {
             "type": "string",
             "description": "Инициатор изменения. Логин или ФИО"
           },
@@ -1316,8 +1319,8 @@
           "id",
           "taskId",
           "taskStatus",
-          "changeAt",
-          "changeBy"
+          "changedAt",
+          "changedBy"
         ],
         "additionalProperties": false
       },
@@ -1497,19 +1500,19 @@
             ],
             "description": "Дата последнего копирования в ТФР (ISO 8601)"
           },
-          "tasksCount": {
+          "totalTasksCount": {
             "default": 0,
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
             "description": "Количество заданий в пакете"
           },
-          "totalSize": {
+          "totalFilesSize": {
             "default": 0,
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "description": "Общий размер пакета в байтах (сумма размеров всех файлов)"
+            "description": "Общий размер пакета в мегабайтах (сумма размеров всех файлов)"
           },
           "updatedAt": {
             "type": "string",
@@ -1519,7 +1522,7 @@
           },
           "status": {
             "description": "Текущий статус пакета",
-            "$ref": "#/components/schemas/PacketStatusEnum"
+            "$ref": "#/components/schemas/PackageStatusEnum"
           }
         },
         "required": [
@@ -1528,8 +1531,8 @@
           "createdAt",
           "createdBy",
           "lastCopiedToTfrAt",
-          "tasksCount",
-          "totalSize",
+          "totalTasksCount",
+          "totalFilesSize",
           "updatedAt",
           "status"
         ],
@@ -1842,15 +1845,15 @@
             "description": "Integer ID"
           },
           "packageStatus": {
-            "$ref": "#/components/schemas/PacketStatusEnum"
+            "$ref": "#/components/schemas/PackageStatusEnum"
           },
-          "changeAt": {
+          "changedAt": {
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
             "description": "Дата и время изменения"
           },
-          "changeBy": {
+          "changedBy": {
             "type": "string",
             "description": "Инициатор изменения. Логин или ФИО"
           },
@@ -1867,8 +1870,8 @@
           "id",
           "packageId",
           "packageStatus",
-          "changeAt",
-          "changeBy"
+          "changedAt",
+          "changedBy"
         ],
         "additionalProperties": false
       },
