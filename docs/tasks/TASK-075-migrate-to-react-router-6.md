@@ -998,3 +998,61 @@ location.reload();
 | `history.replace()` | `navigate(path, { replace: true })` | ✅ Мигрировано |
 
 ---
+
+## 📝 Уточнения по повторному выполнению задачи (2026-03-17)
+
+### Проблема с исходной веткой
+
+При первоначальном выполнении задачи VTB-559 ветка была создана не от актуального состояния `develop`. Это привело к невозможности использования стандартных операций `git rebase` или `git cherry-pick` для интеграции изменений.
+
+**Решение:** Изменения были повторно применены вручную к актуальному состоянию проекта (коммит `6a5d90e`).
+
+### Итоговые изменения
+
+**Изменённые файлы (9 шт):**
+- `package.json` — обновление зависимостей React Router и добавление `path-to-regexp`
+- `src/App/App.tsx` — упрощение, использование `LEGACY_FEATURE_CONFIG`
+- `src/components/Header/Header.tsx` — миграция `useHistory` → `useNavigate`
+- `src/constants/featureFlags.ts` — полная переработка системы фича-флагов с интеграцией ENV
+- `src/modules/ReportManagerLegacyModule/ReportManagerLegacyModuleRouting.tsx` — миграция на React Router 6 API
+- `src/modules/ReportManagerLegacyModule/pages/MainPage.tsx` — добавление ссылки на настройки
+- `webpack.config.ts` — добавление функции `loadEnvVars()` и прокидывание env переменных
+
+**Удалённые файлы (2 шт):**
+- `src/App/AppRouter.tsx` — устаревший роутер
+- `src/App/SettingsPage.tsx` — заменён на `src/pages/SettingsPage.tsx`
+
+**Новые файлы (4 шт):**
+- `.env.develop` — дефолтные настройки команды (123 строки)
+- `docs/ENV_CONFIGURATION.md` — полная документация по env переменным (276 строк)
+- `src/constants/env.ts` — типизация env переменных (62 строки)
+- `src/pages/SettingsPage.tsx` и `src/pages/index.ts` — страница настроек разработчика
+
+### Ключевые отличия от исходного патча
+
+1. **README.md не обновлялся** — изменения в README.md были признаны лишними и откачены
+2. **Файл `CommonTask.tsx` не найден** — этот файл отсутствовал в актуальном состоянии проекта, миграция его пропущена
+3. **Структура роутинга** — использован существующий `ReportManagerLegacyModuleRouting.tsx` вместо создания нового `ReportManagerAppRouting.tsx`
+
+### Приоритет загрузки env переменных
+
+Реализованный приоритет (от высшего к низшему):
+1. `.env` (индивидуальные настройки разработчика, опционально)
+2. `.env.develop` (дефолтные значения команды)
+3. `localStorage` (runtime переопределения для `moduleToShow` и `isAdminUser`)
+
+Переменные "вшиваются" в бандл на этапе сборки через webpack `DefinePlugin`, поэтому для применения изменений требуется перезапуск dev server.
+
+### Прокидываемые env переменные
+
+Через webpack DefinePlugin прокидываются следующие переменные:
+- `SWAGGER_HOST_DEV`
+- `SWAGGER_HOST_LOCAL`
+- `FEATURE_USE_NEW_APP_ARCHITECTURE`
+- `FEATURE_MODULE_REPORTS`
+- `FEATURE_MODULE_INVENTORY`
+- `FEATURE_SHOW_SETTINGS`
+- `FEATURE_IS_ADMIN`
+- `FEATURE_SHOW_REPORT_STATUS`
+
+---

@@ -37,7 +37,7 @@ type CustomFastifyInstance = FastifyInstance<
  * для генераторов клиентского кода.
  */
 const enumExtensions: Record<string, Record<string, unknown>> = {
-  PacketStatusEnum: extractEnumExtensions(PackageStatusEnumSchema),
+  PackageStatusEnum: extractEnumExtensions(PackageStatusEnumSchema),
   FileStatusEnum: extractEnumExtensions(FileStatusEnumSwaggerSchema),
   ReportTypeEnum: extractEnumExtensions(ReportTypeEnumSchema),
   SortOrderEnum: extractEnumExtensions(SortOrderEnumSchema),
