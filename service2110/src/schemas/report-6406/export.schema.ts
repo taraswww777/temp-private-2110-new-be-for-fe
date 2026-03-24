@@ -42,14 +42,19 @@ export type ExportFilters = z.infer<typeof exportFiltersSchema>;
 export const exportSortBySchema = z.enum(['createdAt', 'branchId', 'status', 'periodStart', 'updatedAt']);
 export type ExportSortBy = z.infer<typeof exportSortBySchema>;
 
+/** Схема сортировки для экспорта */
+export const exportSortingSchema = z.object({
+  sortBy: exportSortBySchema.default('createdAt').describe('Поле для сортировки'),
+  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
+});
+
 /**
  * Схема для запроса экспорта (с дополнительными опциями)
  */
 export const exportTasksRequestSchema = z.object({
   filters: exportFiltersSchema,
   columns: z.array(z.string()).optional().describe('Список колонок для включения в экспорт'),
-  sortBy: exportSortBySchema.default('createdAt').describe('Поле для сортировки'),
-  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
+  sorting: exportSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
 });
 
 export type ExportTasksRequest = z.infer<typeof exportTasksRequestSchema>;

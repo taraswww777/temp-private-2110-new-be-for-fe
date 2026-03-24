@@ -823,10 +823,10 @@
           "sorting": {
             "type": "object",
             "properties": {
-              "direction": {
+              "sortOrder": {
                 "$ref": "#/components/schemas/SortOrderEnum"
               },
-              "column": {
+              "sortBy": {
                 "type": "string",
                 "enum": [
                   "createdAt",
@@ -840,13 +840,13 @@
               }
             },
             "required": [
-              "direction",
-              "column"
+              "sortOrder",
+              "sortBy"
             ],
             "additionalProperties": false,
             "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
-          "filter": {
+          "filters": {
             "description": "Фильтры для списка заданий (объект с опциональными полями)",
             "type": "object",
             "properties": {
@@ -1960,25 +1960,35 @@
               "type": "string"
             }
           },
-          "sortBy": {
-            "default": "createdAt",
-            "description": "Поле для сортировки",
-            "type": "string",
-            "enum": [
-              "createdAt",
-              "branchId",
-              "status",
-              "periodStart",
-              "updatedAt"
-            ]
-          },
-          "sortOrder": {
-            "$ref": "#/components/schemas/SortOrderEnum"
+          "sorting": {
+            "type": "object",
+            "properties": {
+              "sortBy": {
+                "default": "createdAt",
+                "description": "Поле для сортировки",
+                "type": "string",
+                "enum": [
+                  "createdAt",
+                  "branchId",
+                  "status",
+                  "periodStart",
+                  "updatedAt"
+                ]
+              },
+              "sortOrder": {
+                "$ref": "#/components/schemas/SortOrderEnum"
+              }
+            },
+            "required": [
+              "sortBy",
+              "sortOrder"
+            ],
+            "additionalProperties": false,
+            "description": "Параметры сортировки (колонка — фиксированный набор)"
           }
         },
         "required": [
-          "sortBy",
-          "sortOrder"
+          "sorting"
         ],
         "additionalProperties": false
       },

@@ -115,8 +115,8 @@ export type TaskListSortColumn = z.infer<typeof taskListSortColumnSchema>;
 
 /** Схема сортировки для списка заданий (колонка — enum) */
 export const tasksListSortingSchema = z.object({
-  direction: sortOrderSchema,
-  column: taskListSortColumnSchema.describe('Колонка для сортировки'),
+  sortOrder: sortOrderSchema,
+  sortBy: taskListSortColumnSchema.describe('Колонка для сортировки'),
 });
 
 /**
@@ -146,7 +146,7 @@ export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
 export const getTasksRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
-  filter: tasksListFilterSchema.describe('Фильтры для списка заданий (объект с опциональными полями)'),
+  filters: tasksListFilterSchema.describe('Фильтры для списка заданий (объект с опциональными полями)'),
 });
 
 export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;
