@@ -14,8 +14,8 @@ export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
  * Метаданные пагинации в ответе (number, size, totalItems, totalPages)
  */
 export const paginationMetadataSchema = z.object({
-  number: z.number().int().min(1).describe('Текущий номер страницы'),
-  size: z.number().int().min(1).max(100).describe('Размер страницы'),
+  page: z.number().int().min(1).describe('Текущий номер страницы'),
+  limit: z.number().int().min(1).max(100).describe('Размер страницы'),
   totalItems: z.number().int().min(0).describe('Общее количество элементов'),
   totalPages: z.number().int().min(0).describe('Общее количество страниц'),
 });
