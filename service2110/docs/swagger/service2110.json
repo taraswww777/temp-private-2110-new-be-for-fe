@@ -12,12 +12,12 @@
   "components": {
     "schemas": {
       "SortOrderEnum": {
-        "default": "DESC",
+        "default": "desc",
         "description": "Направление сортировки",
         "type": "string",
         "enum": [
-          "ASC",
-          "DESC"
+          "asc",
+          "desc"
         ],
         "x-enum-descriptions": [
           "Сортировка по возрастанию",
@@ -29,12 +29,12 @@
         ],
         "oneOf": [
           {
-            "const": "ASC",
+            "const": "asc",
             "description": "Сортировка по возрастанию",
             "title": "ASC"
           },
           {
-            "const": "DESC",
+            "const": "desc",
             "description": "Сортировка по убыванию",
             "title": "DESC"
           }

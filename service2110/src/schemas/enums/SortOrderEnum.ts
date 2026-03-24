@@ -9,10 +9,10 @@ import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithD
  */
 export enum SortOrderEnum {
   /** Сортировка по возрастанию. */
-  ASC = 'ASC',
+  ASC = 'asc',
 
   /** Сортировка по убыванию. */
-  DESC = 'DESC',
+  DESC = 'desc',
 }
 
 /**
