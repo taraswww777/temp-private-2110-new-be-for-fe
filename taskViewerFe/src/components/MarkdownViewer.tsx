@@ -77,7 +77,7 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
     <div className="flex gap-6 min-w-0">
       {/* Навигация по заголовкам */}
       {headings.length > 0 && (
-        <Card className="w-72 shrink-0 self-start p-5 sticky top-4 z-10 h-fit max-h-[calc(100vh-2rem)] overflow-y-auto">
+        <Card className="w-72 shrink-0 self-start p-2 sticky top-4 z-10 h-fit max-h-[calc(100vh-2rem)] overflow-y-auto">
           <nav className="space-y-1.5">
             {headings.map((heading) => (
               <button
@@ -88,7 +88,7 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
                     ? 'bg-primary text-primary-foreground'
                     : 'hover:bg-muted'
                 }`}
-                style={{ paddingLeft: `${(heading.level - 1) * 1}rem` }}
+                style={{ paddingLeft: `${Math.max(heading.level - 1, 1)}rem` }}
               >
                 {heading.text}
               </button>
