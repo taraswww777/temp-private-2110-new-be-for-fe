@@ -7,7 +7,9 @@ export  const AppTemplateHeader = () => {
     <div className="container mx-auto px-4 py-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold">Task Viewer</h1>
+          <a href="/">
+            <h1 className="text-2xl font-bold">Task Viewer</h1>
+          </a>
           <ProjectSelector />
         </div>
         <div className="flex items-center gap-4">

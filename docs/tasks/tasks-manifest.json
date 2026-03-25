@@ -831,7 +831,8 @@
       "createdDate": "2026-02-12T00:00:00Z",
       "completedDate": null,
       "branch": null,
-      "priority": "medium"
+      "priority": "medium",
+      "projectId": "taskviewer-project-id"
     },
     {
       "id": "TASK-068",
