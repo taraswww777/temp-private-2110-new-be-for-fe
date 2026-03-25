@@ -78,7 +78,7 @@ function EyeIcon({ className }: { className?: string }) {
   );
 }
 
-const defaultStatusFilter: TaskStatus[] = ['backlog', 'planned', 'in-progress', 'cancelled'];
+const defaultStatusFilter: TaskStatus[] = ['backlog', 'planned', 'in-progress'];
 const defaultPriorityFilter: TaskPriority[] = ['critical', 'high', 'medium', 'low'];
 
 function TaskListYouTrackCell({

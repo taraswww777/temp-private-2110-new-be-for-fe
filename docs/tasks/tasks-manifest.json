@@ -938,11 +938,11 @@
     {
       "id": "TASK-075",
       "title": "Миграция на React Router 6.29.0 с модульной архитектурой и фича-флагами",
-      "status": "in-progress",
+      "status": "completed",
       "priority": "high",
       "file": "TASK-075-migrate-to-react-router-6.md",
       "createdDate": "2026-03-17T00:00:00.000Z",
-      "completedDate": null,
+      "completedDate": "2026-03-25T20:55:44.818Z",
       "branch": "VTB-559/FE-Perehod-na-react-router-dom6.29.0",
       "tagIds": [
         "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
