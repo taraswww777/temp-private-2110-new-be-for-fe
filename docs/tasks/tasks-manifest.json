@@ -923,7 +923,7 @@
     {
       "id": "TASK-074",
       "title": "Разработка контрактов API-16 (система инвентаризации)",
-      "status": "in-progress",
+      "status": "cancelled",
       "priority": "high",
       "file": "TASK-074-inventory-api16-contracts.md",
       "createdDate": "2026-03-16T00:00:00.000Z",
@@ -945,6 +945,21 @@
       "branch": "VTB-559/FE-Perehod-na-react-router-dom6.29.0",
       "tagIds": [
         "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+      ],
+      "projectId": "2110-project-id"
+    },
+    {
+      "id": "TASK-076",
+      "title": "API инвентаризации в service2110 (front API-28): контракты и заглушки",
+      "status": "backlog",
+      "priority": "high",
+      "file": "TASK-076-inventorization-service2110-contracts.md",
+      "createdDate": "2026-03-25T12:00:00.000Z",
+      "completedDate": null,
+      "branch": null,
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72",
+        "2377e7f3-28db-4fd0-a37b-96603b49c553"
       ],
       "projectId": "2110-project-id"
     }
