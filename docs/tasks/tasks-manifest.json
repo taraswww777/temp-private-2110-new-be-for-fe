@@ -952,11 +952,11 @@
     {
       "id": "TASK-076",
       "title": "API инвентаризации в service2110 (front API-28): контракты и заглушки",
-      "status": "backlog",
+      "status": "completed",
       "priority": "high",
       "file": "TASK-076-inventorization-service2110-contracts.md",
       "createdDate": "2026-03-25T12:00:00.000Z",
-      "completedDate": null,
+      "completedDate": "2026-03-26T12:00:00.000Z",
       "branch": null,
       "tagIds": [
         "f15ee308-9732-448c-a102-a3a5bf631e72",

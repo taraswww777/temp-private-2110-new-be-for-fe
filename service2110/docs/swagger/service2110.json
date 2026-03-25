@@ -2085,6 +2085,610 @@
         "items": {
           "$ref": "#/components/schemas/StorageVolumeItemDto"
         }
+      },
+      "InventorizationOrderListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "orderNumber": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationGetOrdersListRequestDto": {
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "description": "Параметры пагинации",
+            "$ref": "#/components/schemas/PaginationRequestDto"
+          },
+          "sorting": {
+            "type": "object",
+            "properties": {
+              "sortOrder": {
+                "$ref": "#/components/schemas/SortOrderEnum"
+              },
+              "sortBy": {
+                "type": "string",
+                "enum": [
+                  "id",
+                  "createdAt",
+                  "orderNumber",
+                  "status"
+                ],
+                "description": "Колонка для сортировки"
+              }
+            },
+            "required": [
+              "sortOrder",
+              "sortBy"
+            ],
+            "additionalProperties": false,
+            "description": "Сортировка"
+          },
+          "filters": {
+            "description": "Фильтры списка приказов",
+            "type": "object",
+            "properties": {
+              "inventoryOrderId": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991,
+                "description": "Integer ID"
+              },
+              "statusId": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991,
+                "description": "Integer ID"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "pagination",
+          "sorting"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationOrdersListResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventorizationOrderListItemDto"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "items",
+          "totalItems"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationCreateOrderDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationUpdateOrderDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "title": {
+            "type": "string"
+          },
+          "statusId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationOrderMutationResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationBs2FilterItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "bs2Name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "bs2Name"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationBs2FilterResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventorizationBs2FilterItemDto"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationDictionaryItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationDictionaryListResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventorizationDictionaryItemDto"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationGetAccountsListRequestDto": {
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "description": "Параметры пагинации",
+            "$ref": "#/components/schemas/PaginationRequestDto"
+          },
+          "sorting": {
+            "type": "object",
+            "properties": {
+              "sortOrder": {
+                "$ref": "#/components/schemas/SortOrderEnum"
+              },
+              "sortBy": {
+                "type": "string",
+                "enum": [
+                  "id",
+                  "accountNumber",
+                  "accountSurrogateId",
+                  "updatedAt"
+                ],
+                "description": "Колонка для сортировки"
+              }
+            },
+            "required": [
+              "sortOrder",
+              "sortBy"
+            ],
+            "additionalProperties": false,
+            "description": "Сортировка"
+          },
+          "filters": {
+            "description": "Фильтры списка счетов",
+            "type": "object",
+            "properties": {
+              "inventoryOrderId": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991,
+                "description": "Integer ID"
+              },
+              "accountSurrogateId": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991,
+                "description": "Integer ID"
+              },
+              "accountTypeId": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991,
+                "description": "Integer ID"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "pagination",
+          "sorting"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountsListResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
+                },
+                "accountSurrogateId": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
+                },
+                "accountNumber": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "accountSurrogateId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "items",
+          "totalItems"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "accountSurrogateId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "accountNumber": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "accountSurrogateId"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountHistoryResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991,
+                  "description": "Integer ID"
+                },
+                "changedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                "action": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "changedAt",
+                "action"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationManualUnitBulkRequestDto": {
+        "type": "object",
+        "properties": {
+          "accountSurrogateIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          }
+        },
+        "required": [
+          "accountSurrogateIds"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationManualUnitResponseDto": {
+        "type": "object",
+        "properties": {
+          "updated": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "updated"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountsInventoryRequestDto": {
+        "type": "object",
+        "properties": {
+          "inventoryOrderId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "accountIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          }
+        },
+        "required": [
+          "inventoryOrderId"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountsInventoryExcludeRequestDto": {
+        "type": "object",
+        "properties": {
+          "inventoryOrderId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "accountIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          }
+        },
+        "required": [
+          "inventoryOrderId",
+          "accountIds"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountsInventoryMutationResponseDto": {
+        "type": "object",
+        "properties": {
+          "affected": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "affected"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountColumnDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountColumnsResponseDto": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventorizationAccountColumnDto"
+            }
+          }
+        },
+        "required": [
+          "columns"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountColumnsUpdateDto": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventorizationAccountColumnDto"
+            }
+          }
+        },
+        "required": [
+          "columns"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountsExportRequestDto": {
+        "type": "object",
+        "properties": {
+          "inventoryOrderId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "xlsx",
+              "csv"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "InventorizationAccountsExportResponseDto": {
+        "type": "object",
+        "properties": {
+          "fileKey": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InventorizationStatisticsExportRequestDto": {
+        "type": "object",
+        "properties": {
+          "inventoryOrderId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "xlsx",
+              "csv"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "InventorizationStatisticsExportResponseDto": {
+        "type": "object",
+        "properties": {
+          "fileKey": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InventorizationInventoryStateResponseDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "progressPercent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "additionalProperties": false
       }
     }
   },
@@ -3086,6 +3690,708 @@
           }
         }
       }
+    },
+    "/api/v1/inventorization/orders/list": {
+      "post": {
+        "summary": "Список приказов инвентаризации (пагинация, сортировка, фильтры)",
+        "tags": [
+          "Inventorization"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationGetOrdersListRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationOrdersListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/orders/new": {
+      "post": {
+        "summary": "Создать приказ инвентаризации",
+        "tags": [
+          "Inventorization"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationCreateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationOrderMutationResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/orders/update": {
+      "post": {
+        "summary": "Обновить приказ инвентаризации",
+        "tags": [
+          "Inventorization"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationUpdateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationOrderMutationResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/dictionary/filters/bs2/{inventoryOrderId}": {
+      "get": {
+        "summary": "Справочник БС-2 для фильтров (только id и bs2Name)",
+        "tags": [
+          "Inventorization - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationBs2FilterResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/dictionary/filters/account-type/{inventoryOrderId}": {
+      "get": {
+        "summary": "Тип счёта (фильтр)",
+        "tags": [
+          "Inventorization - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/dictionary/filters/responsible-unit/{inventoryOrderId}": {
+      "get": {
+        "summary": "Ответственное подразделение (фильтр)",
+        "tags": [
+          "Inventorization - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/dictionary/filters/responsible-unit-type/{inventoryOrderId}": {
+      "get": {
+        "summary": "Тип ответственного подразделения (фильтр)",
+        "tags": [
+          "Inventorization - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/dictionary/filters/inventory-status/{inventoryOrderId}": {
+      "get": {
+        "summary": "Статус инвентаризации (фильтр)",
+        "tags": [
+          "Inventorization - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/dictionary/filters/source-bank/{inventoryOrderId}": {
+      "get": {
+        "summary": "Банк-источник (фильтр)",
+        "tags": [
+          "Inventorization - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/dictionary/filters/product/{inventoryOrderId}": {
+      "get": {
+        "summary": "Продукт (фильтр)",
+        "tags": [
+          "Inventorization - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/dictionary/filters/manual-control-rule-number/{inventoryOrderId}": {
+      "get": {
+        "summary": "Номер правила ручного контроля (фильтр)",
+        "tags": [
+          "Inventorization - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/accounts/list": {
+      "post": {
+        "summary": "Список счетов инвентаризации (пагинация, сортировка, фильтры)",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationGetAccountsListRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationAccountsListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/accounts/columns": {
+      "get": {
+        "summary": "Колонки таблицы счетов",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationAccountColumnsResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Сохранить настройки колонок",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationAccountColumnsUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationAccountColumnsResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/accounts/export": {
+      "post": {
+        "summary": "Экспорт реестра счетов",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationAccountsExportRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationAccountsExportResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/accounts/inventory": {
+      "post": {
+        "summary": "Включить счета в инвентаризацию",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationAccountsInventoryRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationAccountsInventoryMutationResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/accounts/inventory/exclude": {
+      "post": {
+        "summary": "Исключить счета из инвентаризации",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationAccountsInventoryExcludeRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationAccountsInventoryMutationResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/accounts/manual-unit/bulk": {
+      "post": {
+        "summary": "Ручной учёт: массовая операция",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationManualUnitBulkRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationManualUnitResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/accounts/manual-unit/{accountSurrogateId}": {
+      "post": {
+        "summary": "Ручной учёт: одна запись (accountSurrogateId в URL)",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "accountSurrogateId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationManualUnitResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/accounts/surrogate/{accountSurrogateId}/history": {
+      "get": {
+        "summary": "История изменений по surrogate id счёта",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "accountSurrogateId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationAccountHistoryResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/accounts/{id}": {
+      "get": {
+        "summary": "Деталь счёта по id",
+        "tags": [
+          "Inventorization - Accounts"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationAccountDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/statistics/export": {
+      "post": {
+        "summary": "Экспорт статистики инвентаризации",
+        "tags": [
+          "Inventorization - Statistics"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventorizationStatisticsExportRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationStatisticsExportResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventorization/inventory/state": {
+      "get": {
+        "summary": "Состояние процесса инвентаризации",
+        "tags": [
+          "Inventorization"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "query",
+            "name": "inventoryOrderId",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorizationInventoryStateResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "servers": [
@@ -3122,6 +4428,22 @@
     {
       "name": "Report 6406 - Storage",
       "description": "Мониторинг хранилища отчётов"
+    },
+    {
+      "name": "Inventorization",
+      "description": "Инвентаризация (uaod-si-inventory, API-28)"
+    },
+    {
+      "name": "Inventorization - Dictionary",
+      "description": "Словари фильтров инвентаризации"
+    },
+    {
+      "name": "Inventorization - Accounts",
+      "description": "Счета инвентаризации"
+    },
+    {
+      "name": "Inventorization - Statistics",
+      "description": "Статистика инвентаризации"
     }
   ]
 }
