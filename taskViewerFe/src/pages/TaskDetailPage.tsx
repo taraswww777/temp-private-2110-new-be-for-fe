@@ -305,8 +305,8 @@ export function TaskDetailPage() {
         </div>
       </Card>
 
-      <Card className="overflow-hidden">
-        <CardContent className="min-w-0 overflow-hidden pt-6 pl-0">
+      <Card>
+        <CardContent className="min-w-0 pt-6 pl-0">
           <MarkdownViewer content={task.content} />
         </CardContent>
       </Card>
