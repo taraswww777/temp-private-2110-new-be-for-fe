@@ -149,6 +149,10 @@ export const registerFastifySwagger = async (app: CustomFastifyInstance) => {
         { name: 'Report 6406 - Tasks', description: 'Задания на построение отчётов для формы 6406' },
         { name: 'Report 6406 - Packages', description: 'Пакеты заданий для формы 6406' },
         { name: 'Report 6406 - Storage', description: 'Мониторинг хранилища отчётов' },
+        { name: 'Inventorization', description: 'Инвентаризация (uaod-si-inventory, API-28)' },
+        { name: 'Inventorization - Dictionary', description: 'Словари фильтров инвентаризации' },
+        { name: 'Inventorization - Accounts', description: 'Счета инвентаризации' },
+        { name: 'Inventorization - Statistics', description: 'Статистика инвентаризации' },
       ],
     },
     transform: createJsonSchemaTransform({
