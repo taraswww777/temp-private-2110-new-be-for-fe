@@ -962,6 +962,36 @@
         "2377e7f3-28db-4fd0-a37b-96603b49c553"
       ],
       "projectId": "2110-project-id"
+    },
+    {
+      "id": "TASK-077",
+      "title": "Связи задач и типы работ (Jira-подобная модель) в Task Viewer",
+      "status": "backlog",
+      "priority": "high",
+      "file": "TASK-077-task-links-and-issue-types.md",
+      "createdDate": "2026-03-25T12:00:00.000Z",
+      "completedDate": null,
+      "branch": null,
+      "projectId": "taskviewer-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72",
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+      ]
+    },
+    {
+      "id": "TASK-078",
+      "title": "Пайплайн заданий («после A — делай B») и визуальный редактор",
+      "status": "backlog",
+      "priority": "medium",
+      "file": "TASK-078-task-pipeline-and-visual-editor.md",
+      "createdDate": "2026-03-25T12:00:00.000Z",
+      "completedDate": null,
+      "branch": null,
+      "projectId": "taskviewer-project-id",
+      "tagIds": [
+        "f15ee308-9732-448c-a102-a3a5bf631e72",
+        "c1bfb65a-75bb-4108-9837-9d4b53a6bb14"
+      ]
     }
   ]
 }
