@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-import { paginationQuerySchema } from '../common.schema.ts';
 import { sortOrderSchema } from '../enums/SortOrderEnum.ts';
 import { dateSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
+import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
 export const inventoryOrderListSortColumnSchema = z.enum([
   'id',
