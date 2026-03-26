@@ -1,0 +1,8 @@
+---
+description: Соглашения API (URL, report-6406) и размеры файлов/объёмов в байтах — skill project-conventions
+alwaysApply: false
+---
+
+# API и размеры
+
+Следуй skill **`.cursor/skills/project-conventions/SKILL.md`**. Каноничные документы: **`docs/api-conventions.md`**, **`docs/conventions/file-size-conventions.md`**.
