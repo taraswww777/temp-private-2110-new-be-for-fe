@@ -4,8 +4,6 @@
 **Ветка**: (по факту — текущая рабочая ветка репозитория)  
 **Приоритет**: high  
 
-**Зафиксировано при реализации**: список счетов — `POST /accounts/list` (как у приказов `/orders/list`).
-
 ---
 
 ## Краткое описание
@@ -21,14 +19,18 @@
 | Тема | Решение |
 |------|---------|
 | Базовый префикс API | `/api/v1/inventorization` |
-| Словари (фильтры) | Префикс сегмента **`/dictionary/`** (например `/dictionary/filters/...`), в духе `report-6406`, не `/dictionaries/` из исходного DOC |
-| Списки сущностей | Как в report-6406: тело запроса с **pagination** (`PaginationRequestDto`: `page`, `limit`), **sorting** (`sortOrder`, `sortBy`), **filters**; ответ `items` + `totalItems` (аналог `GetTasksRequestDto` / `TasksListResponseDto`) |
+| Словари (фильтры) | Сегмент **`/dictionary/`** (не `/dictionaries/` из DOC). Шаблон пути: **`GET /dictionary/filters/<ключ-словаря>/:inventoryOrderId`**, где `<ключ-словаря>` — литералы `bs2`, `account-type`, `responsible-unit`, и т.д. Ответ БС-2: обёртка **`items`** массивом элементов **`{ id, bs2Name }`**. Остальные словари — **`items`** с **`{ id, name }`**. |
+| Списки сущностей | Как в report-6406: тело с **pagination** (`PaginationRequestDto`: `page`, `limit`), **sorting** (`sortOrder`, `sortBy`), **filters**; ответ **`items` + `totalItems`** (аналог `GetTasksRequestDto` / `TasksListResponseDto`). Отдельные DTO в OpenAPI с префиксом имён **`Inventorization…`** (например `InventorizationGetOrdersListRequestDto`), чтобы не пересекаться с 6406. |
+| Список счетов | Зафиксирован **`POST /accounts/list`** (тот же паттерн, что **`POST /orders/list`**, а не единственный `POST /accounts`). |
 | Идентификаторы | Все бывшие UUID в контракте — **`zIdSchema` (int)** из `common.schema.ts` |
-| Поле `adLogin` | С фронта **не передаётся** — не включать в body create/update приказа |
+| Поле `adLogin` | С фронта **не передаётся** — не включать в body create/update приказа. В стабе create достаточно минимального поля (например **`title`**) без лишних опциональных полей. |
 | `accountSurrogateKey` | Переименовать в **`accountSurrogateId`**, тип **int** (`zIdSchema`), если иное не потребует интеграция |
-| Ручной учёт (`manual-unit`) | **Два метода**: (1) операция над **одной** записью — `accountSurrogateId` в **URL**; (2) **массовая** — массив числовых id **в body** |
-| Ответ фильтра БС-2 | Только **`bs2Name`** (и id для строки); **без** `value` и **без** `orderId` в элементах ответа |
-| Реестр OpenAPI | Разделить регистрацию схем: одна часть для **report-6406**, другая для **inventorization** (отдельный модуль(и) + тонкий `schema-registry.ts`), по аналогии с папкой `schemas/report-6406/` |
+| Ручной учёт (`manual-unit`) | **Два маршрута**: (1) **`POST /accounts/manual-unit/:accountSurrogateId`** — один surrogate в path, тело опционально пустое `{}`; (2) **`POST /accounts/manual-unit/bulk`** — в body **`accountSurrogateIds`**: массив int (`zIdSchema`). Регистрировать **`/manual-unit/bulk` до** параметризованного `:accountSurrogateId`, чтобы не перехватывать сегмент `bulk`. |
+| Ответ фильтра БС-2 | Только **`bs2Name`** (и **id** для строки); **без** `value` и **без** `orderId` в элементах ответа |
+| История счёта | **`GET /accounts/surrogate/:accountSurrogateId/history`** — префикс **`surrogate`**, чтобы не конфликтовать с **`GET /accounts/:id`**. |
+| Состояние процесса | Полный путь **`GET /inventory/state`** относительно базы инвентаризации (итого **`/api/v1/inventorization/inventory/state`**). Query: опциональный **`inventoryOrderId`** (int). |
+| Реестр OpenAPI | Регистрация вынесена: **`schemas/report-6406/openapi-register.ts`** (`registerReport6406OpenApiSchemas`), **`schemas/inventorization/openapi-register.ts`** (`registerInventorizationOpenApiSchemas`); **`schema-registry.ts`** остаётся тонким (общие enum/общие DTO + вызов обоих регистраторов). |
+| Swagger UI | Теги: **`Inventorization`**, **`Inventorization - Dictionary`**, **`Inventorization - Accounts`**, **`Inventorization - Statistics`**. |
 
 ---
 
@@ -40,19 +42,26 @@
 - `POST /orders/new`
 - `POST /orders/update`
 
-**Словари** (`/dictionary/filters/...`), все **GET**, в path — `inventoryOrderId` (int):
+**Словари** — все **GET**, параметр path **`inventoryOrderId`** (int), примеры полных путей:
 
-- `bs2`, `account-type`, `responsible-unit`, `responsible-unit-type`, `inventory-status`, `source-bank`, `product`, `manual-control-rule-number`
+- `GET …/dictionary/filters/bs2/:inventoryOrderId`
+- `GET …/dictionary/filters/account-type/:inventoryOrderId`
+- `GET …/dictionary/filters/responsible-unit/:inventoryOrderId`
+- `GET …/dictionary/filters/responsible-unit-type/:inventoryOrderId`
+- `GET …/dictionary/filters/inventory-status/:inventoryOrderId`
+- `GET …/dictionary/filters/source-bank/:inventoryOrderId`
+- `GET …/dictionary/filters/product/:inventoryOrderId`
+- `GET …/dictionary/filters/manual-control-rule-number/:inventoryOrderId`
 
-**Счета**
+**Счета** (префикс **`/accounts`**, статичные сегменты объявлять **до** `GET /:id`)
 
-- Список: **POST `/accounts`** (или `/accounts/list` — зафиксировать один вариант в коде и в Swagger) с pagination + sorting + filters.
-- Ручной учёт: отдельный single + bulk (см. выше).
+- Список: **`POST /accounts/list`** — pagination + sorting + filters; ответ `items` + `totalItems`.
+- Ручной учёт: **`POST /accounts/manual-unit/:accountSurrogateId`** (одна запись) и **`POST /accounts/manual-unit/bulk`** (массив **`accountSurrogateIds`** в body).
 - `POST /accounts/inventory`, `POST /accounts/inventory/exclude`
 - `GET /accounts/columns`, `POST /accounts/columns`
 - `POST /accounts/export`
-- `GET /accounts/:id` — деталь счёта по **id**
-- История: путь без коллизии с `/:id`, например **`GET /accounts/surrogate/:accountSurrogateId/history`** (или иной явный префикс).
+- `GET /accounts/:id` — деталь счёта по **id** (числовой идентификатор записи в реестре).
+- История: **`GET /accounts/surrogate/:accountSurrogateId/history`**.
 
 **Статистика**
 
@@ -60,7 +69,7 @@
 
 **Состояние процесса**
 
-- `GET /inventory/state` с опциональным query **`inventoryOrderId`** (int), если в DOC фигурирует опциональный идентификатор приказа.
+- **`GET /inventory/state`** — query: опциональный **`inventoryOrderId`** (int).
 
 Точный состав полей фильтров списка счетов и тел `inventory` / `exclude` — сверять с таблицами в MHT; для стабов допускаются минимальные объекты.
 
@@ -73,7 +82,7 @@
 - [x] Списки используют тот же паттерн запроса/ответа, что список заданий 6406 (pagination, sorting, filters).
 - [x] В контрактах нет UUID; идентификаторы сущностей — `zIdSchema`, `accountSurrogateId` — число.
 - [x] Элементы ответа фильтра БС-2 без `value` и `orderId`, есть `bs2Name`.
-- [x] Два варианта `manual-unit`: по одному id в URL и массовый с массивом id в body.
+- [x] Два варианта `manual-unit`: **`POST …/manual-unit/:accountSurrogateId`** и **`POST …/manual-unit/bulk`** с полем **`accountSurrogateIds`** в body.
 - [x] Заглушки возвращают пустые `items` / пустые объекты там, где это уместно; Swagger собирается без ошибок.
 - [x] Задание отражено в этом файле; статус в `tasks-manifest.json` обновляет исполнитель по завершении.
 
