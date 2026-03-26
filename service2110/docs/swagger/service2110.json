@@ -461,24 +461,6 @@
         ],
         "additionalProperties": false
       },
-      "FilterDto": {
-        "type": "object",
-        "properties": {
-          "column": {
-            "type": "string",
-            "description": "Колонка для фильтрации"
-          },
-          "value": {
-            "type": "string",
-            "description": "Значение для фильтрации"
-          }
-        },
-        "required": [
-          "column",
-          "value"
-        ],
-        "additionalProperties": false
-      },
       "DateSchema": {
         "type": "string",
         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
@@ -489,41 +471,6 @@
         "format": "date-time",
         "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
         "description": "Дата и время в формате ISO 8601"
-      },
-      "HttpErrorWithInstanceDto": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "URI типа ошибки"
-          },
-          "title": {
-            "type": "string",
-            "description": "Заголовок ошибки"
-          },
-          "status": {
-            "type": "integer",
-            "minimum": -9007199254740991,
-            "maximum": 9007199254740991,
-            "description": "HTTP статус"
-          },
-          "detail": {
-            "type": "string",
-            "description": "Детали ошибки"
-          },
-          "instance": {
-            "type": "string",
-            "description": "URI запроса"
-          }
-        },
-        "required": [
-          "type",
-          "title",
-          "status",
-          "detail",
-          "instance"
-        ],
-        "additionalProperties": false
       },
       "BranchDto": {
         "type": "object",
