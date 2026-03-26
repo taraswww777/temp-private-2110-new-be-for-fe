@@ -90,18 +90,6 @@ export const problemDetailsSchema = z.object({
 export type ProblemDetails = z.infer<typeof problemDetailsSchema>;
 
 /**
- * Упрощённая схема для HTTP ошибок (без валидации URL для type)
- */
-export const httpErrorSchema = z.object({
-  type: z.string(),
-  title: z.string(),
-  status: z.number().int(),
-  detail: z.string(),
-});
-
-export type HttpError = z.infer<typeof httpErrorSchema>;
-
-/**
  * Схема для фильтрации данных
  */
 export const filterSchema = z.object({
