@@ -3,9 +3,9 @@ import { FastifyBaseLogger, FastifyServerOptions, RawServerDefault } from 'fasti
 
 export const fastifyOptions: FastifyServerOptions<RawServerDefault, FastifyBaseLogger> = {
   logger: {
-    level: env.NODE_ENV === 'development' ? 'warn' : 'error',
+    level: env.NODE_ENV === 'development' ? 'info' : 'error',
   },
   requestIdLogLabel: 'reqId',
-  disableRequestLogging: false,
+  disableRequestLogging: true,
   requestIdHeader: 'x-request-id',
 };
