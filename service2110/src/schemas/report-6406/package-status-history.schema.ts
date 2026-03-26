@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { packetStatusSchema } from '../enums/PackageStatusEnum.ts';
+import { packetStatusSchema } from './enums/PackageStatusEnum.ts';
 
 import { zIdSchema } from '../common/id.schema.ts';
 

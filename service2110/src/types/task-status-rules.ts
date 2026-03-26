@@ -1,4 +1,4 @@
-import { TaskStatusEnum } from '../schemas/enums/TaskStatusEnum';
+import { TaskStatusEnum } from '../schemas/report-6406/enums/TaskStatusEnum.ts';
 
 export interface StatusPermissions {
   canCancel: boolean; // Отменить

@@ -16,7 +16,7 @@ export const inventorizationDictionaryRoutes: FastifyPluginAsync = async (fastif
       params: inventorizationInventoryOrderIdParamSchema,
       response: { 200: inventorizationBs2FilterResponseSchema },
     },
-  }, async (_request, reply) => reply.status(200).send({ items: [] }));
+  }, async (_request, reply) => reply.status(200).send([]));
 
   const listFilters = [
     ['/filters/account-type/:inventoryOrderId', 'Тип счёта (фильтр)'],
@@ -36,6 +36,6 @@ export const inventorizationDictionaryRoutes: FastifyPluginAsync = async (fastif
         params: inventorizationInventoryOrderIdParamSchema,
         response: { 200: inventorizationDictionaryListResponseSchema },
       },
-    }, async (_request, reply) => reply.status(200).send({ items: [] }));
+    }, async (_request, reply) => reply.status(200).send([]));
   }
 };

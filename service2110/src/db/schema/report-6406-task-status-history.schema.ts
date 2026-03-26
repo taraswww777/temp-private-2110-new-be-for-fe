@@ -1,7 +1,7 @@
 import { pgTable, timestamp, varchar, text, jsonb, index } from 'drizzle-orm/pg-core';
 import { report6406Tasks } from './report-6406-tasks.schema.ts';
 import { idColumn, idColumnPrimary } from './base.schema.ts';
-import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
+import { TaskStatusEnum } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
 import { taskStatusPgEnum } from './enums.schema.ts';
 
 /**

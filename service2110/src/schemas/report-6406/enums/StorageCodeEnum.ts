@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
+
+import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
 
 /**
  * Код хранилища.
@@ -25,8 +26,8 @@ export enum StorageCodeEnum {
  * Используется для генерации расширенной OpenAPI-схемы с `x-enum-*` метаданными.
  */
 const StorageCodeDescriptions = {
-  [StorageCodeEnum.TFR]:   { value: StorageCodeEnum.TFR,   description: 'Территориальный финансовый репозиторий' },
-  [StorageCodeEnum.S3]:    { value: StorageCodeEnum.S3,    description: 'Объектное хранилище (S3)' },
+  [StorageCodeEnum.TFR]: { value: StorageCodeEnum.TFR, description: 'Территориальный финансовый репозиторий' },
+  [StorageCodeEnum.S3]: { value: StorageCodeEnum.S3, description: 'Объектное хранилище (S3)' },
   [StorageCodeEnum.LOCAL]: { value: StorageCodeEnum.LOCAL, description: 'Локальное хранилище' },
 } as const;
 

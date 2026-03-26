@@ -14,14 +14,14 @@ import { writeFileSync } from 'fs';
 
 import { env } from '../../config/env.ts';
 import { openApiRegistry } from '../../schemas/schema-registry.ts';
-import { PackageStatusEnumSchema } from '../../schemas/enums/PackageStatusEnum.ts';
-import { FileStatusEnumSwaggerSchema } from '../../schemas/enums/FileStatusEnum.ts';
-import { ReportTypeEnumSchema } from '../../schemas/enums/ReportTypeEnum.ts';
-import { SortOrderEnumSchema } from '../../schemas/enums/SortOrderEnum.ts';
-import { CurrencyEnumSchema } from '../../schemas/enums/CurrencyEnum.ts';
-import { FileFormatEnumSchema } from '../../schemas/enums/FileFormatEnum.ts';
-import { TaskStatusEnumSchema } from '../../schemas/enums/TaskStatusEnum.ts';
-import { StorageCodeEnumSwaggerSchema } from '../../schemas/enums/StorageCodeEnum.ts';
+import { PackageStatusEnumSchema } from '../../schemas/report-6406/enums/PackageStatusEnum.ts';
+import { FileStatusEnumSwaggerSchema } from '../../schemas/report-6406/enums/FileStatusEnum.ts';
+import { ReportTypeEnumSchema } from '../../schemas/report-6406/enums/ReportTypeEnum.ts';
+import { SortOrderEnumSchema } from '../../schemas/common/SortOrderEnum.ts';
+import { CurrencyEnumSchema } from '../../schemas/report-6406/enums/CurrencyEnum.ts';
+import { FileFormatEnumSchema } from '../../schemas/report-6406/enums/FileFormatEnum.ts';
+import { TaskStatusEnumSchema } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
+import { StorageCodeEnumSwaggerSchema } from '../../schemas/report-6406/enums/StorageCodeEnum.ts';
 import { InventoryProcessStatusEnumSchema } from '../../schemas/inventorization/enums/InventoryProcessStatusEnum.ts';
 
 type CustomFastifyInstance = FastifyInstance<

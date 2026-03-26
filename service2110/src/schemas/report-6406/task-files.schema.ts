@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
-import { fileStatusZodSchema } from '../enums/FileStatusEnum.ts';
+import { SortOrderEnum, sortOrderSchema } from '../common/SortOrderEnum.ts';
+import { fileStatusZodSchema } from './enums/FileStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationMetadataSchema, paginationQuerySchema } from '../common/pagination.schema.ts';
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
+import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 
 import { zIdSchema } from '../common/id.schema.ts';
 

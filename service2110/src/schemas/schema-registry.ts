@@ -5,7 +5,7 @@
  * автоматически попадают в components.schemas и заменяются на $ref-ссылки
  * в описаниях роутов.
  *
- * Регистрация по доменам: report-6406 и inventorization — отдельные модули.
+ * Регистрация: common, report-6406, inventorization.
  */
 
 import { z } from 'zod';
@@ -13,11 +13,9 @@ import { z } from 'zod';
 import { registerReport6406OpenApiSchemas } from './report-6406/openapi-register.ts';
 import { registerInventorizationOpenApiSchemas } from './inventorization/openapi-register.ts';
 import { registerCommonOpenApiSchemas } from './common/openapi-register.ts';
-import { registerEnumsOpenApiSchemas } from './enums/openapi-register.ts';
 
 export const openApiRegistry = z.registry<{ id: string }>();
 
-registerEnumsOpenApiSchemas(openApiRegistry);
 registerCommonOpenApiSchemas(openApiRegistry);
 registerReport6406OpenApiSchemas(openApiRegistry);
 registerInventorizationOpenApiSchemas(openApiRegistry);

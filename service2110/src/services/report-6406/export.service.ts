@@ -10,7 +10,7 @@ import type {
 import { generateTasksCsv, generateCsvFileName } from '../../utils/csv-generator.ts';
 import { env } from '../../config/env.ts';
 import { randomUUID } from 'crypto';
-import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
+import { TaskStatusEnum } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
 
 export class ExportService {
   /**

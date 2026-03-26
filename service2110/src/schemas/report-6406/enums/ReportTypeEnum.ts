@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
+
+import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
 
 // Enum для тип операции
 // Информация об операциях за период
@@ -15,7 +16,6 @@ export enum ReportTypeEnum {
   LSOP = 'LSOP',
 }
 
-
 // Мапа описаний для каждого значения enum
 const ReportTypeDescriptions = {
   [ReportTypeEnum.LSOZ]: { value: ReportTypeEnum.LSOZ, description: 'LSOZ' },
@@ -30,5 +30,5 @@ export const ReportTypeEnumSchema = createEnumSchemaWithDescriptions(
   ReportTypeEnum,
   ReportTypeDescriptions,
   'ReportTypeEnum',
-  'Тип отчёта'
+  'Тип отчёта',
 );

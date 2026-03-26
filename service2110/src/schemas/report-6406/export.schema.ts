@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
-import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
-import { reportTypeSchema } from '../enums/ReportTypeEnum';
-import { fileFormatSchema } from '../enums/FileFormatEnum';
+import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
+import { SortOrderEnum, sortOrderSchema } from '../common/SortOrderEnum.ts';
+import { reportTypeSchema } from './enums/ReportTypeEnum.ts';
+import { fileFormatSchema } from './enums/FileFormatEnum.ts';
 
 import { zIdSchema } from '../common/id.schema.ts';
 

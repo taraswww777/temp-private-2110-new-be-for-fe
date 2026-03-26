@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { sortOrderSchema } from '../enums/SortOrderEnum.ts';
+import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { dateSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
