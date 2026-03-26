@@ -1,6 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { z } from 'zod';
 import {
   getInventoryAccountsListRequestSchema,
   inventoryAccountsExportRequestSchema,
@@ -13,6 +12,7 @@ import {
   inventoryAccountHistoryResponseSchema,
   inventoryAccountSurrogateIdParamSchema,
   inventoryManualUnitBulkRequestSchema,
+  inventoryManualUnitSingleRequestSchema,
   inventoryManualUnitResponseSchema,
   inventorizationAccountColumnsResponseSchema,
   inventorizationAccountColumnsUpdateSchema,
@@ -89,7 +89,7 @@ export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify)
       tags: ['Inventorization - Accounts'],
       summary: 'Ручной учёт: одна запись (accountSurrogateId в URL)',
       params: inventoryAccountSurrogateIdParamSchema,
-      body: z.object({}).optional(),
+      body: inventoryManualUnitSingleRequestSchema,
       response: { 200: inventoryManualUnitResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send({ updated: 0 }));

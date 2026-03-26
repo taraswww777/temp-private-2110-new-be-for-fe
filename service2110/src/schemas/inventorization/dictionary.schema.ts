@@ -1,16 +1,17 @@
 import { z } from 'zod';
 
-
 import { zIdSchema } from '../common/id.schema.ts';
 
 export const inventorizationInventoryOrderIdParamSchema = z.object({
   inventoryOrderId: zIdSchema,
 });
 
-/** Ответ фильтра БС-2: только id и bs2Name (без value и orderId). */
+/** Элемент фильтра БС-2 — полный состав DOC (value, привязка к приказу). */
 export const inventorizationBs2FilterItemSchema = z.object({
   id: zIdSchema,
   bs2Name: z.string(),
+  value: z.string().optional().describe('Значение БС-2 (DOC)'),
+  inventoryOrderId: zIdSchema.optional().describe('ИД приказа инвентаризации (DOC)'),
 });
 
 export const inventorizationBs2FilterResponseSchema = z.object({

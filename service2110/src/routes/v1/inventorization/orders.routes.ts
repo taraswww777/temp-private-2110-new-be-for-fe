@@ -14,7 +14,7 @@ export const inventorizationOrdersRoutes: FastifyPluginAsync = async (fastify) =
   app.post('/list', {
     schema: {
       tags: ['Inventorization'],
-      summary: 'Список приказов инвентаризации (пагинация, сортировка, фильтры)',
+      summary: 'Список приказов инвентаризации (пагинация, сортировка)',
       body: getInventoryOrdersListRequestSchema,
       response: { 200: inventoryOrdersListResponseSchema },
     },

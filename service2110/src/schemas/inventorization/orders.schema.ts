@@ -9,7 +9,6 @@ export const inventoryOrderListSortColumnSchema = z.enum([
   'id',
   'createdAt',
   'orderNumber',
-  'status',
 ]);
 
 export const inventoryOrdersListSortingSchema = z.object({
@@ -17,24 +16,21 @@ export const inventoryOrdersListSortingSchema = z.object({
   sortBy: inventoryOrderListSortColumnSchema.describe('Колонка для сортировки'),
 });
 
-export const inventoryOrdersListFilterSchema = z.object({
-  inventoryOrderId: zIdSchema.optional(),
-  statusId: zIdSchema.optional(),
-}).optional();
-
+/** Тело POST …/orders/list — как `getTasksRequestSchema` в report-6406, без блока filters. */
 export const getInventoryOrdersListRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
-  sorting: inventoryOrdersListSortingSchema.describe('Сортировка'),
+  sorting: inventoryOrdersListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
 });
 
+/** Элемент списка приказов — поля ответа DOC; `orderFileLink` вместо сырого binary. */
 export const inventoryOrderListItemSchema = z.object({
   id: zIdSchema,
   orderNumber: z.string().describe('Номер приказа'),
   orderDate: dateSchema.describe('Дата приказа YYYY-MM-DD'),
   inventoryDateFrom: dateSchema.describe('Дата начала инвентаризации'),
   inventoryDateTo: dateSchema.describe('Дата окончания инвентаризации'),
-  orderFile: z.string().optional().describe('Ссылка на скачивание файла из S3'),
-  isActive: z.boolean().optional().describe('Флаг, указывающий, что приказ актуален на данный момент').default(true),
+  orderFileLink: z.string().optional().describe('Ссылка на файл приказа (DOC: orderFileLink)'),
+  isActive: z.boolean().optional().describe('Приказ актуален на данный момент'),
   createdAt: z.iso.datetime().optional(),
 });
 
@@ -43,15 +39,22 @@ export const inventoryOrdersListResponseSchema = z.object({
   totalItems: z.number().int().min(0),
 });
 
-/** Создание приказа (поле adLogin с фронта не передаётся). */
+/** Создание приказа — поля тела DOC (adLogin с фронта не передаётся). */
 export const createInventoryOrderSchema = z.object({
-  title: z.string(),
+  orderNumber: z.string(),
+  orderDate: dateSchema,
+  inventoryDateFrom: dateSchema,
+  inventoryDateTo: dateSchema,
+  orderFile: z.string().optional().describe('Файл приказа: в DOC binary; в JSON — base64 или отдельная загрузка'),
 });
 
 export const updateInventoryOrderSchema = z.object({
   id: zIdSchema,
-  title: z.string().optional(),
-  statusId: zIdSchema.optional(),
+  orderNumber: z.string().optional(),
+  orderDate: dateSchema.optional(),
+  inventoryDateFrom: dateSchema.optional(),
+  inventoryDateTo: dateSchema.optional(),
+  orderFile: z.string().optional(),
 });
 
 export const inventoryOrderMutationResponseSchema = z.object({
