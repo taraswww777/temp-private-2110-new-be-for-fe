@@ -1,0 +1,11 @@
+---
+description: Именованные экспорты вместо default export
+globs: **/*.{ts,tsx,js,jsx,mts,cts}
+alwaysApply: false
+---
+
+# Экспорты
+
+- Всегда используй именованные экспорты (named exports) вместо экспорта по умолчанию (default exports).
+- Используй `export { ... }` или `export const/function/class ...` вместо `export default`.
+- При импорте используй деструктуризацию: `import { something } from './module'` вместо `import something from './module'`.

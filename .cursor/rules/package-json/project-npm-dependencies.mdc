@@ -1,0 +1,9 @@
+---
+description: npm-зависимости только как devDependencies
+globs: "**/package.json"
+alwaysApply: false
+---
+
+# Зависимости
+
+Все npm-зависимости устанавливай только как devDependencies с флагами `-ED`, например: `npm i lodash -ED`.
