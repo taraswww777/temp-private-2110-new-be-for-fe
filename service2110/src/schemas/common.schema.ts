@@ -88,13 +88,3 @@ export const problemDetailsSchema = z.object({
 });
 
 export type ProblemDetails = z.infer<typeof problemDetailsSchema>;
-
-/**
- * Схема для фильтрации данных
- */
-export const filterSchema = z.object({
-  column: z.string().describe('Колонка для фильтрации'),
-  value: z.string().describe('Значение для фильтрации'),
-});
-
-export type Filter = z.infer<typeof filterSchema>;

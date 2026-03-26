@@ -14,7 +14,6 @@ import {
   paginationQuerySchema,
   paginationMetadataSchema,
   paginatedResponseSchema,
-  filterSchema,
 } from './common.schema.ts';
 import { sortOrderSchema } from './enums/SortOrderEnum';
 import { currencySchema } from './enums/CurrencyEnum';
@@ -44,7 +43,6 @@ openApiRegistry.add(storageCodeZodSchema, { id: 'StorageCodeEnum' });
 openApiRegistry.add(paginationQuerySchema, { id: 'PaginationRequestDto' });
 openApiRegistry.add(paginationMetadataSchema, { id: 'PaginationMetadataDto' });
 openApiRegistry.add(paginatedResponseSchema, { id: 'PaginatedResponseDto' });
-openApiRegistry.add(filterSchema, { id: 'FilterDto' });
 openApiRegistry.add(dateSchema, { id: 'DateSchema' });
 openApiRegistry.add(dateTimeSchema, { id: 'DateTimeSchema' });
 
