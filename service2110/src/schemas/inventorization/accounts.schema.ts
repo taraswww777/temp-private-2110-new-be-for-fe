@@ -26,7 +26,7 @@ export const inventoryAccountsListSortingSchema = z.object({
  * Поля фильтров POST /accounts (DOC) — группировка в `filters` тела списка.
  * Имена и типы по «Описание front-API-28»; массивы — множественный выбор.
  */
-export const inventoryAccountsListFilterFieldsSchema = z.object({
+export const inventoryAccountsListFilterSchema = z.object({
   inventoryOrderId: zIdSchema.optional().describe('ИД приказа инвентаризации'),
   accountSurrogateId: zIdSchema.optional().describe('Суррогатный ключ счёта'),
   accountTypeId: zIdSchema.optional().describe('Тип счёта (одиночный id)'),
@@ -40,15 +40,13 @@ export const inventoryAccountsListFilterFieldsSchema = z.object({
   productName: z.array(z.string()).optional(),
   manualControlRuleNumber: z.array(zIdSchema).optional(),
   showZeroBalanceAccounts: z.boolean().optional(),
-});
-
-export const inventoryAccountsListFilterSchema = inventoryAccountsListFilterFieldsSchema.optional();
+}).describe('Фильтр для списка счетов');
 
 /** Тело POST …/accounts/list — как `getTasksRequestSchema` в report-6406. */
 export const getInventoryAccountsListRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: inventoryAccountsListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
-  filters: inventoryAccountsListFilterSchema.describe('Фильтры для списка счетов (объект с опциональными полями)'),
+  filter: inventoryAccountsListFilterSchema,
 });
 
 /**
@@ -178,7 +176,7 @@ export const inventorizationAccountColumnsUpdateSchema = z.object({
 /** DOC: accountSurrogateKeys + filter (объект фильтров списка). */
 export const inventoryAccountsExportRequestSchema = z.object({
   accountSurrogateIds: z.array(zIdSchema).optional().describe('DOC: accountSurrogateKeys'),
-  filter: inventoryAccountsListFilterFieldsSchema.optional().describe('Если не задан список surrogate id'),
+  filter: inventoryAccountsListFilterSchema,
   inventoryOrderId: zIdSchema.optional(),
   format: z.enum(['xlsx', 'csv']).optional(),
 });

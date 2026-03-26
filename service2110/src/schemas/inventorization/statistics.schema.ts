@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 import { zIdSchema } from '../common/id.schema.ts';
-import { inventoryAccountsListFilterFieldsSchema } from './accounts.schema.ts';
+import { inventoryAccountsListFilterSchema } from './accounts.schema.ts';
 
 export const inventorizationStatisticsExportRequestSchema = z.object({
-  filters: inventoryAccountsListFilterFieldsSchema.optional().describe('Те же фильтры, что у списка счетов'),
+  filter: inventoryAccountsListFilterSchema,
   inventoryOrderId: zIdSchema.optional(),
   format: z.enum(['xlsx', 'csv']).optional(),
 });

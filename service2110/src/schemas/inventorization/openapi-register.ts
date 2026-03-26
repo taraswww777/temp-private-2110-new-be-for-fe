@@ -17,7 +17,7 @@ import {
 import {
   getInventoryAccountsListRequestSchema,
   inventoryAccountsListResponseSchema,
-  inventoryAccountsListFilterFieldsSchema,
+  inventoryAccountsListFilterSchema,
   inventoryAccountDetailSchema,
   inventoryAccountListItemSchema,
   inventoryAccountHistoryItemSchema,
@@ -58,7 +58,7 @@ export function registerInventorizationOpenApiSchemas(registry: OpenApiSchemaReg
   registry.add(inventorizationDictionaryItemSchema, { id: 'InventorizationDictionaryItemDto' });
   registry.add(inventorizationDictionaryListResponseSchema, { id: 'InventorizationDictionaryListResponseDto' });
 
-  registry.add(inventoryAccountsListFilterFieldsSchema, { id: 'InventorizationAccountsListFilterFieldsDto' });
+  registry.add(inventoryAccountsListFilterSchema, { id: 'ШnventoryAccountsListFilterDto' });
   registry.add(getInventoryAccountsListRequestSchema, { id: 'InventorizationGetAccountsListRequestDto' });
   registry.add(inventoryAccountsListResponseSchema, { id: 'InventorizationAccountsListResponseDto' });
   registry.add(inventoryAccountListItemSchema, { id: 'InventorizationAccountListItemDto' });

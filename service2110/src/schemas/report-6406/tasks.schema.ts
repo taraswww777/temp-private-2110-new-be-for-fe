@@ -149,7 +149,7 @@ export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
 export const getTasksRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
-  filters: tasksListFilterSchema.describe('Фильтры для списка заданий (объект с опциональными полями)'),
+  filter: tasksListFilterSchema,
 });
 
 export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;

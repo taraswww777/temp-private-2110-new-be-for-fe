@@ -53,7 +53,7 @@ export const exportSortingSchema = z.object({
  * Схема для запроса экспорта (с дополнительными опциями)
  */
 export const exportTasksRequestSchema = z.object({
-  filters: exportFiltersSchema,
+  filter: exportFiltersSchema,
   columns: z.array(z.string()).optional().describe('Список колонок для включения в экспорт'),
   sorting: exportSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
 });

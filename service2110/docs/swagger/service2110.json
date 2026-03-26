@@ -793,8 +793,7 @@
             "additionalProperties": false,
             "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
-          "filters": {
-            "description": "Фильтры для списка заданий (объект с опциональными полями)",
+          "filter": {
             "type": "object",
             "properties": {
               "packageId": {
@@ -1831,7 +1830,7 @@
       "ExportTasksRequestDto": {
         "type": "object",
         "properties": {
-          "filters": {
+          "filter": {
             "type": "object",
             "properties": {
               "statuses": {
@@ -2271,12 +2270,6 @@
           "value": {
             "description": "Значение БС-2 (DOC)",
             "type": "string"
-          },
-          "inventoryOrderId": {
-            "description": "ИД приказа инвентаризации (DOC)",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
           }
         },
         "required": [
@@ -2286,19 +2279,10 @@
         "additionalProperties": false
       },
       "InventorizationBs2FilterResponseDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InventorizationBs2FilterItemDto"
-            }
-          }
-        },
-        "required": [
-          "items"
-        ],
-        "additionalProperties": false
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventorizationBs2FilterItemDto"
+        }
       },
       "InventorizationDictionaryItemDto": {
         "type": "object",
@@ -2320,21 +2304,12 @@
         "additionalProperties": false
       },
       "InventorizationDictionaryListResponseDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InventorizationDictionaryItemDto"
-            }
-          }
-        },
-        "required": [
-          "items"
-        ],
-        "additionalProperties": false
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventorizationDictionaryItemDto"
+        }
       },
-      "InventorizationAccountsListFilterFieldsDto": {
+      "ШnventoryAccountsListFilterDto": {
         "type": "object",
         "properties": {
           "inventoryOrderId": {
@@ -2422,7 +2397,8 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Фильтр для списка счетов"
       },
       "InventorizationGetAccountsListRequestDto": {
         "type": "object",
@@ -2455,14 +2431,14 @@
             "additionalProperties": false,
             "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
-          "filters": {
-            "description": "Фильтры для списка счетов (объект с опциональными полями)",
-            "$ref": "#/components/schemas/InventorizationAccountsListFilterFieldsDto"
+          "filter": {
+            "$ref": "#/components/schemas/ШnventoryAccountsListFilterDto"
           }
         },
         "required": [
           "pagination",
-          "sorting"
+          "sorting",
+          "filter"
         ],
         "additionalProperties": false
       },
@@ -3025,8 +3001,7 @@
             }
           },
           "filter": {
-            "description": "Если не задан список surrogate id",
-            "$ref": "#/components/schemas/InventorizationAccountsListFilterFieldsDto"
+            "$ref": "#/components/schemas/ШnventoryAccountsListFilterDto"
           },
           "inventoryOrderId": {
             "type": "integer",
@@ -3042,6 +3017,9 @@
             ]
           }
         },
+        "required": [
+          "filter"
+        ],
         "additionalProperties": false
       },
       "InventorizationAccountsExportResponseDto": {
@@ -3056,9 +3034,8 @@
       "InventorizationStatisticsExportRequestDto": {
         "type": "object",
         "properties": {
-          "filters": {
-            "description": "Те же фильтры, что у списка счетов",
-            "$ref": "#/components/schemas/InventorizationAccountsListFilterFieldsDto"
+          "filter": {
+            "$ref": "#/components/schemas/ШnventoryAccountsListFilterDto"
           },
           "inventoryOrderId": {
             "type": "integer",
@@ -3074,6 +3051,9 @@
             ]
           }
         },
+        "required": [
+          "filter"
+        ],
         "additionalProperties": false
       },
       "InventorizationStatisticsExportResponseDto": {
