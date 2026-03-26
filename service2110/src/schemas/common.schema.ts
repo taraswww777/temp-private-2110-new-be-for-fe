@@ -32,13 +32,6 @@ export const paginatedResponseSchema = z.object({
 
 export type PaginatedResponse = z.infer<typeof paginatedResponseSchema>;
 
-
-/**
- * Переиспользуемая схема для integer ID
- * Используется, для создания ссылок в OpenAPI спецификации
- */
-export const zIdSchema = z.number().int().positive().describe('Integer ID').min(1);
-
 /**
  * Переиспользуемая Zod-схема для номера счёта (ровно 20 цифр).
  *
@@ -60,31 +53,3 @@ export const zAccountSchema = z.string().length(20).regex(/^\d+$/).describe('С�
  * - только цифры: `^\d+$`
  */
 export const zAccountSecondOrderSchema = z.string().length(5).regex(/^\d+$/).describe('Счёт второго порядка (5-значный номер)');
-
-export type ID = z.infer<typeof zIdSchema>;
-
-/**
- * Схема для integer ID параметров
- */
-export const idParamSchema = z.object({
-  id: zIdSchema,
-});
-
-export type IdParam = z.infer<typeof idParamSchema>;
-
-/**
- * Схема для RFC 7807 Problem Details ошибок
- */
-export const problemDetailsSchema = z.object({
-  type: z.string().url(),
-  title: z.string(),
-  status: z.number().int(),
-  detail: z.string(),
-  instance: z.string().optional(),
-  errors: z.array(z.object({
-    path: z.string(),
-    message: z.string(),
-  })).optional(),
-});
-
-export type ProblemDetails = z.infer<typeof problemDetailsSchema>;

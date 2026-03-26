@@ -1,7 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { idParamSchema } from '../../../schemas/common.schema.ts';
 import {
   getInventoryAccountsListRequestSchema,
   inventoryAccountsExportRequestSchema,
@@ -18,6 +17,7 @@ import {
   inventorizationAccountColumnsResponseSchema,
   inventorizationAccountColumnsUpdateSchema,
 } from '../../../schemas/inventorization/accounts.schema.ts';
+import { idParamSchema } from '../../../schemas/common/id.schema.ts';
 
 export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();

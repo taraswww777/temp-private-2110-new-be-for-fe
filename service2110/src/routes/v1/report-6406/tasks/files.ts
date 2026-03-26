@@ -7,7 +7,7 @@ import {
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
 } from '../../../../schemas/report-6406/task-files.schema.ts';
-import { idParamSchema, zIdSchema } from '../../../../schemas/common.schema.ts';
+import { idParamSchema, zIdSchema } from '../../../../schemas/common/id.schema.ts';
 
 const taskFileParamsSchema = z.object({
   taskId: zIdSchema,

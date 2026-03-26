@@ -2,7 +2,8 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { taskDetailSchema } from '../../../../schemas/report-6406/tasks.schema.ts';
-import { idParamSchema } from '../../../../schemas/common.schema.ts';
+
+import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
 
 /**
  * GET /api/v1/report-6406/tasks/:id

@@ -3,7 +3,8 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   taskStatusHistoryResponseSchema,
 } from '../../../../schemas/report-6406/task-status-history.schema.ts';
-import { idParamSchema } from '../../../../schemas/common.schema.ts';
+
+import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
 
 /**
  * GET /api/v1/report-6406/tasks/:id/status-history

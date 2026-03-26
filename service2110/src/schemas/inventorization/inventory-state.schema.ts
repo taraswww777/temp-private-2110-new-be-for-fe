@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
-import { zIdSchema } from '../common.schema.ts';
+
+import { zIdSchema } from '../common/id.schema.ts';
 
 export const inventorizationInventoryStateQuerySchema = z.object({
   inventoryOrderId: zIdSchema.optional(),

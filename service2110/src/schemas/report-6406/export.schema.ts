@@ -3,7 +3,8 @@ import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { fileFormatSchema } from '../enums/FileFormatEnum';
-import { zIdSchema } from '../common.schema.ts';
+
+import { zIdSchema } from '../common/id.schema.ts';
 
 /**
  * Схема для фильтров экспорта (расширенная)

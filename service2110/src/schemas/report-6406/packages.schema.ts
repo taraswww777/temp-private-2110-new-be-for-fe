@@ -1,7 +1,8 @@
 import { z } from 'zod';
-import { paginationQuerySchema, paginationMetadataSchema, zIdSchema } from '../common.schema';
+import { paginationQuerySchema, paginationMetadataSchema } from '../common.schema';
 import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
 import { packetStatusSchema } from '../enums/PackageStatusEnum.ts';
+import { zIdSchema } from '../common/id.schema.ts';
 
 /**
  * Базовая схема пакета — все поля, общие для detail, list и create.
