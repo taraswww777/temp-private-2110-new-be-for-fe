@@ -1,10 +1,11 @@
 import { z } from 'zod';
-import { dateRangeRefinement, dateSchema, paginationQuerySchema, zAccountSchema, zAccountSecondOrderSchema, zIdSchema, } from '../common.schema.ts';
+import { paginationQuerySchema, zAccountSchema, zAccountSecondOrderSchema, zIdSchema, } from '../common.schema.ts';
 import { reportTypeSchema } from '../enums/ReportTypeEnum';
 import { currencySchema } from '../enums/CurrencyEnum';
 import { FileFormatEnum, fileFormatSchema } from '../enums/FileFormatEnum';
 import { sortOrderSchema } from '../enums/SortOrderEnum.ts';
 import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
+import { dateRangeRefinement, dateSchema } from '../common/dateString.schema.ts';
 
 export type CurrencyType = z.infer<typeof currencySchema>;
 export type FileFormatType = z.infer<typeof fileFormatSchema>;

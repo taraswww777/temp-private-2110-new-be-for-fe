@@ -15,8 +15,6 @@ import {
   paginationMetadataSchema,
   paginatedResponseSchema,
   filterSchema,
-  dateSchema,
-  dateTimeSchema,
   httpErrorWithInstanceSchema,
 } from './common.schema.ts';
 import { sortOrderSchema } from './enums/SortOrderEnum';
@@ -29,6 +27,7 @@ import { fileStatusZodSchema } from './enums/FileStatusEnum.ts';
 import { storageCodeZodSchema } from './enums/StorageCodeEnum.ts';
 import { registerReport6406OpenApiSchemas } from './report-6406/openapi-register.ts';
 import { registerInventorizationOpenApiSchemas } from './inventorization/openapi-register.ts';
+import { dateSchema, dateTimeSchema } from './common/dateString.schema.ts';
 
 export const openApiRegistry = z.registry<{ id: string }>();
 

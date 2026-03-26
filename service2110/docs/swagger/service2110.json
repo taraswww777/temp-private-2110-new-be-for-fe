@@ -2096,7 +2096,29 @@
             "description": "Integer ID"
           },
           "orderNumber": {
+            "type": "string",
+            "description": "Номер приказа"
+          },
+          "orderDate": {
+            "description": "Дата приказа YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateFrom": {
+            "description": "Дата начала инвентаризации",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateTo": {
+            "description": "Дата окончания инвентаризации",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "orderFile": {
+            "description": "Ссылка на скачивание файла из S3",
             "type": "string"
+          },
+          "isActive": {
+            "default": true,
+            "description": "Флаг, указывающий, что приказ актуален на данный момент",
+            "type": "boolean"
           },
           "createdAt": {
             "type": "string",
@@ -2105,7 +2127,12 @@
           }
         },
         "required": [
-          "id"
+          "id",
+          "orderNumber",
+          "orderDate",
+          "inventoryDateFrom",
+          "inventoryDateTo",
+          "isActive"
         ],
         "additionalProperties": false
       },
@@ -2139,25 +2166,6 @@
             ],
             "additionalProperties": false,
             "description": "Сортировка"
-          },
-          "filters": {
-            "description": "Фильтры списка приказов",
-            "type": "object",
-            "properties": {
-              "inventoryOrderId": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 9007199254740991,
-                "description": "Integer ID"
-              },
-              "statusId": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 9007199254740991,
-                "description": "Integer ID"
-              }
-            },
-            "additionalProperties": false
           }
         },
         "required": [

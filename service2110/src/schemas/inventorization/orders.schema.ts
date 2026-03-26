@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { paginationQuerySchema, zIdSchema } from '../common.schema.ts';
 import { sortOrderSchema } from '../enums/SortOrderEnum.ts';
+import { dateSchema } from '../common/dateString.schema.ts';
 
 export const inventoryOrderListSortColumnSchema = z.enum([
   'id',
@@ -23,12 +24,16 @@ export const inventoryOrdersListFilterSchema = z.object({
 export const getInventoryOrdersListRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: inventoryOrdersListSortingSchema.describe('Сортировка'),
-  filters: inventoryOrdersListFilterSchema.describe('Фильтры списка приказов'),
 });
 
 export const inventoryOrderListItemSchema = z.object({
   id: zIdSchema,
-  orderNumber: z.string().optional(),
+  orderNumber: z.string().describe('Номер приказа'),
+  orderDate: dateSchema.describe('Дата приказа YYYY-MM-DD'),
+  inventoryDateFrom: dateSchema.describe('Дата начала инвентаризации'),
+  inventoryDateTo: dateSchema.describe('Дата окончания инвентаризации'),
+  orderFile: z.string().optional().describe('Ссылка на скачивание файла из S3'),
+  isActive: z.boolean().optional().describe('Флаг, указывающий, что приказ актуален на данный момент').default(true),
   createdAt: z.iso.datetime().optional(),
 });
 
