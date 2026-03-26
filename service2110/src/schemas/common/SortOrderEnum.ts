@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
+
+import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions.ts';
 
 /**
  * Направление сортировки.
@@ -20,7 +21,7 @@ export enum SortOrderEnum {
  * Используется для генерации расширенной OpenAPI-схемы с `x-enum-*` метаданными.
  */
 const SortOrderDescriptions = {
-  [SortOrderEnum.ASC]:  { value: SortOrderEnum.ASC,  description: 'Сортировка по возрастанию' },
+  [SortOrderEnum.ASC]: { value: SortOrderEnum.ASC, description: 'Сортировка по возрастанию' },
   [SortOrderEnum.DESC]: { value: SortOrderEnum.DESC, description: 'Сортировка по убыванию' },
 } as const;
 

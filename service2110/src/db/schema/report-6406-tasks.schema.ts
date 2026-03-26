@@ -2,7 +2,7 @@ import { bigint, date, index, integer, pgTable, text, timestamp, varchar } from 
 import { branches } from './branches.schema.ts';
 import { idColumn, idColumnPrimary } from './base.schema.ts';
 import { currencyPgEnum, fileFormatPgEnum, reportTypePgEnum, taskStatusPgEnum } from './enums.schema.ts';
-import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
+import { TaskStatusEnum } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
 
 /**
  * Задания на построение отчёта для формы 6406

@@ -16,7 +16,6 @@ async function start() {
 
     app.log.info(`Server is running at http://${env.HOST}:${env.PORT}`);
     app.log.info(`Swagger documentation available at http://${env.HOST}:${env.PORT}/docs`);
-    app.log.info(`Health check available at http://${env.HOST}:${env.PORT}/health`);
   } catch (err) {
     console.error('Error starting server:', err);
     process.exit(1);

@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
-import { zIdSchema } from '../schemas/common.schema.ts';
+
+import { zIdSchema } from '../schemas/common/id.schema.ts';
 
 const mockFileParamsSchema = z.object({
   fileId: zIdSchema,

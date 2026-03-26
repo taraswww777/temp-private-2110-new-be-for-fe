@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { registerReport6406EnumsOpenApiSchemas } from './enums/openapi-register.ts';
 import {
   createTaskSchema,
   taskListItemSchema,
@@ -65,6 +66,8 @@ export type OpenApiSchemaRegistry = ReturnType<typeof z.registry<{ id: string }>
  * Регистрация Zod-схем подсистемы report-6406 в общем OpenAPI-реестре.
  */
 export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry) {
+  registerReport6406EnumsOpenApiSchemas(registry);
+
   registry.add(branchSchema, { id: 'BranchDto' });
   registry.add(currencyReferenceSchema, { id: 'CurrencyDto' });
   registry.add(formatReferenceSchema, { id: 'FormatDto' });

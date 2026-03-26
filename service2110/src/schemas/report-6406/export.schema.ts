@@ -1,9 +1,10 @@
 import { z } from 'zod';
-import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
-import { SortOrderEnum, sortOrderSchema } from '../enums/SortOrderEnum';
-import { reportTypeSchema } from '../enums/ReportTypeEnum';
-import { fileFormatSchema } from '../enums/FileFormatEnum';
-import { zIdSchema } from '../common.schema.ts';
+import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
+import { SortOrderEnum, sortOrderSchema } from '../common/SortOrderEnum.ts';
+import { reportTypeSchema } from './enums/ReportTypeEnum.ts';
+import { fileFormatSchema } from './enums/FileFormatEnum.ts';
+
+import { zIdSchema } from '../common/id.schema.ts';
 
 /**
  * Схема для фильтров экспорта (расширенная)
@@ -52,7 +53,7 @@ export const exportSortingSchema = z.object({
  * Схема для запроса экспорта (с дополнительными опциями)
  */
 export const exportTasksRequestSchema = z.object({
-  filters: exportFiltersSchema,
+  filter: exportFiltersSchema,
   columns: z.array(z.string()).optional().describe('Список колонок для включения в экспорт'),
   sorting: exportSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
 });

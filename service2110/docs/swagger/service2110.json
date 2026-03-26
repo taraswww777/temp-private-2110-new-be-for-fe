@@ -11,6 +11,98 @@
   },
   "components": {
     "schemas": {
+      "PaginationRequestDto": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "default": 1,
+            "description": "Номер страницы (начиная с 1)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "limit": {
+            "default": 20,
+            "description": "Размер страницы",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "page",
+          "limit"
+        ],
+        "additionalProperties": false
+      },
+      "PaginationMetadataDto": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Текущий номер страницы"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Размер страницы"
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество элементов"
+          },
+          "totalPages": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество страниц"
+          }
+        },
+        "required": [
+          "page",
+          "limit",
+          "totalItems",
+          "totalPages"
+        ],
+        "additionalProperties": false
+      },
+      "PaginatedResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {},
+            "description": "Список элементов"
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество элементов"
+          }
+        },
+        "required": [
+          "items",
+          "totalItems"
+        ],
+        "additionalProperties": false
+      },
+      "DateSchema": {
+        "type": "string",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+        "description": "Дата в формате YYYY-MM-DD"
+      },
+      "DateTimeSchema": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+        "description": "Дата и время в формате ISO 8601"
+      },
       "SortOrderEnum": {
         "default": "desc",
         "description": "Направление сортировки",
@@ -380,151 +472,6 @@
           }
         ]
       },
-      "PaginationRequestDto": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "default": 1,
-            "description": "Номер страницы (начиная с 1)",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "limit": {
-            "default": 20,
-            "description": "Размер страницы",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          }
-        },
-        "required": [
-          "page",
-          "limit"
-        ],
-        "additionalProperties": false
-      },
-      "PaginationMetadataDto": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Текущий номер страницы"
-          },
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100,
-            "description": "Размер страницы"
-          },
-          "totalItems": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общее количество элементов"
-          },
-          "totalPages": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общее количество страниц"
-          }
-        },
-        "required": [
-          "page",
-          "limit",
-          "totalItems",
-          "totalPages"
-        ],
-        "additionalProperties": false
-      },
-      "PaginatedResponseDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {},
-            "description": "Список элементов"
-          },
-          "totalItems": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общее количество элементов"
-          }
-        },
-        "required": [
-          "items",
-          "totalItems"
-        ],
-        "additionalProperties": false
-      },
-      "FilterDto": {
-        "type": "object",
-        "properties": {
-          "column": {
-            "type": "string",
-            "description": "Колонка для фильтрации"
-          },
-          "value": {
-            "type": "string",
-            "description": "Значение для фильтрации"
-          }
-        },
-        "required": [
-          "column",
-          "value"
-        ],
-        "additionalProperties": false
-      },
-      "DateSchema": {
-        "type": "string",
-        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-        "description": "Дата в формате YYYY-MM-DD"
-      },
-      "DateTimeSchema": {
-        "type": "string",
-        "format": "date-time",
-        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-        "description": "Дата и время в формате ISO 8601"
-      },
-      "HttpErrorWithInstanceDto": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "URI типа ошибки"
-          },
-          "title": {
-            "type": "string",
-            "description": "Заголовок ошибки"
-          },
-          "status": {
-            "type": "integer",
-            "minimum": -9007199254740991,
-            "maximum": 9007199254740991,
-            "description": "HTTP статус"
-          },
-          "detail": {
-            "type": "string",
-            "description": "Детали ошибки"
-          },
-          "instance": {
-            "type": "string",
-            "description": "URI запроса"
-          }
-        },
-        "required": [
-          "type",
-          "title",
-          "status",
-          "detail",
-          "instance"
-        ],
-        "additionalProperties": false
-      },
       "BranchDto": {
         "type": "object",
         "properties": {
@@ -846,8 +793,7 @@
             "additionalProperties": false,
             "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
-          "filters": {
-            "description": "Фильтры для списка заданий (объект с опциональными полями)",
+          "filter": {
             "type": "object",
             "properties": {
               "packageId": {
@@ -1884,7 +1830,7 @@
       "ExportTasksRequestDto": {
         "type": "object",
         "properties": {
-          "filters": {
+          "filter": {
             "type": "object",
             "properties": {
               "statuses": {
@@ -2086,6 +2032,50 @@
           "$ref": "#/components/schemas/StorageVolumeItemDto"
         }
       },
+      "InventoryProcessStatusEnum": {
+        "type": "string",
+        "enum": [
+          "in_progress",
+          "pending",
+          "completed",
+          "reopened"
+        ],
+        "description": "Статус процесса инвентаризации",
+        "x-enum-descriptions": [
+          "В процессе выполнения инвентаризации",
+          "Ожидание",
+          "Завершено",
+          "Повторно открыто"
+        ],
+        "x-enum-varnames": [
+          "IN_PROGRESS",
+          "PENDING",
+          "COMPLETED",
+          "REOPENED"
+        ],
+        "oneOf": [
+          {
+            "const": "in_progress",
+            "description": "В процессе выполнения инвентаризации",
+            "title": "IN_PROGRESS"
+          },
+          {
+            "const": "pending",
+            "description": "Ожидание",
+            "title": "PENDING"
+          },
+          {
+            "const": "completed",
+            "description": "Завершено",
+            "title": "COMPLETED"
+          },
+          {
+            "const": "reopened",
+            "description": "Повторно открыто",
+            "title": "REOPENED"
+          }
+        ]
+      },
       "InventorizationOrderListItemDto": {
         "type": "object",
         "properties": {
@@ -2096,7 +2086,28 @@
             "description": "Integer ID"
           },
           "orderNumber": {
+            "type": "string",
+            "description": "Номер приказа"
+          },
+          "orderDate": {
+            "description": "Дата приказа YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateFrom": {
+            "description": "Дата начала инвентаризации",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateTo": {
+            "description": "Дата окончания инвентаризации",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "orderFileLink": {
+            "description": "Ссылка на файл приказа (DOC: orderFileLink)",
             "type": "string"
+          },
+          "isActive": {
+            "description": "Приказ актуален на данный момент",
+            "type": "boolean"
           },
           "createdAt": {
             "type": "string",
@@ -2105,7 +2116,11 @@
           }
         },
         "required": [
-          "id"
+          "id",
+          "orderNumber",
+          "orderDate",
+          "inventoryDateFrom",
+          "inventoryDateTo"
         ],
         "additionalProperties": false
       },
@@ -2127,8 +2142,7 @@
                 "enum": [
                   "id",
                   "createdAt",
-                  "orderNumber",
-                  "status"
+                  "orderNumber"
                 ],
                 "description": "Колонка для сортировки"
               }
@@ -2138,26 +2152,7 @@
               "sortBy"
             ],
             "additionalProperties": false,
-            "description": "Сортировка"
-          },
-          "filters": {
-            "description": "Фильтры списка приказов",
-            "type": "object",
-            "properties": {
-              "inventoryOrderId": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 9007199254740991,
-                "description": "Integer ID"
-              },
-              "statusId": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 9007199254740991,
-                "description": "Integer ID"
-              }
-            },
-            "additionalProperties": false
+            "description": "Параметры сортировки (колонка — фиксированный набор)"
           }
         },
         "required": [
@@ -2190,12 +2185,28 @@
       "InventorizationCreateOrderDto": {
         "type": "object",
         "properties": {
-          "title": {
+          "orderNumber": {
+            "type": "string"
+          },
+          "orderDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateFrom": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateTo": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "orderFile": {
+            "description": "Файл приказа: в DOC binary; в JSON — base64 или отдельная загрузка",
             "type": "string"
           }
         },
         "required": [
-          "title"
+          "orderNumber",
+          "orderDate",
+          "inventoryDateFrom",
+          "inventoryDateTo"
         ],
         "additionalProperties": false
       },
@@ -2208,14 +2219,20 @@
             "maximum": 9007199254740991,
             "description": "Integer ID"
           },
-          "title": {
+          "orderNumber": {
             "type": "string"
           },
-          "statusId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+          "orderDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateFrom": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateTo": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "orderFile": {
+            "type": "string"
           }
         },
         "required": [
@@ -2249,6 +2266,10 @@
           },
           "bs2Name": {
             "type": "string"
+          },
+          "value": {
+            "description": "Значение БС-2 (DOC)",
+            "type": "string"
           }
         },
         "required": [
@@ -2258,19 +2279,10 @@
         "additionalProperties": false
       },
       "InventorizationBs2FilterResponseDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InventorizationBs2FilterItemDto"
-            }
-          }
-        },
-        "required": [
-          "items"
-        ],
-        "additionalProperties": false
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventorizationBs2FilterItemDto"
+        }
       },
       "InventorizationDictionaryItemDto": {
         "type": "object",
@@ -2292,19 +2304,101 @@
         "additionalProperties": false
       },
       "InventorizationDictionaryListResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventorizationDictionaryItemDto"
+        }
+      },
+      "ШnventoryAccountsListFilterDto": {
         "type": "object",
         "properties": {
-          "items": {
+          "inventoryOrderId": {
+            "description": "ИД приказа инвентаризации",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "accountSurrogateId": {
+            "description": "Суррогатный ключ счёта",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "accountTypeId": {
+            "description": "Тип счёта (одиночный id)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "bs2": {
+            "description": "БС-2 (массив int)",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InventorizationDictionaryItemDto"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
             }
+          },
+          "accountNum": {
+            "description": "Номер счёта (accountNum в DOC)",
+            "type": "string"
+          },
+          "accountType": {
+            "description": "Типы счёта (массив)",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          },
+          "responsibleUnit": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "responsibleUnitType": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inventoryAccountStatus": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceBank": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "productName": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "manualControlRuleNumber": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          },
+          "showZeroBalanceAccounts": {
+            "type": "boolean"
           }
         },
-        "required": [
-          "items"
-        ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Фильтр для списка счетов"
       },
       "InventorizationGetAccountsListRequestDto": {
         "type": "object",
@@ -2335,37 +2429,16 @@
               "sortBy"
             ],
             "additionalProperties": false,
-            "description": "Сортировка"
+            "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
-          "filters": {
-            "description": "Фильтры списка счетов",
-            "type": "object",
-            "properties": {
-              "inventoryOrderId": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 9007199254740991,
-                "description": "Integer ID"
-              },
-              "accountSurrogateId": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 9007199254740991,
-                "description": "Integer ID"
-              },
-              "accountTypeId": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 9007199254740991,
-                "description": "Integer ID"
-              }
-            },
-            "additionalProperties": false
+          "filter": {
+            "$ref": "#/components/schemas/ШnventoryAccountsListFilterDto"
           }
         },
         "required": [
           "pagination",
-          "sorting"
+          "sorting",
+          "filter"
         ],
         "additionalProperties": false
       },
@@ -2375,40 +2448,158 @@
           "items": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "Integer ID"
-                },
-                "accountSurrogateId": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "Integer ID"
-                },
-                "accountNumber": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id",
-                "accountSurrogateId"
-              ],
-              "additionalProperties": false
-            }
+              "$ref": "#/components/schemas/InventorizationAccountDetailDto"
+            },
+            "description": "Список счетов"
           },
           "totalItems": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991
+            "maximum": 9007199254740991,
+            "description": "Общее количество счетов"
           }
         },
         "required": [
           "items",
           "totalItems"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД записи в реестре"
+          },
+          "accountSurrogateId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Суррогатный ключ счёта (DOC: accountSurrogateKey)"
+          },
+          "accountNumber": {
+            "description": "Номер счёта (DOC: accountNum)",
+            "type": "string"
+          },
+          "accountOpenDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "accountType": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "clientName": {
+            "type": "string"
+          },
+          "agreementNum": {
+            "type": "string"
+          },
+          "originalUnit": {
+            "type": "string"
+          },
+          "bs2": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "accountName": {
+            "type": "string"
+          },
+          "lastOperationDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "agreementStatus": {
+            "type": "string"
+          },
+          "accountOutRubSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "accountOutSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "productCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "manualControlRuleNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "manualControlFlag": {
+            "type": "boolean"
+          },
+          "inventoryAccountStatus": {
+            "type": "string"
+          },
+          "reversedDebitSumRub": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "reversedDebitSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "reversedCreditSumRub": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "reversedCreditSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "sourceBank": {
+            "type": "string"
+          },
+          "dataDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "currencyIsoCode": {
+            "type": "string"
+          },
+          "clientInn": {
+            "type": "string"
+          },
+          "discrepancyDescription": {
+            "type": "string"
+          },
+          "discrepancySum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "discrepancyReason": {
+            "type": "string"
+          },
+          "resolutionActions": {
+            "type": "string"
+          },
+          "resolutionDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "manualUnit": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "description": "Для сортировки списка",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          }
+        },
+        "required": [
+          "id",
+          "accountSurrogateId"
         ],
         "additionalProperties": false
       },
@@ -2419,21 +2610,176 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "description": "ИД записи в реестре"
           },
           "accountSurrogateId": {
             "type": "integer",
             "minimum": 1,
             "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "description": "Суррогатный ключ счёта (DOC: accountSurrogateKey)"
           },
           "accountNumber": {
+            "description": "Номер счёта (DOC: accountNum)",
             "type": "string"
+          },
+          "accountOpenDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "accountType": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "clientName": {
+            "type": "string"
+          },
+          "agreementNum": {
+            "type": "string"
+          },
+          "originalUnit": {
+            "type": "string"
+          },
+          "bs2": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "accountName": {
+            "type": "string"
+          },
+          "lastOperationDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "agreementStatus": {
+            "type": "string"
+          },
+          "accountOutRubSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "accountOutSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "productCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "manualControlRuleNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "manualControlFlag": {
+            "type": "boolean"
+          },
+          "inventoryAccountStatus": {
+            "type": "string"
+          },
+          "reversedDebitSumRub": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "reversedDebitSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "reversedCreditSumRub": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "reversedCreditSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "sourceBank": {
+            "type": "string"
+          },
+          "dataDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "currencyIsoCode": {
+            "type": "string"
+          },
+          "clientInn": {
+            "type": "string"
+          },
+          "discrepancyDescription": {
+            "type": "string"
+          },
+          "discrepancySum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "discrepancyReason": {
+            "type": "string"
+          },
+          "resolutionActions": {
+            "type": "string"
+          },
+          "resolutionDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "manualUnit": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "description": "Для сортировки списка",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
           }
         },
         "required": [
           "id",
           "accountSurrogateId"
+        ],
+        "additionalProperties": false
+      },
+      "InventorizationAccountHistoryItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "accountSurrogateId": {
+            "description": "Суррогат счёта (DOC)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "changedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "changedBy": {
+            "type": "string"
+          },
+          "fieldName": {
+            "type": "string"
+          },
+          "oldValue": {
+            "type": "string"
+          },
+          "newValue": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "changedAt"
         ],
         "additionalProperties": false
       },
@@ -2443,29 +2789,7 @@
           "items": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "Integer ID"
-                },
-                "changedAt": {
-                  "type": "string",
-                  "format": "date-time",
-                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                },
-                "action": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id",
-                "changedAt",
-                "action"
-              ],
-              "additionalProperties": false
+              "$ref": "#/components/schemas/InventorizationAccountHistoryItemDto"
             }
           }
         },
@@ -2486,11 +2810,29 @@
               "maximum": 9007199254740991,
               "description": "Integer ID"
             }
+          },
+          "manualResponsibleUnit": {
+            "type": "string"
+          },
+          "force": {
+            "type": "boolean"
           }
         },
         "required": [
           "accountSurrogateIds"
         ],
+        "additionalProperties": false
+      },
+      "InventorizationManualUnitSingleRequestDto": {
+        "type": "object",
+        "properties": {
+          "manualResponsibleUnit": {
+            "type": "string"
+          },
+          "force": {
+            "type": "boolean"
+          }
+        },
         "additionalProperties": false
       },
       "InventorizationManualUnitResponseDto": {
@@ -2516,18 +2858,40 @@
             "maximum": 9007199254740991,
             "description": "Integer ID"
           },
-          "accountIds": {
+          "accountSurrogateIds": {
+            "minItems": 1,
             "type": "array",
             "items": {
               "type": "integer",
               "minimum": 1,
               "maximum": 9007199254740991,
               "description": "Integer ID"
-            }
+            },
+            "description": "DOC: accountSurrogateKeys"
+          },
+          "manualInventoryAccountStatus": {
+            "type": "string"
+          },
+          "discrepancyDescription": {
+            "type": "string"
+          },
+          "discrepancySum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "discrepancyReason": {
+            "type": "string"
+          },
+          "resolutionActions": {
+            "type": "string"
+          },
+          "resolutionDate": {
+            "$ref": "#/components/schemas/DateSchema"
           }
         },
         "required": [
-          "inventoryOrderId"
+          "inventoryOrderId",
+          "accountSurrogateIds"
         ],
         "additionalProperties": false
       },
@@ -2540,7 +2904,7 @@
             "maximum": 9007199254740991,
             "description": "Integer ID"
           },
-          "accountIds": {
+          "accountSurrogateIds": {
             "minItems": 1,
             "type": "array",
             "items": {
@@ -2553,7 +2917,7 @@
         },
         "required": [
           "inventoryOrderId",
-          "accountIds"
+          "accountSurrogateIds"
         ],
         "additionalProperties": false
       },
@@ -2579,6 +2943,9 @@
           },
           "label": {
             "type": "string"
+          },
+          "isVisible": {
+            "type": "boolean"
           },
           "visible": {
             "type": "boolean"
@@ -2623,6 +2990,19 @@
       "InventorizationAccountsExportRequestDto": {
         "type": "object",
         "properties": {
+          "accountSurrogateIds": {
+            "description": "DOC: accountSurrogateKeys",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          },
+          "filter": {
+            "$ref": "#/components/schemas/ШnventoryAccountsListFilterDto"
+          },
           "inventoryOrderId": {
             "type": "integer",
             "minimum": 1,
@@ -2637,6 +3017,9 @@
             ]
           }
         },
+        "required": [
+          "filter"
+        ],
         "additionalProperties": false
       },
       "InventorizationAccountsExportResponseDto": {
@@ -2651,6 +3034,9 @@
       "InventorizationStatisticsExportRequestDto": {
         "type": "object",
         "properties": {
+          "filter": {
+            "$ref": "#/components/schemas/ШnventoryAccountsListFilterDto"
+          },
           "inventoryOrderId": {
             "type": "integer",
             "minimum": 1,
@@ -2665,6 +3051,9 @@
             ]
           }
         },
+        "required": [
+          "filter"
+        ],
         "additionalProperties": false
       },
       "InventorizationStatisticsExportResponseDto": {
@@ -2680,12 +3069,16 @@
         "type": "object",
         "properties": {
           "status": {
-            "type": "string"
+            "$ref": "#/components/schemas/InventoryProcessStatusEnum"
           },
           "progressPercent": {
             "type": "number",
             "minimum": 0,
             "maximum": 100
+          },
+          "orderDataFilled": {
+            "description": "Заполнены данными приказа",
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3693,7 +4086,7 @@
     },
     "/api/v1/inventorization/orders/list": {
       "post": {
-        "summary": "Список приказов инвентаризации (пагинация, сортировка, фильтры)",
+        "summary": "Список приказов инвентаризации (пагинация, сортировка)",
         "tags": [
           "Inventorization"
         ],
@@ -4236,8 +4629,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {}
+                "$ref": "#/components/schemas/InventorizationManualUnitSingleRequestDto"
               }
             }
           }

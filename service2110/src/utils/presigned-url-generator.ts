@@ -3,8 +3,8 @@
  */
 
 import { env } from '../config/env.ts';
-import { ID } from '../schemas/common.schema.ts';
 import { TaskFile } from '../schemas/report-6406/task-files.schema.ts';
+import { ID } from '../schemas/common/id.schema.ts';
 
 /**
  * Результат генерации pre-signed URL

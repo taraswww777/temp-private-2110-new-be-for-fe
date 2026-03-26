@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
+
+import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
 
 /**
  * Статус конвертации файла.
@@ -29,10 +30,10 @@ export enum FileStatusEnum {
  * Используется для генерации расширенной OpenAPI-схемы с `x-enum-*` метаданными.
  */
 const FileStatusDescriptions = {
-  [FileStatusEnum.PENDING]:    { value: FileStatusEnum.PENDING,    description: 'Ожидает обработки' },
+  [FileStatusEnum.PENDING]: { value: FileStatusEnum.PENDING, description: 'Ожидает обработки' },
   [FileStatusEnum.CONVERTING]: { value: FileStatusEnum.CONVERTING, description: 'Идёт конвертация файла' },
-  [FileStatusEnum.COMPLETED]:  { value: FileStatusEnum.COMPLETED,  description: 'Конвертация успешно завершена' },
-  [FileStatusEnum.FAILED]:     { value: FileStatusEnum.FAILED,     description: 'Конвертация завершилась ошибкой' },
+  [FileStatusEnum.COMPLETED]: { value: FileStatusEnum.COMPLETED, description: 'Конвертация успешно завершена' },
+  [FileStatusEnum.FAILED]: { value: FileStatusEnum.FAILED, description: 'Конвертация завершилась ошибкой' },
 } as const;
 
 /**
@@ -51,5 +52,5 @@ export const FileStatusEnumSwaggerSchema = createEnumSchemaWithDescriptions(
   FileStatusEnum,
   FileStatusDescriptions,
   'FileStatusEnum',
-  'Статус конвертации файла'
+  'Статус конвертации файла',
 );

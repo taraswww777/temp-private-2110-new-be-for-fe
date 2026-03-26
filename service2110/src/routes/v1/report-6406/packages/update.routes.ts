@@ -5,7 +5,8 @@ import {
   updatePackageSchema,
   updatePackageResponseSchema,
 } from '../../../../schemas/report-6406/packages.schema';
-import { idParamSchema } from '../../../../schemas/common.schema';
+
+import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
 
 /**
  * PATCH /api/v1/report-6406/packages/:id

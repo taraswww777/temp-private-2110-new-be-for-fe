@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
+
+import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
 
 // Enum для форматов
 export enum FileFormatEnum {
@@ -26,5 +27,5 @@ export const FileFormatEnumSchema = createEnumSchemaWithDescriptions(
   FileFormatEnum,
   FileFormatDescriptions,
   'FileFormatEnum',
-  'Формат файла отчёта'
+  'Формат файла отчёта',
 );

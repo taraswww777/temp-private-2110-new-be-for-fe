@@ -1,4 +1,5 @@
 import type { OpenApiSchemaRegistry } from '../report-6406/openapi-register.ts';
+import { registerInventorizationEnumsOpenApiSchemas } from './enums/openapi-register.ts';
 import {
   getInventoryOrdersListRequestSchema,
   inventoryOrdersListResponseSchema,
@@ -16,9 +17,13 @@ import {
 import {
   getInventoryAccountsListRequestSchema,
   inventoryAccountsListResponseSchema,
+  inventoryAccountsListFilterSchema,
   inventoryAccountDetailSchema,
+  inventoryAccountListItemSchema,
+  inventoryAccountHistoryItemSchema,
   inventoryAccountHistoryResponseSchema,
   inventoryManualUnitBulkRequestSchema,
+  inventoryManualUnitSingleRequestSchema,
   inventoryManualUnitResponseSchema,
   inventoryAccountsInventoryRequestSchema,
   inventoryAccountsInventoryExcludeRequestSchema,
@@ -33,14 +38,14 @@ import {
   inventorizationStatisticsExportRequestSchema,
   inventorizationStatisticsExportResponseSchema,
 } from './statistics.schema.ts';
-import {
-  inventorizationInventoryStateResponseSchema,
-} from './inventory-state.schema.ts';
+import { inventorizationInventoryStateResponseSchema } from './inventory-state.schema.ts';
 
 /**
  * Регистрация Zod-схем подсистемы инвентаризации (front API-28) в OpenAPI-реестре.
  */
 export function registerInventorizationOpenApiSchemas(registry: OpenApiSchemaRegistry) {
+  registerInventorizationEnumsOpenApiSchemas(registry);
+
   registry.add(inventoryOrderListItemSchema, { id: 'InventorizationOrderListItemDto' });
   registry.add(getInventoryOrdersListRequestSchema, { id: 'InventorizationGetOrdersListRequestDto' });
   registry.add(inventoryOrdersListResponseSchema, { id: 'InventorizationOrdersListResponseDto' });
@@ -53,11 +58,15 @@ export function registerInventorizationOpenApiSchemas(registry: OpenApiSchemaReg
   registry.add(inventorizationDictionaryItemSchema, { id: 'InventorizationDictionaryItemDto' });
   registry.add(inventorizationDictionaryListResponseSchema, { id: 'InventorizationDictionaryListResponseDto' });
 
+  registry.add(inventoryAccountsListFilterSchema, { id: 'ШnventoryAccountsListFilterDto' });
   registry.add(getInventoryAccountsListRequestSchema, { id: 'InventorizationGetAccountsListRequestDto' });
   registry.add(inventoryAccountsListResponseSchema, { id: 'InventorizationAccountsListResponseDto' });
+  registry.add(inventoryAccountListItemSchema, { id: 'InventorizationAccountListItemDto' });
   registry.add(inventoryAccountDetailSchema, { id: 'InventorizationAccountDetailDto' });
+  registry.add(inventoryAccountHistoryItemSchema, { id: 'InventorizationAccountHistoryItemDto' });
   registry.add(inventoryAccountHistoryResponseSchema, { id: 'InventorizationAccountHistoryResponseDto' });
   registry.add(inventoryManualUnitBulkRequestSchema, { id: 'InventorizationManualUnitBulkRequestDto' });
+  registry.add(inventoryManualUnitSingleRequestSchema, { id: 'InventorizationManualUnitSingleRequestDto' });
   registry.add(inventoryManualUnitResponseSchema, { id: 'InventorizationManualUnitResponseDto' });
   registry.add(inventoryAccountsInventoryRequestSchema, { id: 'InventorizationAccountsInventoryRequestDto' });
   registry.add(inventoryAccountsInventoryExcludeRequestSchema, { id: 'InventorizationAccountsInventoryExcludeRequestDto' });

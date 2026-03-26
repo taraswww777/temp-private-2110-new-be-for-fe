@@ -1,6 +1,6 @@
 import { pgTable, timestamp, varchar, integer, bigint, index } from 'drizzle-orm/pg-core';
 import { idColumnPrimary } from './base.schema.ts';
-import { PackageStatusEnum } from '../../schemas/enums/PackageStatusEnum.ts';
+import { PackageStatusEnum } from '../../schemas/report-6406/enums/PackageStatusEnum.ts';
 import { packetStatusPgEnum } from './enums.schema.ts';
 
 /**

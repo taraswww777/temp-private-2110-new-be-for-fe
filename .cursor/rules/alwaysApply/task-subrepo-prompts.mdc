@@ -1,0 +1,8 @@
+---
+description: Старт задачи с подрепо — skill task-subrepo-start
+alwaysApply: true
+---
+
+# Старт задачи с подрепо
+
+Следуй skill **`.cursor/skills/task-subrepo-start/SKILL.md`** при запросах на выполнение/старт задачи с **TASK-XXX**, **VTB-XXX** и веткой в `subProjects/temp-private-2110/`.

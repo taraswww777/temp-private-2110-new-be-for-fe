@@ -2,12 +2,10 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ProjectContextValue {
   selectedProject: string | null;
@@ -30,6 +28,17 @@ function getStoredProject(): string | null {
   }
 }
 
+function getProjectFromUrl(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get(LEGACY_URL_PARAM);
+    return raw && raw !== '__none__' ? raw : null;
+  } catch {
+    return null;
+  }
+}
+
 function setStoredProject(project: string | null): void {
   if (typeof window === 'undefined') return;
   try {
@@ -43,38 +52,39 @@ function setStoredProject(project: string | null): void {
   }
 }
 
-export function ProjectProvider({ children }: { children: ReactNode }) {
-  const location = useLocation();
-  const navigate = useNavigate();
+function cleanupUrl() {
+  if (typeof window === 'undefined') return;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has(LEGACY_URL_PARAM)) return;
 
-  const [selectedProject, setSelectedProjectState] = useState<string | null>(() => getStoredProject());
+    params.delete(LEGACY_URL_PARAM);
+    const qs = params.toString();
+    const newUrl = `${window.location.pathname}${qs ? `?${qs}` : ''}${window.location.hash}`;
+    window.history.replaceState(null, '', newUrl);
+  } catch {
+    // Ignore errors
+  }
+}
+
+function getInitialProject(): string | null {
+  const urlProject = getProjectFromUrl();
+  if (urlProject) {
+    // Если есть проект в URL, сохраняем его в localStorage и чистим URL
+    setStoredProject(urlProject);
+    cleanupUrl();
+    return urlProject;
+  }
+  return getStoredProject();
+}
+
+export function ProjectProvider({ children }: { children: ReactNode }) {
+  const [selectedProject, setSelectedProjectState] = useState<string | null>(getInitialProject);
 
   const setSelectedProject = useCallback((project: string | null) => {
     setSelectedProjectState(project);
     setStoredProject(project);
   }, []);
-
-  /** Разовый перенос ?project= из старых ссылок в localStorage + убрать параметр из адреса */
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    if (!params.has(LEGACY_URL_PARAM)) return;
-
-    const raw = params.get(LEGACY_URL_PARAM);
-    const value = raw && raw !== '__none__' ? raw : null;
-    setSelectedProjectState(value);
-    setStoredProject(value);
-
-    params.delete(LEGACY_URL_PARAM);
-    const qs = params.toString();
-    navigate(
-      {
-        pathname: location.pathname,
-        search: qs ? `?${qs}` : '',
-        hash: location.hash,
-      },
-      { replace: true }
-    );
-  }, [location.search, location.pathname, location.hash, navigate]);
 
   const value = useMemo<ProjectContextValue>(
     () => ({ selectedProject, setSelectedProject }),

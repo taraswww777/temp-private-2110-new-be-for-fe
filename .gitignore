@@ -27,9 +27,6 @@ out/
 !.vscode/settings.json
 *.code-workspace
 
-# IDE - Cursor
-.cursor/
-
 # IDE - WebStorm / JetBrains
 .idea/
 *.iml

@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
+
+import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
 
 /**
  * Статусы задания (локальная статусная модель task_*)

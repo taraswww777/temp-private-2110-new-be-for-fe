@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { idParamSchema } from '../../../../schemas/common.schema';
 import { packageStatusHistoryResponseSchema } from '../../../../schemas/report-6406/package-status-history.schema';
+import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
 
 /**
  * GET /api/v1/report-6406/packages/:id/status-history

@@ -5,7 +5,8 @@ import {
   addTasksToPackageSchema,
   addTasksToPackageResponseSchema,
 } from '../../../../schemas/report-6406/packages.schema';
-import { idParamSchema } from '../../../../schemas/common.schema';
+
+import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
 
 /**
  * POST /api/v1/report-6406/packages/:packageId/tasks

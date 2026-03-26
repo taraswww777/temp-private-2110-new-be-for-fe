@@ -1,0 +1,14 @@
+---
+description: Задания TASK-XXX — следуй skill протокола (не дублировать полный текст здесь)
+globs: docs/tasks/**
+alwaysApply: false
+---
+
+# Протокол TASK-XXX
+
+При работе с файлами в `docs/tasks/` (и манифестом заданий) **следуй skill**:
+
+- **`.cursor/skills/task-management-protocol/SKILL.md`** — краткие обязательные пункты и ссылка на полный текст;
+- **`.cursor/skills/task-management-protocol/reference.md`** — полный протокол (процедуры, шаблоны, чеклисты).
+
+Если пользователь просит создать/вести/закрыть задание TASK-XXX без открытых файлов — открой skill по описанию выше и при необходимости **`reference.md`**.

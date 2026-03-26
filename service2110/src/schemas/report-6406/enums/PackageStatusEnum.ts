@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { createEnumSchemaWithDescriptions } from '../utils/createEnumSchemaWithDescriptions';
+
+import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
 
 // Enum для статусов пакета
 export enum PackageStatusEnum {
@@ -35,5 +36,5 @@ export const PackageStatusEnumSchema = createEnumSchemaWithDescriptions(
   PackageStatusEnum,
   PacketStatusDescriptions,
   'PackageStatusEnum',
-  'Статус пакета'
+  'Статус пакета',
 );

@@ -1,11 +1,11 @@
 import { pgEnum } from 'drizzle-orm/pg-core';
-import { ReportTypeEnum } from '../../schemas/enums/ReportTypeEnum.ts';
-import { Currency } from '../../schemas/enums/CurrencyEnum.ts';
-import { FileFormatEnum } from '../../schemas/enums/FileFormatEnum.ts';
-import { PackageStatusEnum } from '../../schemas/enums/PackageStatusEnum.ts';
-import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
-import { FileStatusEnum } from '../../schemas/enums/FileStatusEnum.ts';
-import { SortOrderEnum } from '../../schemas/enums/SortOrderEnum.ts';
+import { ReportTypeEnum } from '../../schemas/report-6406/enums/ReportTypeEnum.ts';
+import { Currency } from '../../schemas/report-6406/enums/CurrencyEnum.ts';
+import { FileFormatEnum } from '../../schemas/report-6406/enums/FileFormatEnum.ts';
+import { PackageStatusEnum } from '../../schemas/report-6406/enums/PackageStatusEnum.ts';
+import { TaskStatusEnum } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
+import { FileStatusEnum } from '../../schemas/report-6406/enums/FileStatusEnum.ts';
+import { SortOrderEnum } from '../../schemas/common/SortOrderEnum.ts';
 
 /**
  * PostgreSQL enum для типа отчёта

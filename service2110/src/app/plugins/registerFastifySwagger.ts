@@ -14,14 +14,15 @@ import { writeFileSync } from 'fs';
 
 import { env } from '../../config/env.ts';
 import { openApiRegistry } from '../../schemas/schema-registry.ts';
-import { PackageStatusEnumSchema } from '../../schemas/enums/PackageStatusEnum.ts';
-import { FileStatusEnumSwaggerSchema } from '../../schemas/enums/FileStatusEnum.ts';
-import { ReportTypeEnumSchema } from '../../schemas/enums/ReportTypeEnum.ts';
-import { SortOrderEnumSchema } from '../../schemas/enums/SortOrderEnum.ts';
-import { CurrencyEnumSchema } from '../../schemas/enums/CurrencyEnum.ts';
-import { FileFormatEnumSchema } from '../../schemas/enums/FileFormatEnum.ts';
-import { TaskStatusEnumSchema } from '../../schemas/enums/TaskStatusEnum.ts';
-import { StorageCodeEnumSwaggerSchema } from '../../schemas/enums/StorageCodeEnum.ts';
+import { PackageStatusEnumSchema } from '../../schemas/report-6406/enums/PackageStatusEnum.ts';
+import { FileStatusEnumSwaggerSchema } from '../../schemas/report-6406/enums/FileStatusEnum.ts';
+import { ReportTypeEnumSchema } from '../../schemas/report-6406/enums/ReportTypeEnum.ts';
+import { SortOrderEnumSchema } from '../../schemas/common/SortOrderEnum.ts';
+import { CurrencyEnumSchema } from '../../schemas/report-6406/enums/CurrencyEnum.ts';
+import { FileFormatEnumSchema } from '../../schemas/report-6406/enums/FileFormatEnum.ts';
+import { TaskStatusEnumSchema } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
+import { StorageCodeEnumSwaggerSchema } from '../../schemas/report-6406/enums/StorageCodeEnum.ts';
+import { InventoryProcessStatusEnumSchema } from '../../schemas/inventorization/enums/InventoryProcessStatusEnum.ts';
 
 type CustomFastifyInstance = FastifyInstance<
   http.Server<typeof IncomingMessage, typeof ServerResponse>,
@@ -32,20 +33,29 @@ type CustomFastifyInstance = FastifyInstance<
 >;
 
 /**
- * Расширения для enum-схем (x-enum-descriptions, x-enum-varnames, oneOf).
- * Библиотека генерирует базовый { type, enum }, а мы дополняем расширениями
- * для генераторов клиентского кода.
+ * JSON Schema из `createEnumSchemaWithDescriptions` по имени компонента в OpenAPI.
+ * Имя ключа должно совпадать с `registry.add(..., { id: '...' })` в openapi-register.
+ * Библиотека генерирует базовый `{ type, enum }`, а transform ниже подмешивает
+ * x-enum-descriptions, x-enum-varnames и oneOf.
  */
-const enumExtensions: Record<string, Record<string, unknown>> = {
-  PackageStatusEnum: extractEnumExtensions(PackageStatusEnumSchema),
-  FileStatusEnum: extractEnumExtensions(FileStatusEnumSwaggerSchema),
-  ReportTypeEnum: extractEnumExtensions(ReportTypeEnumSchema),
-  SortOrderEnum: extractEnumExtensions(SortOrderEnumSchema),
-  CurrencyEnum: extractEnumExtensions(CurrencyEnumSchema),
-  FileFormatEnum: extractEnumExtensions(FileFormatEnumSchema),
-  TaskStatusEnum: extractEnumExtensions(TaskStatusEnumSchema),
-  StorageCodeEnum: extractEnumExtensions(StorageCodeEnumSwaggerSchema),
+const swaggerExtendedEnumJsonSchemas: Record<string, Record<string, unknown>> = {
+  PackageStatusEnum: PackageStatusEnumSchema,
+  FileStatusEnum: FileStatusEnumSwaggerSchema,
+  ReportTypeEnum: ReportTypeEnumSchema,
+  SortOrderEnum: SortOrderEnumSchema,
+  CurrencyEnum: CurrencyEnumSchema,
+  FileFormatEnum: FileFormatEnumSchema,
+  TaskStatusEnum: TaskStatusEnumSchema,
+  StorageCodeEnum: StorageCodeEnumSwaggerSchema,
+  InventoryProcessStatusEnum: InventoryProcessStatusEnumSchema,
 };
+
+const enumExtensions: Record<string, Record<string, unknown>> = Object.fromEntries(
+  Object.entries(swaggerExtendedEnumJsonSchemas).map(([name, schema]) => [
+    name,
+    extractEnumExtensions(schema),
+  ]),
+);
 
 function extractEnumExtensions(schema: Record<string, unknown>) {
   const ext: Record<string, unknown> = {};

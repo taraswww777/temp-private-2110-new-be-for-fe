@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { storageCodeZodSchema, StorageCodeEnum } from '../enums/StorageCodeEnum.ts';
+import { storageCodeZodSchema, StorageCodeEnum } from './enums/StorageCodeEnum.ts';
 
 export const storageCodeSchema = storageCodeZodSchema;
 export type StorageCode = `${StorageCodeEnum}`;

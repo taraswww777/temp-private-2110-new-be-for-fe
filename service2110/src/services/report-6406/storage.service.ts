@@ -2,9 +2,9 @@ import { db } from '../../db';
 import { report6406Tasks } from '../../db/schema';
 import { ne, sql } from 'drizzle-orm';
 import type { StorageVolumeItem } from '../../schemas/report-6406/storage.schema.ts';
-import { StorageCodeEnum } from '../../schemas/enums/StorageCodeEnum.ts';
+import { StorageCodeEnum } from '../../schemas/report-6406/enums/StorageCodeEnum.ts';
 import { env } from '../../config/env.ts';
-import { TaskStatusEnum } from '../../schemas/enums/TaskStatusEnum.ts';
+import { TaskStatusEnum } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
 
 const DEFAULT_STORAGE_CODE: StorageCodeEnum = StorageCodeEnum.LOCAL;
 

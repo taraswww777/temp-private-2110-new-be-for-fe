@@ -26,7 +26,7 @@
 ## 📚 Другие документы проекта
 
 - [API Conventions](../api-conventions.md) - общие соглашения по API
-- [Task Management Protocol](../cursorRules/task-management-protocol.md) - протокол работы с задачами
+- [Task Management Protocol](../../.cursor/skills/task-management-protocol/reference.md) — протокол работы с задачами (каноничный текст; кратко — [SKILL.md](../../.cursor/skills/task-management-protocol/SKILL.md))
 - [Tasks README](../tasks/README.md) - управление заданиями
 
 ---

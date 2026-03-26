@@ -1,10 +1,13 @@
 import { z } from 'zod';
-import { dateRangeRefinement, dateSchema, paginationQuerySchema, zAccountSchema, zAccountSecondOrderSchema, zIdSchema, } from '../common.schema.ts';
-import { reportTypeSchema } from '../enums/ReportTypeEnum';
-import { currencySchema } from '../enums/CurrencyEnum';
-import { FileFormatEnum, fileFormatSchema } from '../enums/FileFormatEnum';
-import { sortOrderSchema } from '../enums/SortOrderEnum.ts';
-import { taskStatusSchema } from '../enums/TaskStatusEnum.ts';
+import { zAccountSchema, zAccountSecondOrderSchema,  } from '../common.schema.ts';
+import { reportTypeSchema } from './enums/ReportTypeEnum.ts';
+import { currencySchema } from './enums/CurrencyEnum.ts';
+import { FileFormatEnum, fileFormatSchema } from './enums/FileFormatEnum.ts';
+import { sortOrderSchema } from '../common/SortOrderEnum.ts';
+import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
+import { dateRangeRefinement, dateSchema } from '../common/dateString.schema.ts';
+import { zIdSchema } from '../common/id.schema.ts';
+import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
 export type CurrencyType = z.infer<typeof currencySchema>;
 export type FileFormatType = z.infer<typeof fileFormatSchema>;
@@ -146,7 +149,7 @@ export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
 export const getTasksRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
-  filters: tasksListFilterSchema.describe('Фильтры для списка заданий (объект с опциональными полями)'),
+  filter: tasksListFilterSchema,
 });
 
 export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;

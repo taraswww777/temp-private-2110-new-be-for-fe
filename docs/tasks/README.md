@@ -291,7 +291,7 @@ AI-ассистент работает по строгому протоколу 
 ### Технический протокол
 
 Детальный регламент работы AI-ассистента с заданиями описан в:
-📋 [docs/cursorRules/task-management-protocol.md](../cursorRules/task-management-protocol.md)
+📋 [Полный протокол](../../.cursor/skills/task-management-protocol/reference.md) (кратко для агента: [SKILL.md](../../.cursor/skills/task-management-protocol/SKILL.md))
 
 **Этот протокол для AI-ассистента**, вам читать его не обязательно.
 
