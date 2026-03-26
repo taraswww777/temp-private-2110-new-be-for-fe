@@ -110,16 +110,3 @@ export const filterSchema = z.object({
 });
 
 export type Filter = z.infer<typeof filterSchema>;
-
-/**
- * Схема ответа об ошибке с полем instance (503 и др.)
- */
-export const httpErrorWithInstanceSchema = z.object({
-  type: z.string().describe('URI типа ошибки'),
-  title: z.string().describe('Заголовок ошибки'),
-  status: z.number().int().describe('HTTP статус'),
-  detail: z.string().describe('Детали ошибки'),
-  instance: z.string().describe('URI запроса'),
-});
-
-export type HttpErrorWithInstance = z.infer<typeof httpErrorWithInstanceSchema>;

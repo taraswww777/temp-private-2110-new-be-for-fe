@@ -15,7 +15,6 @@ import {
   paginationMetadataSchema,
   paginatedResponseSchema,
   filterSchema,
-  httpErrorWithInstanceSchema,
 } from './common.schema.ts';
 import { sortOrderSchema } from './enums/SortOrderEnum';
 import { currencySchema } from './enums/CurrencyEnum';
@@ -48,7 +47,6 @@ openApiRegistry.add(paginatedResponseSchema, { id: 'PaginatedResponseDto' });
 openApiRegistry.add(filterSchema, { id: 'FilterDto' });
 openApiRegistry.add(dateSchema, { id: 'DateSchema' });
 openApiRegistry.add(dateTimeSchema, { id: 'DateTimeSchema' });
-openApiRegistry.add(httpErrorWithInstanceSchema, { id: 'HttpErrorWithInstanceDto' });
 
 registerReport6406OpenApiSchemas(openApiRegistry);
 registerInventorizationOpenApiSchemas(openApiRegistry);
