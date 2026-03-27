@@ -6,7 +6,7 @@ import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
 /** Десятичные суммы в DOC передаются как string($decimal). */
-export const inventorizationDecimalStringSchema = z
+export const inventoryDecimalStringSchema = z
   .string()
   .describe('Десятичное значение как строка (как в DOC string($decimal))');
 
@@ -66,23 +66,23 @@ export const inventoryAccountRowSchema = z.object({
   accountName: z.string().optional(),
   lastOperationDate: dateSchema.optional(),
   agreementStatus: z.string().optional(),
-  accountOutRubSum: inventorizationDecimalStringSchema.optional(),
-  accountOutSum: inventorizationDecimalStringSchema.optional(),
+  accountOutRubSum: inventoryDecimalStringSchema.optional(),
+  accountOutSum: inventoryDecimalStringSchema.optional(),
   productCode: z.string().optional(),
   productName: z.string().optional(),
   manualControlRuleNumber: zIdSchema.optional(),
   manualControlFlag: z.boolean().optional(),
   inventoryAccountStatus: z.string().optional(),
-  reversedDebitSumRub: inventorizationDecimalStringSchema.optional(),
-  reversedDebitSum: inventorizationDecimalStringSchema.optional(),
-  reversedCreditSumRub: inventorizationDecimalStringSchema.optional(),
-  reversedCreditSum: inventorizationDecimalStringSchema.optional(),
+  reversedDebitSumRub: inventoryDecimalStringSchema.optional(),
+  reversedDebitSum: inventoryDecimalStringSchema.optional(),
+  reversedCreditSumRub: inventoryDecimalStringSchema.optional(),
+  reversedCreditSum: inventoryDecimalStringSchema.optional(),
   sourceBank: z.string().optional(),
   dataDate: dateSchema.optional(),
   currencyIsoCode: z.string().optional(),
   clientInn: z.string().optional(),
   discrepancyDescription: z.string().optional(),
-  discrepancySum: inventorizationDecimalStringSchema.optional(),
+  discrepancySum: inventoryDecimalStringSchema.optional(),
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
   resolutionDate: dateSchema.optional(),
@@ -142,7 +142,7 @@ export const inventoryAccountsInventoryRequestSchema = z.object({
   accountSurrogateIds: z.array(zIdSchema).min(1).describe('DOC: accountSurrogateKeys'),
   manualInventoryAccountStatus: z.string().optional(),
   discrepancyDescription: z.string().optional(),
-  discrepancySum: inventorizationDecimalStringSchema.optional(),
+  discrepancySum: inventoryDecimalStringSchema.optional(),
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
   resolutionDate: dateSchema.optional(),
@@ -158,19 +158,19 @@ export const inventoryAccountsInventoryMutationResponseSchema = z.object({
 });
 
 /** DOC: isVisible; в API сохраняем оба имени как optional (ренейминг). */
-export const inventorizationAccountColumnSchema = z.object({
+export const inventoryAccountColumnSchema = z.object({
   key: z.string(),
   label: z.string(),
   isVisible: z.boolean().optional(),
   visible: z.boolean().optional(),
 });
 
-export const inventorizationAccountColumnsResponseSchema = z.object({
-  columns: z.array(inventorizationAccountColumnSchema),
+export const inventoryAccountColumnsResponseSchema = z.object({
+  columns: z.array(inventoryAccountColumnSchema),
 });
 
-export const inventorizationAccountColumnsUpdateSchema = z.object({
-  columns: z.array(inventorizationAccountColumnSchema),
+export const inventoryAccountColumnsUpdateSchema = z.object({
+  columns: z.array(inventoryAccountColumnSchema),
 });
 
 /** DOC: accountSurrogateKeys + filter (объект фильтров списка). */

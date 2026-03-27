@@ -6,14 +6,14 @@ import {
   inventoryOrderMutationResponseSchema,
   inventoryOrdersListResponseSchema,
   updateInventoryOrderSchema,
-} from '../../../schemas/inventorization/orders.schema.ts';
+} from '../../../schemas/inventory/orders.schema.ts';
 
-export const inventorizationOrdersRoutes: FastifyPluginAsync = async (fastify) => {
+export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   app.post('/list', {
     schema: {
-      tags: ['Inventorization'],
+      tags: ['Inventory'],
       summary: 'Список приказов инвентаризации (пагинация, сортировка)',
       body: getInventoryOrdersListRequestSchema,
       response: { 200: inventoryOrdersListResponseSchema },
@@ -22,7 +22,7 @@ export const inventorizationOrdersRoutes: FastifyPluginAsync = async (fastify) =
 
   app.post('/new', {
     schema: {
-      tags: ['Inventorization'],
+      tags: ['Inventory'],
       summary: 'Создать приказ инвентаризации',
       body: createInventoryOrderSchema,
       response: { 200: inventoryOrderMutationResponseSchema },
@@ -31,7 +31,7 @@ export const inventorizationOrdersRoutes: FastifyPluginAsync = async (fastify) =
 
   app.post('/update', {
     schema: {
-      tags: ['Inventorization'],
+      tags: ['Inventory'],
       summary: 'Обновить приказ инвентаризации',
       body: updateInventoryOrderSchema,
       response: { 200: inventoryOrderMutationResponseSchema },

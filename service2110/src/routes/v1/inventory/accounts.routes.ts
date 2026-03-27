@@ -14,17 +14,17 @@ import {
   inventoryManualUnitBulkRequestSchema,
   inventoryManualUnitSingleRequestSchema,
   inventoryManualUnitResponseSchema,
-  inventorizationAccountColumnsResponseSchema,
-  inventorizationAccountColumnsUpdateSchema,
-} from '../../../schemas/inventorization/accounts.schema.ts';
+  inventoryAccountColumnsResponseSchema,
+  inventoryAccountColumnsUpdateSchema,
+} from '../../../schemas/inventory/accounts.schema.ts';
 import { idParamSchema } from '../../../schemas/common/id.schema.ts';
 
-export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify) => {
+export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   app.post('/list', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'Список счетов инвентаризации (пагинация, сортировка, фильтры)',
       body: getInventoryAccountsListRequestSchema,
       response: { 200: inventoryAccountsListResponseSchema },
@@ -33,24 +33,24 @@ export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify)
 
   app.get('/columns', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'Колонки таблицы счетов',
-      response: { 200: inventorizationAccountColumnsResponseSchema },
+      response: { 200: inventoryAccountColumnsResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send({ columns: [] }));
 
   app.post('/columns', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'Сохранить настройки колонок',
-      body: inventorizationAccountColumnsUpdateSchema,
-      response: { 200: inventorizationAccountColumnsResponseSchema },
+      body: inventoryAccountColumnsUpdateSchema,
+      response: { 200: inventoryAccountColumnsResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send({ columns: [] }));
 
   app.post('/export', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'Экспорт реестра счетов',
       body: inventoryAccountsExportRequestSchema,
       response: { 200: inventoryAccountsExportResponseSchema },
@@ -59,7 +59,7 @@ export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify)
 
   app.post('/inventory', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'Включить счета в инвентаризацию',
       body: inventoryAccountsInventoryRequestSchema,
       response: { 200: inventoryAccountsInventoryMutationResponseSchema },
@@ -68,7 +68,7 @@ export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify)
 
   app.post('/inventory/exclude', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'Исключить счета из инвентаризации',
       body: inventoryAccountsInventoryExcludeRequestSchema,
       response: { 200: inventoryAccountsInventoryMutationResponseSchema },
@@ -77,7 +77,7 @@ export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify)
 
   app.post('/manual-unit/bulk', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'Ручной учёт: массовая операция',
       body: inventoryManualUnitBulkRequestSchema,
       response: { 200: inventoryManualUnitResponseSchema },
@@ -86,7 +86,7 @@ export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify)
 
   app.post('/manual-unit/:accountSurrogateId', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'Ручной учёт: одна запись (accountSurrogateId в URL)',
       params: inventoryAccountSurrogateIdParamSchema,
       body: inventoryManualUnitSingleRequestSchema,
@@ -96,7 +96,7 @@ export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify)
 
   app.get('/surrogate/:accountSurrogateId/history', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'История изменений по surrogate id счёта',
       params: inventoryAccountSurrogateIdParamSchema,
       response: { 200: inventoryAccountHistoryResponseSchema },
@@ -105,7 +105,7 @@ export const inventorizationAccountsRoutes: FastifyPluginAsync = async (fastify)
 
   app.get('/:id', {
     schema: {
-      tags: ['Inventorization - Accounts'],
+      tags: ['Inventory - Accounts'],
       summary: 'Деталь счёта по id',
       params: idParamSchema,
       response: { 200: inventoryAccountDetailSchema },

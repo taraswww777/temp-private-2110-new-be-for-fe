@@ -22,7 +22,7 @@ import { CurrencyEnumSchema } from '../../schemas/report-6406/enums/CurrencyEnum
 import { FileFormatEnumSchema } from '../../schemas/report-6406/enums/FileFormatEnum.ts';
 import { TaskStatusEnumSchema } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
 import { StorageCodeEnumSwaggerSchema } from '../../schemas/report-6406/enums/StorageCodeEnum.ts';
-import { InventoryProcessStatusEnumSchema } from '../../schemas/inventorization/enums/InventoryProcessStatusEnum.ts';
+import { InventoryProcessStatusEnumSchema } from '../../schemas/inventory/enums/InventoryProcessStatusEnum.ts';
 
 type CustomFastifyInstance = FastifyInstance<
   http.Server<typeof IncomingMessage, typeof ServerResponse>,
@@ -159,10 +159,10 @@ export const registerFastifySwagger = async (app: CustomFastifyInstance) => {
         { name: 'Report 6406 - Tasks', description: 'Задания на построение отчётов для формы 6406' },
         { name: 'Report 6406 - Packages', description: 'Пакеты заданий для формы 6406' },
         { name: 'Report 6406 - Storage', description: 'Мониторинг хранилища отчётов' },
-        { name: 'Inventorization', description: 'Инвентаризация (uaod-si-inventory, API-28)' },
-        { name: 'Inventorization - Dictionary', description: 'Словари фильтров инвентаризации' },
-        { name: 'Inventorization - Accounts', description: 'Счета инвентаризации' },
-        { name: 'Inventorization - Statistics', description: 'Статистика инвентаризации' },
+        { name: 'Inventory', description: 'Инвентаризация (uaod-si-inventory, API-28)' },
+        { name: 'Inventory - Dictionary', description: 'Словари фильтров инвентаризации' },
+        { name: 'Inventory - Accounts', description: 'Счета инвентаризации' },
+        { name: 'Inventory - Statistics', description: 'Статистика инвентаризации' },
       ],
     },
     transform: createJsonSchemaTransform({

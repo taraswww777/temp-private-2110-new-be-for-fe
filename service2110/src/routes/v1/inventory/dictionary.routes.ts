@@ -1,20 +1,20 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
-  inventorizationBs2FilterResponseSchema,
-  inventorizationDictionaryListResponseSchema,
-  inventorizationInventoryOrderIdParamSchema,
-} from '../../../schemas/inventorization/dictionary.schema.ts';
+  inventoryBs2FilterResponseSchema,
+  inventoryDictionaryListResponseSchema,
+  inventoryInventoryOrderIdParamSchema,
+} from '../../../schemas/inventory/dictionary.schema.ts';
 
-export const inventorizationDictionaryRoutes: FastifyPluginAsync = async (fastify) => {
+export const inventoryDictionaryRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   app.get('/filters/bs2/:inventoryOrderId', {
     schema: {
-      tags: ['Inventorization - Dictionary'],
+      tags: ['Inventory - Dictionary'],
       summary: 'Справочник БС-2 для фильтров (только id и bs2Name)',
-      params: inventorizationInventoryOrderIdParamSchema,
-      response: { 200: inventorizationBs2FilterResponseSchema },
+      params: inventoryInventoryOrderIdParamSchema,
+      response: { 200: inventoryBs2FilterResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send([]));
 
@@ -31,10 +31,10 @@ export const inventorizationDictionaryRoutes: FastifyPluginAsync = async (fastif
   for (const [url, summary] of listFilters) {
     app.get(url, {
       schema: {
-        tags: ['Inventorization - Dictionary'],
+        tags: ['Inventory - Dictionary'],
         summary,
-        params: inventorizationInventoryOrderIdParamSchema,
-        response: { 200: inventorizationDictionaryListResponseSchema },
+        params: inventoryInventoryOrderIdParamSchema,
+        response: { 200: inventoryDictionaryListResponseSchema },
       },
     }, async (_request, reply) => reply.status(200).send([]));
   }
