@@ -9,10 +9,22 @@ import {
   inventoryOrderListItemSchema,
 } from './orders.schema.ts';
 import {
+  inventoryAccountStatusFilterItemSchema,
+  inventoryAccountStatusFilterResponseSchema,
+  inventoryAccountTypeFilterItemSchema,
+  inventoryAccountTypeFilterResponseSchema,
   inventoryBs2FilterItemSchema,
   inventoryBs2FilterResponseSchema,
-  inventoryDictionaryItemSchema,
-  inventoryDictionaryListResponseSchema,
+  inventoryManualControlFilterItemSchema,
+  inventoryManualControlFilterResponseSchema,
+  inventoryProductFilterItemSchema,
+  inventoryProductFilterResponseSchema,
+  inventoryResponsibleUnitFilterItemSchema,
+  inventoryResponsibleUnitFilterResponseSchema,
+  inventoryResponsibleUnitTypeFilterItemSchema,
+  inventoryResponsibleUnitTypeFilterResponseSchema,
+  inventorySourceBankFilterItemSchema,
+  inventorySourceBankFilterResponseSchema,
 } from './dictionary.schema.ts';
 import {
   getInventoryAccountsListRequestSchema,
@@ -55,10 +67,22 @@ export function registerInventoryOpenApiSchemas(registry: OpenApiSchemaRegistry)
 
   registry.add(inventoryBs2FilterItemSchema, { id: 'InventoryBs2FilterItemDto' });
   registry.add(inventoryBs2FilterResponseSchema, { id: 'InventoryBs2FilterResponseDto' });
-  registry.add(inventoryDictionaryItemSchema, { id: 'InventoryDictionaryItemDto' });
-  registry.add(inventoryDictionaryListResponseSchema, { id: 'InventoryDictionaryListResponseDto' });
-
-  registry.add(inventoryAccountsListFilterSchema, { id: 'ШnventoryAccountsListFilterDto' });
+  registry.add(inventoryAccountTypeFilterItemSchema, { id: 'InventoryAccountTypeFilterItemDto' });
+  registry.add(inventoryAccountTypeFilterResponseSchema, { id: 'InventoryAccountTypeFilterResponseDto' });
+  registry.add(inventoryResponsibleUnitFilterItemSchema, { id: 'InventoryResponsibleUnitFilterItemDto' });
+  registry.add(inventoryResponsibleUnitFilterResponseSchema, { id: 'InventoryResponsibleUnitFilterResponseDto' });
+  registry.add(inventoryResponsibleUnitTypeFilterItemSchema, { id: 'InventoryResponsibleUnitTypeFilterItemDto' });
+  registry.add(inventoryResponsibleUnitTypeFilterResponseSchema, { id: 'InventoryResponsibleUnitTypeFilterResponseDto' });
+  registry.add(inventoryAccountStatusFilterItemSchema, { id: 'InventoryAccountStatusFilterItemDto' });
+  registry.add(inventoryAccountStatusFilterResponseSchema, { id: 'InventoryAccountStatusFilterResponseDto' });
+  registry.add(inventorySourceBankFilterItemSchema, { id: 'InventorySourceBankFilterItemDto' });
+  registry.add(inventorySourceBankFilterResponseSchema, { id: 'InventorySourceBankFilterResponseDto' });
+  registry.add(inventoryProductFilterItemSchema, { id: 'InventoryProductFilterItemDto' });
+  registry.add(inventoryProductFilterResponseSchema, { id: 'InventoryProductFilterResponseDto' });
+  registry.add(inventoryManualControlFilterItemSchema, { id: 'InventoryManualControlFilterItemDto' });
+  registry.add(inventoryManualControlFilterResponseSchema, { id: 'InventoryManualControlFilterResponseDto' });
+  
+  registry.add(inventoryAccountsListFilterSchema, { id: 'InventoryAccountsListFilterDto' });
   registry.add(getInventoryAccountsListRequestSchema, { id: 'InventoryGetAccountsListRequestDto' });
   registry.add(inventoryAccountsListResponseSchema, { id: 'InventoryAccountsListResponseDto' });
   registry.add(inventoryAccountListItemSchema, { id: 'InventoryAccountListItemDto' });

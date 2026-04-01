@@ -2265,11 +2265,10 @@
             "description": "Integer ID"
           },
           "bs2Name": {
-            "type": "string"
-          },
-          "value": {
-            "description": "Значение БС-2 (DOC)",
-            "type": "string"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 99999,
+            "description": "Значение"
           }
         },
         "required": [
@@ -2284,7 +2283,7 @@
           "$ref": "#/components/schemas/InventoryBs2FilterItemDto"
         }
       },
-      "InventoryDictionaryItemDto": {
+      "InventoryAccountTypeFilterItemDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2293,23 +2292,177 @@
             "maximum": 9007199254740991,
             "description": "Integer ID"
           },
-          "name": {
+          "accountTypeName": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "accountTypeName"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountTypeFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryAccountTypeFilterItemDto"
+        }
+      },
+      "InventoryResponsibleUnitFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "responsibleUnitName": {
             "type": "string"
           }
         },
         "required": [
           "id",
-          "name"
+          "responsibleUnitName"
         ],
         "additionalProperties": false
       },
-      "InventoryDictionaryListResponseDto": {
+      "InventoryResponsibleUnitFilterResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/InventoryDictionaryItemDto"
+          "$ref": "#/components/schemas/InventoryResponsibleUnitFilterItemDto"
         }
       },
-      "ШnventoryAccountsListFilterDto": {
+      "InventoryResponsibleUnitTypeFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "responsibleUnitTypeName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "responsibleUnitTypeName"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryResponsibleUnitTypeFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryResponsibleUnitTypeFilterItemDto"
+        }
+      },
+      "InventoryAccountStatusFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "inventoryAccountStatusName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "inventoryAccountStatusName"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountStatusFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryAccountStatusFilterItemDto"
+        }
+      },
+      "InventorySourceBankFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "sourceBankName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sourceBankName"
+        ],
+        "additionalProperties": false
+      },
+      "InventorySourceBankFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventorySourceBankFilterItemDto"
+        }
+      },
+      "InventoryProductFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "productName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "productName"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryProductFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryProductFilterItemDto"
+        }
+      },
+      "InventoryManualControlFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "manualControlRuleNumber": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "manualControlRuleNumber"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryManualControlFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryManualControlFilterItemDto"
+        }
+      },
+      "InventoryAccountsListFilterDto": {
         "type": "object",
         "properties": {
           "inventoryOrderId": {
@@ -2432,7 +2585,7 @@
             "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
           "filter": {
-            "$ref": "#/components/schemas/ШnventoryAccountsListFilterDto"
+            "$ref": "#/components/schemas/InventoryAccountsListFilterDto"
           }
         },
         "required": [
@@ -3001,7 +3154,7 @@
             }
           },
           "filter": {
-            "$ref": "#/components/schemas/ШnventoryAccountsListFilterDto"
+            "$ref": "#/components/schemas/InventoryAccountsListFilterDto"
           },
           "inventoryOrderId": {
             "type": "integer",
@@ -3035,7 +3188,7 @@
         "type": "object",
         "properties": {
           "filter": {
-            "$ref": "#/components/schemas/ШnventoryAccountsListFilterDto"
+            "$ref": "#/components/schemas/InventoryAccountsListFilterDto"
           },
           "inventoryOrderId": {
             "type": "integer",
@@ -4173,7 +4326,7 @@
     },
     "/api/v1/inventory/dictionary/filters/bs2/{inventoryOrderId}": {
       "get": {
-        "summary": "Справочник БС-2 для фильтров (только id и bs2Name)",
+        "summary": "БС-2 (фильтр)",
         "tags": [
           "Inventory - Dictionary"
         ],
@@ -4227,7 +4380,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryAccountTypeFilterResponseDto"
                 }
               }
             }
@@ -4259,7 +4412,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryResponsibleUnitFilterResponseDto"
                 }
               }
             }
@@ -4291,7 +4444,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryResponsibleUnitTypeFilterResponseDto"
                 }
               }
             }
@@ -4299,7 +4452,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/inventory-status/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/inventory-account-status/{inventoryOrderId}": {
       "get": {
         "summary": "Статус инвентаризации (фильтр)",
         "tags": [
@@ -4323,7 +4476,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryAccountStatusFilterResponseDto"
                 }
               }
             }
@@ -4355,7 +4508,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventorySourceBankFilterResponseDto"
                 }
               }
             }
@@ -4363,7 +4516,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/product/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/product-name/{inventoryOrderId}": {
       "get": {
         "summary": "Продукт (фильтр)",
         "tags": [
@@ -4387,7 +4540,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryProductFilterResponseDto"
                 }
               }
             }
@@ -4419,7 +4572,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryManualControlFilterResponseDto"
                 }
               }
             }
