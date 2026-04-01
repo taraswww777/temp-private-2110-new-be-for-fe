@@ -5,6 +5,6 @@ import { inventoryProcessStatusSchema } from './InventoryProcessStatusEnum.ts';
 /**
  * Регистрация Zod-схем перечислений подсистемы инвентаризации в OpenAPI-реестре.
  */
-export function registerInventorizationEnumsOpenApiSchemas(registry: OpenApiSchemaRegistry) {
+export function registerInventoryEnumsOpenApiSchemas(registry: OpenApiSchemaRegistry) {
   registry.add(inventoryProcessStatusSchema, { id: 'InventoryProcessStatusEnum' });
 }

@@ -2076,7 +2076,7 @@
           }
         ]
       },
-      "InventorizationOrderListItemDto": {
+      "InventoryOrderListItemDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2124,7 +2124,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationGetOrdersListRequestDto": {
+      "InventoryGetOrdersListRequestDto": {
         "type": "object",
         "properties": {
           "pagination": {
@@ -2161,13 +2161,13 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationOrdersListResponseDto": {
+      "InventoryOrdersListResponseDto": {
         "type": "object",
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InventorizationOrderListItemDto"
+              "$ref": "#/components/schemas/InventoryOrderListItemDto"
             }
           },
           "totalItems": {
@@ -2182,7 +2182,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationCreateOrderDto": {
+      "InventoryCreateOrderDto": {
         "type": "object",
         "properties": {
           "orderNumber": {
@@ -2210,7 +2210,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationUpdateOrderDto": {
+      "InventoryUpdateOrderDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2240,7 +2240,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationOrderMutationResponseDto": {
+      "InventoryOrderMutationResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2255,7 +2255,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationBs2FilterItemDto": {
+      "InventoryBs2FilterItemDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2278,13 +2278,13 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationBs2FilterResponseDto": {
+      "InventoryBs2FilterResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/InventorizationBs2FilterItemDto"
+          "$ref": "#/components/schemas/InventoryBs2FilterItemDto"
         }
       },
-      "InventorizationDictionaryItemDto": {
+      "InventoryDictionaryItemDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2303,10 +2303,10 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationDictionaryListResponseDto": {
+      "InventoryDictionaryListResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/InventorizationDictionaryItemDto"
+          "$ref": "#/components/schemas/InventoryDictionaryItemDto"
         }
       },
       "ШnventoryAccountsListFilterDto": {
@@ -2400,7 +2400,7 @@
         "additionalProperties": false,
         "description": "Фильтр для списка счетов"
       },
-      "InventorizationGetAccountsListRequestDto": {
+      "InventoryGetAccountsListRequestDto": {
         "type": "object",
         "properties": {
           "pagination": {
@@ -2442,13 +2442,13 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountsListResponseDto": {
+      "InventoryAccountsListResponseDto": {
         "type": "object",
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InventorizationAccountDetailDto"
+              "$ref": "#/components/schemas/InventoryAccountDetailDto"
             },
             "description": "Список счетов"
           },
@@ -2465,7 +2465,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountListItemDto": {
+      "InventoryAccountListItemDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2603,7 +2603,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountDetailDto": {
+      "InventoryAccountDetailDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2741,7 +2741,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountHistoryItemDto": {
+      "InventoryAccountHistoryItemDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2783,13 +2783,13 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountHistoryResponseDto": {
+      "InventoryAccountHistoryResponseDto": {
         "type": "object",
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InventorizationAccountHistoryItemDto"
+              "$ref": "#/components/schemas/InventoryAccountHistoryItemDto"
             }
           }
         },
@@ -2798,7 +2798,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationManualUnitBulkRequestDto": {
+      "InventoryManualUnitBulkRequestDto": {
         "type": "object",
         "properties": {
           "accountSurrogateIds": {
@@ -2823,7 +2823,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationManualUnitSingleRequestDto": {
+      "InventoryManualUnitSingleRequestDto": {
         "type": "object",
         "properties": {
           "manualResponsibleUnit": {
@@ -2835,7 +2835,7 @@
         },
         "additionalProperties": false
       },
-      "InventorizationManualUnitResponseDto": {
+      "InventoryManualUnitResponseDto": {
         "type": "object",
         "properties": {
           "updated": {
@@ -2849,7 +2849,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountsInventoryRequestDto": {
+      "InventoryAccountsInventoryRequestDto": {
         "type": "object",
         "properties": {
           "inventoryOrderId": {
@@ -2895,7 +2895,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountsInventoryExcludeRequestDto": {
+      "InventoryAccountsInventoryExcludeRequestDto": {
         "type": "object",
         "properties": {
           "inventoryOrderId": {
@@ -2921,7 +2921,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountsInventoryMutationResponseDto": {
+      "InventoryAccountsInventoryMutationResponseDto": {
         "type": "object",
         "properties": {
           "affected": {
@@ -2935,7 +2935,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountColumnDto": {
+      "InventoryAccountColumnDto": {
         "type": "object",
         "properties": {
           "key": {
@@ -2957,13 +2957,13 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountColumnsResponseDto": {
+      "InventoryAccountColumnsResponseDto": {
         "type": "object",
         "properties": {
           "columns": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InventorizationAccountColumnDto"
+              "$ref": "#/components/schemas/InventoryAccountColumnDto"
             }
           }
         },
@@ -2972,13 +2972,13 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountColumnsUpdateDto": {
+      "InventoryAccountColumnsUpdateDto": {
         "type": "object",
         "properties": {
           "columns": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InventorizationAccountColumnDto"
+              "$ref": "#/components/schemas/InventoryAccountColumnDto"
             }
           }
         },
@@ -2987,7 +2987,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountsExportRequestDto": {
+      "InventoryAccountsExportRequestDto": {
         "type": "object",
         "properties": {
           "accountSurrogateIds": {
@@ -3022,7 +3022,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationAccountsExportResponseDto": {
+      "InventoryAccountsExportResponseDto": {
         "type": "object",
         "properties": {
           "fileKey": {
@@ -3031,7 +3031,7 @@
         },
         "additionalProperties": false
       },
-      "InventorizationStatisticsExportRequestDto": {
+      "InventoryStatisticsExportRequestDto": {
         "type": "object",
         "properties": {
           "filter": {
@@ -3056,7 +3056,7 @@
         ],
         "additionalProperties": false
       },
-      "InventorizationStatisticsExportResponseDto": {
+      "InventoryStatisticsExportResponseDto": {
         "type": "object",
         "properties": {
           "fileKey": {
@@ -3065,7 +3065,7 @@
         },
         "additionalProperties": false
       },
-      "InventorizationInventoryStateResponseDto": {
+      "InventoryInventoryStateResponseDto": {
         "type": "object",
         "properties": {
           "status": {
@@ -4084,17 +4084,17 @@
         }
       }
     },
-    "/api/v1/inventorization/orders/list": {
+    "/api/v1/inventory/orders/list": {
       "post": {
         "summary": "Список приказов инвентаризации (пагинация, сортировка)",
         "tags": [
-          "Inventorization"
+          "Inventory"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationGetOrdersListRequestDto"
+                "$ref": "#/components/schemas/InventoryGetOrdersListRequestDto"
               }
             }
           }
@@ -4105,7 +4105,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationOrdersListResponseDto"
+                  "$ref": "#/components/schemas/InventoryOrdersListResponseDto"
                 }
               }
             }
@@ -4113,17 +4113,17 @@
         }
       }
     },
-    "/api/v1/inventorization/orders/new": {
+    "/api/v1/inventory/orders/new": {
       "post": {
         "summary": "Создать приказ инвентаризации",
         "tags": [
-          "Inventorization"
+          "Inventory"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationCreateOrderDto"
+                "$ref": "#/components/schemas/InventoryCreateOrderDto"
               }
             }
           }
@@ -4134,7 +4134,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationOrderMutationResponseDto"
+                  "$ref": "#/components/schemas/InventoryOrderMutationResponseDto"
                 }
               }
             }
@@ -4142,17 +4142,17 @@
         }
       }
     },
-    "/api/v1/inventorization/orders/update": {
+    "/api/v1/inventory/orders/update": {
       "post": {
         "summary": "Обновить приказ инвентаризации",
         "tags": [
-          "Inventorization"
+          "Inventory"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationUpdateOrderDto"
+                "$ref": "#/components/schemas/InventoryUpdateOrderDto"
               }
             }
           }
@@ -4163,7 +4163,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationOrderMutationResponseDto"
+                  "$ref": "#/components/schemas/InventoryOrderMutationResponseDto"
                 }
               }
             }
@@ -4171,11 +4171,11 @@
         }
       }
     },
-    "/api/v1/inventorization/dictionary/filters/bs2/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/bs2/{inventoryOrderId}": {
       "get": {
         "summary": "Справочник БС-2 для фильтров (только id и bs2Name)",
         "tags": [
-          "Inventorization - Dictionary"
+          "Inventory - Dictionary"
         ],
         "parameters": [
           {
@@ -4195,7 +4195,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationBs2FilterResponseDto"
+                  "$ref": "#/components/schemas/InventoryBs2FilterResponseDto"
                 }
               }
             }
@@ -4203,11 +4203,11 @@
         }
       }
     },
-    "/api/v1/inventorization/dictionary/filters/account-type/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/account-type/{inventoryOrderId}": {
       "get": {
         "summary": "Тип счёта (фильтр)",
         "tags": [
-          "Inventorization - Dictionary"
+          "Inventory - Dictionary"
         ],
         "parameters": [
           {
@@ -4227,7 +4227,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
                 }
               }
             }
@@ -4235,11 +4235,11 @@
         }
       }
     },
-    "/api/v1/inventorization/dictionary/filters/responsible-unit/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/responsible-unit/{inventoryOrderId}": {
       "get": {
         "summary": "Ответственное подразделение (фильтр)",
         "tags": [
-          "Inventorization - Dictionary"
+          "Inventory - Dictionary"
         ],
         "parameters": [
           {
@@ -4259,7 +4259,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
                 }
               }
             }
@@ -4267,11 +4267,11 @@
         }
       }
     },
-    "/api/v1/inventorization/dictionary/filters/responsible-unit-type/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/responsible-unit-type/{inventoryOrderId}": {
       "get": {
         "summary": "Тип ответственного подразделения (фильтр)",
         "tags": [
-          "Inventorization - Dictionary"
+          "Inventory - Dictionary"
         ],
         "parameters": [
           {
@@ -4291,7 +4291,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
                 }
               }
             }
@@ -4299,11 +4299,11 @@
         }
       }
     },
-    "/api/v1/inventorization/dictionary/filters/inventory-status/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/inventory-status/{inventoryOrderId}": {
       "get": {
         "summary": "Статус инвентаризации (фильтр)",
         "tags": [
-          "Inventorization - Dictionary"
+          "Inventory - Dictionary"
         ],
         "parameters": [
           {
@@ -4323,7 +4323,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
                 }
               }
             }
@@ -4331,11 +4331,11 @@
         }
       }
     },
-    "/api/v1/inventorization/dictionary/filters/source-bank/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/source-bank/{inventoryOrderId}": {
       "get": {
         "summary": "Банк-источник (фильтр)",
         "tags": [
-          "Inventorization - Dictionary"
+          "Inventory - Dictionary"
         ],
         "parameters": [
           {
@@ -4355,7 +4355,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
                 }
               }
             }
@@ -4363,11 +4363,11 @@
         }
       }
     },
-    "/api/v1/inventorization/dictionary/filters/product/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/product/{inventoryOrderId}": {
       "get": {
         "summary": "Продукт (фильтр)",
         "tags": [
-          "Inventorization - Dictionary"
+          "Inventory - Dictionary"
         ],
         "parameters": [
           {
@@ -4387,7 +4387,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
                 }
               }
             }
@@ -4395,11 +4395,11 @@
         }
       }
     },
-    "/api/v1/inventorization/dictionary/filters/manual-control-rule-number/{inventoryOrderId}": {
+    "/api/v1/inventory/dictionary/filters/manual-control-rule-number/{inventoryOrderId}": {
       "get": {
         "summary": "Номер правила ручного контроля (фильтр)",
         "tags": [
-          "Inventorization - Dictionary"
+          "Inventory - Dictionary"
         ],
         "parameters": [
           {
@@ -4419,7 +4419,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationDictionaryListResponseDto"
+                  "$ref": "#/components/schemas/InventoryDictionaryListResponseDto"
                 }
               }
             }
@@ -4427,17 +4427,17 @@
         }
       }
     },
-    "/api/v1/inventorization/accounts/list": {
+    "/api/v1/inventory/accounts/list": {
       "post": {
         "summary": "Список счетов инвентаризации (пагинация, сортировка, фильтры)",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationGetAccountsListRequestDto"
+                "$ref": "#/components/schemas/InventoryGetAccountsListRequestDto"
               }
             }
           }
@@ -4448,7 +4448,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationAccountsListResponseDto"
+                  "$ref": "#/components/schemas/InventoryAccountsListResponseDto"
                 }
               }
             }
@@ -4456,11 +4456,11 @@
         }
       }
     },
-    "/api/v1/inventorization/accounts/columns": {
+    "/api/v1/inventory/accounts/columns": {
       "get": {
         "summary": "Колонки таблицы счетов",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "responses": {
           "200": {
@@ -4468,7 +4468,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationAccountColumnsResponseDto"
+                  "$ref": "#/components/schemas/InventoryAccountColumnsResponseDto"
                 }
               }
             }
@@ -4478,13 +4478,13 @@
       "post": {
         "summary": "Сохранить настройки колонок",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationAccountColumnsUpdateDto"
+                "$ref": "#/components/schemas/InventoryAccountColumnsUpdateDto"
               }
             }
           }
@@ -4495,7 +4495,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationAccountColumnsResponseDto"
+                  "$ref": "#/components/schemas/InventoryAccountColumnsResponseDto"
                 }
               }
             }
@@ -4503,17 +4503,17 @@
         }
       }
     },
-    "/api/v1/inventorization/accounts/export": {
+    "/api/v1/inventory/accounts/export": {
       "post": {
         "summary": "Экспорт реестра счетов",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationAccountsExportRequestDto"
+                "$ref": "#/components/schemas/InventoryAccountsExportRequestDto"
               }
             }
           }
@@ -4524,7 +4524,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationAccountsExportResponseDto"
+                  "$ref": "#/components/schemas/InventoryAccountsExportResponseDto"
                 }
               }
             }
@@ -4532,17 +4532,17 @@
         }
       }
     },
-    "/api/v1/inventorization/accounts/inventory": {
+    "/api/v1/inventory/accounts/inventory": {
       "post": {
         "summary": "Включить счета в инвентаризацию",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationAccountsInventoryRequestDto"
+                "$ref": "#/components/schemas/InventoryAccountsInventoryRequestDto"
               }
             }
           }
@@ -4553,7 +4553,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationAccountsInventoryMutationResponseDto"
+                  "$ref": "#/components/schemas/InventoryAccountsInventoryMutationResponseDto"
                 }
               }
             }
@@ -4561,17 +4561,17 @@
         }
       }
     },
-    "/api/v1/inventorization/accounts/inventory/exclude": {
+    "/api/v1/inventory/accounts/inventory/exclude": {
       "post": {
         "summary": "Исключить счета из инвентаризации",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationAccountsInventoryExcludeRequestDto"
+                "$ref": "#/components/schemas/InventoryAccountsInventoryExcludeRequestDto"
               }
             }
           }
@@ -4582,7 +4582,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationAccountsInventoryMutationResponseDto"
+                  "$ref": "#/components/schemas/InventoryAccountsInventoryMutationResponseDto"
                 }
               }
             }
@@ -4590,17 +4590,17 @@
         }
       }
     },
-    "/api/v1/inventorization/accounts/manual-unit/bulk": {
+    "/api/v1/inventory/accounts/manual-unit/bulk": {
       "post": {
         "summary": "Ручной учёт: массовая операция",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationManualUnitBulkRequestDto"
+                "$ref": "#/components/schemas/InventoryManualUnitBulkRequestDto"
               }
             }
           }
@@ -4611,7 +4611,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationManualUnitResponseDto"
+                  "$ref": "#/components/schemas/InventoryManualUnitResponseDto"
                 }
               }
             }
@@ -4619,17 +4619,17 @@
         }
       }
     },
-    "/api/v1/inventorization/accounts/manual-unit/{accountSurrogateId}": {
+    "/api/v1/inventory/accounts/manual-unit/{accountSurrogateId}": {
       "post": {
         "summary": "Ручной учёт: одна запись (accountSurrogateId в URL)",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationManualUnitSingleRequestDto"
+                "$ref": "#/components/schemas/InventoryManualUnitSingleRequestDto"
               }
             }
           }
@@ -4652,7 +4652,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationManualUnitResponseDto"
+                  "$ref": "#/components/schemas/InventoryManualUnitResponseDto"
                 }
               }
             }
@@ -4660,11 +4660,11 @@
         }
       }
     },
-    "/api/v1/inventorization/accounts/surrogate/{accountSurrogateId}/history": {
+    "/api/v1/inventory/accounts/surrogate/{accountSurrogateId}/history": {
       "get": {
         "summary": "История изменений по surrogate id счёта",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "parameters": [
           {
@@ -4684,7 +4684,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationAccountHistoryResponseDto"
+                  "$ref": "#/components/schemas/InventoryAccountHistoryResponseDto"
                 }
               }
             }
@@ -4692,11 +4692,11 @@
         }
       }
     },
-    "/api/v1/inventorization/accounts/{id}": {
+    "/api/v1/inventory/accounts/{id}": {
       "get": {
         "summary": "Деталь счёта по id",
         "tags": [
-          "Inventorization - Accounts"
+          "Inventory - Accounts"
         ],
         "parameters": [
           {
@@ -4716,7 +4716,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationAccountDetailDto"
+                  "$ref": "#/components/schemas/InventoryAccountDetailDto"
                 }
               }
             }
@@ -4724,17 +4724,17 @@
         }
       }
     },
-    "/api/v1/inventorization/statistics/export": {
+    "/api/v1/inventory/statistics/export": {
       "post": {
         "summary": "Экспорт статистики инвентаризации",
         "tags": [
-          "Inventorization - Statistics"
+          "Inventory - Statistics"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventorizationStatisticsExportRequestDto"
+                "$ref": "#/components/schemas/InventoryStatisticsExportRequestDto"
               }
             }
           }
@@ -4745,7 +4745,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationStatisticsExportResponseDto"
+                  "$ref": "#/components/schemas/InventoryStatisticsExportResponseDto"
                 }
               }
             }
@@ -4753,11 +4753,11 @@
         }
       }
     },
-    "/api/v1/inventorization/inventory/state": {
+    "/api/v1/inventory/inventory/state": {
       "get": {
         "summary": "Состояние процесса инвентаризации",
         "tags": [
-          "Inventorization"
+          "Inventory"
         ],
         "parameters": [
           {
@@ -4777,7 +4777,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventorizationInventoryStateResponseDto"
+                  "$ref": "#/components/schemas/InventoryInventoryStateResponseDto"
                 }
               }
             }
@@ -4822,19 +4822,19 @@
       "description": "Мониторинг хранилища отчётов"
     },
     {
-      "name": "Inventorization",
+      "name": "Inventory",
       "description": "Инвентаризация (uaod-si-inventory, API-28)"
     },
     {
-      "name": "Inventorization - Dictionary",
+      "name": "Inventory - Dictionary",
       "description": "Словари фильтров инвентаризации"
     },
     {
-      "name": "Inventorization - Accounts",
+      "name": "Inventory - Accounts",
       "description": "Счета инвентаризации"
     },
     {
-      "name": "Inventorization - Statistics",
+      "name": "Inventory - Statistics",
       "description": "Статистика инвентаризации"
     }
   ]

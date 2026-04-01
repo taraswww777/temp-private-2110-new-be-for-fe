@@ -1,10 +1,10 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { report6406Routes } from './report-6406/index.ts';
-import { inventorizationRoutes } from './inventorization/index.ts';
+import { inventoryRoutes } from './inventory/index.ts';
 
 export const v1Routes: FastifyPluginAsync = async (fastify) => {
   // API для формы отчётности 6406
   await fastify.register(report6406Routes, { prefix: '/report-6406' });
   // Инвентаризация (front API-28)
-  await fastify.register(inventorizationRoutes, { prefix: '/inventorization' });
+  await fastify.register(inventoryRoutes, { prefix: '/inventory' });
 };
