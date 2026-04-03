@@ -1,7 +1,6 @@
 import type { OpenApiSchemaRegistry } from '../report-6406/openapi-register.ts';
 import { registerInventoryEnumsOpenApiSchemas } from './enums/openapi-register.ts';
 import {
-  getInventoryOrdersListRequestSchema,
   inventoryOrdersListResponseSchema,
   createInventoryOrderSchema,
   updateInventoryOrderSchema,
@@ -59,7 +58,6 @@ export function registerInventoryOpenApiSchemas(registry: OpenApiSchemaRegistry)
   registerInventoryEnumsOpenApiSchemas(registry);
 
   registry.add(inventoryOrderListItemSchema, { id: 'InventoryOrderListItemDto' });
-  registry.add(getInventoryOrdersListRequestSchema, { id: 'InventoryGetOrdersListRequestDto' });
   registry.add(inventoryOrdersListResponseSchema, { id: 'InventoryOrdersListResponseDto' });
   registry.add(createInventoryOrderSchema, { id: 'InventoryCreateOrderDto' });
   registry.add(updateInventoryOrderSchema, { id: 'InventoryUpdateOrderDto' });

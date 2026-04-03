@@ -2,7 +2,6 @@ import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   createInventoryOrderSchema,
-  getInventoryOrdersListRequestSchema,
   inventoryOrderMutationResponseSchema,
   inventoryOrdersListResponseSchema,
   updateInventoryOrderSchema,
@@ -11,30 +10,29 @@ import {
 export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
-  app.post('/list', {
+  app.get('/', {
     schema: {
-      tags: ['Inventory'],
-      summary: 'Список приказов инвентаризации (пагинация, сортировка)',
-      body: getInventoryOrdersListRequestSchema,
+      tags: ['Inventory - Orders'],
+      summary: 'Список приказов инвентаризации',
       response: { 200: inventoryOrdersListResponseSchema },
     },
-  }, async (_request, reply) => reply.status(200).send({ items: [], totalItems: 0 }));
+  }, async (_request, reply) => reply.status(200).send([]));
 
   app.post('/new', {
     schema: {
-      tags: ['Inventory'],
+      tags: ['Inventory - Orders'],
       summary: 'Создать приказ инвентаризации',
       body: createInventoryOrderSchema,
       response: { 200: inventoryOrderMutationResponseSchema },
     },
-  }, async (_request, reply) => reply.status(200).send({ id: 1 }));
+  }, async (_request, reply) => reply.status(200).send({ invertoryOrderId: String(1) }));
 
   app.post('/update', {
     schema: {
-      tags: ['Inventory'],
+      tags: ['Inventory - Orders'],
       summary: 'Обновить приказ инвентаризации',
       body: updateInventoryOrderSchema,
       response: { 200: inventoryOrderMutationResponseSchema },
     },
-  }, async (_request, reply) => reply.status(200).send({ id: 1 }));
+  }, async (_request, reply) => reply.status(200).send({ invertoryOrderId: String(1) }));
 };
