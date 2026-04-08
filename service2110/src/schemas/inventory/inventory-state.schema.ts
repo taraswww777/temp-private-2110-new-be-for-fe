@@ -1,16 +1,20 @@
 import { z } from 'zod';
 
-import { zIdSchema } from '../common/id.schema.ts';
 import { inventoryProcessStatusSchema } from './enums/InventoryProcessStatusEnum.ts';
+import { dateSchema } from '../common/dateString.schema.ts';
 
 export const inventoryInventoryStateQuerySchema = z.object({
-  inventoryOrderId: zIdSchema.optional(),
+  inventoryOrderId: z.string().optional(),
 });
 
 export { inventoryProcessStatusSchema };
 
 export const inventoryInventoryStateResponseSchema = z.object({
+  inventoryOrderId: z.string().optional(),
+  orderNumber: z.string().optional(),
+  orderDate: dateSchema.optional(),
+  inventoryDateFrom: dateSchema.optional(),
+  inventoryDateTo: dateSchema.optional(),
+  isActive: z.boolean().optional(),
   status: inventoryProcessStatusSchema.optional(),
-  progressPercent: z.number().min(0).max(100).optional(),
-  orderDataFilled: z.boolean().optional().describe('Заполнены данными приказа'),
 });

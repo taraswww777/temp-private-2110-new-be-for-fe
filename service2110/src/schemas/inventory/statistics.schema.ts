@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 import { zIdSchema } from '../common/id.schema.ts';
-import { inventoryAccountsListFilterSchema } from './accounts.schema.ts';
 
-export const inventoryStatisticsExportRequestSchema = z.object({
-  filter: inventoryAccountsListFilterSchema,
-  inventoryOrderId: zIdSchema.optional(),
-  format: z.enum(['xlsx', 'csv']).optional(),
+export const inventoryStatisticsFilterSchema = z.object({
+  bs2: z.array(zIdSchema).optional().describe("БС-2 (массив int)"),
+  responsibleUnit: z.array(z.string()).optional(),
+  responsibleUnitType: z.array(z.string()).optional(),
+  productName: z.array(z.string()).optional(),
 });
 
-export const inventoryStatisticsExportResponseSchema = z.object({
-  fileKey: z.string().optional(),
+export const inventoryStatisticsExportRequestSchema = z.object({
+  filter: inventoryStatisticsFilterSchema,
 });

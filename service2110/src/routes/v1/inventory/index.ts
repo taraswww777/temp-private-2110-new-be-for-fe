@@ -10,5 +10,5 @@ export const inventoryRoutes: FastifyPluginAsync = async (fastify) => {
   await fastify.register(inventoryDictionaryRoutes, { prefix: '/dictionary' });
   await fastify.register(inventoryAccountsRoutes, { prefix: '/accounts' });
   await fastify.register(inventoryStatisticsRoutes, { prefix: '/statistics' });
-  await fastify.register(inventoryInventoryStateRoutes, { prefix: '/inventory' });
+  await fastify.register(inventoryInventoryStateRoutes, { prefix: '/' });
 };
