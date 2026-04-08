@@ -2145,7 +2145,8 @@
           "orderNumber",
           "orderDate",
           "inventoryDateFrom",
-          "inventoryDateTo"
+          "inventoryDateTo",
+          "orderFile"
         ],
         "additionalProperties": false
       },
@@ -2176,7 +2177,8 @@
           "orderNumber",
           "orderDate",
           "inventoryDateFrom",
-          "inventoryDateTo"
+          "inventoryDateTo",
+          "orderFile"
         ],
         "additionalProperties": false
       },
@@ -2402,24 +2404,6 @@
       "InventoryAccountsListFilterDto": {
         "type": "object",
         "properties": {
-          "inventoryOrderId": {
-            "description": "ИД приказа инвентаризации",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "accountSurrogateId": {
-            "description": "Суррогатный ключ счёта",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "accountTypeId": {
-            "description": "Тип счёта (одиночный id)",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
           "bs2": {
             "description": "БС-2 (массив int)",
             "type": "array",
@@ -2485,6 +2469,9 @@
           },
           "showZeroBalanceAccounts": {
             "type": "boolean"
+          },
+          "isExclude": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false,
@@ -2527,7 +2514,6 @@
         },
         "required": [
           "pagination",
-          "sorting",
           "filter"
         ],
         "additionalProperties": false
@@ -2558,19 +2544,13 @@
       "InventoryAccountListItemDto": {
         "type": "object",
         "properties": {
-          "id": {
+          "accountId": {
             "type": "integer",
             "minimum": 1,
             "maximum": 9007199254740991,
-            "description": "ИД записи в реестре"
+            "description": "ID счета"
           },
-          "accountSurrogateId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Суррогатный ключ счёта (DOC: accountSurrogateKey)"
-          },
-          "accountNumber": {
+          "accountNum": {
             "description": "Номер счёта (DOC: accountNum)",
             "type": "string"
           },
@@ -2589,7 +2569,7 @@
           "agreementNum": {
             "type": "string"
           },
-          "originalUnit": {
+          "originalResponsibleUnit": {
             "type": "string"
           },
           "bs2": {
@@ -2677,287 +2657,29 @@
           "resolutionDate": {
             "$ref": "#/components/schemas/DateSchema"
           },
-          "manualUnit": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "description": "Для сортировки списка",
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-          }
-        },
-        "required": [
-          "id",
-          "accountSurrogateId"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryAccountDetailDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД записи в реестре"
-          },
-          "accountSurrogateId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Суррогатный ключ счёта (DOC: accountSurrogateKey)"
-          },
-          "accountNumber": {
-            "description": "Номер счёта (DOC: accountNum)",
-            "type": "string"
-          },
-          "accountOpenDate": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "accountType": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "clientName": {
-            "type": "string"
-          },
-          "agreementNum": {
-            "type": "string"
-          },
-          "originalUnit": {
-            "type": "string"
-          },
-          "bs2": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "accountName": {
-            "type": "string"
-          },
-          "lastOperationDate": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "agreementStatus": {
-            "type": "string"
-          },
-          "accountOutRubSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
-          },
-          "accountOutSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
-          },
-          "productCode": {
-            "type": "string"
-          },
-          "productName": {
-            "type": "string"
-          },
-          "manualControlRuleNumber": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "manualControlFlag": {
-            "type": "boolean"
-          },
-          "inventoryAccountStatus": {
-            "type": "string"
-          },
-          "reversedDebitSumRub": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
-          },
-          "reversedDebitSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
-          },
-          "reversedCreditSumRub": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
-          },
-          "reversedCreditSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
-          },
-          "sourceBank": {
-            "type": "string"
-          },
-          "dataDate": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "currencyIsoCode": {
-            "type": "string"
-          },
-          "clientInn": {
-            "type": "string"
-          },
-          "discrepancyDescription": {
-            "type": "string"
-          },
-          "discrepancySum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
-          },
-          "discrepancyReason": {
-            "type": "string"
-          },
-          "resolutionActions": {
-            "type": "string"
-          },
-          "resolutionDate": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "manualUnit": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "description": "Для сортировки списка",
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-          }
-        },
-        "required": [
-          "id",
-          "accountSurrogateId"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryAccountHistoryItemDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "accountSurrogateId": {
-            "description": "Суррогат счёта (DOC)",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "changedAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-          },
-          "changedBy": {
-            "type": "string"
-          },
-          "fieldName": {
-            "type": "string"
-          },
-          "oldValue": {
-            "type": "string"
-          },
-          "newValue": {
-            "type": "string"
-          },
-          "action": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "changedAt"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryAccountHistoryResponseDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InventoryAccountHistoryItemDto"
-            }
-          }
-        },
-        "required": [
-          "items"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryManualUnitBulkRequestDto": {
-        "type": "object",
-        "properties": {
-          "accountSurrogateIds": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            }
-          },
           "manualResponsibleUnit": {
             "type": "string"
           },
-          "force": {
+          "isCriticalUpdated": {
             "type": "boolean"
-          }
-        },
-        "required": [
-          "accountSurrogateIds"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryManualUnitSingleRequestDto": {
-        "type": "object",
-        "properties": {
-          "manualResponsibleUnit": {
-            "type": "string"
           },
-          "force": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "InventoryManualUnitResponseDto": {
-        "type": "object",
-        "properties": {
-          "updated": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991
-          }
-        },
-        "required": [
-          "updated"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryAccountsInventoryRequestDto": {
-        "type": "object",
-        "properties": {
-          "inventoryOrderId": {
+          "version": {
             "type": "integer",
             "minimum": 1,
             "maximum": 9007199254740991,
             "description": "Integer ID"
-          },
-          "accountSurrogateIds": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            },
-            "description": "DOC: accountSurrogateKeys"
+          }
+        },
+        "required": [
+          "accountId"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountStatusDto": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string"
           },
           "manualInventoryAccountStatus": {
             "type": "string"
@@ -2977,24 +2699,192 @@
           },
           "resolutionDate": {
             "$ref": "#/components/schemas/DateSchema"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
           }
         },
         "required": [
-          "inventoryOrderId",
-          "accountSurrogateIds"
+          "accountId",
+          "manualInventoryAccountStatus"
         ],
         "additionalProperties": false
       },
-      "InventoryAccountsInventoryExcludeRequestDto": {
+      "InventoryAccountDetailDto": {
         "type": "object",
         "properties": {
-          "inventoryOrderId": {
+          "accountId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ID счета"
+          },
+          "accountNum": {
+            "description": "Номер счёта (DOC: accountNum)",
+            "type": "string"
+          },
+          "accountOpenDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "accountType": {
             "type": "integer",
             "minimum": 1,
             "maximum": 9007199254740991,
             "description": "Integer ID"
           },
-          "accountSurrogateIds": {
+          "clientName": {
+            "type": "string"
+          },
+          "agreementNum": {
+            "type": "string"
+          },
+          "originalResponsibleUnit": {
+            "type": "string"
+          },
+          "bs2": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "accountName": {
+            "type": "string"
+          },
+          "lastOperationDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "agreementStatus": {
+            "type": "string"
+          },
+          "accountOutRubSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "accountOutSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "productCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "manualControlRuleNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "manualControlFlag": {
+            "type": "boolean"
+          },
+          "inventoryAccountStatus": {
+            "type": "string"
+          },
+          "reversedDebitSumRub": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "reversedDebitSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "reversedCreditSumRub": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "reversedCreditSum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "sourceBank": {
+            "type": "string"
+          },
+          "dataDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "currencyIsoCode": {
+            "type": "string"
+          },
+          "clientInn": {
+            "type": "string"
+          },
+          "discrepancyDescription": {
+            "type": "string"
+          },
+          "discrepancySum": {
+            "type": "string",
+            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+          },
+          "discrepancyReason": {
+            "type": "string"
+          },
+          "resolutionActions": {
+            "type": "string"
+          },
+          "resolutionDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "manualResponsibleUnit": {
+            "type": "string"
+          },
+          "isCriticalUpdated": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          }
+        },
+        "required": [
+          "accountId"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountHistoryItemDto": {
+        "type": "object",
+        "properties": {
+          "changeDate": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "changedBy": {
+            "type": "string"
+          },
+          "fieldName": {
+            "type": "string"
+          },
+          "oldValue": {
+            "type": "string"
+          },
+          "newValue": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "changeDate",
+          "changedBy",
+          "fieldName",
+          "oldValue",
+          "newValue"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountHistoryResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryAccountHistoryItemDto"
+        }
+      },
+      "InventoryManualUnitRequestDto": {
+        "type": "object",
+        "properties": {
+          "accountId": {
             "minItems": 1,
             "type": "array",
             "items": {
@@ -3003,68 +2893,93 @@
               "maximum": 9007199254740991,
               "description": "Integer ID"
             }
+          },
+          "manualResponsibleUnit": {
+            "type": "string"
+          },
+          "force": {
+            "type": "boolean"
           }
         },
         "required": [
-          "inventoryOrderId",
-          "accountSurrogateIds"
+          "accountId"
         ],
         "additionalProperties": false
       },
-      "InventoryAccountsInventoryMutationResponseDto": {
+      "InventoryAccountsInventoryExcludeRequestDto": {
         "type": "object",
         "properties": {
-          "affected": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991
+          "accountId": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          },
+          "isExclude": {
+            "type": "boolean"
           }
         },
         "required": [
-          "affected"
+          "accountId",
+          "isExclude"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountsInventoryIncludeResponseDto": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          },
+          "isInclude": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "accountId",
+          "isInclude"
         ],
         "additionalProperties": false
       },
       "InventoryAccountColumnDto": {
         "type": "object",
         "properties": {
-          "key": {
-            "type": "string"
-          },
-          "label": {
+          "column": {
             "type": "string"
           },
           "isVisible": {
             "type": "boolean"
-          },
-          "visible": {
-            "type": "boolean"
           }
         },
         "required": [
-          "key",
-          "label"
+          "column",
+          "isVisible"
         ],
         "additionalProperties": false
       },
       "InventoryAccountColumnsResponseDto": {
-        "type": "object",
-        "properties": {
-          "columns": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InventoryAccountColumnDto"
-            }
-          }
-        },
-        "required": [
-          "columns"
-        ],
-        "additionalProperties": false
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryAccountColumnDto"
+        }
       },
       "InventoryAccountColumnsUpdateDto": {
         "type": "object",
         "properties": {
+          "tableName": {
+            "type": "string"
+          },
           "columns": {
             "type": "array",
             "items": {
@@ -3073,6 +2988,7 @@
           }
         },
         "required": [
+          "tableName",
           "columns"
         ],
         "additionalProperties": false
@@ -3080,8 +2996,7 @@
       "InventoryAccountsExportRequestDto": {
         "type": "object",
         "properties": {
-          "accountSurrogateIds": {
-            "description": "DOC: accountSurrogateKeys",
+          "accountIds": {
             "type": "array",
             "items": {
               "type": "integer",
@@ -3092,31 +3007,6 @@
           },
           "filter": {
             "$ref": "#/components/schemas/InventoryAccountsListFilterDto"
-          },
-          "inventoryOrderId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "format": {
-            "type": "string",
-            "enum": [
-              "xlsx",
-              "csv"
-            ]
-          }
-        },
-        "required": [
-          "filter"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryAccountsExportResponseDto": {
-        "type": "object",
-        "properties": {
-          "fileKey": {
-            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4508,7 +4398,7 @@
         }
       }
     },
-    "/api/v1/inventory/accounts/list": {
+    "/api/v1/inventory/accounts": {
       "post": {
         "summary": "Список счетов инвентаризации (пагинация, сортировка, фильтры)",
         "tags": [
@@ -4537,11 +4427,247 @@
         }
       }
     },
+    "/api/v1/inventory/accounts/{accountId}": {
+      "get": {
+        "summary": "Деталь счёта по accountId",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "accountId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/inventory-status/{accountId}": {
+      "get": {
+        "summary": "Запрос данных о статусе и параметрах инвентаризации для конкретного счета",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "accountId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountStatusDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/inventory-status": {
+      "put": {
+        "summary": "Установка статуса и параметров инвентаризации счета",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/manual-unit": {
+      "put": {
+        "summary": "Изменение поля \"Ответственное подразделение, проставленное вручную\"",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryManualUnitRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/inventory/exclude": {
+      "put": {
+        "summary": "Исключить счета из инвентаризации",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountsInventoryExcludeRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/inventory/include": {
+      "put": {
+        "summary": "Включить счета в инвентаризацию",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountsInventoryIncludeResponseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/{accountId}/history": {
+      "get": {
+        "summary": "История изменений конкретного счета",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "accountId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountHistoryResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/inventory/accounts/columns": {
       "get": {
         "summary": "Колонки таблицы счетов",
         "tags": [
           "Inventory - Accounts"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "tableName",
+            "required": true
+          }
         ],
         "responses": {
           "200": {
@@ -4556,7 +4682,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Сохранить настройки колонок",
         "tags": [
           "Inventory - Accounts"
@@ -4605,199 +4731,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryAccountsExportResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/inventory/accounts/inventory": {
-      "post": {
-        "summary": "Включить счета в инвентаризацию",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryAccountsInventoryRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryAccountsInventoryMutationResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/inventory/accounts/inventory/exclude": {
-      "post": {
-        "summary": "Исключить счета из инвентаризации",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryAccountsInventoryExcludeRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryAccountsInventoryMutationResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/inventory/accounts/manual-unit/bulk": {
-      "post": {
-        "summary": "Ручной учёт: массовая операция",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryManualUnitBulkRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryManualUnitResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/inventory/accounts/manual-unit/{accountSurrogateId}": {
-      "post": {
-        "summary": "Ручной учёт: одна запись (accountSurrogateId в URL)",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryManualUnitSingleRequestDto"
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            },
-            "in": "path",
-            "name": "accountSurrogateId",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryManualUnitResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/inventory/accounts/surrogate/{accountSurrogateId}/history": {
-      "get": {
-        "summary": "История изменений по surrogate id счёта",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "parameters": [
-          {
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            },
-            "in": "path",
-            "name": "accountSurrogateId",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryAccountHistoryResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/inventory/accounts/{id}": {
-      "get": {
-        "summary": "Деталь счёта по id",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "parameters": [
-          {
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            },
-            "in": "path",
-            "name": "id",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryAccountDetailDto"
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
                 }
               }
             }
