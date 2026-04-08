@@ -3011,24 +3011,45 @@
         },
         "additionalProperties": false
       },
+      "InventoryStatisticsFilterDto": {
+        "type": "object",
+        "properties": {
+          "bs2": {
+            "description": "БС-2 (массив int)",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          },
+          "responsibleUnit": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "responsibleUnitType": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "productName": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "InventoryStatisticsExportRequestDto": {
         "type": "object",
         "properties": {
           "filter": {
-            "$ref": "#/components/schemas/InventoryAccountsListFilterDto"
-          },
-          "inventoryOrderId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "format": {
-            "type": "string",
-            "enum": [
-              "xlsx",
-              "csv"
-            ]
+            "$ref": "#/components/schemas/InventoryStatisticsFilterDto"
           }
         },
         "required": [
@@ -3036,29 +3057,29 @@
         ],
         "additionalProperties": false
       },
-      "InventoryStatisticsExportResponseDto": {
-        "type": "object",
-        "properties": {
-          "fileKey": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
       "InventoryInventoryStateResponseDto": {
         "type": "object",
         "properties": {
+          "inventoryOrderId": {
+            "type": "string"
+          },
+          "orderNumber": {
+            "type": "string"
+          },
+          "orderDate": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateFrom": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "inventoryDateTo": {
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
           "status": {
             "$ref": "#/components/schemas/InventoryProcessStatusEnum"
-          },
-          "progressPercent": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 100
-          },
-          "orderDataFilled": {
-            "description": "Заполнены данными приказа",
-            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -4764,7 +4785,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryStatisticsExportResponseDto"
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
                 }
               }
             }
@@ -4772,18 +4797,16 @@
         }
       }
     },
-    "/api/v1/inventory/inventory/state": {
+    "/api/v1/inventory/state": {
       "get": {
-        "summary": "Состояние процесса инвентаризации",
+        "summary": "Статус процесса инвентаризации",
         "tags": [
           "Inventory"
         ],
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "type": "string"
             },
             "in": "query",
             "name": "inventoryOrderId",

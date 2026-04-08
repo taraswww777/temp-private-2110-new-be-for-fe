@@ -11,7 +11,7 @@ export const inventoryInventoryStateRoutes: FastifyPluginAsync = async (fastify)
   app.get('/state', {
     schema: {
       tags: ['Inventory'],
-      summary: 'Состояние процесса инвентаризации',
+      summary: 'Статус процесса инвентаризации',
       querystring: inventoryInventoryStateQuerySchema,
       response: { 200: inventoryInventoryStateResponseSchema },
     },

@@ -44,7 +44,7 @@ import {
 } from './accounts.schema.ts';
 import {
   inventoryStatisticsExportRequestSchema,
-  inventoryStatisticsExportResponseSchema,
+  inventoryStatisticsFilterSchema,
 } from './statistics.schema.ts';
 import { inventoryInventoryStateResponseSchema } from './inventory-state.schema.ts';
 
@@ -93,8 +93,8 @@ export function registerInventoryOpenApiSchemas(registry: OpenApiSchemaRegistry)
   registry.add(inventoryAccountColumnsUpdateSchema, { id: 'InventoryAccountColumnsUpdateDto' });
   registry.add(inventoryAccountsExportRequestSchema, { id: 'InventoryAccountsExportRequestDto' });
 
+  registry.add(inventoryStatisticsFilterSchema, { id: 'InventoryStatisticsFilterDto' });
   registry.add(inventoryStatisticsExportRequestSchema, { id: 'InventoryStatisticsExportRequestDto' });
-  registry.add(inventoryStatisticsExportResponseSchema, { id: 'InventoryStatisticsExportResponseDto' });
 
   registry.add(inventoryInventoryStateResponseSchema, { id: 'InventoryInventoryStateResponseDto' });
 }
