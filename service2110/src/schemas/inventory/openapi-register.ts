@@ -33,17 +33,14 @@ import {
   inventoryAccountListItemSchema,
   inventoryAccountHistoryItemSchema,
   inventoryAccountHistoryResponseSchema,
-  inventoryManualUnitBulkRequestSchema,
-  inventoryManualUnitSingleRequestSchema,
-  inventoryManualUnitResponseSchema,
-  inventoryAccountsInventoryRequestSchema,
+  inventoryManualUnitRequestSchema,
   inventoryAccountsInventoryExcludeRequestSchema,
-  inventoryAccountsInventoryMutationResponseSchema,
   inventoryAccountColumnSchema,
   inventoryAccountColumnsResponseSchema,
   inventoryAccountColumnsUpdateSchema,
   inventoryAccountsExportRequestSchema,
-  inventoryAccountsExportResponseSchema,
+  inventoryAccountStatusSchema,
+  inventoryAccountsInventoryIncludeRequestSchema,
 } from './accounts.schema.ts';
 import {
   inventoryStatisticsExportRequestSchema,
@@ -84,20 +81,17 @@ export function registerInventoryOpenApiSchemas(registry: OpenApiSchemaRegistry)
   registry.add(getInventoryAccountsListRequestSchema, { id: 'InventoryGetAccountsListRequestDto' });
   registry.add(inventoryAccountsListResponseSchema, { id: 'InventoryAccountsListResponseDto' });
   registry.add(inventoryAccountListItemSchema, { id: 'InventoryAccountListItemDto' });
+  registry.add(inventoryAccountStatusSchema, { id: 'InventoryAccountStatusDto' });
   registry.add(inventoryAccountDetailSchema, { id: 'InventoryAccountDetailDto' });
   registry.add(inventoryAccountHistoryItemSchema, { id: 'InventoryAccountHistoryItemDto' });
   registry.add(inventoryAccountHistoryResponseSchema, { id: 'InventoryAccountHistoryResponseDto' });
-  registry.add(inventoryManualUnitBulkRequestSchema, { id: 'InventoryManualUnitBulkRequestDto' });
-  registry.add(inventoryManualUnitSingleRequestSchema, { id: 'InventoryManualUnitSingleRequestDto' });
-  registry.add(inventoryManualUnitResponseSchema, { id: 'InventoryManualUnitResponseDto' });
-  registry.add(inventoryAccountsInventoryRequestSchema, { id: 'InventoryAccountsInventoryRequestDto' });
+  registry.add(inventoryManualUnitRequestSchema, { id: 'InventoryManualUnitRequestDto' });
   registry.add(inventoryAccountsInventoryExcludeRequestSchema, { id: 'InventoryAccountsInventoryExcludeRequestDto' });
-  registry.add(inventoryAccountsInventoryMutationResponseSchema, { id: 'InventoryAccountsInventoryMutationResponseDto' });
+  registry.add(inventoryAccountsInventoryIncludeRequestSchema, { id: 'InventoryAccountsInventoryIncludeResponseDto' });
   registry.add(inventoryAccountColumnSchema, { id: 'InventoryAccountColumnDto' });
   registry.add(inventoryAccountColumnsResponseSchema, { id: 'InventoryAccountColumnsResponseDto' });
   registry.add(inventoryAccountColumnsUpdateSchema, { id: 'InventoryAccountColumnsUpdateDto' });
   registry.add(inventoryAccountsExportRequestSchema, { id: 'InventoryAccountsExportRequestDto' });
-  registry.add(inventoryAccountsExportResponseSchema, { id: 'InventoryAccountsExportResponseDto' });
 
   registry.add(inventoryStatisticsExportRequestSchema, { id: 'InventoryStatisticsExportRequestDto' });
   registry.add(inventoryStatisticsExportResponseSchema, { id: 'InventoryStatisticsExportResponseDto' });

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { sortOrderSchema } from '../common/SortOrderEnum.ts';
-import { dateSchema } from '../common/dateString.schema.ts';
+import { dateSchema, dateTimeSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
@@ -27,9 +27,6 @@ export const inventoryAccountsListSortingSchema = z.object({
  * Имена и типы по «Описание front-API-28»; массивы — множественный выбор.
  */
 export const inventoryAccountsListFilterSchema = z.object({
-  inventoryOrderId: zIdSchema.optional().describe('ИД приказа инвентаризации'),
-  accountSurrogateId: zIdSchema.optional().describe('Суррогатный ключ счёта'),
-  accountTypeId: zIdSchema.optional().describe('Тип счёта (одиночный id)'),
   bs2: z.array(zIdSchema).optional().describe('БС-2 (массив int)'),
   accountNum: z.string().optional().describe('Номер счёта (accountNum в DOC)'),
   accountType: z.array(zIdSchema).optional().describe('Типы счёта (массив)'),
@@ -40,12 +37,13 @@ export const inventoryAccountsListFilterSchema = z.object({
   productName: z.array(z.string()).optional(),
   manualControlRuleNumber: z.array(zIdSchema).optional(),
   showZeroBalanceAccounts: z.boolean().optional(),
+  isExclude: z.boolean().optional(),
 }).describe('Фильтр для списка счетов');
 
 /** Тело POST …/accounts/list — как `getTasksRequestSchema` в report-6406. */
 export const getInventoryAccountsListRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
-  sorting: inventoryAccountsListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
+  sorting: inventoryAccountsListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)').optional(),
   filter: inventoryAccountsListFilterSchema,
 });
 
@@ -54,14 +52,13 @@ export const getInventoryAccountsListRequestSchema = z.object({
  * `accountSurrogateKey` → `accountSurrogateId`, `accountNum` → `accountNumber`.
  */
 export const inventoryAccountRowSchema = z.object({
-  id: zIdSchema.describe('ИД записи в реестре'),
-  accountSurrogateId: zIdSchema.describe('Суррогатный ключ счёта (DOC: accountSurrogateKey)'),
-  accountNumber: z.string().optional().describe('Номер счёта (DOC: accountNum)'),
+  accountId: zIdSchema.describe('ID счета'),
+  accountNum: z.string().optional().describe('Номер счёта (DOC: accountNum)'),
   accountOpenDate: dateSchema.optional(),
   accountType: zIdSchema.optional(),
   clientName: z.string().optional(),
   agreementNum: z.string().optional(),
-  originalUnit: z.string().optional(),
+  originalResponsibleUnit: z.string().optional(),
   bs2: zIdSchema.optional(),
   accountName: z.string().optional(),
   lastOperationDate: dateSchema.optional(),
@@ -86,8 +83,9 @@ export const inventoryAccountRowSchema = z.object({
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
   resolutionDate: dateSchema.optional(),
-  manualUnit: z.string().optional(),
-  updatedAt: z.iso.datetime().optional().describe('Для сортировки списка'),
+  manualResponsibleUnit: z.string().optional(),
+  isCriticalUpdated: z.boolean().optional(),
+  version: zIdSchema.optional(),
 });
 
 export const inventoryAccountListItemSchema = inventoryAccountRowSchema;
@@ -100,87 +98,63 @@ export const inventoryAccountsListResponseSchema = z.object({
 export const inventoryAccountDetailSchema = inventoryAccountRowSchema;
 
 export const inventoryAccountHistoryItemSchema = z.object({
-  id: zIdSchema,
-  accountSurrogateId: zIdSchema.optional().describe('Суррогат счёта (DOC)'),
-  changedAt: z.iso.datetime(),
-  changedBy: z.string().optional(),
-  fieldName: z.string().optional(),
-  oldValue: z.string().optional(),
-  newValue: z.string().optional(),
-  /** Дополнительное поле; в DOC основной состав — fieldName / oldValue / newValue */
-  action: z.string().optional(),
+  changeDate:dateTimeSchema,
+  changedBy: z.string(),
+  fieldName: z.string(),
+  oldValue: z.string(),
+  newValue: z.string(),
 });
 
-export const inventoryAccountHistoryResponseSchema = z.object({
-  items: z.array(inventoryAccountHistoryItemSchema),
+export const inventoryAccountHistoryResponseSchema = z.array(inventoryAccountHistoryItemSchema);
+
+export const inventoryAccountIdParamSchema = z.object({
+  accountId: zIdSchema,
 });
 
-export const inventoryAccountSurrogateIdParamSchema = z.object({
-  accountSurrogateId: zIdSchema,
-});
-
-/** POST …/manual-unit/:accountSurrogateId — тело (DOC: manualResponsibleUnit, force). */
-export const inventoryManualUnitSingleRequestSchema = z.object({
+export const inventoryManualUnitRequestSchema = z.object({
+  accountId: z.array(zIdSchema).min(1),
   manualResponsibleUnit: z.string().optional(),
   force: z.boolean().optional(),
 });
 
-/** Массовая пометка ручного учёта: массив surrogate id в body. */
-export const inventoryManualUnitBulkRequestSchema = z.object({
-  accountSurrogateIds: z.array(zIdSchema).min(1),
-  manualResponsibleUnit: z.string().optional(),
-  force: z.boolean().optional(),
+export const inventoryAccountsInventoryExcludeRequestSchema = z.object({
+  accountId: z.array(zIdSchema).min(1),
+  isExclude: z.boolean(),
 });
 
-export const inventoryManualUnitResponseSchema = z.object({
-  updated: z.number().int().min(0),
+export const inventoryAccountsInventoryIncludeRequestSchema = z.object({
+  accountId: z.array(zIdSchema).min(1),
+  isInclude: z.boolean(),
 });
 
-/** POST /accounts/inventory — полное тело по DOC. */
-export const inventoryAccountsInventoryRequestSchema = z.object({
-  inventoryOrderId: zIdSchema,
-  accountSurrogateIds: z.array(zIdSchema).min(1).describe('DOC: accountSurrogateKeys'),
-  manualInventoryAccountStatus: z.string().optional(),
+export const inventoryAccountColumnSchema = z.object({
+  column: z.string(),
+  isVisible: z.boolean(),
+});
+
+export const inventoryAccountColumnsResponseSchema = z.array(inventoryAccountColumnSchema);
+
+export const inventoryAccountColumnsUpdateSchema = z.object({
+  tableName: z.string(),
+  columns: z.array(inventoryAccountColumnSchema),
+});
+
+export const inventoryAccountsExportRequestSchema = z.object({
+  accountIds: z.array(zIdSchema).optional(),
+  filter: inventoryAccountsListFilterSchema.optional(),
+});
+
+export const inventoryAccountStatusSchema = z.object({
+  accountId: z.string(),
+  manualInventoryAccountStatus: z.string(),
   discrepancyDescription: z.string().optional(),
   discrepancySum: inventoryDecimalStringSchema.optional(),
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
   resolutionDate: dateSchema.optional(),
+  version: zIdSchema.optional(),
 });
 
-export const inventoryAccountsInventoryExcludeRequestSchema = z.object({
-  inventoryOrderId: zIdSchema,
-  accountSurrogateIds: z.array(zIdSchema).min(1),
-});
-
-export const inventoryAccountsInventoryMutationResponseSchema = z.object({
-  affected: z.number().int().min(0),
-});
-
-/** DOC: isVisible; в API сохраняем оба имени как optional (ренейминг). */
-export const inventoryAccountColumnSchema = z.object({
-  key: z.string(),
-  label: z.string(),
-  isVisible: z.boolean().optional(),
-  visible: z.boolean().optional(),
-});
-
-export const inventoryAccountColumnsResponseSchema = z.object({
-  columns: z.array(inventoryAccountColumnSchema),
-});
-
-export const inventoryAccountColumnsUpdateSchema = z.object({
-  columns: z.array(inventoryAccountColumnSchema),
-});
-
-/** DOC: accountSurrogateKeys + filter (объект фильтров списка). */
-export const inventoryAccountsExportRequestSchema = z.object({
-  accountSurrogateIds: z.array(zIdSchema).optional().describe('DOC: accountSurrogateKeys'),
-  filter: inventoryAccountsListFilterSchema,
-  inventoryOrderId: zIdSchema.optional(),
-  format: z.enum(['xlsx', 'csv']).optional(),
-});
-
-export const inventoryAccountsExportResponseSchema = z.object({
-  fileKey: z.string().optional(),
-});
+export const inventoryColumnsQuerySchema = z.object({
+  tableName: z.string(),
+})

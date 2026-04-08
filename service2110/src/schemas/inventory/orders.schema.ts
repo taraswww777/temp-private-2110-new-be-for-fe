@@ -21,7 +21,7 @@ export const createInventoryOrderSchema = z.object({
   orderDate: dateSchema,
   inventoryDateFrom: dateSchema,
   inventoryDateTo: dateSchema,
-  orderFile: z.string('Ссылка на файл').optional(),
+  orderFile: z.string('Ссылка на файл'),
 });
 
 export const updateInventoryOrderSchema = z.object({
@@ -30,7 +30,7 @@ export const updateInventoryOrderSchema = z.object({
   orderDate: dateSchema,
   inventoryDateFrom: dateSchema,
   inventoryDateTo: dateSchema,
-  orderFile: z.string('Ссылка на файл').optional(),
+  orderFile: z.string('Ссылка на файл'),
 });
 
 export const inventoryOrderMutationResponseSchema = z.object({
