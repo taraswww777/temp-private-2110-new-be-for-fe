@@ -47,7 +47,12 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
       summary: 'Запрос данных о статусе и параметрах инвентаризации для конкретного счета',
       response: { 200: inventoryAccountStatusSchema },
     },
-  }, async (_request, reply) => reply.status(200).send({}));
+  }, async (_request, reply) =>
+      reply.status(200).send({
+        accountId: "1",
+        manualInventoryAccountStatus: "1",
+      }),
+  );
 
   app.put('/inventory-status', {
     schema: {
