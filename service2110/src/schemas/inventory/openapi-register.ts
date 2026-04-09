@@ -34,20 +34,20 @@ import {
   inventoryAccountHistoryItemSchema,
   inventoryAccountHistoryResponseSchema,
   inventoryManualUnitRequestSchema,
-  inventoryAccountsInventoryExcludeRequestSchema,
-  inventoryAccountColumnSchema,
-  inventoryAccountColumnsResponseSchema,
-  inventoryAccountColumnsUpdateSchema,
   inventoryAccountsExportRequestSchema,
   inventoryAccountStatusSchema,
-  inventoryAccountsInventoryIncludeRequestSchema,
+  inventoryAccountIdsSchema,
 } from './accounts.schema.ts';
 import {
   inventoryStatisticsExportRequestSchema,
   inventoryStatisticsFilterSchema,
 } from './statistics.schema.ts';
-import { inventoryInventoryStateResponseSchema } from './inventory-state.schema.ts';
-
+import {
+  inventoryColumnSchema,
+  inventoryColumnsResponseSchema,
+  inventoryColumnsUpdateSchema,
+  inventoryInventoryStateResponseSchema,
+} from "./inventory-common.schema.ts";
 /**
  * Регистрация Zod-схем подсистемы инвентаризации (front API-28) в OpenAPI-реестре.
  */
@@ -86,15 +86,14 @@ export function registerInventoryOpenApiSchemas(registry: OpenApiSchemaRegistry)
   registry.add(inventoryAccountHistoryItemSchema, { id: 'InventoryAccountHistoryItemDto' });
   registry.add(inventoryAccountHistoryResponseSchema, { id: 'InventoryAccountHistoryResponseDto' });
   registry.add(inventoryManualUnitRequestSchema, { id: 'InventoryManualUnitRequestDto' });
-  registry.add(inventoryAccountsInventoryExcludeRequestSchema, { id: 'InventoryAccountsInventoryExcludeRequestDto' });
-  registry.add(inventoryAccountsInventoryIncludeRequestSchema, { id: 'InventoryAccountsInventoryIncludeResponseDto' });
-  registry.add(inventoryAccountColumnSchema, { id: 'InventoryAccountColumnDto' });
-  registry.add(inventoryAccountColumnsResponseSchema, { id: 'InventoryAccountColumnsResponseDto' });
-  registry.add(inventoryAccountColumnsUpdateSchema, { id: 'InventoryAccountColumnsUpdateDto' });
+  registry.add(inventoryAccountIdsSchema, { id: 'InventoryAccountsIdsDto' });
   registry.add(inventoryAccountsExportRequestSchema, { id: 'InventoryAccountsExportRequestDto' });
 
   registry.add(inventoryStatisticsFilterSchema, { id: 'InventoryStatisticsFilterDto' });
   registry.add(inventoryStatisticsExportRequestSchema, { id: 'InventoryStatisticsExportRequestDto' });
 
+  registry.add(inventoryColumnSchema, { id: 'InventoryColumnDto' });
+  registry.add(inventoryColumnsResponseSchema, { id: 'InventoryColumnsResponseDto' });
+  registry.add(inventoryColumnsUpdateSchema, { id: 'InventoryColumnsUpdateDto' });
   registry.add(inventoryInventoryStateResponseSchema, { id: 'InventoryInventoryStateResponseDto' });
 }

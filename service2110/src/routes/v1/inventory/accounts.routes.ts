@@ -3,17 +3,13 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   getInventoryAccountsListRequestSchema,
   inventoryAccountsExportRequestSchema,
-  inventoryAccountsInventoryExcludeRequestSchema,
   inventoryAccountsListResponseSchema,
   inventoryAccountDetailSchema,
   inventoryAccountHistoryResponseSchema,
   inventoryAccountIdParamSchema,
   inventoryManualUnitRequestSchema,
-  inventoryAccountColumnsResponseSchema,
-  inventoryAccountColumnsUpdateSchema,
   inventoryAccountStatusSchema,
-  inventoryColumnsQuerySchema,
-  inventoryAccountsInventoryIncludeRequestSchema,
+  inventoryAccountIdsSchema,
 } from '../../../schemas/inventory/accounts.schema.ts';
 import z from 'zod';
 
@@ -76,7 +72,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Inventory - Accounts'],
       summary: 'Исключить счета из инвентаризации',
-      body: inventoryAccountsInventoryExcludeRequestSchema,
+      body: inventoryAccountIdsSchema,
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
@@ -85,7 +81,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Inventory - Accounts'],
       summary: 'Включить счета в инвентаризацию',
-      body: inventoryAccountsInventoryIncludeRequestSchema ,
+      body: inventoryAccountIdsSchema ,
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
@@ -96,24 +92,6 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
       summary: 'История изменений конкретного счета',
       params: inventoryAccountIdParamSchema,
       response: { 200: inventoryAccountHistoryResponseSchema },
-    },
-  }, async (_request, reply) => reply.status(200).send([]));
-
-  app.get('/columns', {
-    schema: {
-      tags: ['Inventory - Accounts'],
-      summary: 'Колонки таблицы счетов',
-      querystring: inventoryColumnsQuerySchema,
-      response: { 200: inventoryAccountColumnsResponseSchema },
-    },
-  }, async (_request, reply) => reply.status(200).send([]));
-
-  app.put('/columns', {
-    schema: {
-      tags: ['Inventory - Accounts'],
-      summary: 'Сохранить настройки колонок',
-      body: inventoryAccountColumnsUpdateSchema,
-      response: { 200: inventoryAccountColumnsResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send([]));
 

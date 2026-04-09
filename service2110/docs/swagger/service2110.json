@@ -2508,13 +2508,13 @@
             "additionalProperties": false,
             "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
-          "filter": {
+          "filters": {
             "$ref": "#/components/schemas/InventoryAccountsListFilterDto"
           }
         },
         "required": [
           "pagination",
-          "filter"
+          "filters"
         ],
         "additionalProperties": false
       },
@@ -2682,6 +2682,9 @@
             "type": "string"
           },
           "manualInventoryAccountStatus": {
+            "type": "string"
+          },
+          "originalInventoryAccountStatus": {
             "type": "string"
           },
           "discrepancyDescription": {
@@ -2906,7 +2909,7 @@
         ],
         "additionalProperties": false
       },
-      "InventoryAccountsInventoryExcludeRequestDto": {
+      "InventoryAccountsIdsDto": {
         "type": "object",
         "properties": {
           "accountId": {
@@ -2918,78 +2921,10 @@
               "maximum": 9007199254740991,
               "description": "Integer ID"
             }
-          },
-          "isExclude": {
-            "type": "boolean"
           }
         },
         "required": [
-          "accountId",
-          "isExclude"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryAccountsInventoryIncludeResponseDto": {
-        "type": "object",
-        "properties": {
-          "accountId": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            }
-          },
-          "isInclude": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "accountId",
-          "isInclude"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryAccountColumnDto": {
-        "type": "object",
-        "properties": {
-          "column": {
-            "type": "string"
-          },
-          "isVisible": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "column",
-          "isVisible"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryAccountColumnsResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/InventoryAccountColumnDto"
-        }
-      },
-      "InventoryAccountColumnsUpdateDto": {
-        "type": "object",
-        "properties": {
-          "tableName": {
-            "type": "string"
-          },
-          "columns": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InventoryAccountColumnDto"
-            }
-          }
-        },
-        "required": [
-          "tableName",
-          "columns"
+          "accountId"
         ],
         "additionalProperties": false
       },
@@ -3005,7 +2940,7 @@
               "description": "Integer ID"
             }
           },
-          "filter": {
+          "filters": {
             "$ref": "#/components/schemas/InventoryAccountsListFilterDto"
           }
         },
@@ -3048,12 +2983,54 @@
       "InventoryStatisticsExportRequestDto": {
         "type": "object",
         "properties": {
-          "filter": {
+          "filters": {
             "$ref": "#/components/schemas/InventoryStatisticsFilterDto"
           }
         },
         "required": [
-          "filter"
+          "filters"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryColumnDto": {
+        "type": "object",
+        "properties": {
+          "columnName": {
+            "type": "string"
+          },
+          "isVisible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "columnName",
+          "isVisible"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryColumnsResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryColumnDto"
+        }
+      },
+      "InventoryColumnsUpdateDto": {
+        "type": "object",
+        "properties": {
+          "tableName": {
+            "type": "string"
+          },
+          "columnName": {
+            "type": "string"
+          },
+          "isVisible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "tableName",
+          "columnName",
+          "isVisible"
         ],
         "additionalProperties": false
       },
@@ -4586,7 +4563,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventoryAccountsInventoryExcludeRequestDto"
+                "$ref": "#/components/schemas/InventoryAccountsIdsDto"
               }
             }
           }
@@ -4619,7 +4596,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventoryAccountsInventoryIncludeResponseDto"
+                "$ref": "#/components/schemas/InventoryAccountsIdsDto"
               }
             }
           }
@@ -4667,63 +4644,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InventoryAccountHistoryResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/inventory/accounts/columns": {
-      "get": {
-        "summary": "Колонки таблицы счетов",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query",
-            "name": "tableName",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryAccountColumnsResponseDto"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Сохранить настройки колонок",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryAccountColumnsUpdateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InventoryAccountColumnsResponseDto"
                 }
               }
             }
@@ -4820,6 +4740,63 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InventoryInventoryStateResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/columns": {
+      "get": {
+        "summary": "Колонки таблицы",
+        "tags": [
+          "Inventory"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "tableName",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryColumnsResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Сохранить настройки колонок",
+        "tags": [
+          "Inventory"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryColumnsUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryColumnsResponseDto"
                 }
               }
             }

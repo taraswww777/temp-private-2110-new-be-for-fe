@@ -10,5 +10,5 @@ export const inventoryStatisticsFilterSchema = z.object({
 });
 
 export const inventoryStatisticsExportRequestSchema = z.object({
-  filter: inventoryStatisticsFilterSchema,
+  filters: inventoryStatisticsFilterSchema,
 });
