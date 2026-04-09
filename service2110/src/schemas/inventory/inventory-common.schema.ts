@@ -18,3 +18,20 @@ export const inventoryInventoryStateResponseSchema = z.object({
   isActive: z.boolean().optional(),
   status: inventoryProcessStatusSchema.optional(),
 });
+
+export const inventoryColumnsQuerySchema = z.object({
+  tableName: z.string(),
+})
+
+export const inventoryColumnsUpdateSchema = z.object({
+  tableName: z.string(),
+  columnName: z.string(),
+  isVisible: z.boolean(),
+});
+
+export const inventoryColumnSchema = z.object({
+  columnName: z.string(),
+  isVisible: z.boolean(),
+});
+
+export const inventoryColumnsResponseSchema = z.array(inventoryColumnSchema);

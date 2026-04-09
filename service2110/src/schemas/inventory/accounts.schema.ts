@@ -44,7 +44,7 @@ export const inventoryAccountsListFilterSchema = z.object({
 export const getInventoryAccountsListRequestSchema = z.object({
   pagination: paginationQuerySchema.describe('Параметры пагинации'),
   sorting: inventoryAccountsListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)').optional(),
-  filter: inventoryAccountsListFilterSchema,
+  filters: inventoryAccountsListFilterSchema,
 });
 
 /**
@@ -110,6 +110,9 @@ export const inventoryAccountHistoryResponseSchema = z.array(inventoryAccountHis
 export const inventoryAccountIdParamSchema = z.object({
   accountId: zIdSchema,
 });
+export const inventoryAccountIdsSchema = z.object({
+  accountId: z.array(zIdSchema).min(1),
+});
 
 export const inventoryManualUnitRequestSchema = z.object({
   accountId: z.array(zIdSchema).min(1),
@@ -117,36 +120,15 @@ export const inventoryManualUnitRequestSchema = z.object({
   force: z.boolean().optional(),
 });
 
-export const inventoryAccountsInventoryExcludeRequestSchema = z.object({
-  accountId: z.array(zIdSchema).min(1),
-  isExclude: z.boolean(),
-});
-
-export const inventoryAccountsInventoryIncludeRequestSchema = z.object({
-  accountId: z.array(zIdSchema).min(1),
-  isInclude: z.boolean(),
-});
-
-export const inventoryAccountColumnSchema = z.object({
-  column: z.string(),
-  isVisible: z.boolean(),
-});
-
-export const inventoryAccountColumnsResponseSchema = z.array(inventoryAccountColumnSchema);
-
-export const inventoryAccountColumnsUpdateSchema = z.object({
-  tableName: z.string(),
-  columns: z.array(inventoryAccountColumnSchema),
-});
-
 export const inventoryAccountsExportRequestSchema = z.object({
   accountIds: z.array(zIdSchema).optional(),
-  filter: inventoryAccountsListFilterSchema.optional(),
+  filters: inventoryAccountsListFilterSchema.optional(),
 });
 
 export const inventoryAccountStatusSchema = z.object({
   accountId: z.string(),
   manualInventoryAccountStatus: z.string(),
+  originalInventoryAccountStatus: z.string().optional(),
   discrepancyDescription: z.string().optional(),
   discrepancySum: inventoryDecimalStringSchema.optional(),
   discrepancyReason: z.string().optional(),
@@ -154,7 +136,3 @@ export const inventoryAccountStatusSchema = z.object({
   resolutionDate: dateSchema.optional(),
   version: zIdSchema.optional(),
 });
-
-export const inventoryColumnsQuerySchema = z.object({
-  tableName: z.string(),
-})
