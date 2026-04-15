@@ -4,6 +4,7 @@ import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { dateSchema, dateTimeSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
+import { zUuidSchema } from '../common/uuid.schema.ts';
 
 /** Десятичные суммы в DOC передаются как string($decimal). */
 export const inventoryDecimalStringSchema = z
@@ -52,7 +53,7 @@ export const getInventoryAccountsListRequestSchema = z.object({
  * `accountSurrogateKey` → `accountSurrogateId`, `accountNum` → `accountNumber`.
  */
 export const inventoryAccountRowSchema = z.object({
-  accountId: z.uuid().describe('ID счета'),
+  accountId: zUuidSchema,
   accountNum: z.string().optional().describe('Номер счёта (DOC: accountNum)'),
   accountOpenDate: dateSchema.optional(),
   accountType: zIdSchema.optional(),
@@ -108,26 +109,26 @@ export const inventoryAccountHistoryItemSchema = z.object({
 export const inventoryAccountHistoryResponseSchema = z.array(inventoryAccountHistoryItemSchema);
 
 export const inventoryAccountIdParamSchema = z.object({
-  accountId: z.uuid(),
+  accountId: zUuidSchema,
 });
 export const inventoryAccountIdsSchema = z.object({
-  accountId: z.array(z.uuid()).min(1),
+  accountId: z.array(zUuidSchema).min(1),
 });
 
 export const inventoryManualUnitRequestSchema = z.object({
-  accountId: z.uuid(),
+  accountId: zUuidSchema,
   manualResponsibleUnit: z.string().optional(),
   force: z.boolean().optional(),
   version: zIdSchema,
 });
 
 export const inventoryAccountsExportRequestSchema = z.object({
-  accountIds: z.array(z.uuid()).optional(),
+  accountIds: z.array(zUuidSchema).optional(),
   filters: inventoryAccountsListFilterSchema.optional(),
 });
 
 export const inventoryAccountStatusSchema = z.object({
-  accountId: z.uuid(),
+  accountId: zUuidSchema,
   manualInventoryAccountStatus: z.string(),
   originalInventoryAccountStatus: z.string().optional(),
   discrepancyDescription: z.string().optional(),

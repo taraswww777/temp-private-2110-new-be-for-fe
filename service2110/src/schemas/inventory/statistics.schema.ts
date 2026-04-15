@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { zIdSchema } from '../common/id.schema.ts';
 import { dateSchema } from '../common/dateString.schema.ts';
 import { inventoryStatisticsStatusSchema } from './enums/InventoryStatisticsStatusEnum.ts';
+import { zUuidSchema } from '../common/uuid.schema.ts';
 
 export const inventoryStatisticsFilterSchema = z.object({
   bs2: z.array(zIdSchema).optional().describe("БС-2 (массив int)"),
@@ -16,7 +17,7 @@ export const inventoryStatisticsExportRequestSchema = z.object({
 });
 
 export const inventoryStatisticsExportItemSchema = z.object({
-  id: z.uuid(),
+  id: zUuidSchema,
   fullName: z.string(),
   exportParams: z.string().describe("JSON-строка InventoryStatisticsFilterDto"),
   filePath: z.string(),
