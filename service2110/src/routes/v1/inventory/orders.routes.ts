@@ -27,7 +27,7 @@ export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(200).send({ invertoryOrderId: String(1) }));
 
-  app.post('/update', {
+  app.put('/update', {
     schema: {
       tags: ['Inventory - Orders'],
       summary: 'Обновить приказ инвентаризации',

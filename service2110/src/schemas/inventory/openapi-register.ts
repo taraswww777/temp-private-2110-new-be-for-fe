@@ -40,6 +40,8 @@ import {
 } from './accounts.schema.ts';
 import {
   inventoryStatisticsExportRequestSchema,
+  inventoryStatisticsExportItemSchema,
+  inventoryStatisticsExportResponseSchema,
   inventoryStatisticsFilterSchema,
 } from './statistics.schema.ts';
 import {
@@ -91,6 +93,8 @@ export function registerInventoryOpenApiSchemas(registry: OpenApiSchemaRegistry)
 
   registry.add(inventoryStatisticsFilterSchema, { id: 'InventoryStatisticsFilterDto' });
   registry.add(inventoryStatisticsExportRequestSchema, { id: 'InventoryStatisticsExportRequestDto' });
+  registry.add(inventoryStatisticsExportItemSchema, { id: 'InventoryStatisticsExportItemDto' });
+  registry.add(inventoryStatisticsExportResponseSchema, { id: 'InventoryStatisticsResponseDto' });
 
   registry.add(inventoryColumnSchema, { id: 'InventoryColumnDto' });
   registry.add(inventoryColumnsResponseSchema, { id: 'InventoryColumnsResponseDto' });

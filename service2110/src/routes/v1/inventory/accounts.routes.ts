@@ -12,6 +12,7 @@ import {
   inventoryAccountIdsSchema,
 } from '../../../schemas/inventory/accounts.schema.ts';
 import z from 'zod';
+import { randomUUID } from 'crypto';
 
 export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -34,7 +35,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) =>
     reply.status(200).send({
-      accountId: 1,
+      accountId: randomUUID(),
     }));
 
   app.get('/inventory-status/:accountId', {
