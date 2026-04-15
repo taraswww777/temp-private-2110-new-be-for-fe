@@ -52,7 +52,7 @@ export const getInventoryAccountsListRequestSchema = z.object({
  * `accountSurrogateKey` → `accountSurrogateId`, `accountNum` → `accountNumber`.
  */
 export const inventoryAccountRowSchema = z.object({
-  accountId: zIdSchema.describe('ID счета'),
+  accountId: z.uuid().describe('ID счета'),
   accountNum: z.string().optional().describe('Номер счёта (DOC: accountNum)'),
   accountOpenDate: dateSchema.optional(),
   accountType: zIdSchema.optional(),
@@ -108,25 +108,26 @@ export const inventoryAccountHistoryItemSchema = z.object({
 export const inventoryAccountHistoryResponseSchema = z.array(inventoryAccountHistoryItemSchema);
 
 export const inventoryAccountIdParamSchema = z.object({
-  accountId: zIdSchema,
+  accountId: z.uuid(),
 });
 export const inventoryAccountIdsSchema = z.object({
-  accountId: z.array(zIdSchema).min(1),
+  accountId: z.array(z.uuid()).min(1),
 });
 
 export const inventoryManualUnitRequestSchema = z.object({
-  accountId: z.array(zIdSchema).min(1),
+  accountId: z.uuid(),
   manualResponsibleUnit: z.string().optional(),
   force: z.boolean().optional(),
+  version: zIdSchema,
 });
 
 export const inventoryAccountsExportRequestSchema = z.object({
-  accountIds: z.array(zIdSchema).optional(),
+  accountIds: z.array(z.uuid()).optional(),
   filters: inventoryAccountsListFilterSchema.optional(),
 });
 
 export const inventoryAccountStatusSchema = z.object({
-  accountId: z.string(),
+  accountId: z.uuid(),
   manualInventoryAccountStatus: z.string(),
   originalInventoryAccountStatus: z.string().optional(),
   discrepancyDescription: z.string().optional(),

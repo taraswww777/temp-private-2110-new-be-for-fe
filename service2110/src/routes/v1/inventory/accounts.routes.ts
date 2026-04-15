@@ -34,7 +34,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) =>
     reply.status(200).send({
-      accountId: 1,
+      accountId: "3f9d1f6e-8b3c-4c1a-9f2d-6a7e5b8c2d1e",
     }));
 
   app.get('/inventory-status/:accountId', {

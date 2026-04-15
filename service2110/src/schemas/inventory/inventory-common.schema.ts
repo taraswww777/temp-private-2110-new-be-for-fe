@@ -4,13 +4,13 @@ import { inventoryProcessStatusSchema } from './enums/InventoryProcessStatusEnum
 import { dateSchema } from '../common/dateString.schema.ts';
 
 export const inventoryInventoryStateQuerySchema = z.object({
-  inventoryOrderId: z.string().optional(),
+  inventoryOrderId: z.uuid().optional(),
 });
 
 export { inventoryProcessStatusSchema };
 
 export const inventoryInventoryStateResponseSchema = z.object({
-  inventoryOrderId: z.string().optional(),
+  inventoryOrderId: z.uuid().optional(),
   orderNumber: z.string().optional(),
   orderDate: dateSchema.optional(),
   inventoryDateFrom: dateSchema.optional(),

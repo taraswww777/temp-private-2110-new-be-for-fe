@@ -5,7 +5,7 @@ import { zIdSchema } from '../common/id.schema.ts';
 
 /** Элемент списка приказов — поля ответа DOC; `orderFileLink` вместо сырого binary. */
 export const inventoryOrderListItemSchema = z.object({
-  invertoryOrderId: z.string(),
+  invertoryOrderId: z.uuid(),
   orderNumber: z.string().describe('Номер приказа'),
   orderDate: dateSchema.describe('Дата приказа YYYY-MM-DD'),
   inventoryDateFrom: dateSchema.describe('Дата начала инвентаризации'),
@@ -25,14 +25,15 @@ export const createInventoryOrderSchema = z.object({
 });
 
 export const updateInventoryOrderSchema = z.object({
-  invertoryOrderId: z.string(),
+  invertoryOrderId: z.uuid(),
   orderNumber: z.string(),
   orderDate: dateSchema,
   inventoryDateFrom: dateSchema,
   inventoryDateTo: dateSchema,
   orderFile: z.string('Ссылка на файл'),
+  isActive: z.boolean(),
 });
 
 export const inventoryOrderMutationResponseSchema = z.object({
-  invertoryOrderId: z.string(),
+  invertoryOrderId: z.uuid(),
 });
