@@ -5,7 +5,6 @@ import {
   inventoryStatisticsExportResponseSchema,
 } from '../../../schemas/inventory/statistics.schema.ts';
 import z from 'zod';
-import { InventoryStatisticsStatusEnum } from '../../../schemas/inventory/enums/InventoryStatisticsStatusEnum.ts';
 
 export const inventoryStatisticsRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
