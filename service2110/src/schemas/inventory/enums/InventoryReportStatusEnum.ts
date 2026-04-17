@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-export enum InventoryStatisticsStatusEnum {
+export enum InventoryReportStatusEnum {
   RECEIVED = 'RECEIVED',
   IN_PROGRESS = 'IN_PROGRESS',
   COMPLETED = 'COMPLETED',
   FAILED  = 'FAILED',
 }
 
-export const inventoryStatisticsStatusSchema = z
-  .enum(InventoryStatisticsStatusEnum)
+export const inventoryReportStatusSchema = z
+  .enum(InventoryReportStatusEnum)
   .describe('Статус формирования отчета');

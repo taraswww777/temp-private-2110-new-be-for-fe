@@ -2076,7 +2076,7 @@
           }
         ]
       },
-      "InventoryStatisticsStatusEnum": {
+      "InventoryReportStatusEnum": {
         "type": "string",
         "enum": [
           "RECEIVED",
@@ -2694,11 +2694,12 @@
           }
         },
         "required": [
-          "accountId"
+          "accountId",
+          "version"
         ],
         "additionalProperties": false
       },
-      "InventoryAccountStatusDto": {
+      "InventoryAccountStatusSingleDto": {
         "type": "object",
         "properties": {
           "accountId": {
@@ -2738,7 +2739,50 @@
         },
         "required": [
           "accountId",
-          "manualInventoryAccountStatus"
+          "manualInventoryAccountStatus",
+          "version"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountVersionedIdDto": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          }
+        },
+        "required": [
+          "accountId",
+          "version"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountVersionedIdsDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryAccountVersionedIdDto"
+        }
+      },
+      "InventoryAccountUpdatedResponseDto": {
+        "type": "object",
+        "properties": {
+          "updatedCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "updatedCount"
         ],
         "additionalProperties": false
       },
@@ -2872,7 +2916,8 @@
           }
         },
         "required": [
-          "accountId"
+          "accountId",
+          "version"
         ],
         "additionalProperties": false
       },
@@ -2938,6 +2983,24 @@
         ],
         "additionalProperties": false
       },
+      "InventoryManualUnitBulkRequestDto": {
+        "type": "object",
+        "properties": {
+          "manualResponsibleUnit": {
+            "type": "string"
+          },
+          "force": {
+            "type": "boolean"
+          },
+          "accounts": {
+            "$ref": "#/components/schemas/InventoryAccountVersionedIdsDto"
+          }
+        },
+        "required": [
+          "accounts"
+        ],
+        "additionalProperties": false
+      },
       "InventoryAccountsIdsDto": {
         "type": "object",
         "properties": {
@@ -2950,6 +3013,21 @@
               "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
               "description": "UUID"
             }
+          }
+        },
+        "required": [
+          "accountId"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountsIdDto": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID"
           }
         },
         "required": [
@@ -2974,6 +3052,12 @@
           }
         },
         "additionalProperties": false
+      },
+      "InventoryAccountsExportResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryReportExportItemDto"
+        }
       },
       "InventoryStatisticsFilterDto": {
         "type": "object",
@@ -3021,44 +3105,10 @@
         ],
         "additionalProperties": false
       },
-      "InventoryStatisticsExportItemDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
-          },
-          "fullName": {
-            "type": "string"
-          },
-          "exportParams": {
-            "type": "string",
-            "description": "JSON-строка InventoryStatisticsFilterDto"
-          },
-          "filePath": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/InventoryStatisticsStatusEnum"
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/DateSchema"
-          }
-        },
-        "required": [
-          "id",
-          "fullName",
-          "exportParams",
-          "filePath"
-        ],
-        "additionalProperties": false
-      },
       "InventoryStatisticsResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/InventoryStatisticsExportItemDto"
+          "$ref": "#/components/schemas/InventoryReportExportItemDto"
         }
       },
       "InventoryColumnDto": {
@@ -3131,6 +3181,40 @@
             "$ref": "#/components/schemas/InventoryProcessStatusEnum"
           }
         },
+        "additionalProperties": false
+      },
+      "InventoryReportExportItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "exportParams": {
+            "type": "string",
+            "description": "JSON-строка с параметрами"
+          },
+          "filePath": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/InventoryReportStatusEnum"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/DateSchema"
+          }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "exportParams",
+          "filePath"
+        ],
         "additionalProperties": false
       }
     }
@@ -4551,7 +4635,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryAccountStatusDto"
+                  "$ref": "#/components/schemas/InventoryAccountStatusSingleDto"
                 }
               }
             }
@@ -4569,7 +4653,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventoryAccountStatusDto"
+                "$ref": "#/components/schemas/InventoryAccountStatusSingleDto"
               }
             }
           }
@@ -4592,9 +4676,67 @@
         }
       }
     },
+    "/api/v1/inventory/accounts/bulk": {
+      "put": {
+        "summary": "Установка статуса инвентаризации нескольких счетов по выборке",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountVersionedIdsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountUpdatedResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/update-by-filter": {
+      "put": {
+        "summary": "Установка статуса инвентаризации нескольких счетов по фильтру",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountsListFilterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountUpdatedResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/inventory/accounts/manual-unit": {
       "put": {
-        "summary": "Изменение поля \"Ответственное подразделение, проставленное вручную\"",
+        "summary": "Смена ответственного для выбранного счета",
         "tags": [
           "Inventory - Accounts"
         ],
@@ -4625,9 +4767,9 @@
         }
       }
     },
-    "/api/v1/inventory/accounts/inventory/exclude": {
+    "/api/v1/inventory/accounts/manual-unit/bulk": {
       "put": {
-        "summary": "Исключить счета из инвентаризации",
+        "summary": "Смена ответственного для выбранных счетов",
         "tags": [
           "Inventory - Accounts"
         ],
@@ -4635,7 +4777,36 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventoryAccountsIdsDto"
+                "$ref": "#/components/schemas/InventoryManualUnitBulkRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountUpdatedResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/inventory/exclude": {
+      "put": {
+        "summary": "Исключение счета из инвентаризации",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountsIdDto"
               }
             }
           }
@@ -4658,9 +4829,9 @@
         }
       }
     },
-    "/api/v1/inventory/accounts/inventory/include": {
+    "/api/v1/inventory/accounts/inventory/exclude/bulk": {
       "put": {
-        "summary": "Включить счета в инвентаризацию",
+        "summary": "Исключение выбранных счетов из инвентаризации",
         "tags": [
           "Inventory - Accounts"
         ],
@@ -4668,7 +4839,36 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventoryAccountsIdsDto"
+                "$ref": "#/components/schemas/InventoryAccountVersionedIdsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountUpdatedResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/inventory/include": {
+      "put": {
+        "summary": "Включение счета в инвентаризацию",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountsIdDto"
               }
             }
           }
@@ -4684,6 +4884,35 @@
                   "enum": [
                     null
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/inventory/include/bulk": {
+      "put": {
+        "summary": "Включение выбранных счетов из инвентаризации",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountVersionedIdsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountUpdatedResponseDto"
                 }
               }
             }
@@ -4724,6 +4953,24 @@
       }
     },
     "/api/v1/inventory/accounts/export": {
+      "get": {
+        "summary": "Просмотр выгрузок",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountsExportResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "summary": "Экспорт реестра счетов",
         "tags": [
@@ -4734,6 +4981,39 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/InventoryAccountsExportRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/accounts/critical-update": {
+      "put": {
+        "summary": "Метод для снятия пометки критичного обновления данных о счете",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountsIdDto"
               }
             }
           }

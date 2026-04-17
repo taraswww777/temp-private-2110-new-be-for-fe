@@ -5,6 +5,7 @@ import { dateSchema, dateTimeSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 import { zUuidSchema } from '../common/uuid.schema.ts';
+import { inventoryReportExportItemSchema } from './inventory-common.schema.ts';
 
 /** Десятичные суммы в DOC передаются как string($decimal). */
 export const inventoryDecimalStringSchema = z
@@ -86,7 +87,7 @@ export const inventoryAccountRowSchema = z.object({
   resolutionDate: dateSchema.optional(),
   manualResponsibleUnit: z.string().optional(),
   isCriticalUpdated: z.boolean().optional(),
-  version: zIdSchema.optional(),
+  version: zIdSchema,
 });
 
 export const inventoryAccountListItemSchema = inventoryAccountRowSchema;
@@ -111,6 +112,11 @@ export const inventoryAccountHistoryResponseSchema = z.array(inventoryAccountHis
 export const inventoryAccountIdParamSchema = z.object({
   accountId: zUuidSchema,
 });
+
+export const inventoryAccountIdSchema = z.object({
+  accountId: zUuidSchema,
+});
+
 export const inventoryAccountIdsSchema = z.object({
   accountId: z.array(zUuidSchema).min(1),
 });
@@ -127,7 +133,9 @@ export const inventoryAccountsExportRequestSchema = z.object({
   filters: inventoryAccountsListFilterSchema.optional(),
 });
 
-export const inventoryAccountStatusSchema = z.object({
+export const inventoryAccountsExportResponseSchema =  z.array(inventoryReportExportItemSchema);
+
+export const inventoryAccountStatusSingleSchema = z.object({
   accountId: zUuidSchema,
   manualInventoryAccountStatus: z.string(),
   originalInventoryAccountStatus: z.string().optional(),
@@ -136,5 +144,22 @@ export const inventoryAccountStatusSchema = z.object({
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
   resolutionDate: dateSchema.optional(),
-  version: zIdSchema.optional(),
+  version: zIdSchema,
 });
+
+export const accountVersionedIdSchema = z.object({
+   accountId: zUuidSchema,
+   version: zIdSchema,
+});
+
+export const accountVersionedIdsSchema =  z.array(accountVersionedIdSchema);
+
+export const inventoryAccountUpdatedResponseSchema = z.object({
+   updatedCount: z.number().int().min(0),
+});
+
+export const inventoryManualUnitBulkRequestSchema = z.object({
+  manualResponsibleUnit: z.string().optional(),
+  force: z.boolean().optional(),
+  accounts: accountVersionedIdsSchema,
+})

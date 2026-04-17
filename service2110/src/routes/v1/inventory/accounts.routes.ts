@@ -8,8 +8,13 @@ import {
   inventoryAccountHistoryResponseSchema,
   inventoryAccountIdParamSchema,
   inventoryManualUnitRequestSchema,
-  inventoryAccountStatusSchema,
-  inventoryAccountIdsSchema,
+  inventoryAccountStatusSingleSchema,
+  inventoryAccountIdSchema,
+  inventoryAccountsExportResponseSchema,
+  accountVersionedIdsSchema,
+  inventoryAccountUpdatedResponseSchema,
+  inventoryAccountsListFilterSchema,
+  inventoryManualUnitBulkRequestSchema,
 } from '../../../schemas/inventory/accounts.schema.ts';
 import z from 'zod';
 import { randomUUID } from 'crypto';
@@ -36,18 +41,20 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
   }, async (_request, reply) =>
     reply.status(200).send({
       accountId: randomUUID(),
+      version: 1,
     }));
 
   app.get('/inventory-status/:accountId', {
     schema: {
       tags: ['Inventory - Accounts'],
       summary: 'Запрос данных о статусе и параметрах инвентаризации для конкретного счета',
-      response: { 200: inventoryAccountStatusSchema },
+      response: { 200: inventoryAccountStatusSingleSchema },
     },
   }, async (_request, reply) =>
       reply.status(200).send({
         accountId: "1",
         manualInventoryAccountStatus: "1",
+        version: 1
       }),
   );
 
@@ -55,37 +62,82 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: ['Inventory - Accounts'],
       summary: 'Установка статуса и параметров инвентаризации счета',
-      body: inventoryAccountStatusSchema,
+      body: inventoryAccountStatusSingleSchema,
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
 
+  app.put('/bulk', {
+    schema: {
+      tags: ['Inventory - Accounts'],
+      summary: 'Установка статуса инвентаризации нескольких счетов по выборке',
+      body: accountVersionedIdsSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
+
+  app.put('/update-by-filter', {
+    schema: {
+      tags: ['Inventory - Accounts'],
+      summary: 'Установка статуса инвентаризации нескольких счетов по фильтру',
+      body: inventoryAccountsListFilterSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
+
   app.put('/manual-unit', {
     schema: {
       tags: ['Inventory - Accounts'],
-      summary: 'Изменение поля "Ответственное подразделение, проставленное вручную"',
+      summary: 'Смена ответственного для выбранного счета',
       body: inventoryManualUnitRequestSchema,
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
 
+  app.put('/manual-unit/bulk', {
+    schema: {
+      tags: ['Inventory - Accounts'],
+      summary: 'Смена ответственного для выбранных счетов',
+      body: inventoryManualUnitBulkRequestSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
+
   app.put('/inventory/exclude', {
     schema: {
       tags: ['Inventory - Accounts'],
-      summary: 'Исключить счета из инвентаризации',
-      body: inventoryAccountIdsSchema,
+      summary: 'Исключение счета из инвентаризации',
+      body: inventoryAccountIdSchema,
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
 
+  app.put('/inventory/exclude/bulk', {
+    schema: {
+      tags: ['Inventory - Accounts'],
+      summary: 'Исключение выбранных счетов из инвентаризации',
+      body: accountVersionedIdsSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
+
   app.put('/inventory/include', {
     schema: {
       tags: ['Inventory - Accounts'],
-      summary: 'Включить счета в инвентаризацию',
-      body: inventoryAccountIdsSchema ,
+      summary: 'Включение счета в инвентаризацию',
+      body: inventoryAccountIdSchema ,
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
+
+  app.put('/inventory/include/bulk', {
+    schema: {
+      tags: ['Inventory - Accounts'],
+      summary: 'Включение выбранных счетов из инвентаризации',
+      body: accountVersionedIdsSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
 
   app.get('/:accountId/history', {
     schema: {
@@ -96,11 +148,28 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(200).send([]));
 
+  app.get('/export', {
+    schema: {
+      tags: ['Inventory - Accounts'],
+      summary: 'Просмотр выгрузок',
+      response: { 200: inventoryAccountsExportResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send([]));
+
   app.post('/export', {
     schema: {
       tags: ['Inventory - Accounts'],
       summary: 'Экспорт реестра счетов',
       body: inventoryAccountsExportRequestSchema,
+      response: { 200: z.null() },
+    },
+  }, async (_request, reply) => reply.status(200).send(null));
+
+  app.put('/critical-update', {
+    schema: {
+      tags: ['Inventory - Accounts'],
+      summary: 'Метод для снятия пометки критичного обновления данных о счете',
+      body: inventoryAccountIdSchema ,
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
