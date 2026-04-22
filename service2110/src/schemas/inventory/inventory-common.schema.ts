@@ -46,3 +46,7 @@ export const inventoryReportExportItemSchema = z.object({
   status: inventoryReportStatusSchema.optional(),
   createdAt: dateSchema.optional(),
 });
+
+export const inventoryActiveStateSchema = z.object({
+  status: inventoryProcessStatusSchema,
+});

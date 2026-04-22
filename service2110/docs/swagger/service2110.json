@@ -2118,6 +2118,9 @@
           "isActive": {
             "description": "Приказ актуален на данный момент",
             "type": "boolean"
+          },
+          "inventoryOrderStatus": {
+            "$ref": "#/components/schemas/InventoryProcessStatusEnum"
           }
         },
         "required": [
@@ -2125,7 +2128,8 @@
           "orderNumber",
           "orderDate",
           "inventoryDateFrom",
-          "inventoryDateTo"
+          "inventoryDateTo",
+          "inventoryOrderStatus"
         ],
         "additionalProperties": false
       },
@@ -3214,6 +3218,18 @@
           "fullName",
           "exportParams",
           "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryActiveStateDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/InventoryProcessStatusEnum"
+          }
+        },
+        "required": [
+          "status"
         ],
         "additionalProperties": false
       }
@@ -4796,39 +4812,6 @@
         }
       }
     },
-    "/api/v1/inventory/accounts/inventory/exclude": {
-      "put": {
-        "summary": "Исключение счета из инвентаризации",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryAccountsIdDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "nullable": true,
-                  "enum": [
-                    null
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v1/inventory/accounts/inventory/exclude/bulk": {
       "put": {
         "summary": "Исключение выбранных счетов из инвентаризации",
@@ -4851,39 +4834,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InventoryAccountUpdatedResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/inventory/accounts/inventory/include": {
-      "put": {
-        "summary": "Включение счета в инвентаризацию",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryAccountsIdDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "nullable": true,
-                  "enum": [
-                    null
-                  ]
                 }
               }
             }
@@ -5169,6 +5119,39 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InventoryColumnsResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/inventory-active": {
+      "put": {
+        "summary": "Запрос изменения активности инвентаризации",
+        "tags": [
+          "Inventory"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryActiveStateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
                 }
               }
             }

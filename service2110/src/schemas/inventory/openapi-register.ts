@@ -50,6 +50,7 @@ import {
   inventoryStatisticsFilterSchema,
 } from './statistics.schema.ts';
 import {
+  inventoryActiveStateSchema,
   inventoryColumnSchema,
   inventoryColumnsResponseSchema,
   inventoryColumnsUpdateSchema,
@@ -112,4 +113,5 @@ export function registerInventoryOpenApiSchemas(registry: OpenApiSchemaRegistry)
   registry.add(inventoryColumnsUpdateSchema, { id: 'InventoryColumnsUpdateDto' });
   registry.add(inventoryInventoryStateResponseSchema, { id: 'InventoryInventoryStateResponseDto' });
   registry.add(inventoryReportExportItemSchema, { id: 'InventoryReportExportItemDto' });
+  registry.add(inventoryActiveStateSchema, { id: 'InventoryActiveStateDto' });
 }

@@ -6,7 +6,9 @@ import {
   inventoryColumnsQuerySchema,
   inventoryInventoryStateQuerySchema,
   inventoryInventoryStateResponseSchema,
+  inventoryActiveStateSchema,
 } from '../../../schemas/inventory/inventory-common.schema.ts';
+import z from 'zod';
 
 export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -38,4 +40,13 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
       response: { 200: inventoryColumnsResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send([]));
+
+    app.put('/inventory-active', {
+    schema: {
+      tags: ['Inventory'],
+      summary: 'Запрос изменения активности инвентаризации',
+      body: inventoryActiveStateSchema,
+      response: { 200: z.null() },
+    },
+  }, async (_request, reply) => reply.status(200).send(null));
 };

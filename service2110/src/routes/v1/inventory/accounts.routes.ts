@@ -103,15 +103,6 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
 
-  app.put('/inventory/exclude', {
-    schema: {
-      tags: ['Inventory - Accounts'],
-      summary: 'Исключение счета из инвентаризации',
-      body: inventoryAccountIdSchema,
-      response: { 200: z.null() },
-    },
-  }, async (_request, reply) => reply.status(200).send(null));
-
   app.put('/inventory/exclude/bulk', {
     schema: {
       tags: ['Inventory - Accounts'],
@@ -120,15 +111,6 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
       response: { 200: inventoryAccountUpdatedResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
-
-  app.put('/inventory/include', {
-    schema: {
-      tags: ['Inventory - Accounts'],
-      summary: 'Включение счета в инвентаризацию',
-      body: inventoryAccountIdSchema ,
-      response: { 200: z.null() },
-    },
-  }, async (_request, reply) => reply.status(200).send(null));
 
   app.put('/inventory/include/bulk', {
     schema: {
