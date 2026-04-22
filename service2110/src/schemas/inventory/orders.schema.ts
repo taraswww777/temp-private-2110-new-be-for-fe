@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { dateSchema } from '../common/dateString.schema.ts';
 import { zUuidSchema } from '../common/uuid.schema.ts';
+import { inventoryProcessStatusSchema } from './enums/InventoryProcessStatusEnum.ts';
 
 /** Элемент списка приказов — поля ответа DOC; `orderFileLink` вместо сырого binary. */
 export const inventoryOrderListItemSchema = z.object({
@@ -12,6 +13,7 @@ export const inventoryOrderListItemSchema = z.object({
   inventoryDateTo: dateSchema.describe('Дата окончания инвентаризации'),
   orderFileLink: z.string().optional().describe('Ссылка на файл приказа (DOC: orderFileLink)'),
   isActive: z.boolean().optional().describe('Приказ актуален на данный момент'),
+  inventoryOrderStatus: inventoryProcessStatusSchema,
 });
 
 export const inventoryOrdersListResponseSchema = z.array(inventoryOrderListItemSchema);
