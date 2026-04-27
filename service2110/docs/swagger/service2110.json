@@ -1377,17 +1377,10 @@
             "minLength": 1,
             "maxLength": 255,
             "description": "Название пакета"
-          },
-          "createdBy": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255,
-            "description": "ФИО сотрудника, создавшего пакет"
           }
         },
         "required": [
-          "name",
-          "createdBy"
+          "name"
         ],
         "additionalProperties": false
       },

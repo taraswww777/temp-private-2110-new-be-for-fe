@@ -26,10 +26,7 @@ export const basePackageSchema = z.object({
  * Обязательные: name, createdBy.
  */
 export const createPackageSchema = basePackageSchema
-  .pick({
-    name: true,
-    createdBy: true,
-  });
+  .pick({ name: true });
 
 export type CreatePackageInput = z.infer<typeof createPackageSchema>;
 
