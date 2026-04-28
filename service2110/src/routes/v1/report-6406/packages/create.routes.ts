@@ -1,15 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
-  createPackageSchema,
+  createPackageSchema, Package,
   packageSchema,
 } from '../../../../schemas/report-6406/packages.schema';
+import { zErrorDTOSchema } from '../../../../schemas/common/errorDTO.schema.ts';
+
 
 /**
  * POST /api/v1/report-6406/packages
  * Создать новый пакет
- * 
+ *
  * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
  */
 export const createPackageRoute: FastifyPluginAsync = async (fastify) => {
@@ -22,9 +23,10 @@ export const createPackageRoute: FastifyPluginAsync = async (fastify) => {
       body: createPackageSchema,
       response: {
         201: packageSchema,
+        409: zErrorDTOSchema,
       },
     },
   }, async (_request, reply) => {
-    return reply.status(201).send({} as any);
+    return reply.status(201).send({} as Package);
   });
 };

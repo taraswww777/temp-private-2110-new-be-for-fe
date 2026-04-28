@@ -97,6 +97,24 @@
         "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
         "description": "Дата в формате YYYY-MM-DD"
       },
+      "ErrorDTO": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Код ошибки из справочника"
+          },
+          "message": {
+            "type": "string",
+            "description": "Текст сообщения об ошибке"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "additionalProperties": false
+      },
       "DateTimeSchema": {
         "type": "string",
         "format": "date-time",
@@ -3778,6 +3796,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PackageDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
             }
