@@ -1272,11 +1272,6 @@
           },
           "note": {
             "type": "string"
-          },
-          "metadata": {
-            "description": "Дополнительные метаданные в формате ключ-значение",
-            "type": "object",
-            "additionalProperties": {}
           }
         },
         "required": [
@@ -1816,11 +1811,6 @@
           },
           "note": {
             "type": "string"
-          },
-          "metadata": {
-            "description": "Дополнительные метаданные в формате ключ-значение",
-            "type": "object",
-            "additionalProperties": {}
           }
         },
         "required": [
@@ -2041,6 +2031,31 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/StorageVolumeItemDto"
+        }
+      },
+      "AccountMaskItemDto": {
+        "type": "object",
+        "properties": {
+          "firstAccount": {
+            "type": "string"
+          },
+          "secondAccounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "firstAccount",
+          "secondAccounts"
+        ],
+        "additionalProperties": false
+      },
+      "AccountMasksResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AccountMaskItemDto"
         }
       },
       "InventoryProcessStatusEnum": {
@@ -3424,26 +3439,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "firstAccount": {
-                        "type": "number"
-                      },
-                      "secondAccounts": {
-                        "type": "array",
-                        "items": {
-                          "type": "number"
-                        }
-                      }
-                    },
-                    "required": [
-                      "firstAccount",
-                      "secondAccounts"
-                    ],
-                    "additionalProperties": false
-                  }
+                  "$ref": "#/components/schemas/AccountMasksResponseDto"
                 }
               }
             }

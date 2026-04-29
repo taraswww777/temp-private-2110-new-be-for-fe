@@ -59,6 +59,7 @@ import {
   taskFilesResponseSchema,
   retryFileConversionResponseSchema,
 } from './task-files.schema.ts';
+import { accountMaskItemSchema, accountMasksResponseSchema } from './dictionary.schema.ts';
 
 export type OpenApiSchemaRegistry = ReturnType<typeof z.registry<{ id: string }>>;
 
@@ -114,4 +115,7 @@ export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry
 
   registry.add(storageVolumeItemSchema, { id: 'StorageVolumeItemDto' });
   registry.add(storageVolumeListResponseSchema, { id: 'StorageVolumeListResponseDto' });
+
+  registry.add(accountMaskItemSchema, { id: 'AccountMaskItemDto' });
+  registry.add(accountMasksResponseSchema, { id: 'AccountMasksResponseDto' });
 }
