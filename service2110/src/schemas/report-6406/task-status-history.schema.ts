@@ -13,7 +13,6 @@ export const taskStatusHistoryItemSchema = z.object({
   changedAt: z.iso.datetime().describe('Дата и время изменения'),
   changedBy: z.string().describe('Инициатор изменения. Логин или ФИО'),
   note: z.string().optional(),
-  metadata: z.record(z.string(), z.any()).optional().describe('Дополнительные метаданные в формате ключ-значение'),
 });
 
 export type TaskStatusHistoryItem = z.infer<typeof taskStatusHistoryItemSchema>;
