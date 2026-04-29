@@ -73,12 +73,12 @@ export class ReferencesService {
   async getAccountMasks(): Promise<AccountMasksResponse> {
     return [
       {
-        firstAccount: 123,
-        secondAccounts: [12345, 12345]
+        firstAccount: '123',
+        secondAccounts: ['12345', '12345']
       },
       {
-        firstAccount: 456,
-        secondAccounts: [45690, 45691]
+        firstAccount: '456',
+        secondAccounts: ['45690', '45691']
       }
     ];
   }

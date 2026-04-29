@@ -76,8 +76,8 @@ export type EmployeeResponse = z.infer<typeof employeeResponseSchema>;
  * Схема для маски счета (связанный список)
  */
 export const accountMaskItemSchema = z.object({
-  firstAccount: z.number(),
-  secondAccounts: z.array(z.number())
+  firstAccount: z.string(),
+  secondAccounts: z.array(z.string())
 });
 
 export type AccountMaskItem = z.infer<typeof accountMaskItemSchema>;
