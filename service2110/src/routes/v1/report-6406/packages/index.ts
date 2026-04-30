@@ -7,7 +7,7 @@ import { updatePackageRoute } from './update.routes';
 import { deletePackagesRoute } from './delete.routes';
 import { addTasksToPackageRoute } from './add-tasks.routes';
 import { removeTasksFromPackageRoute } from './remove-tasks.routes';
-import { copyToTfrRoute } from './copy-to-tfr.routes';
+import { tfrRoutes } from './copy-to-tfr.routes';
 
 /**
  * Регистрация всех роутов для работы с пакетами (packages)
@@ -21,6 +21,6 @@ export const packagesRoutes: FastifyPluginAsync = async (fastify) => {
   await fastify.register(deletePackagesRoute);
   await fastify.register(addTasksToPackageRoute);
   await fastify.register(removeTasksFromPackageRoute);
-  await fastify.register(copyToTfrRoute);
+  await fastify.register(tfrRoutes);
   await fastify.register(packageStatusHistoryRoutes);
 };

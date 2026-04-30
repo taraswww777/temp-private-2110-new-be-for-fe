@@ -140,3 +140,10 @@ export const copyToTfrResponseSchema = z.object({
 });
 
 export type CopyToTfrResponse = z.infer<typeof copyToTfrResponseSchema>;
+
+export const packageTfrResponseSchema = z.object({
+  packageId: zIdSchema.describe('ИД пакета'),
+  packageName: z.string().describe('Имя пакета'),
+  tfrCopyDate: z.iso.datetime().describe('Дата и время копирования в ТФР'),
+  size: z.number().int().min(0).describe('Размер пакета в мегабайтах').default(0),
+});

@@ -1651,6 +1651,41 @@
           "$ref": "#/components/schemas/AccountMaskItemDto"
         }
       },
+      "PackageTfrResponseDto": {
+        "type": "object",
+        "properties": {
+          "packageId": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "ИД пакета"
+          },
+          "packageName": {
+            "type": "string",
+            "description": "Имя пакета"
+          },
+          "tfrCopyDate": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время копирования в ТФР"
+          },
+          "size": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Размер пакета в мегабайтах"
+          }
+        },
+        "required": [
+          "packageId",
+          "packageName",
+          "tfrCopyDate",
+          "size"
+        ],
+        "additionalProperties": false
+      },
       "InventoryProcessStatusEnum": {
         "type": "string",
         "enum": [
@@ -3853,9 +3888,36 @@
         }
       }
     },
-    "/api/v1/report-6406/packages/{packageId}/copy-to-tfr": {
+    "/api/v1/report-6406/packages/transfer": {
       "post": {
-        "summary": "Скопировать пакет в ТФР",
+        "summary": "Скопировать список пакетов на ТФР",
+        "tags": [
+          "Report 6406 - Packages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/{id}/cancel-copy": {
+      "post": {
+        "summary": "Скопировать список пакетов на ТФР",
         "tags": [
           "Report 6406 - Packages"
         ],
@@ -3867,7 +3929,57 @@
               "maximum": 9007199254740991
             },
             "in": "path",
-            "name": "packageId",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/tfr": {
+      "delete": {
+        "summary": "Удалить список пакетов на ТФР",
+        "tags": [
+          "Report 6406 - Packages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      },
+      "get": {
+        "summary": "Получить список пакетов на ТФР",
+        "tags": [
+          "Report 6406 - Packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "path",
+            "name": "id",
             "required": true
           }
         ],
@@ -3877,7 +3989,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CopyToTfrResponseDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PackageTfrResponseDto"
+                  }
                 }
               }
             }

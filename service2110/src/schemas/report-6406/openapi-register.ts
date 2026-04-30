@@ -3,56 +3,46 @@ import { z } from 'zod';
 import { registerReport6406EnumsOpenApiSchemas } from './enums/openapi-register.ts';
 import {
   createTaskSchema,
-  taskListItemSchema,
   getTasksRequestSchema,
-  tasksListResponseSchema,
   taskDetailSchema,
+  taskListItemSchema,
+  tasksListResponseSchema,
 } from './tasks.schema.ts';
 import {
+  branchesResponseSchema,
   branchSchema,
+  currenciesResponseSchema,
   currencyReferenceSchema,
   formatReferenceSchema,
-  sourceSchema,
-  branchesResponseSchema,
-  currenciesResponseSchema,
   formatsResponseSchema,
+  sourceSchema,
   sourcesResponseSchema,
 } from './references.schema.ts';
 import {
-  createPackageSchema,
-  updatePackageSchema,
-  packageSchema,
-  getPackageListResponseSchema,
-  updatePackageResponseSchema,
   addTasksToPackageSchema,
   copyToTfrResponseSchema,
+  createPackageSchema,
+  getPackageListResponseSchema,
+  packageSchema,
+  packageTfrResponseSchema,
+  updatePackageResponseSchema,
+  updatePackageSchema,
 } from './packages.schema.ts';
-import {
-  exportTasksResponseSchema,
-} from './export.schema.ts';
-import {
-  taskStatusHistoryItemSchema,
-  taskStatusHistoryResponseSchema,
-} from './task-status-history.schema.ts';
+import { exportTasksResponseSchema } from './export.schema.ts';
+import { taskStatusHistoryItemSchema, taskStatusHistoryResponseSchema } from './task-status-history.schema.ts';
 import {
   packageStatusHistoryItemSchema,
   packageStatusHistoryResponseSchema,
 } from './package-status-history.schema.ts';
+import { storageVolumeItemSchema, storageVolumeListResponseSchema } from './storage.schema.ts';
 import {
-  storageVolumeItemSchema,
-  storageVolumeListResponseSchema,
-} from './storage.schema.ts';
-import {
+  retryFileConversionResponseSchema,
   taskFileSchema,
   taskFilesResponseSchema,
-  retryFileConversionResponseSchema, taskFileUrlResponseSchema, taskFileUrlItemSchema,
+  taskFileUrlItemSchema,
+  taskFileUrlResponseSchema,
 } from './task-files.schema.ts';
 import { accountMaskItemSchema, accountMasksResponseSchema } from './dictionary.schema.ts';
-import {
-  processResponseSchema,
-  processResultItemSchema,
-  processRequestSchema,
-} from '../common/process.schema.ts';
 
 export type OpenApiSchemaRegistry = ReturnType<typeof z.registry<{ id: string }>>;
 
@@ -101,4 +91,6 @@ export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry
 
   registry.add(accountMaskItemSchema, { id: 'AccountMaskItemDto' });
   registry.add(accountMasksResponseSchema, { id: 'AccountMasksResponseDto' });
+
+  registry.add(packageTfrResponseSchema, { id: 'PackageTfrResponseDto' });
 }
