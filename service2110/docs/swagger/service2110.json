@@ -1169,11 +1169,6 @@
             "maximum": 9007199254740991,
             "description": "Integer ID"
           },
-          "fileNumber": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
           "fileName": {
             "type": "string"
           },
@@ -1182,25 +1177,12 @@
             "minimum": 0,
             "maximum": 9007199254740991,
             "description": "Размер файла в байтах (например, 10485760 = 10 MB)"
-          },
-          "fileFormat": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FileStatusEnum"
-          },
-          "downloadUrl": {
-            "type": "string"
           }
         },
         "required": [
           "id",
-          "fileNumber",
           "fileName",
-          "fileSize",
-          "fileFormat",
-          "status",
-          "downloadUrl"
+          "fileSize"
         ],
         "additionalProperties": false
       },
@@ -1229,6 +1211,28 @@
           "pagination"
         ],
         "additionalProperties": false
+      },
+      "TaskFileUrlItemDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "fileName"
+        ],
+        "additionalProperties": false
+      },
+      "TaskFileUrlResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TaskFileUrlItemDto"
+        }
       },
       "RetryFileConversionResponseDto": {
         "type": "object",
@@ -3580,7 +3584,7 @@
         "tags": [
           "Report 6406 - Tasks"
         ],
-        "description": "Возвращает список файлов с pre-signed URLs для скачивания. URLs генерируются автоматически для файлов в статусе COMPLETED.",
+        "description": "Возвращает список файлов без pre-signed URLs для скачивания.",
         "parameters": [
           {
             "schema": {
@@ -3660,6 +3664,41 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskFilesResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/files/presigned-urls": {
+      "post": {
+        "summary": "Получение presigned URL для скачивания файлов по их ID",
+        "tags": [
+          "Report 6406 - Tasks"
+        ],
+        "description": "Возвращает список pre-signed URLs для скачивания.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskFileUrlResponseDto"
                 }
               }
             }

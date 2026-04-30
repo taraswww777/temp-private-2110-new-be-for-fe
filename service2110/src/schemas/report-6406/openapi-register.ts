@@ -54,7 +54,7 @@ import {
 import {
   taskFileSchema,
   taskFilesResponseSchema,
-  retryFileConversionResponseSchema,
+  retryFileConversionResponseSchema, taskFileUrlResponseSchema, taskFileUrlItemSchema,
 } from './task-files.schema.ts';
 import { accountMaskItemSchema, accountMasksResponseSchema } from './dictionary.schema.ts';
 
@@ -87,6 +87,8 @@ export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry
   registry.add(taskStatusHistoryResponseSchema, { id: 'TaskStatusHistoryResponseDto' });
   registry.add(taskFileSchema, { id: 'TaskFileDto' });
   registry.add(taskFilesResponseSchema, { id: 'TaskFilesResponseDto' });
+  registry.add(taskFileUrlItemSchema, { id: 'TaskFileUrlItemDto' });
+  registry.add(taskFileUrlResponseSchema, { id: 'TaskFileUrlResponseDto' });
   registry.add(retryFileConversionResponseSchema, { id: 'RetryFileConversionResponseDto' });
 
   registry.add(createPackageSchema, { id: 'CreatePackageDto' });
