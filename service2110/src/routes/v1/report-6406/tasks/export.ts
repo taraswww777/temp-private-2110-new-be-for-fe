@@ -21,6 +21,6 @@ export const exportRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    return reply.status(200).send({} as any);
+    return reply.status(200).send({} as never);
   });
 };

@@ -41,8 +41,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getCurrencies();
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 
   /**
@@ -58,8 +57,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getSources();
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 
   /**
@@ -75,8 +73,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getAccountMasks();
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 
   /**
@@ -95,7 +92,6 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getEmployee(request.params.login);
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 };
