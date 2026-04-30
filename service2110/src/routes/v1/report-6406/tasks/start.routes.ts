@@ -1,9 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import {
-  processTasksResponseSchema,
-  processTasksSchema,
-} from '../../../../schemas/report-6406/tasks.schema.ts';
+import { processResponseSchema, processRequestSchema } from '../../../../schemas/common/process.schema.ts';
 
 /**
  * POST /api/v1/report-6406/tasks/start
@@ -19,9 +16,9 @@ export const startTasksRoute: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Tasks'],
       summary: 'Запустить задания на выполнение (переводит из статуса created в started)',
       description: 'Запускает задания на генерацию отчётов. Проверяет наличие свободного места в хранилище. Поддерживает запуск одного или нескольких заданий.',
-      body: processTasksSchema,
+      body: processRequestSchema,
       response: {
-        200: processTasksResponseSchema,
+        200: processResponseSchema,
       },
     },
   }, async (_request, reply) => {

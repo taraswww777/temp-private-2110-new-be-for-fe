@@ -144,6 +144,67 @@
           }
         ]
       },
+      "ProcessDto": {
+        "minItems": 1,
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "description": "Integer ID"
+        }
+      },
+      "ProcessResponseDto": {
+        "type": "object",
+        "properties": {
+          "succeeded": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Количество успешно удалённых записей"
+          },
+          "failed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Количество записей, которые не удалось удалить"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcessResultItemDto"
+            }
+          }
+        },
+        "required": [
+          "succeeded",
+          "failed",
+          "results"
+        ],
+        "additionalProperties": false
+      },
+      "ProcessResultItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991,
+            "description": "Integer ID"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "success"
+        ],
+        "additionalProperties": false
+      },
       "CurrencyEnum": {
         "type": "string",
         "enum": [
@@ -1076,67 +1137,6 @@
         ],
         "additionalProperties": false
       },
-      "ProcessTasksDto": {
-        "minItems": 1,
-        "type": "array",
-        "items": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 9007199254740991,
-          "description": "Integer ID"
-        }
-      },
-      "ProcessTasksResponseDto": {
-        "type": "object",
-        "properties": {
-          "succeeded": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество успешно удалённых заданий"
-          },
-          "failed": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество заданий, которые не удалось удалить"
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProcessTasksResultItemDto"
-            }
-          }
-        },
-        "required": [
-          "succeeded",
-          "failed",
-          "results"
-        ],
-        "additionalProperties": false
-      },
-      "ProcessTasksResultItemDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "success": {
-            "type": "boolean"
-          },
-          "reason": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "success"
-        ],
-        "additionalProperties": false
-      },
       "TaskStatusHistoryItemDto": {
         "type": "object",
         "properties": {
@@ -1336,7 +1336,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 255,
-            "description": "ФИО сотрудника, создавшего пакет"
+            "description": "Логин сотрудника, создавшего пакет"
           },
           "lastCopiedToTfrAt": {
             "anyOf": [
@@ -1349,7 +1349,7 @@
                 "type": "null"
               }
             ],
-            "description": "Дата последнего копирования в ТФР (ISO 8601)"
+            "description": "Дата последнего копирования в ТФР (ISO 8601), например  2026-04-30T12:20:50.979Z"
           },
           "totalTasksCount": {
             "default": 0,
@@ -1369,7 +1369,7 @@
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время последнего обновления"
+            "description": "Дата и время последнего обновления, например  2026-04-30T12:20:50.979Z"
           },
           "status": {
             "description": "Текущий статус пакета",
@@ -1409,77 +1409,6 @@
         "required": [
           "items",
           "totalItems"
-        ],
-        "additionalProperties": false
-      },
-      "BulkDeletePackagesRequestDto": {
-        "type": "object",
-        "properties": {
-          "packageIds": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            },
-            "description": "Массив ИД пакетов для удаления (минимум 1)"
-          }
-        },
-        "required": [
-          "packageIds"
-        ],
-        "additionalProperties": false
-      },
-      "BulkDeletePackagesResponseDto": {
-        "type": "object",
-        "properties": {
-          "deleted": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество успешно удалённых пакетов"
-          },
-          "failed": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество пакетов, которые не удалось удалить"
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "packageId": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "ИД пакета"
-                },
-                "success": {
-                  "type": "boolean",
-                  "description": "Успешность операции"
-                },
-                "reason": {
-                  "description": "Причина ошибки (если success = false)",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "packageId",
-                "success"
-              ],
-              "additionalProperties": false
-            },
-            "description": "Детальные результаты по каждому пакету"
-          }
-        },
-        "required": [
-          "deleted",
-          "failed",
-          "results"
         ],
         "additionalProperties": false
       },
@@ -1527,131 +1456,6 @@
         },
         "required": [
           "taskIds"
-        ],
-        "additionalProperties": false
-      },
-      "AddTasksToPackageResponseDto": {
-        "type": "object",
-        "properties": {
-          "added": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество успешно добавленных заданий"
-          },
-          "alreadyInPackage": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество заданий, которые уже были в пакете"
-          },
-          "notFound": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество не найденных заданий"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "taskId": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "ИД задания"
-                },
-                "reason": {
-                  "type": "string",
-                  "description": "Причина ошибки"
-                }
-              },
-              "required": [
-                "taskId",
-                "reason"
-              ],
-              "additionalProperties": false
-            },
-            "description": "Список ошибок при добавлении заданий"
-          }
-        },
-        "required": [
-          "added",
-          "alreadyInPackage",
-          "notFound",
-          "errors"
-        ],
-        "additionalProperties": false
-      },
-      "BulkRemoveTasksFromPackageRequestDto": {
-        "type": "object",
-        "properties": {
-          "taskIds": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            },
-            "description": "Массив ИД заданий для удаления из пакета (минимум 1)"
-          }
-        },
-        "required": [
-          "taskIds"
-        ],
-        "additionalProperties": false
-      },
-      "BulkRemoveTasksResponseDto": {
-        "type": "object",
-        "properties": {
-          "removed": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество успешно удалённых заданий"
-          },
-          "failed": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество заданий, которые не удалось удалить"
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "taskId": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "ИД задания"
-                },
-                "success": {
-                  "type": "boolean",
-                  "description": "Успешность операции"
-                },
-                "reason": {
-                  "description": "Причина ошибки (если success = false)",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "taskId",
-                "success"
-              ],
-              "additionalProperties": false
-            },
-            "description": "Детальные результаты по каждому заданию"
-          }
-        },
-        "required": [
-          "removed",
-          "failed",
-          "results"
         ],
         "additionalProperties": false
       },
@@ -3319,7 +3123,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProcessTasksDto"
+                "$ref": "#/components/schemas/ProcessDto"
               }
             }
           }
@@ -3330,7 +3134,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProcessTasksResponseDto"
+                  "$ref": "#/components/schemas/ProcessResponseDto"
                 }
               }
             }
@@ -3410,7 +3214,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProcessTasksDto"
+                "$ref": "#/components/schemas/ProcessDto"
               }
             }
           }
@@ -3421,7 +3225,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProcessTasksResponseDto"
+                  "$ref": "#/components/schemas/ProcessResponseDto"
                 }
               }
             }
@@ -3440,7 +3244,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProcessTasksDto"
+                "$ref": "#/components/schemas/ProcessDto"
               }
             }
           }
@@ -3451,7 +3255,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProcessTasksResponseDto"
+                  "$ref": "#/components/schemas/ProcessResponseDto"
                 }
               }
             }
@@ -3744,7 +3548,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BulkDeletePackagesRequestDto"
+                "$ref": "#/components/schemas/ProcessDto"
               }
             }
           }
@@ -3755,7 +3559,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BulkDeletePackagesResponseDto"
+                  "$ref": "#/components/schemas/ProcessResponseDto"
                 }
               }
             }
@@ -3956,8 +3760,8 @@
         }
       }
     },
-    "/api/v1/report-6406/packages/{packageId}/tasks": {
-      "post": {
+    "/api/v1/report-6406/packages/{packageId}/add-link-with-tasks": {
+      "patch": {
         "summary": "Добавить задания в пакет",
         "tags": [
           "Report 6406 - Packages"
@@ -3966,7 +3770,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddTasksToPackageRequestDto"
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                }
               }
             }
           }
@@ -3989,13 +3798,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AddTasksToPackageResponseDto"
+                  "$ref": "#/components/schemas/ProcessResponseDto"
                 }
               }
             }
           }
         }
-      },
+      }
+    },
+    "/api/v1/report-6406/packages/{packageId}/delete-link-with-tasks": {
       "delete": {
         "summary": "Удалить одно или несколько заданий из пакета",
         "tags": [
@@ -4006,7 +3817,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BulkRemoveTasksFromPackageRequestDto"
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                }
               }
             }
           }
@@ -4029,7 +3845,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BulkRemoveTasksResponseDto"
+                  "$ref": "#/components/schemas/ProcessResponseDto"
                 }
               }
             }

@@ -7,9 +7,6 @@ import {
   getTasksRequestSchema,
   tasksListResponseSchema,
   taskDetailSchema,
-  processTasksSchema,
-  processTasksResponseSchema,
-  processTasksResultItemSchema,
 } from './tasks.schema.ts';
 import {
   branchSchema,
@@ -26,13 +23,8 @@ import {
   updatePackageSchema,
   packageSchema,
   getPackageListResponseSchema,
-  bulkDeletePackagesSchema,
-  bulkDeletePackagesResponseSchema,
   updatePackageResponseSchema,
   addTasksToPackageSchema,
-  addTasksToPackageResponseSchema,
-  bulkRemoveTasksFromPackageSchema,
-  bulkRemoveTasksResponseSchema,
   copyToTfrResponseSchema,
 } from './packages.schema.ts';
 import {
@@ -56,6 +48,11 @@ import {
   retryFileConversionResponseSchema, taskFileUrlResponseSchema, taskFileUrlItemSchema,
 } from './task-files.schema.ts';
 import { accountMaskItemSchema, accountMasksResponseSchema } from './dictionary.schema.ts';
+import {
+  processResponseSchema,
+  processResultItemSchema,
+  processRequestSchema,
+} from '../common/process.schema.ts';
 
 export type OpenApiSchemaRegistry = ReturnType<typeof z.registry<{ id: string }>>;
 
@@ -79,9 +76,6 @@ export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry
   registry.add(getTasksRequestSchema, { id: 'GetTasksRequestDto' });
   registry.add(tasksListResponseSchema, { id: 'TasksListResponseDto' });
   registry.add(taskDetailSchema, { id: 'TaskDetailDto' });
-  registry.add(processTasksSchema, { id: 'ProcessTasksDto' });
-  registry.add(processTasksResponseSchema, { id: 'ProcessTasksResponseDto' });
-  registry.add(processTasksResultItemSchema, { id: 'ProcessTasksResultItemDto' });
   registry.add(taskStatusHistoryItemSchema, { id: 'TaskStatusHistoryItemDto' });
   registry.add(taskStatusHistoryResponseSchema, { id: 'TaskStatusHistoryResponseDto' });
   registry.add(taskFileSchema, { id: 'TaskFileDto' });
@@ -94,13 +88,8 @@ export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry
   registry.add(updatePackageSchema, { id: 'UpdatePackageDto' });
   registry.add(packageSchema, { id: 'PackageDto' });
   registry.add(getPackageListResponseSchema, { id: 'PackagesListResponseDto' });
-  registry.add(bulkDeletePackagesSchema, { id: 'BulkDeletePackagesRequestDto' });
-  registry.add(bulkDeletePackagesResponseSchema, { id: 'BulkDeletePackagesResponseDto' });
   registry.add(updatePackageResponseSchema, { id: 'UpdatePackageResponseDto' });
   registry.add(addTasksToPackageSchema, { id: 'AddTasksToPackageRequestDto' });
-  registry.add(addTasksToPackageResponseSchema, { id: 'AddTasksToPackageResponseDto' });
-  registry.add(bulkRemoveTasksFromPackageSchema, { id: 'BulkRemoveTasksFromPackageRequestDto' });
-  registry.add(bulkRemoveTasksResponseSchema, { id: 'BulkRemoveTasksResponseDto' });
   registry.add(copyToTfrResponseSchema, { id: 'CopyToTfrResponseDto' });
   registry.add(packageStatusHistoryItemSchema, { id: 'PackageStatusHistoryItemDto' });
   registry.add(packageStatusHistoryResponseSchema, { id: 'PackageStatusHistoryResponseDto' });

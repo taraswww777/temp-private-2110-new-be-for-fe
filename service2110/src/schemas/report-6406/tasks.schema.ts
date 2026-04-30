@@ -175,21 +175,3 @@ export const tasksListResponseSchema = z.object({
 
 export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
 
-/**
- * Схема для массового удаления заданий
- */
-export const processTasksSchema = z.array(zIdSchema).min(1);
-
-export const processTasksResultItemSchema = z.object({
-  id: zIdSchema,
-  success: z.boolean(),
-  reason: z.string().optional(),
-});
-/**
- * Схема для ответа при массовой операции
- */
-export const processTasksResponseSchema = z.object({
-  succeeded: z.number().int().min(0).describe('Количество успешно удалённых заданий'),
-  failed: z.number().int().min(0).describe('Количество заданий, которые не удалось удалить'),
-  results: z.array(processTasksResultItemSchema),
-});
