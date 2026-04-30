@@ -1703,117 +1703,6 @@
           "$ref": "#/components/schemas/PackageStatusHistoryItemDto"
         }
       },
-      "ExportTasksRequestDto": {
-        "type": "object",
-        "properties": {
-          "filter": {
-            "type": "object",
-            "properties": {
-              "statuses": {
-                "description": "Список статусов для фильтрации",
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/TaskStatusEnum"
-                }
-              },
-              "branchIds": {
-                "description": "Список ИД филиалов для фильтрации",
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "Integer ID"
-                }
-              },
-              "reportTypes": {
-                "description": "Список типов отчётов для фильтрации",
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ReportTypeEnum"
-                }
-              },
-              "formats": {
-                "description": "Список форматов для фильтрации",
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/FileFormatEnum"
-                }
-              },
-              "periodStartFrom": {
-                "description": "Начальная дата периода",
-                "type": "string",
-                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
-              },
-              "periodStartTo": {
-                "description": "Конечная дата периода",
-                "type": "string",
-                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
-              },
-              "periodEndFrom": {
-                "description": "Начальная дата окончания периода",
-                "type": "string",
-                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
-              },
-              "periodEndTo": {
-                "description": "Конечная дата окончания периода",
-                "type": "string",
-                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
-              },
-              "createdAtFrom": {
-                "description": "Начальная дата создания",
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-              },
-              "createdAtTo": {
-                "description": "Конечная дата создания",
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-              }
-            },
-            "additionalProperties": false
-          },
-          "columns": {
-            "description": "Список колонок для включения в экспорт",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "sorting": {
-            "type": "object",
-            "properties": {
-              "sortBy": {
-                "default": "createdAt",
-                "description": "Поле для сортировки",
-                "type": "string",
-                "enum": [
-                  "createdAt",
-                  "branchId",
-                  "status",
-                  "periodStart",
-                  "updatedAt"
-                ]
-              },
-              "sortOrder": {
-                "$ref": "#/components/schemas/SortOrderEnum"
-              }
-            },
-            "required": [
-              "sortBy",
-              "sortOrder"
-            ],
-            "additionalProperties": false,
-            "description": "Параметры сортировки (колонка — фиксированный набор)"
-          }
-        },
-        "required": [
-          "sorting"
-        ],
-        "additionalProperties": false
-      },
       "ExportTasksResponseDto": {
         "type": "object",
         "properties": {
@@ -3760,7 +3649,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExportTasksRequestDto"
+                "$ref": "#/components/schemas/GetTasksRequestDto"
               }
             }
           }

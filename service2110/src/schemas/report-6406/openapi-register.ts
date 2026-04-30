@@ -36,7 +36,6 @@ import {
   copyToTfrResponseSchema,
 } from './packages.schema.ts';
 import {
-  exportTasksRequestSchema,
   exportTasksResponseSchema,
 } from './export.schema.ts';
 import {
@@ -106,7 +105,6 @@ export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry
   registry.add(packageStatusHistoryItemSchema, { id: 'PackageStatusHistoryItemDto' });
   registry.add(packageStatusHistoryResponseSchema, { id: 'PackageStatusHistoryResponseDto' });
 
-  registry.add(exportTasksRequestSchema, { id: 'ExportTasksRequestDto' });
   registry.add(exportTasksResponseSchema, { id: 'ExportTasksResponseDto' });
 
   registry.add(storageVolumeItemSchema, { id: 'StorageVolumeItemDto' });

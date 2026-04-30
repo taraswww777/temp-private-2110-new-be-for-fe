@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { exportTasksRequestSchema } from '../../../../schemas/report-6406/export.schema.ts';
 import { z } from 'zod';
+import { getTasksRequestSchema } from '../../../../schemas/report-6406/tasks.schema.ts';
 
 export const exportRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -15,7 +15,7 @@ export const exportRoutes: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Tasks'],
       summary: 'Выгрузить реестр отчётов в CSV формате',
       description: 'Создаёт CSV файл со списком заданий согласно фильтрам. Возвращает ссылку на скачивание файла.',
-      body: exportTasksRequestSchema,
+      body: getTasksRequestSchema,
       response: {
         200: z.file(),
       },
