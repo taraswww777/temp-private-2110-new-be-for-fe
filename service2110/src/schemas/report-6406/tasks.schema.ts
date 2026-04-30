@@ -92,8 +92,7 @@ export const taskDetailSchema = baseTaskSchema.extend({
   accountList,
   secondOrderAccountList,
   operationType,
-  // TODO: Это поле нужно, а вот что там будет пока не известно
-  s3FolderId: z.string().optional().describe('ID папки в S3'),
+  s3Path: z.string().optional().describe('ID папки в S3'),
 }).superRefine(dateRangeRefinement());
 
 export type TaskDetails = z.infer<typeof taskDetailSchema>;
