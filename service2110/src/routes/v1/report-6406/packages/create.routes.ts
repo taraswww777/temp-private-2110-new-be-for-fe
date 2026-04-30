@@ -1,10 +1,12 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
+  basePackageSchema,
   createPackageSchema, Package,
   packageSchema,
 } from '../../../../schemas/report-6406/packages.schema';
 import { zErrorDTOSchema } from '../../../../schemas/common/errorDTO.schema.ts';
+import { zIdSchema } from '../../../../schemas/common/id.schema.ts';
 
 
 /**
@@ -22,11 +24,11 @@ export const createPackageRoute: FastifyPluginAsync = async (fastify) => {
       summary: 'Создать новый пакет',
       body: createPackageSchema,
       response: {
-        201: packageSchema,
+        201: zIdSchema.describe('ИД пакета'),
         409: zErrorDTOSchema,
       },
     },
   }, async (_request, reply) => {
-    return reply.status(201).send({} as Package);
+    return reply.status(201).send(0);
   });
 };
