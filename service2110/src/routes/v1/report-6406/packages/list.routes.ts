@@ -2,8 +2,8 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
-  packagesQuerySchema,
-  packagesListResponseSchema,
+  getPackageListRequestSchema,
+  getPackageListResponseSchema,
 } from '../../../../schemas/report-6406/packages.schema';
 
 /**
@@ -15,13 +15,13 @@ import {
 export const listPackagesRoute: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
-  app.get('/', {
+  app.post('/list', {
     schema: {
       tags: ['Report 6406 - Packages'],
       summary: 'Получить список пакетов с пагинацией',
-      querystring: packagesQuerySchema,
+      body: getPackageListRequestSchema,
       response: {
-        200: packagesListResponseSchema,
+        200: getPackageListResponseSchema,
       },
     },
   }, async (_request, reply) => {

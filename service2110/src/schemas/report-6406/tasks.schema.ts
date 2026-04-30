@@ -1,42 +1,46 @@
 import { z } from 'zod';
-import { zAccountSchema, zAccountSecondOrderSchema,  } from '../common.schema.ts';
+import { zAccountSchema, zAccountSecondOrderSchema } from '../common.schema.ts';
 import { reportTypeSchema } from './enums/ReportTypeEnum.ts';
-import { currencySchema } from './enums/CurrencyEnum.ts';
+import { currencyIdSchema, currencySchema } from './enums/CurrencyEnum.ts';
 import { FileFormatEnum, fileFormatSchema } from './enums/FileFormatEnum.ts';
 import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 import { dateRangeRefinement, dateSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
+import { branchSchema, sourceSchema } from './references.schema.ts';
 
 export type CurrencyType = z.infer<typeof currencySchema>;
 export type FileFormatType = z.infer<typeof fileFormatSchema>;
 
 
  // TODO Проработать нейминг accountList/ accountPlansList/ accountNumbersList
-// Будет только в create и detail, в списке быть не должно
+// Будет только в create и detail и в фильтрах, в списке быть не должно
 const accountList = z.array(zAccountSchema).optional().describe('Список счетов (20-значные номера)');
-// Будет только в create и detail, в списке быть не должно
-const accountSecondOrderList = z.array(zAccountSecondOrderSchema).optional().describe('Счета второго порядка (5-значные номера)');
+// Будет только в create и detail и в фильтрах, в списке быть не должно
+const secondOrderAccountList = z.array(zAccountSecondOrderSchema).optional().describe('Счета второго порядка (5-значные номера)');
+
+/** Есть только в create и filter */
+const operationTypeList =  z.array(reportTypeSchema).describe('Тип операции');
+/** Есть везде кроме create и filter */
+const operationType = reportTypeSchema.describe('Тип операции');
 
 /**
  * Базовая схема задания — все поля, общие для detail, list и create.
  */
 export const baseTaskSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
-  createdAt: z.iso.datetime().describe('Дата и время создания'),
-  createdBy: z.string().describe('ФИО сотрудника, создавшего задание'),
-  branchIdsList: z.array(zIdSchema).min(1).describe('Массив ИД филиалов'),
-  // TODO: reportType =>  OperationType OperationTypeEnum
-  reportType: reportTypeSchema.describe('Тип операции'),
-  periodFrom: dateSchema.optional().describe('Дата начала отчётного периода YYYY-MM-DD'),
-  periodTo: dateSchema.optional().describe('Дата окончания отчётного периода YYYY-MM-DD'),
-  currencyCode: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
+  createdAt: z.iso.datetime().describe('Дата и время создания 2026-04-30T07:46:40.449Z'),
+  createdBy: z.string().describe('Логин сотрудника, создавшего задание'),
+  branchList: z.array(branchSchema).min(1).describe('Массив ИД филиалов').nonempty(),
+  periodFrom: dateSchema.optional().describe('Дата начала отчётного периода 2023-01-01'),
+  periodTo: dateSchema.optional().describe('Дата окончания отчётного периода 2023-12-31'),
+  currencyId: currencyIdSchema.describe('Ид валюты (например: 810, 999)'),
   fileFormat: fileFormatSchema.describe('Формат файла').default(FileFormatEnum.TXT),
   taskStatus: taskStatusSchema.describe('Статус задания'),
-  totalFilesSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан'),
-  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
-  sourcesList: z.array(zIdSchema).optional().describe('Источники данных'),
+  totalFilesSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан').default(0),
+  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления 2026-04-30T07:46:40.449Z'),
+  sourceList: z.array(sourceSchema).optional().describe('Источники данных'),
   filesCount: z.number().int().min(0).describe('Количество файлов').default(0),
   packageId: zIdSchema.optional().describe('ИД Пакета, в который входит задание'),
 });
@@ -60,7 +64,8 @@ export const createTaskSchema = baseTaskSchema
   })
   .extend({
     accountList,
-    accountSecondOrderList,
+    secondOrderAccountList,
+    operationTypeList,
   })
   .superRefine(dateRangeRefinement());
 
@@ -85,9 +90,9 @@ export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
  */
 export const taskDetailSchema = baseTaskSchema.extend({
   accountList,
-  accountSecondOrderList,
-  // TODO: Это поле нужно, а вот что там будет пока не известно
-  s3FolderId: z.string().optional().describe('ID папки в S3'),
+  secondOrderAccountList,
+  operationType,
+  s3Path: z.string().optional().describe('ID папки в S3'),
 }).superRefine(dateRangeRefinement());
 
 export type TaskDetails = z.infer<typeof taskDetailSchema>;
@@ -96,7 +101,9 @@ export type TaskDetails = z.infer<typeof taskDetailSchema>;
  * Схема для элемента списка заданий (TaskListItemDto).
  * Проекция baseTaskSchema — все поля базы, без дополнительных detail-полей.
  */
-export const taskListItemSchema = baseTaskSchema;
+export const taskListItemSchema = baseTaskSchema.extend({
+  operationType
+});
 
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
 
@@ -129,16 +136,20 @@ export const tasksListSortingSchema = z.object({
  */
 export const tasksListFilterSchema = z.object({
   packageId: zIdSchema.optional().describe('ID пакета'),
-  branchIdsList: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
+  operationTypeList: z.array(reportTypeSchema).optional().describe('Типы отчётов'),
+  branchIdList: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
   taskStatusList: z.array(taskStatusSchema).optional().describe('Статусы заданий'),
-  reportTypeList: z.array(reportTypeSchema).optional().describe('Типы отчётов'),
   fileFormatList: z.array(fileFormatSchema).optional().describe('Форматы файла'),
   sourceIdList: z.array(zIdSchema).optional().describe('Идентификаторы источников данных'),
-  createdByList: z.array(z.string()).optional().describe('ФИО создателя задания'),
+  accountList,
+  secondOrderAccountList,
+  currencyIdList: z.array(currencyIdSchema).optional(),
+  /** без интеграции с карточкой фл этот фильтр createdByList не получится сделать нормально, будет много дефектов */
+  createdByList: z.array(z.string()).optional().describe('Логин создателя пакета'),
   periodFrom: dateSchema.optional().describe('Дата начала отчётного периода YYYY-MM-DD'),
   periodTo: dateSchema.optional().describe('Дата окончания отчётного периода YYYY-MM-DD'),
-  createdAtFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601)'),
-  createdAtTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601)'),
+  createdAtFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
+  createdAtTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
 }).optional();
 
 export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
@@ -164,80 +175,3 @@ export const tasksListResponseSchema = z.object({
 
 export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
 
-/**
- * Схема для массового удаления заданий
- */
-export const bulkDeleteTasksSchema = z.array(zIdSchema).min(1);
-
-export type BulkDeleteTasksInput = z.infer<typeof bulkDeleteTasksSchema>;
-
-/**
- * Схема для ответа при массовом удалении (с детальными результатами)
- */
-export const bulkDeleteResponseSchema = z.object({
-  succeeded: z.number().int().min(0).describe('Количество успешно удалённых заданий'),
-  failed: z.number().int().min(0).describe('Количество заданий, которые не удалось удалить'),
-  results: z.array(z.object({
-    taskId: zIdSchema,
-    success: z.boolean(),
-    reason: z.string().optional(),
-  })),
-});
-
-export type BulkDeleteResponse = z.infer<typeof bulkDeleteResponseSchema>;
-
-/**
- * Схема для массовой отмены заданий
- */
-export const bulkCancelTasksSchema = z.array(zIdSchema).min(1);
-
-export type BulkCancelTasksInput = z.infer<typeof bulkCancelTasksSchema>;
-
-/**
- * Схема для ответа при массовой отмене (с детальными результатами)
- */
-export const bulkCancelResponseSchema = z.object({
-  succeeded: z.number().int().min(0).describe('Количество успешно отменённых заданий'),
-  failed: z.number().int().min(0).describe('Количество заданий, которые не удалось отменить'),
-  results: z.array(z.object({
-    taskId: zIdSchema,
-    success: z.boolean(),
-    taskStatus: taskStatusSchema.optional(),
-    updatedAt: z.iso.datetime().optional(),
-    reason: z.string().optional(),
-  })),
-});
-
-export type BulkCancelResponse = z.infer<typeof bulkCancelResponseSchema>;
-
-
-/**
- * Схема для запуска заданий (одного или нескольких)
- */
-export const startTasksSchema = z.array(zIdSchema).min(1);
-
-export type StartTasksInput = z.infer<typeof startTasksSchema>;
-
-/**
- * Элемент результата запуска (успех/ошибка) — в bulk-формате.
- */
-export const startTaskResultSchema = z.object({
-  taskId: zIdSchema,
-  success: z.boolean(),
-  status: taskStatusSchema.optional(),
-  startedAt: z.iso.datetime().optional(),
-  reason: z.string().optional(),
-});
-
-export type StartTaskResult = z.infer<typeof startTaskResultSchema>;
-
-/**
- * Схема для ответа при запуске заданий
- */
-export const startTasksResponseSchema = z.object({
-  succeeded: z.number().int().min(0).describe('Количество успешно запущенных заданий'),
-  failed: z.number().int().min(0).describe('Количество заданий, которые не удалось запустить'),
-  results: z.array(startTaskResultSchema),
-});
-
-export type StartTasksResponse = z.infer<typeof startTasksResponseSchema>;

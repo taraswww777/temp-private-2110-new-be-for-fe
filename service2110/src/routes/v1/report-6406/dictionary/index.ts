@@ -1,13 +1,12 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { referencesService } from '../../../../services/report-6406/references.service.ts';
 import {
+  accountMasksResponseSchema,
   branchesResponseSchema,
   currenciesResponseSchema,
-  sourcesResponseSchema,
   employeeResponseSchema,
-  accountMasksResponseSchema
+  sourcesResponseSchema,
 } from '../../../../schemas/report-6406/dictionary.schema';
 
 export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
@@ -26,8 +25,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getBranches();
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 
   /**
@@ -43,8 +41,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getCurrencies();
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 
   /**
@@ -60,8 +57,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getSources();
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 
   /**
@@ -77,8 +73,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getAccountMasks();
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 
   /**
@@ -97,7 +92,6 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await referencesService.getEmployee(request.params.login);
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 };

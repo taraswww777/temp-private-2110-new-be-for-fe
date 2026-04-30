@@ -3,9 +3,10 @@ import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import {
+  retryFileConversionResponseSchema,
   taskFilesQuerySchema,
   taskFilesResponseSchema,
-  retryFileConversionResponseSchema,
+  taskFileUrlResponseSchema,
 } from '../../../../schemas/report-6406/task-files.schema.ts';
 import { idParamSchema, zIdSchema } from '../../../../schemas/common/id.schema.ts';
 
@@ -20,18 +21,38 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
   /**
    * GET /api/v1/report-6406/tasks/:id/files
    * Получить список файлов задания
-   * 
+   *
    * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
    */
   app.get('/:id/files', {
     schema: {
       tags: ['Report 6406 - Tasks'],
       summary: 'Получить список файлов задания',
-      description: 'Возвращает список файлов с pre-signed URLs для скачивания. URLs генерируются автоматически для файлов в статусе COMPLETED.',
+      description: 'Возвращает список файлов без pre-signed URLs для скачивания.',
       params: idParamSchema,
       querystring: taskFilesQuerySchema,
       response: {
         200: taskFilesResponseSchema,
+      },
+    },
+  }, async (_request, reply) => {
+    return reply.status(200).send({} as any);
+  });
+
+  /**
+   * GET /api/v1/report-6406/tasks/files/presigned-urls
+   * Получить список файлов задания
+   *
+   * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
+   */
+  app.post('/files/presigned-urls', {
+    schema: {
+      tags: ['Report 6406 - Tasks'],
+      summary: 'Получение presigned URL для скачивания файлов по их ID',
+      description: 'Возвращает список pre-signed URLs для скачивания.',
+      body: z.array(zIdSchema),
+      response: {
+        200: taskFileUrlResponseSchema,
       },
     },
   }, async (_request, reply) => {

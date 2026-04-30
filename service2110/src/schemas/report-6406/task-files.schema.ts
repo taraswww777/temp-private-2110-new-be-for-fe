@@ -10,12 +10,8 @@ import { paginationMetadataSchema, paginationQuerySchema } from '../common/pagin
  */
 export const taskFileSchema = z.object({
   id: zIdSchema,
-  fileNumber: z.number().int().min(1),
   fileName: z.string(),
   fileSize: z.number().int().min(0).describe('Размер файла в байтах (например, 10485760 = 10 MB)'),
-  fileFormat: z.string(),
-  status: fileStatusZodSchema,
-  downloadUrl: z.string(),
 });
 
 export type TaskFile = z.infer<typeof taskFileSchema>;
@@ -58,3 +54,15 @@ export const retryFileConversionResponseSchema = z.object({
 });
 
 export type RetryFileConversionResponse = z.infer<typeof retryFileConversionResponseSchema>;
+
+
+/**
+ * Схема для ответа со списком ссылок для файлов
+ */
+export const taskFileUrlItemSchema = z.object({
+  url: z.string(),
+  fileName: z.string(),
+});
+
+export const taskFileUrlResponseSchema = z.array(taskFileUrlItemSchema);
+

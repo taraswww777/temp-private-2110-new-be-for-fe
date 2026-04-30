@@ -15,10 +15,10 @@ export enum StorageCodeEnum {
   TFR = 'TFR',
 
   /** Объектное хранилище (S3-совместимое). */
-  S3 = 'S3',
+  CEPH = 'CEPH',
 
   /** Локальное хранилище на сервере. */
-  LOCAL = 'LOCAL',
+  ARCHIVE = 'ARCHIVE',
 }
 
 /**
@@ -27,8 +27,8 @@ export enum StorageCodeEnum {
  */
 const StorageCodeDescriptions = {
   [StorageCodeEnum.TFR]: { value: StorageCodeEnum.TFR, description: 'Территориальный финансовый репозиторий' },
-  [StorageCodeEnum.S3]: { value: StorageCodeEnum.S3, description: 'Объектное хранилище (S3)' },
-  [StorageCodeEnum.LOCAL]: { value: StorageCodeEnum.LOCAL, description: 'Локальное хранилище' },
+  [StorageCodeEnum.CEPH]: { value: StorageCodeEnum.CEPH, description: 'Объектное хранилище (S3)' },
+  [StorageCodeEnum.ARCHIVE]: { value: StorageCodeEnum.ARCHIVE, description: 'Локальное хранилище' },
 } as const;
 
 /**

@@ -1,9 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import {
-  bulkCancelTasksSchema,
-  bulkCancelResponseSchema,
-} from '../../../../schemas/report-6406/tasks.schema.ts';
+import { processResponseSchema, processRequestSchema } from '../../../../schemas/common/process.schema.ts';
 
 /**
  * POST /api/v1/report-6406/tasks/cancel
@@ -19,9 +16,9 @@ export const cancelTasksRoute: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Tasks'],
       summary: 'Отменить одно или несколько заданий',
       description: 'Отменяет задания на нашей стороне (переводит в статус «Задание отменено»). Синхронизация с внешней системой может в дальнейшем приводить к статусу KILLED_DAPP. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
-      body: bulkCancelTasksSchema,
+      body: processRequestSchema,
       response: {
-        200: bulkCancelResponseSchema,
+        200: processResponseSchema,
       },
     },
   }, async (_request, reply) => {

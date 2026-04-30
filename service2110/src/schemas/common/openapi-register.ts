@@ -4,6 +4,7 @@ import { paginatedResponseSchema, paginationMetadataSchema, paginationQuerySchem
 import { dateSchema, dateTimeSchema } from './dateString.schema.ts';
 import { sortOrderSchema } from './SortOrderEnum.ts';
 import { zErrorDTOSchema } from './errorDTO.schema.ts';
+import { processRequestSchema, processResponseSchema, processResultItemSchema } from './process.schema.ts';
 
 export type OpenApiSchemaRegistry = ReturnType<typeof z.registry<{ id: string }>>;
 
@@ -18,4 +19,7 @@ export function registerCommonOpenApiSchemas(registry: OpenApiSchemaRegistry) {
   registry.add(zErrorDTOSchema, { id: 'ErrorDTO' });
   registry.add(dateTimeSchema, { id: 'DateTimeSchema' });
   registry.add(sortOrderSchema, { id: 'SortOrderEnum' });
+  registry.add(processRequestSchema, { id: 'ProcessDto' });
+  registry.add(processResponseSchema, { id: 'ProcessResponseDto' });
+  registry.add(processResultItemSchema, { id: 'ProcessResultItemDto' });
 }

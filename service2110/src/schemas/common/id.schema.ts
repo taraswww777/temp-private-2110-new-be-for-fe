@@ -9,10 +9,9 @@ export const zIdSchema = z.number().int().positive().describe('Integer ID').min(
 export type ID = z.infer<typeof zIdSchema>;
 
 /**
- * Схема для integer ID параметров
+ * Схема для integer ID параметров, в GET параметрах
  */
-export const idParamSchema = z.object({
-  id: zIdSchema,
-});
+export const idParamSchema = z.object({ id: zIdSchema });
 
-export type IdParam = z.infer<typeof idParamSchema>;
+export const idListSchema = z.array(zIdSchema);
+

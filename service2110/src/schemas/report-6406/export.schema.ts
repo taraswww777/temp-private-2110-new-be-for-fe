@@ -1,64 +1,7 @@
 import { z } from 'zod';
 import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
-import { SortOrderEnum, sortOrderSchema } from '../common/SortOrderEnum.ts';
-import { reportTypeSchema } from './enums/ReportTypeEnum.ts';
-import { fileFormatSchema } from './enums/FileFormatEnum.ts';
 
 import { zIdSchema } from '../common/id.schema.ts';
-
-/**
- * Схема для фильтров экспорта (расширенная)
- */
-export const exportFiltersSchema = z.object({
-  // Фильтры по статусам (массив)
-  statuses: z.array(taskStatusSchema).optional().describe('Список статусов для фильтрации'),
-
-  // Фильтры по филиалам (массив строк)
-  branchIds: z.array(zIdSchema).optional().describe('Список ИД филиалов для фильтрации'),
-
-  // Фильтры по типам отчётов (массив)
-  reportTypes: z.array(reportTypeSchema).optional().describe('Список типов отчётов для фильтрации'),
-
-  // Фильтры по форматам (массив)
-  formats: z.array(fileFormatSchema).optional().describe('Список форматов для фильтрации'),
-
-  // Фильтры по периоду (periodStart)
-  periodStartFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Начальная дата периода'),
-  periodStartTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Конечная дата периода'),
-
-  // Фильтры по периоду (periodEnd)
-  periodEndFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Начальная дата окончания периода'),
-  periodEndTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Конечная дата окончания периода'),
-
-  // Фильтры по дате создания
-  createdAtFrom: z.iso.datetime().optional().describe('Начальная дата создания'),
-  createdAtTo: z.iso.datetime().optional().describe('Конечная дата создания'),
-}).optional();
-
-export type ExportFilters = z.infer<typeof exportFiltersSchema>;
-
-/**
- * Допустимые колонки для сортировки экспорта
- */
-export const exportSortBySchema = z.enum(['createdAt', 'branchId', 'status', 'periodStart', 'updatedAt']);
-export type ExportSortBy = z.infer<typeof exportSortBySchema>;
-
-/** Схема сортировки для экспорта */
-export const exportSortingSchema = z.object({
-  sortBy: exportSortBySchema.default('createdAt').describe('Поле для сортировки'),
-  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
-});
-
-/**
- * Схема для запроса экспорта (с дополнительными опциями)
- */
-export const exportTasksRequestSchema = z.object({
-  filter: exportFiltersSchema,
-  columns: z.array(z.string()).optional().describe('Список колонок для включения в экспорт'),
-  sorting: exportSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
-});
-
-export type ExportTasksRequest = z.infer<typeof exportTasksRequestSchema>;
 
 /**
  * Схема для ответа экспорта

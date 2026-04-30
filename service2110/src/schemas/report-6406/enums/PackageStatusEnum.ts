@@ -19,7 +19,7 @@ export enum PackageStatusEnum {
 }
 
 // Мапа описаний для каждого значения enum
-const PacketStatusDescriptions = {
+const PackageStatusDescriptions = {
   [PackageStatusEnum.CREATE]: { value: PackageStatusEnum.CREATE, description: 'Создано' },
   [PackageStatusEnum.TRANSFER]: { value: PackageStatusEnum.TRANSFER, description: 'Копирование' },
   [PackageStatusEnum.DONE]: { value: PackageStatusEnum.DONE, description: 'Выполнено' },
@@ -29,12 +29,12 @@ const PacketStatusDescriptions = {
 } as const;
 
 // Создаем схему через enum (который возвращает ZodEnum)
-export const packetStatusSchema = z.enum(PackageStatusEnum).describe('Статус пакета');
+export const packageStatusSchema = z.enum(PackageStatusEnum).describe('Статус пакета');
 
 // Добавляем метаданные через describe (некоторые генераторы поддерживают)
 export const PackageStatusEnumSchema = createEnumSchemaWithDescriptions(
   PackageStatusEnum,
-  PacketStatusDescriptions,
+  PackageStatusDescriptions,
   'PackageStatusEnum',
   'Статус пакета',
 );

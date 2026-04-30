@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import {
-  bulkDeletePackagesSchema,
-  bulkDeletePackagesResponseSchema,
-} from '../../../../schemas/report-6406/packages.schema';
+import { processRequestSchema, processResponseSchema } from '../../../../schemas/common/process.schema.ts';
 
 /**
  * DELETE /api/v1/report-6406/packages
@@ -20,9 +17,9 @@ export const deletePackagesRoute: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Packages'],
       summary: 'Удалить один или несколько пакетов',
       description: 'Удаляет пакеты. Возвращает 200 OK с детальной информацией о результате операции для каждого пакета.',
-      body: bulkDeletePackagesSchema,
+      body: processRequestSchema,
       response: {
-        200: bulkDeletePackagesResponseSchema,
+        200: processResponseSchema,
       },
     },
   }, async (_request, reply) => {
