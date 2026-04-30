@@ -7,7 +7,7 @@ import { zIdSchema } from '../common/id.schema.ts';
  */
 export const branchSchema = z.object({
   id: zIdSchema.describe('ИД филиала'),
-  code: z.string().describe('Код филиала'),
+  codeCb: z.string().describe('Код филиала по ЦБ'),
   name: z.string().describe('Название филиала'),
 });
 
@@ -58,6 +58,7 @@ export type FormatsResponse = z.infer<typeof formatsResponseSchema>;
  * Схема для источника
  */
 export const sourceSchema = z.object({
+  id: zIdSchema,
   code: z.string(),
   name: z.string(),
   ris: z.string().nullable(),

@@ -8,35 +8,39 @@ import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 import { dateRangeRefinement, dateSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
+import { branchSchema, sourceSchema } from './references.schema.ts';
 
 export type CurrencyType = z.infer<typeof currencySchema>;
 export type FileFormatType = z.infer<typeof fileFormatSchema>;
 
 
  // TODO Проработать нейминг accountList/ accountPlansList/ accountNumbersList
-// Будет только в create и detail, в списке быть не должно
+// Будет только в create и detail и в фильтрах, в списке быть не должно
 const accountList = z.array(zAccountSchema).optional().describe('Список счетов (20-значные номера)');
-// Будет только в create и detail, в списке быть не должно
-const accountSecondOrderList = z.array(zAccountSecondOrderSchema).optional().describe('Счета второго порядка (5-значные номера)');
+// Будет только в create и detail и в фильтрах, в списке быть не должно
+const secondOrderAccountList = z.array(zAccountSecondOrderSchema).optional().describe('Счета второго порядка (5-значные номера)');
+
+/** Есть только в create и filter */
+const operationTypeList =  z.array(reportTypeSchema).describe('Тип операции');
+/** Есть везде кроме create и filter */
+const operationType = reportTypeSchema.describe('Тип операции');
 
 /**
  * Базовая схема задания — все поля, общие для detail, list и create.
  */
 export const baseTaskSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
-  createdAt: z.iso.datetime().describe('Дата и время создания'),
-  createdBy: z.string().describe('ФИО сотрудника, создавшего задание'),
-  branchIdsList: z.array(zIdSchema).min(1).describe('Массив ИД филиалов'),
-  // TODO: reportType =>  OperationType OperationTypeEnum
-  reportType: reportTypeSchema.describe('Тип операции'),
-  periodFrom: dateSchema.optional().describe('Дата начала отчётного периода YYYY-MM-DD'),
-  periodTo: dateSchema.optional().describe('Дата окончания отчётного периода YYYY-MM-DD'),
-  currencyCode: currencySchema.describe('Валюта (например: RUB, FOREIGN)'),
+  createdAt: z.iso.datetime().describe('Дата и время создания 2026-04-30T07:46:40.449Z'),
+  createdBy: z.string().describe('Логин сотрудника, создавшего задание'),
+  branchList: z.array(branchSchema).min(1).describe('Массив ИД филиалов').nonempty(),
+  periodFrom: dateSchema.optional().describe('Дата начала отчётного периода 2023-01-01'),
+  periodTo: dateSchema.optional().describe('Дата окончания отчётного периода 2023-12-31'),
+  currencyId: currencySchema.describe('Ид валюты (например: 810, 999)'),
   fileFormat: fileFormatSchema.describe('Формат файла').default(FileFormatEnum.TXT),
   taskStatus: taskStatusSchema.describe('Статус задания'),
-  totalFilesSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан'),
-  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
-  sourcesList: z.array(zIdSchema).optional().describe('Источники данных'),
+  totalFilesSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан').default(0),
+  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления 2026-04-30T07:46:40.449Z'),
+  sourceList: z.array(sourceSchema).optional().describe('Источники данных'),
   filesCount: z.number().int().min(0).describe('Количество файлов').default(0),
   packageId: zIdSchema.optional().describe('ИД Пакета, в который входит задание'),
 });
@@ -60,7 +64,8 @@ export const createTaskSchema = baseTaskSchema
   })
   .extend({
     accountList,
-    accountSecondOrderList,
+    secondOrderAccountList,
+    operationTypeList,
   })
   .superRefine(dateRangeRefinement());
 
@@ -85,7 +90,8 @@ export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
  */
 export const taskDetailSchema = baseTaskSchema.extend({
   accountList,
-  accountSecondOrderList,
+  secondOrderAccountList,
+  operationType,
   // TODO: Это поле нужно, а вот что там будет пока не известно
   s3FolderId: z.string().optional().describe('ID папки в S3'),
 }).superRefine(dateRangeRefinement());
