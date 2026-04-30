@@ -3771,7 +3771,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExportTasksResponseDto"
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
