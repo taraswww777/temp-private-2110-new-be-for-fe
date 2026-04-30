@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { currencySchema } from './CurrencyEnum.ts';
 import { fileFormatSchema } from './FileFormatEnum.ts';
 import { fileStatusZodSchema } from './FileStatusEnum.ts';
-import { packetStatusSchema } from './PackageStatusEnum.ts';
+import { packageStatusSchema } from './PackageStatusEnum.ts';
 import { reportTypeSchema } from './ReportTypeEnum.ts';
 import { taskStatusSchema } from './TaskStatusEnum.ts';
 import { storageCodeZodSchema } from './StorageCodeEnum.ts';
@@ -18,7 +18,7 @@ export function registerReport6406EnumsOpenApiSchemas(registry: OpenApiSchemaReg
   registry.add(fileFormatSchema, { id: 'FileFormatEnum' });
   registry.add(reportTypeSchema, { id: 'ReportTypeEnum' });
   registry.add(taskStatusSchema, { id: 'TaskStatusEnum' });
-  registry.add(packetStatusSchema, { id: 'PackageStatusEnum' });
+  registry.add(packageStatusSchema, { id: 'PackageStatusEnum' });
   registry.add(fileStatusZodSchema, { id: 'FileStatusEnum' });
   registry.add(storageCodeZodSchema, { id: 'StorageCodeEnum' });
 }

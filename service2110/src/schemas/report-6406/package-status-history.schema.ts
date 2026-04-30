@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { packetStatusSchema } from './enums/PackageStatusEnum.ts';
+import { packageStatusSchema } from './enums/PackageStatusEnum.ts';
 
 import { zIdSchema } from '../common/id.schema.ts';
 
@@ -9,7 +9,7 @@ import { zIdSchema } from '../common/id.schema.ts';
 export const packageStatusHistoryItemSchema = z.object({
   id: zIdSchema,
   packageId: zIdSchema,
-  packageStatus: packetStatusSchema,
+  packageStatus: packageStatusSchema,
   changedAt: z.iso.datetime().describe('Дата и время изменения'),
   changedBy: z.string().describe('Инициатор изменения. Логин или ФИО'),
   note: z.string().optional(),

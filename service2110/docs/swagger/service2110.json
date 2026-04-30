@@ -33,7 +33,8 @@
           "page",
           "limit"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Параметры пагинации"
       },
       "PaginationMetadataDto": {
         "type": "object",
@@ -778,7 +779,6 @@
         "type": "object",
         "properties": {
           "pagination": {
-            "description": "Параметры пагинации",
             "$ref": "#/components/schemas/PaginationRequestDto"
           },
           "sorting": {
@@ -889,7 +889,7 @@
                 }
               },
               "createdByList": {
-                "description": "ФИО создателя задания",
+                "description": "Логин создателя пакета",
                 "type": "array",
                 "items": {
                   "type": "string"
@@ -1392,21 +1392,23 @@
       "PackagesListResponseDto": {
         "type": "object",
         "properties": {
-          "packages": {
+          "items": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PackageDto"
             },
             "description": "Список пакетов"
           },
-          "pagination": {
-            "description": "Метаданные пагинации",
-            "$ref": "#/components/schemas/PaginationMetadataDto"
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество заданий"
           }
         },
         "required": [
-          "packages",
-          "pagination"
+          "items",
+          "totalItems"
         ],
         "additionalProperties": false
       },
@@ -2321,7 +2323,6 @@
         "type": "object",
         "properties": {
           "pagination": {
-            "description": "Параметры пагинации",
             "$ref": "#/components/schemas/PaginationRequestDto"
           },
           "sorting": {
@@ -3733,83 +3734,6 @@
           }
         }
       },
-      "get": {
-        "summary": "Получить список пакетов с пагинацией",
-        "tags": [
-          "Report 6406 - Packages"
-        ],
-        "parameters": [
-          {
-            "schema": {
-              "default": 1,
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            },
-            "in": "query",
-            "name": "page",
-            "required": false
-          },
-          {
-            "schema": {
-              "default": 20,
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100
-            },
-            "in": "query",
-            "name": "limit",
-            "required": false
-          },
-          {
-            "schema": {
-              "default": "createdAt",
-              "type": "string",
-              "enum": [
-                "createdAt",
-                "name",
-                "tasksCount",
-                "totalSize"
-              ]
-            },
-            "in": "query",
-            "name": "sortBy",
-            "required": false
-          },
-          {
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/SortOrderEnum"
-                }
-              ]
-            },
-            "in": "query",
-            "name": "sortOrder",
-            "required": false
-          },
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query",
-            "name": "search",
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PackagesListResponseDto"
-                }
-              }
-            }
-          }
-        }
-      },
       "delete": {
         "summary": "Удалить один или несколько пакетов",
         "tags": [
@@ -3832,6 +3756,128 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BulkDeletePackagesResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/list": {
+      "post": {
+        "summary": "Получить список пакетов с пагинацией",
+        "tags": [
+          "Report 6406 - Packages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page": {
+                    "default": 1,
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  },
+                  "limit": {
+                    "default": 20,
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                  },
+                  "pagination": {
+                    "$ref": "#/components/schemas/PaginationRequestDto"
+                  },
+                  "sorting": {
+                    "type": "object",
+                    "properties": {
+                      "sortOrder": {
+                        "$ref": "#/components/schemas/SortOrderEnum"
+                      },
+                      "sortBy": {
+                        "type": "string",
+                        "enum": [
+                          "createdAt",
+                          "taskStatus",
+                          "reportType",
+                          "periodFrom",
+                          "periodTo",
+                          "createdBy"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "sortBy"
+                    ]
+                  },
+                  "filter": {
+                    "type": "object",
+                    "properties": {
+                      "packageId": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 9007199254740991
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "packageStatus": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/PackageStatusEnum"
+                        }
+                      },
+                      "createdAtFrom": {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      },
+                      "createdAtTo": {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      },
+                      "copiedFrom": {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      },
+                      "copiedTo": {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      },
+                      "isEmpty": {
+                        "default": false,
+                        "type": "boolean"
+                      },
+                      "createdByList": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "pagination",
+                  "sorting"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackagesListResponseDto"
                 }
               }
             }

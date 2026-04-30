@@ -1,8 +1,9 @@
 import { z } from 'zod';
 import { SortOrderEnum, sortOrderSchema } from '../common/SortOrderEnum.ts';
-import { packetStatusSchema } from './enums/PackageStatusEnum.ts';
+import { packageStatusSchema } from './enums/PackageStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationMetadataSchema, paginationQuerySchema } from '../common/pagination.schema.ts';
+import { taskListSortColumnSchema, tasksListSortingSchema } from './tasks.schema.ts';
 
 /**
  * Базовая схема пакета — все поля, общие для detail, list и create.
@@ -17,7 +18,7 @@ export const basePackageSchema = z.object({
   totalTasksCount: z.number().int().min(0).describe('Количество заданий в пакете').default(0),
   totalFilesSize: z.number().int().min(0).describe('Общий размер пакета в мегабайтах (сумма размеров всех файлов)').default(0),
   updatedAt: z.iso.datetime().describe('Дата и время последнего обновления'),
-  status: packetStatusSchema.describe('Текущий статус пакета'),
+  status: packageStatusSchema.describe('Текущий статус пакета'),
 });
 
 /**
@@ -51,36 +52,60 @@ export type Package = z.infer<typeof packageSchema>;
 /**
  * Допустимые колонки для сортировки списка пакетов (детерминированный набор).
  */
-export const packageSortBySchema = z.enum([
+export const packageListSortColumnSchema = z.enum([
   'createdAt',
   'name',
   'tasksCount',
   'totalSize',
 ]);
 
-export type PackageSortBy = z.infer<typeof packageSortBySchema>;
+
+/** Схема сортировки для списка заданий (колонка — enum) */
+export const packageListSortingSchema = z.object({
+  sortOrder: sortOrderSchema,
+  sortBy: taskListSortColumnSchema.describe('Колонка для сортировки'),
+}).describe('Параметры сортировки (колонка — фиксированный набор)');
+
+
+/**
+ * Схема фильтров для списка заданий.
+ * Имена полей согласованы с baseTaskSchema.
+ * Все поля optional — отсутствие поля (undefined/null) означает, что оно не участвует в фильтрации.
+ */
+export const packageListFilterSchema = z.object({
+  packageId: zIdSchema.optional().describe('ID пакета'),
+  name: z.string().describe('Наименование пакета').optional(),
+  packageStatus: z.array(packageStatusSchema).optional().describe('Статусы заданий'),
+  createdAtFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
+  createdAtTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
+
+  copiedFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
+  copiedTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
+
+  isEmpty: z.boolean().default(false).optional().describe('Показать пустые пакеты'),
+  /** без интеграции с карточкой фл этот фильтр createdByList не получится сделать нормально, будет много дефектов */
+  createdByList: z.array(z.string()).optional().describe('Логин создателя пакета'),
+}).optional();
 
 /**
  * Схема для query параметров списка пакетов (GET /api/v1/report-6406/packages).
  * Включает пагинацию, сортировку и поиск по названию.
  */
-export const packagesQuerySchema = paginationQuerySchema.extend({
-  sortBy: packageSortBySchema.default('createdAt').describe('Колонка для сортировки'),
-  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC).describe('Направление сортировки (ASC/DESC)'),
-  search: z.string().optional().describe('Поиск по названию пакета (частичное совпадение)'),
+export const getPackageListRequestSchema = paginationQuerySchema.extend({
+  pagination: paginationQuerySchema,
+  sorting: packageListSortingSchema,
+  filter: packageListFilterSchema,
 });
-
-export type PackagesQuery = z.infer<typeof packagesQuerySchema>;
 
 /**
  * Схема для ответа GET /api/v1/report-6406/packages (пагинированный список пакетов).
  */
-export const packagesListResponseSchema = z.object({
-  packages: z.array(packageSchema).describe('Список пакетов'),
-  pagination: paginationMetadataSchema.describe('Метаданные пагинации'),
+export const getPackageListResponseSchema = z.object({
+  items: z.array(packageSchema).describe('Список пакетов'),
+  totalItems: z.number().int().min(0).describe('Общее количество заданий'),
 });
 
-export type PackagesListResponse = z.infer<typeof packagesListResponseSchema>;
+export type PackagesListResponse = z.infer<typeof getPackageListResponseSchema>;
 
 /**
  * Схема для массового удаления пакетов (DELETE /api/v1/report-6406/packages).

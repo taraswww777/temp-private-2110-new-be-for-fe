@@ -25,7 +25,7 @@ import {
   createPackageSchema,
   updatePackageSchema,
   packageSchema,
-  packagesListResponseSchema,
+  getPackageListResponseSchema,
   bulkDeletePackagesSchema,
   bulkDeletePackagesResponseSchema,
   updatePackageResponseSchema,
@@ -93,7 +93,7 @@ export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry
   registry.add(createPackageSchema, { id: 'CreatePackageDto' });
   registry.add(updatePackageSchema, { id: 'UpdatePackageDto' });
   registry.add(packageSchema, { id: 'PackageDto' });
-  registry.add(packagesListResponseSchema, { id: 'PackagesListResponseDto' });
+  registry.add(getPackageListResponseSchema, { id: 'PackagesListResponseDto' });
   registry.add(bulkDeletePackagesSchema, { id: 'BulkDeletePackagesRequestDto' });
   registry.add(bulkDeletePackagesResponseSchema, { id: 'BulkDeletePackagesResponseDto' });
   registry.add(updatePackageResponseSchema, { id: 'UpdatePackageResponseDto' });
