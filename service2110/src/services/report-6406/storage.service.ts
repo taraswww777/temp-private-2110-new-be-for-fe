@@ -6,11 +6,11 @@ import { StorageCodeEnum } from '../../schemas/report-6406/enums/StorageCodeEnum
 import { env } from '../../config/env.ts';
 import { TaskStatusEnum } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
 
-const DEFAULT_STORAGE_CODE: StorageCodeEnum = StorageCodeEnum.LOCAL;
+const DEFAULT_STORAGE_CODE: StorageCodeEnum = StorageCodeEnum.ARCHIVE;
 
 export class StorageService {
   /**
-   * Получить информацию о объёме хранилищ (массив: по одному элементу на каждое хранилище).
+   * Получить информацию об объёме хранилищ (массив: по одному элементу на каждое хранилище).
    * Пока хранилище одно — возвращается массив из одного элемента.
    */
   async getStorageVolume(): Promise<StorageVolumeItem[]> {

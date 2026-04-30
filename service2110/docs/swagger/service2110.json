@@ -458,8 +458,8 @@
         "type": "string",
         "enum": [
           "TFR",
-          "S3",
-          "LOCAL"
+          "CEPH",
+          "ARCHIVE"
         ],
         "description": "Код хранилища",
         "x-enum-descriptions": [
@@ -469,8 +469,8 @@
         ],
         "x-enum-varnames": [
           "TFR",
-          "S3",
-          "LOCAL"
+          "CEPH",
+          "ARCHIVE"
         ],
         "oneOf": [
           {
@@ -479,14 +479,14 @@
             "title": "TFR"
           },
           {
-            "const": "S3",
+            "const": "CEPH",
             "description": "Объектное хранилище (S3)",
-            "title": "S3"
+            "title": "CEPH"
           },
           {
-            "const": "LOCAL",
+            "const": "ARCHIVE",
             "description": "Локальное хранилище",
-            "title": "LOCAL"
+            "title": "ARCHIVE"
           }
         ]
       },
@@ -2022,7 +2022,6 @@
           "code",
           "totalSize",
           "freeSize",
-          "reservedSize",
           "percent"
         ],
         "additionalProperties": false
