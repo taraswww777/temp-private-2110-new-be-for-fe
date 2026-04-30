@@ -17,6 +17,7 @@ const CurrencyDescriptions = {
 } as const;
 
 export const currencySchema = z.enum(Currency).describe('Валюта');
+export const currencyIdSchema = z.number().positive().min(100).max(999).describe('Валюта');
 
 // Создаем расширенную схему с описаниями
 export const CurrencyEnumSchema = createEnumSchemaWithDescriptions(

@@ -625,8 +625,10 @@
             "$ref": "#/components/schemas/DateSchema"
           },
           "currencyId": {
-            "description": "Ид валюты (например: 810, 999)",
-            "$ref": "#/components/schemas/CurrencyEnum"
+            "type": "number",
+            "minimum": 100,
+            "maximum": 999,
+            "description": "Ид валюты (например: 810, 999)"
           },
           "fileFormat": {
             "default": "TXT",
@@ -713,8 +715,10 @@
             "$ref": "#/components/schemas/DateSchema"
           },
           "currencyId": {
-            "description": "Ид валюты (например: 810, 999)",
-            "$ref": "#/components/schemas/CurrencyEnum"
+            "type": "number",
+            "minimum": 100,
+            "maximum": 999,
+            "description": "Ид валюты (например: 810, 999)"
           },
           "fileFormat": {
             "default": "TXT",
@@ -756,6 +760,10 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 9007199254740991
+          },
+          "operationType": {
+            "description": "Тип операции",
+            "$ref": "#/components/schemas/ReportTypeEnum"
           }
         },
         "required": [
@@ -768,7 +776,8 @@
           "taskStatus",
           "totalFilesSize",
           "updatedAt",
-          "filesCount"
+          "filesCount",
+          "operationType"
         ],
         "additionalProperties": false
       },
@@ -951,8 +960,10 @@
             "$ref": "#/components/schemas/DateSchema"
           },
           "currencyId": {
-            "description": "Ид валюты (например: 810, 999)",
-            "$ref": "#/components/schemas/CurrencyEnum"
+            "type": "number",
+            "minimum": 100,
+            "maximum": 999,
+            "description": "Ид валюты (например: 810, 999)"
           },
           "fileFormat": {
             "default": "TXT",

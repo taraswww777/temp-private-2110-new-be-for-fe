@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { zAccountSchema, zAccountSecondOrderSchema,  } from '../common.schema.ts';
 import { reportTypeSchema } from './enums/ReportTypeEnum.ts';
-import { currencySchema } from './enums/CurrencyEnum.ts';
+import { currencyIdSchema, currencySchema } from './enums/CurrencyEnum.ts';
 import { FileFormatEnum, fileFormatSchema } from './enums/FileFormatEnum.ts';
 import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
@@ -35,7 +35,7 @@ export const baseTaskSchema = z.object({
   branchList: z.array(branchSchema).min(1).describe('Массив ИД филиалов').nonempty(),
   periodFrom: dateSchema.optional().describe('Дата начала отчётного периода 2023-01-01'),
   periodTo: dateSchema.optional().describe('Дата окончания отчётного периода 2023-12-31'),
-  currencyId: currencySchema.describe('Ид валюты (например: 810, 999)'),
+  currencyId: currencyIdSchema.describe('Ид валюты (например: 810, 999)'),
   fileFormat: fileFormatSchema.describe('Формат файла').default(FileFormatEnum.TXT),
   taskStatus: taskStatusSchema.describe('Статус задания'),
   totalFilesSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан').default(0),
@@ -102,7 +102,9 @@ export type TaskDetails = z.infer<typeof taskDetailSchema>;
  * Схема для элемента списка заданий (TaskListItemDto).
  * Проекция baseTaskSchema — все поля базы, без дополнительных detail-полей.
  */
-export const taskListItemSchema = baseTaskSchema;
+export const taskListItemSchema = baseTaskSchema.extend({
+  operationType
+});
 
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
 
