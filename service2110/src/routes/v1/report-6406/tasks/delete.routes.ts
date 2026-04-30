@@ -1,8 +1,8 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
-  bulkDeleteTasksSchema,
-  bulkDeleteResponseSchema,
+  processTasksSchema,
+  processTasksResponseSchema,
 } from '../../../../schemas/report-6406/tasks.schema.ts';
 
 /**
@@ -19,9 +19,9 @@ export const deleteTasksRoute: FastifyPluginAsync = async (fastify) => {
       tags: ['Report 6406 - Tasks'],
       summary: 'Удалить одно или несколько заданий',
       description: 'Удаляет задания. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
-      body: bulkDeleteTasksSchema,
+      body: processTasksSchema,
       response: {
-        200: bulkDeleteResponseSchema,
+        200: processTasksResponseSchema,
       },
     },
   }, async (_request, reply) => {

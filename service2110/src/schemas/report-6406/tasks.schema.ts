@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { zAccountSchema, zAccountSecondOrderSchema,  } from '../common.schema.ts';
+import { zAccountSchema, zAccountSecondOrderSchema } from '../common.schema.ts';
 import { reportTypeSchema } from './enums/ReportTypeEnum.ts';
 import { currencyIdSchema, currencySchema } from './enums/CurrencyEnum.ts';
 import { FileFormatEnum, fileFormatSchema } from './enums/FileFormatEnum.ts';
@@ -174,77 +174,18 @@ export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
 /**
  * Схема для массового удаления заданий
  */
-export const bulkDeleteTasksSchema = z.array(zIdSchema).min(1);
+export const processTasksSchema = z.array(zIdSchema).min(1);
 
-export type BulkDeleteTasksInput = z.infer<typeof bulkDeleteTasksSchema>;
-
-/**
- * Схема для ответа при массовом удалении (с детальными результатами)
- */
-export const bulkDeleteResponseSchema = z.object({
-  succeeded: z.number().int().min(0).describe('Количество успешно удалённых заданий'),
-  failed: z.number().int().min(0).describe('Количество заданий, которые не удалось удалить'),
-  results: z.array(z.object({
-    taskId: zIdSchema,
-    success: z.boolean(),
-    reason: z.string().optional(),
-  })),
-});
-
-export type BulkDeleteResponse = z.infer<typeof bulkDeleteResponseSchema>;
-
-/**
- * Схема для массовой отмены заданий
- */
-export const bulkCancelTasksSchema = z.array(zIdSchema).min(1);
-
-export type BulkCancelTasksInput = z.infer<typeof bulkCancelTasksSchema>;
-
-/**
- * Схема для ответа при массовой отмене (с детальными результатами)
- */
-export const bulkCancelResponseSchema = z.object({
-  succeeded: z.number().int().min(0).describe('Количество успешно отменённых заданий'),
-  failed: z.number().int().min(0).describe('Количество заданий, которые не удалось отменить'),
-  results: z.array(z.object({
-    taskId: zIdSchema,
-    success: z.boolean(),
-    taskStatus: taskStatusSchema.optional(),
-    updatedAt: z.iso.datetime().optional(),
-    reason: z.string().optional(),
-  })),
-});
-
-export type BulkCancelResponse = z.infer<typeof bulkCancelResponseSchema>;
-
-
-/**
- * Схема для запуска заданий (одного или нескольких)
- */
-export const startTasksSchema = z.array(zIdSchema).min(1);
-
-export type StartTasksInput = z.infer<typeof startTasksSchema>;
-
-/**
- * Элемент результата запуска (успех/ошибка) — в bulk-формате.
- */
-export const startTaskResultSchema = z.object({
-  taskId: zIdSchema,
+export const processTasksResultItemSchema = z.object({
+  id: zIdSchema,
   success: z.boolean(),
-  status: taskStatusSchema.optional(),
-  startedAt: z.iso.datetime().optional(),
   reason: z.string().optional(),
 });
-
-export type StartTaskResult = z.infer<typeof startTaskResultSchema>;
-
 /**
- * Схема для ответа при запуске заданий
+ * Схема для ответа при массовой операции
  */
-export const startTasksResponseSchema = z.object({
-  succeeded: z.number().int().min(0).describe('Количество успешно запущенных заданий'),
-  failed: z.number().int().min(0).describe('Количество заданий, которые не удалось запустить'),
-  results: z.array(startTaskResultSchema),
+export const processTasksResponseSchema = z.object({
+  succeeded: z.number().int().min(0).describe('Количество успешно удалённых заданий'),
+  failed: z.number().int().min(0).describe('Количество заданий, которые не удалось удалить'),
+  results: z.array(processTasksResultItemSchema),
 });
-
-export type StartTasksResponse = z.infer<typeof startTasksResponseSchema>;

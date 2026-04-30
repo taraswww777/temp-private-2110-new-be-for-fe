@@ -7,12 +7,9 @@ import {
   getTasksRequestSchema,
   tasksListResponseSchema,
   taskDetailSchema,
-  bulkDeleteTasksSchema,
-  bulkDeleteResponseSchema,
-  bulkCancelTasksSchema,
-  bulkCancelResponseSchema,
-  startTasksSchema,
-  startTasksResponseSchema,
+  processTasksSchema,
+  processTasksResponseSchema,
+  processTasksResultItemSchema,
 } from './tasks.schema.ts';
 import {
   branchSchema,
@@ -83,12 +80,9 @@ export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry
   registry.add(getTasksRequestSchema, { id: 'GetTasksRequestDto' });
   registry.add(tasksListResponseSchema, { id: 'TasksListResponseDto' });
   registry.add(taskDetailSchema, { id: 'TaskDetailDto' });
-  registry.add(bulkDeleteTasksSchema, { id: 'BulkDeleteTasksRequestDto' });
-  registry.add(bulkDeleteResponseSchema, { id: 'BulkDeleteTasksResponseDto' });
-  registry.add(bulkCancelTasksSchema, { id: 'BulkCancelTasksRequestDto' });
-  registry.add(bulkCancelResponseSchema, { id: 'BulkCancelTasksResponseDto' });
-  registry.add(startTasksSchema, { id: 'StartTasksRequestDto' });
-  registry.add(startTasksResponseSchema, { id: 'StartTasksResponseDto' });
+  registry.add(processTasksSchema, { id: 'ProcessTasksDto' });
+  registry.add(processTasksResponseSchema, { id: 'ProcessTasksResponseDto' });
+  registry.add(processTasksResultItemSchema, { id: 'ProcessTasksResultItemDto' });
   registry.add(taskStatusHistoryItemSchema, { id: 'TaskStatusHistoryItemDto' });
   registry.add(taskStatusHistoryResponseSchema, { id: 'TaskStatusHistoryResponseDto' });
   registry.add(taskFileSchema, { id: 'TaskFileDto' });
