@@ -1,6 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { storageService } from '../../../../services/report-6406/storage.service.ts';
 import { storageVolumeListResponseSchema } from '../../../../schemas/report-6406/storage.schema.ts';
 
 export const storageRoutes: FastifyPluginAsync = async (fastify) => {
@@ -20,7 +19,6 @@ export const storageRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (request, reply) => {
-    const result = await storageService.getStorageVolume();
-    return reply.status(200).send(result);
+    return reply.status(200).send({} as never);
   });
 };

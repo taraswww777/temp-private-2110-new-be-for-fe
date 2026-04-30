@@ -136,16 +136,20 @@ export const tasksListSortingSchema = z.object({
  */
 export const tasksListFilterSchema = z.object({
   packageId: zIdSchema.optional().describe('ID пакета'),
-  branchIdsList: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
+  operationTypeList: z.array(reportTypeSchema).optional().describe('Типы отчётов'),
+  branchIdList: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
   taskStatusList: z.array(taskStatusSchema).optional().describe('Статусы заданий'),
-  reportTypeList: z.array(reportTypeSchema).optional().describe('Типы отчётов'),
   fileFormatList: z.array(fileFormatSchema).optional().describe('Форматы файла'),
   sourceIdList: z.array(zIdSchema).optional().describe('Идентификаторы источников данных'),
+  accountList,
+  secondOrderAccountList,
+  currencyIdList: z.array(currencyIdSchema).optional(),
+  /** без интеграции с карточкой фл этот фильтр createdByList не получится сделать нормально, будет много дефектов */
   createdByList: z.array(z.string()).optional().describe('ФИО создателя задания'),
   periodFrom: dateSchema.optional().describe('Дата начала отчётного периода YYYY-MM-DD'),
   periodTo: dateSchema.optional().describe('Дата окончания отчётного периода YYYY-MM-DD'),
-  createdAtFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601)'),
-  createdAtTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601)'),
+  createdAtFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
+  createdAtTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
 }).optional();
 
 export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;

@@ -9,13 +9,12 @@ export const paginationQuerySchema = z.object({
 });
 export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
 /**
- * Метаданные пагинации в ответе (number, size, totalItems, totalPages)
+ * Метаданные пагинации в ответе (number, size, totalItems)
  */
 export const paginationMetadataSchema = z.object({
   page: z.number().int().min(1).describe('Текущий номер страницы'),
   limit: z.number().int().min(1).max(100).describe('Размер страницы'),
   totalItems: z.number().int().min(0).describe('Общее количество элементов'),
-  totalPages: z.number().int().min(0).describe('Общее количество страниц'),
 });
 export type PaginationMetadata = z.infer<typeof paginationMetadataSchema>;
 /**
