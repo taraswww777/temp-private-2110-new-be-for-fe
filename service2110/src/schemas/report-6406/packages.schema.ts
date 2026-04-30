@@ -91,7 +91,7 @@ export const packageListFilterSchema = z.object({
  * Схема для query параметров списка пакетов (GET /api/v1/report-6406/packages).
  * Включает пагинацию, сортировку и поиск по названию.
  */
-export const getPackageListRequestSchema = paginationQuerySchema.extend({
+export const getPackageListRequestSchema = z.object({
   pagination: paginationQuerySchema,
   sorting: packageListSortingSchema,
   filter: packageListFilterSchema,
