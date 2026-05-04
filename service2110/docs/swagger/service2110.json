@@ -836,6 +836,117 @@
         ],
         "additionalProperties": false
       },
+      "TasksListFilterDto": {
+        "type": "object",
+        "properties": {
+          "packageId": {
+            "description": "ID пакета",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "operationTypeList": {
+            "description": "Типы отчётов",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReportTypeEnum"
+            }
+          },
+          "branchIdList": {
+            "description": "Массив ИД филиалов",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          },
+          "taskStatusList": {
+            "description": "Статусы заданий",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskStatusEnum"
+            }
+          },
+          "fileFormatList": {
+            "description": "Форматы файла",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FileFormatEnum"
+            }
+          },
+          "sourceIdList": {
+            "description": "Идентификаторы источников данных",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "description": "Integer ID"
+            }
+          },
+          "accountList": {
+            "description": "Список счетов (20-значные номера)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 20,
+              "pattern": "^\\d+$",
+              "description": "Счёт (20-значный номер)"
+            }
+          },
+          "secondOrderAccountList": {
+            "description": "Счета второго порядка (5-значные номера)",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 5,
+              "pattern": "^\\d+$",
+              "description": "Счёт второго порядка (5-значный номер)"
+            }
+          },
+          "currencyIdList": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 100,
+              "maximum": 999,
+              "description": "Валюта"
+            }
+          },
+          "createdByList": {
+            "description": "Логин создателя пакета",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "periodFrom": {
+            "description": "Дата начала отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "periodTo": {
+            "description": "Дата окончания отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "createdAtFrom": {
+            "description": "Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "createdAtTo": {
+            "description": "Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          }
+        },
+        "additionalProperties": false
+      },
       "GetTasksRequestDto": {
         "type": "object",
         "properties": {
@@ -869,115 +980,7 @@
             "description": "Параметры сортировки (колонка — фиксированный набор)"
           },
           "filter": {
-            "type": "object",
-            "properties": {
-              "packageId": {
-                "description": "ID пакета",
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 9007199254740991
-              },
-              "operationTypeList": {
-                "description": "Типы отчётов",
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ReportTypeEnum"
-                }
-              },
-              "branchIdList": {
-                "description": "Массив ИД филиалов",
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "Integer ID"
-                }
-              },
-              "taskStatusList": {
-                "description": "Статусы заданий",
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/TaskStatusEnum"
-                }
-              },
-              "fileFormatList": {
-                "description": "Форматы файла",
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/FileFormatEnum"
-                }
-              },
-              "sourceIdList": {
-                "description": "Идентификаторы источников данных",
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991,
-                  "description": "Integer ID"
-                }
-              },
-              "accountList": {
-                "description": "Список счетов (20-значные номера)",
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 20,
-                  "maxLength": 20,
-                  "pattern": "^\\d+$",
-                  "description": "Счёт (20-значный номер)"
-                }
-              },
-              "secondOrderAccountList": {
-                "description": "Счета второго порядка (5-значные номера)",
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 5,
-                  "maxLength": 5,
-                  "pattern": "^\\d+$",
-                  "description": "Счёт второго порядка (5-значный номер)"
-                }
-              },
-              "currencyIdList": {
-                "type": "array",
-                "items": {
-                  "type": "number",
-                  "minimum": 100,
-                  "maximum": 999,
-                  "description": "Валюта"
-                }
-              },
-              "createdByList": {
-                "description": "Логин создателя пакета",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "periodFrom": {
-                "description": "Дата начала отчётного периода YYYY-MM-DD",
-                "$ref": "#/components/schemas/DateSchema"
-              },
-              "periodTo": {
-                "description": "Дата окончания отчётного периода YYYY-MM-DD",
-                "$ref": "#/components/schemas/DateSchema"
-              },
-              "createdAtFrom": {
-                "description": "Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z",
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-              },
-              "createdAtTo": {
-                "description": "Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z",
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-              }
-            },
-            "additionalProperties": false
+            "$ref": "#/components/schemas/TasksListFilterDto"
           }
         },
         "required": [

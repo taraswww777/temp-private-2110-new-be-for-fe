@@ -7,6 +7,7 @@ import {
   taskDetailSchema,
   taskListItemSchema,
   tasksListResponseSchema,
+  tasksListFilterSchema,
 } from './tasks.schema.ts';
 import {
   branchesResponseSchema,
@@ -63,6 +64,7 @@ export function registerReport6406OpenApiSchemas(registry: OpenApiSchemaRegistry
 
   registry.add(createTaskSchema, { id: 'CreateTaskDto' });
   registry.add(taskListItemSchema, { id: 'TaskListItemDto' });
+  registry.add(tasksListFilterSchema, { id: 'TasksListFilterDto' });
   registry.add(getTasksRequestSchema, { id: 'GetTasksRequestDto' });
   registry.add(tasksListResponseSchema, { id: 'TasksListResponseDto' });
   registry.add(taskDetailSchema, { id: 'TaskDetailDto' });
