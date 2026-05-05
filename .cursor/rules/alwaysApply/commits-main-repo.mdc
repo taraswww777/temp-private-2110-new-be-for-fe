@@ -1,10 +1,12 @@
 ---
-description: Коммиты основного репозитория — формат TASK-XXX
-alwaysApply: true
+ description: LEGACY: Коммиты основного репозитория в формате TASK-XXX
+alwaysApply: false
 ---
 
-# Коммиты (основной репозиторий)
+# LEGACY: Коммиты (основной репозиторий)
 
-- Описание коммита должно начинаться с номера задачи в формате `TASK-XXX` (например, `TASK-002`), затем через пробел — краткое описание изменений на русском языке.
-- **ЗАПРЕЩЕНО** добавлять в коммиты `Co-authored-by: Cursor <cursoragent@cursor.com>` или любые другие `Co-authored-by` с участием Cursor/AI.
-- **ЗАПРЕЩЕНО** использовать префикс `VTB-XXX` в коммитах основного репозитория — он относится только к подпроекту `subProjects/temp-private-2110/` (см. `.cursor/rules/subProjects-temp-private-2110/commits-subrepo-vtb.mdc`).
+Используй актуальное правило:
+
+- `.cursor/rules/alwaysApply/commits-task-prefix-general.mdc`
+
+Файл сохранен для совместимости со старым форматом `TASK-XXX`.

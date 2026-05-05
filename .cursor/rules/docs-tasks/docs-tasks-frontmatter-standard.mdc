@@ -1,0 +1,18 @@
+---
+description: Стандарт frontmatter для задач в docs/tasks
+globs: docs/tasks/**/*.md
+alwaysApply: false
+---
+
+# Frontmatter для `docs/tasks`
+
+Минимальный набор полей:
+
+- `id: TASK-<N>`
+- `title: <краткое название>`
+- `status: backlog|in-progress|done|cancelled`
+- `source: local|github`
+- `githubIssue: owner/repo#123` (опционально)
+- `updatedAt: YYYY-MM-DD`
+
+При изменении статуса обновляй `updatedAt`.

@@ -1,14 +1,14 @@
 ---
-description: Задания TASK-XXX — следуй skill протокола (не дублировать полный текст здесь)
+description: Задания в docs/tasks — легковесный протокол без обязательного манифеста
 globs: docs/tasks/**
 alwaysApply: false
 ---
 
-# Протокол TASK-XXX
+# Протокол задач в `docs/tasks`
 
-При работе с файлами в `docs/tasks/` (и манифестом заданий) **следуй skill**:
+При работе с файлами в `docs/tasks/` следуй актуальным skills:
 
-- **`.cursor/skills/task-management-protocol/SKILL.md`** — краткие обязательные пункты и ссылка на полный текст;
-- **`.cursor/skills/task-management-protocol/reference.md`** — полный протокол (процедуры, шаблоны, чеклисты).
+- **`.cursor/skills/task-lifecycle-lightweight/SKILL.md`**
+- **`.cursor/skills/github-issue-linking/SKILL.md`**
 
-Если пользователь просит создать/вести/закрыть задание TASK-XXX без открытых файлов — открой skill по описанию выше и при необходимости **`reference.md`**.
+Legacy-протокол `task-management-protocol` c манифестом использовать только при явном запросе пользователя.

@@ -1,16 +1,21 @@
 ---
 name: task-management-protocol
 description: >-
-  Ведёт задания TASK-XXX по проектному протоколу: манифест docs/tasks/tasks-manifest.json,
-  статусы backlog/in-progress/completed/cancelled, синхронизация с файлом задачи, обязательная
-  приёмка пользователем, ветки feature/TASK-XXX. Применяй при создании или изменении задач в
-  docs/tasks/, при упоминании манифеста, TASK-XXX, статусов заданий, приёмки или когда пользователь
-  просит начать/завершить/отменить задание по протоколу.
+  LEGACY-протокол ведения TASK-XXX с манифестом docs/tasks/tasks-manifest.json.
+  Используй только при явном запросе работать по старой схеме. По умолчанию применяй
+  task-lifecycle-lightweight и github-issue-linking.
 ---
 
-# Протокол управления заданиями (TASK-XXX)
+# LEGACY: Протокол управления заданиями (TASK-XXX)
 
-## Сначала прочитай полный текст
+По умолчанию этот skill не используется.
+
+Актуальная схема:
+
+- `.cursor/skills/task-lifecycle-lightweight/SKILL.md`
+- `.cursor/skills/github-issue-linking/SKILL.md`
+
+## Если явно запрошен legacy-режим
 
 Полный регламент (все процедуры, шаблоны, чеклисты, примеры) — в **[reference.md](reference.md)**. Его **нужно открыть и следовать** при любой работе с жизненным циклом задания.
 

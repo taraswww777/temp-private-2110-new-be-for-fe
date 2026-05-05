@@ -1,0 +1,10 @@
+---
+description: Источники задач: docs/tasks и GitHub Issues, без обязательного манифеста
+alwaysApply: true
+---
+
+# Источники задач
+
+- Ведение задач: `docs/tasks/*.md` и/или GitHub Issues.
+- Если задача представлена в обоих источниках, поддерживай двустороннюю связь (`task md` ↔ `issue`).
+- `docs/tasks/tasks-manifest.json` не является обязательным артефактом.

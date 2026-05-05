@@ -1,9 +1,9 @@
 ---
-description: Указатель на skill enum→OpenAPI (service2110)
+description: LEGACY: enum→OpenAPI для service2110. В текущем процессе не применять.
 globs: service2110/**
 alwaysApply: false
 ---
 
-# Enum → Swagger (service2110)
+# LEGACY: Enum → Swagger (service2110)
 
-Следуй skill **`.cursor/skills/service2110-openapi-enum/SKILL.md`** — три шага (enum + Zod registry + `swaggerExtendedEnumJsonSchemas`).
+Процесс без service2110. Файл оставлен как архивный указатель.

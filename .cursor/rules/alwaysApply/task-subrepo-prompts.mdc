@@ -1,8 +1,10 @@
 ---
-description: Старт задачи с подрепо — skill task-subrepo-start
-alwaysApply: true
+description: LEGACY: Старт задачи с подрепо (VTB). Не применять в текущем процессе.
+alwaysApply: false
 ---
 
-# Старт задачи с подрепо
+# LEGACY: Старт задачи с подрепо
 
-Следуй skill **`.cursor/skills/task-subrepo-start/SKILL.md`** при запросах на выполнение/старт задачи с **TASK-XXX**, **VTB-XXX** и веткой в `subProjects/temp-private-2110/`.
+Текущий процесс не использует VTB и сценарий подрепо.
+
+Этот файл оставлен для обратной совместимости. По умолчанию не применять.

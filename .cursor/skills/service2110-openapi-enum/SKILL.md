@@ -1,13 +1,13 @@
 ---
 name: service2110-openapi-enum
 description: >-
-  Добавляет enum в Zod и OpenAPI для service2110: TaskStatusEnum-паттерн, createEnumSchemaWithDescriptions,
-  registry.add в openapi-register.ts, пара в swaggerExtendedEnumJsonSchemas в registerFastifySwagger.ts.
-  Используй при новых enum в API, при отсутствии x-enum-descriptions в service2110.json, при работе с
-  inventorization enums или упоминании swaggerExtendedEnumJsonSchemas.
+  LEGACY для текущего контура: enum в Zod и OpenAPI для service2110.
+  Применяй только если пользователь явно работает с service2110.
 ---
 
-# Enum → Swagger (service2110)
+# LEGACY: Enum → Swagger (service2110)
+
+В текущем процессе service2110 не используется. Этот skill включать только по явному запросу.
 
 Чтобы enum был валидируемым в Zod **и** в `service2110/docs/swagger/service2110.json` попадали **`x-enum-descriptions`**, **`x-enum-varnames`** и **`oneOf`** (из `createEnumSchemaWithDescriptions`), нужно **три шага**:
 
