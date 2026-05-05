@@ -152,7 +152,7 @@ export const tasksListFilterSchema = z.object({
   periodTo: dateSchema.optional().describe('Дата окончания отчётного периода YYYY-MM-DD'),
   createdAtFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
   createdAtTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
-}).optional();
+});
 
 export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
 
