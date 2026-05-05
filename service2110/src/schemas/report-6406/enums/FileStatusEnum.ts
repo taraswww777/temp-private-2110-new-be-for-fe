@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
+import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers.ts';
 
 /**
  * Статус конвертации файла.
@@ -54,3 +55,7 @@ export const FileStatusEnumSwaggerSchema = createEnumSchemaWithDescriptions(
   'FileStatusEnum',
   'Статус конвертации файла',
 );
+
+(function registerFileStatusEnumOpenApi() {
+  registerReport6406EnumOpenApiSchema(fileStatusZodSchema, 'FileStatusEnum');
+})();

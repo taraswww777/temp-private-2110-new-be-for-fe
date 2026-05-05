@@ -1,24 +1,11 @@
-import { z } from 'zod';
-
-import { currencySchema } from './CurrencyEnum.ts';
-import { fileFormatSchema } from './FileFormatEnum.ts';
-import { fileStatusZodSchema } from './FileStatusEnum.ts';
-import { packageStatusSchema } from './PackageStatusEnum.ts';
-import { reportTypeSchema } from './ReportTypeEnum.ts';
-import { taskStatusSchema } from './TaskStatusEnum.ts';
-import { storageCodeZodSchema } from './StorageCodeEnum.ts';
-
-export type OpenApiSchemaRegistry = ReturnType<typeof z.registry<{ id: string }>>;
-
 /**
- * Регистрация Zod-схем перечислений report-6406 в общем OpenAPI-реестре.
+ * Подключает все enum-модули report-6406: каждый файл при загрузке сам регистрирует схему в OpenAPI (IIFE).
+ * Новый enum: добавить сюда одну строку `import './YourEnum.ts'`.
  */
-export function registerReport6406EnumsOpenApiSchemas(registry: OpenApiSchemaRegistry) {
-  registry.add(currencySchema, { id: 'CurrencyEnum' });
-  registry.add(fileFormatSchema, { id: 'FileFormatEnum' });
-  registry.add(reportTypeSchema, { id: 'ReportTypeEnum' });
-  registry.add(taskStatusSchema, { id: 'TaskStatusEnum' });
-  registry.add(packageStatusSchema, { id: 'PackageStatusEnum' });
-  registry.add(fileStatusZodSchema, { id: 'FileStatusEnum' });
-  registry.add(storageCodeZodSchema, { id: 'StorageCodeEnum' });
-}
+import './CurrencyEnum.ts';
+import './FileFormatEnum.ts';
+import './FileStatusEnum.ts';
+import './PackageStatusEnum.ts';
+import './ReportTypeEnum.ts';
+import './TaskStatusEnum.ts';
+import './StorageCodeEnum.ts';

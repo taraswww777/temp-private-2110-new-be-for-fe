@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 
 import { idListSchema, idParamSchema } from '../../../../schemas/common/id.schema.ts';
@@ -16,7 +17,7 @@ export const removeTasksFromPackageRoute: FastifyPluginAsync = async (fastify) =
 
   app.delete('/:packageId/delete-link-with-tasks', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Удалить одно или несколько заданий из пакета',
       description: 'Удаляет задания из пакета. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
       params: idParamSchema.extend({ packageId: idParamSchema.shape.id }).pick({ packageId: true }),

@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   inventoryColumnsResponseSchema,
@@ -15,7 +16,7 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.get('/state', {
     schema: {
-      tags: ['Inventory'],
+      tags: [OpenApiTag.Inventory],
       summary: 'Статус процесса инвентаризации',
       querystring: inventoryInventoryStateQuerySchema,
       response: { 200: inventoryInventoryStateResponseSchema },
@@ -25,7 +26,7 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
   
   app.get('/columns', {
     schema: {
-      tags: ['Inventory'],
+      tags: [OpenApiTag.Inventory],
       summary: 'Колонки таблицы',
       querystring: inventoryColumnsQuerySchema,
       response: { 200: inventoryColumnsResponseSchema },
@@ -34,7 +35,7 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.put('/columns', {
     schema: {
-      tags: ['Inventory'],
+      tags: [OpenApiTag.Inventory],
       summary: 'Сохранить настройки колонок',
       body: inventoryColumnsUpdateSchema,
       response: { 200: inventoryColumnsResponseSchema },
@@ -43,7 +44,7 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
 
     app.put('/inventory-active', {
     schema: {
-      tags: ['Inventory'],
+      tags: [OpenApiTag.Inventory],
       summary: 'Запрос изменения активности инвентаризации',
       body: inventoryActiveStateSchema,
       response: { 200: z.null() },

@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   inventoryAccountStatusFilterResponseSchema,
@@ -29,7 +30,7 @@ export const inventoryDictionaryRoutes: FastifyPluginAsync = async (fastify) => 
   for (const [url, summary, response] of listFilters) {
     app.get(url, {
       schema: {
-        tags: ['Inventory - Dictionary'],
+        tags: [OpenApiTag.InventoryDictionary],
         summary,
         params: inventoryInventoryOrderIdParamSchema,
         response: { 200: response },

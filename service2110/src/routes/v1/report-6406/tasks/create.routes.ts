@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   createTaskSchema,
@@ -17,7 +18,7 @@ export const createTaskRoute: FastifyPluginAsync = async (fastify) => {
 
   app.post('/', {
     schema: {
-      tags: ['Report 6406 - Tasks'],
+      tags: [OpenApiTag.Report6406Tasks],
       summary: 'Создать новое задание на построение отчёта',
       body: createTaskSchema,
       response: {

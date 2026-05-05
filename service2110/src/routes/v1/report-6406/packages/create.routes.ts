@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   basePackageSchema,
@@ -20,7 +21,7 @@ export const createPackageRoute: FastifyPluginAsync = async (fastify) => {
 
   app.post('/', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Создать новый пакет',
       body: createPackageSchema,
       response: {

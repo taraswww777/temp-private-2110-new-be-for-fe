@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { idListSchema, idParamSchema } from '../../../../schemas/common/id.schema.ts';
 import { processResponseSchema } from '../../../../schemas/common/process.schema.ts';
@@ -15,7 +16,7 @@ export const addTasksToPackageRoute: FastifyPluginAsync = async (fastify) => {
 
   app.patch('/:packageId/add-link-with-tasks', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Добавить задания в пакет',
       params: idParamSchema.extend({ packageId: idParamSchema.shape.id }).pick({ packageId: true }),
       body: idListSchema,

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
+import { registerReport6406EnumOpenApiSchema, registerReport6406OpenApiSchema } from '../openapi-register-helpers.ts';
 
 // Enum для валют
 export enum Currency {
@@ -26,3 +27,8 @@ export const CurrencyEnumSchema = createEnumSchemaWithDescriptions(
   'CurrencyEnum',
   'Валюта отчёта',
 );
+
+(function registerCurrencyEnumOpenApi() {
+  registerReport6406EnumOpenApiSchema(currencySchema, 'CurrencyEnum');
+  registerReport6406OpenApiSchema(currencyIdSchema, 'Report6406CurrencyIdSchema');
+})();

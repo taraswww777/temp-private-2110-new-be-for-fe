@@ -5,6 +5,8 @@ import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 import { taskListSortColumnSchema } from './tasks.schema.ts';
 
+import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+
 /**
  * Базовая схема пакета — все поля, общие для detail, list и create.
  * Используется как основа для всех DTO пакетов.
@@ -147,3 +149,18 @@ export const packageTfrResponseSchema = z.object({
   tfrCopyDate: z.iso.datetime().describe('Дата и время копирования в ТФР'),
   size: z.number().int().min(0).describe('Размер пакета в мегабайтах').default(0),
 });
+
+(function registerPackagesReport6406OpenApi() {
+  registerReport6406OpenApiSchema(packageListSortColumnSchema, 'PackageListSortColumnEnum');
+  registerReport6406OpenApiSchema(packageListSortingSchema, 'PackageListSortingDto');
+  registerReport6406OpenApiSchema(packageListFilterSchema, 'PackageListFilterDto');
+  registerReport6406OpenApiSchema(createPackageSchema, 'CreatePackageDto');
+  registerReport6406OpenApiSchema(updatePackageSchema, 'UpdatePackageDto');
+  registerReport6406OpenApiSchema(packageSchema, 'PackageDto');
+  registerReport6406OpenApiSchema(getPackageListRequestSchema, 'GetPackagesListRequestDto');
+  registerReport6406OpenApiSchema(getPackageListResponseSchema, 'PackagesListResponseDto');
+  registerReport6406OpenApiSchema(updatePackageResponseSchema, 'UpdatePackageResponseDto');
+  registerReport6406OpenApiSchema(addTasksToPackageSchema, 'AddTasksToPackageRequestDto');
+  registerReport6406OpenApiSchema(copyToTfrResponseSchema, 'CopyToTfrResponseDto');
+  registerReport6406OpenApiSchema(packageTfrResponseSchema, 'PackageTfrResponseDto');
+})();

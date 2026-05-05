@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { storageCodeZodSchema } from './enums/StorageCodeEnum.ts';
 
+import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+
 /**
  * Схема элемента массива хранилищ (корзина, ТФР и т.д.)
  */
@@ -20,3 +22,8 @@ export type StorageVolumeItem = z.infer<typeof storageVolumeItemSchema>;
 export const storageVolumeListResponseSchema = z.array(storageVolumeItemSchema);
 
 export type StorageVolumeListResponse = z.infer<typeof storageVolumeListResponseSchema>;
+
+(function registerStorageReport6406OpenApi() {
+  registerReport6406OpenApiSchema(storageVolumeItemSchema, 'StorageVolumeItemDto');
+  registerReport6406OpenApiSchema(storageVolumeListResponseSchema, 'StorageVolumeListResponseDto');
+})();

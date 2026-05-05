@@ -14,6 +14,7 @@ import { writeFileSync } from 'fs';
 
 import { env } from '../../config/env.ts';
 import { openApiRegistry } from '../../schemas/schema-registry.ts';
+import { OPENAPI_TAG_SPEC } from '../../schemas/openapi-tags.ts';
 import { PackageStatusEnumSchema } from '../../schemas/report-6406/enums/PackageStatusEnum.ts';
 import { FileStatusEnumSwaggerSchema } from '../../schemas/report-6406/enums/FileStatusEnum.ts';
 import { ReportTypeEnumSchema } from '../../schemas/report-6406/enums/ReportTypeEnum.ts';
@@ -153,18 +154,7 @@ export const registerFastifySwagger = async (app: CustomFastifyInstance) => {
           description: 'Production server',
         },
       ],
-      tags: [
-        { name: 'Health', description: 'Health check endpoints' },
-        { name: 'Report 6406 - Dictionary', description: 'Справочники для формы отчётности 6406' },
-        { name: 'Report 6406 - Tasks', description: 'Задания на построение отчётов для формы 6406' },
-        { name: 'Report 6406 - Packages', description: 'Пакеты заданий для формы 6406' },
-        { name: 'Report 6406 - Storage', description: 'Мониторинг хранилища отчётов' },
-        { name: 'Inventory', description: 'Инвентаризация' },
-        { name: 'Inventory - Orders', description: 'Параметры инвентаризации' },
-        { name: 'Inventory - Dictionary', description: 'Словари фильтров инвентаризации' },
-        { name: 'Inventory - Accounts', description: 'Счета инвентаризации' },
-        { name: 'Inventory - Statistics', description: 'Статистика инвентаризации' },
-      ],
+      tags: OPENAPI_TAG_SPEC.map(({ name, description }) => ({ name, description })),
     },
     transform: createJsonSchemaTransform({
       skipList: DOCS_SKIP_LIST,

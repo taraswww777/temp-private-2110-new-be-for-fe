@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { processRequestSchema, processResponseSchema } from '../../../../schemas/common/process.schema.ts';
 
@@ -14,7 +15,7 @@ export const deletePackagesRoute: FastifyPluginAsync = async (fastify) => {
 
   app.delete('/', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Удалить один или несколько пакетов',
       description: 'Удаляет пакеты. Возвращает 200 OK с детальной информацией о результате операции для каждого пакета.',
       body: processRequestSchema,

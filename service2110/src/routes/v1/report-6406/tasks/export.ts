@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { getTasksRequestSchema } from '../../../../schemas/report-6406/tasks.schema.ts';
@@ -12,7 +13,7 @@ export const exportRoutes: FastifyPluginAsync = async (fastify) => {
    */
   app.post('/export', {
     schema: {
-      tags: ['Report 6406 - Tasks'],
+      tags: [OpenApiTag.Report6406Tasks],
       summary: 'Выгрузить реестр отчётов в CSV формате',
       description: 'Создаёт CSV файл со списком заданий согласно фильтрам. Возвращает ссылку на скачивание файла.',
       body: getTasksRequestSchema,

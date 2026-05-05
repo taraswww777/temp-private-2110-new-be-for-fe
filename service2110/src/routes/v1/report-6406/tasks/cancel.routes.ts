@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { processResponseSchema, processRequestSchema } from '../../../../schemas/common/process.schema.ts';
 
@@ -13,7 +14,7 @@ export const cancelTasksRoute: FastifyPluginAsync = async (fastify) => {
 
   app.post('/cancel', {
     schema: {
-      tags: ['Report 6406 - Tasks'],
+      tags: [OpenApiTag.Report6406Tasks],
       summary: 'Отменить одно или несколько заданий',
       description: 'Отменяет задания на нашей стороне (переводит в статус «Задание отменено»). Синхронизация с внешней системой может в дальнейшем приводить к статусу KILLED_DAPP. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.',
       body: processRequestSchema,

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { packageSchema } from '../../../../schemas/report-6406/packages.schema';
 
@@ -16,7 +17,7 @@ export const getPackageRoute: FastifyPluginAsync = async (fastify) => {
 
   app.get('/:id', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Получить детальную информацию о пакете',
       params: idParamSchema,
       response: {

@@ -5,19 +5,18 @@
  * автоматически попадают в components.schemas и заменяются на $ref-ссылки
  * в описаниях роутов.
  *
- * Регистрация: common, report-6406, inventory.
+ * Регистрация: common, report-6406 (IIFE в модулях), inventory.
  */
 
-import { z } from 'zod';
-
-import { registerReport6406OpenApiSchemas } from './report-6406/openapi-register.ts';
-import { registerInventoryOpenApiSchemas } from './inventory/openapi-register.ts';
+import { openApiRegistry } from './open-api-registry.ts';
 import { registerCommonOpenApiSchemas } from './common/openapi-register.ts';
+import { registerInventoryOpenApiSchemas } from './inventory/openapi-register.ts';
 
-export const openApiRegistry = z.registry<{ id: string }>();
+import './report-6406/openapi-register.ts';
 
-registerCommonOpenApiSchemas(openApiRegistry);
-registerReport6406OpenApiSchemas(openApiRegistry);
-registerInventoryOpenApiSchemas(openApiRegistry);
+export { openApiRegistry };
 
-export type { OpenApiSchemaRegistry } from './report-6406/openapi-register.ts';
+registerCommonOpenApiSchemas();
+registerInventoryOpenApiSchemas();
+
+export type { OpenApiSchemaRegistry } from '../types/openapi-schema-registry.ts';

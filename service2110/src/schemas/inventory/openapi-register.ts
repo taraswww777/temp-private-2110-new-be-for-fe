@@ -1,4 +1,3 @@
-import type { OpenApiSchemaRegistry } from '../report-6406/openapi-register.ts';
 import { registerInventoryEnumsOpenApiSchemas } from './enums/openapi-register.ts';
 import {
   inventoryOrdersListResponseSchema,
@@ -24,6 +23,7 @@ import {
   inventoryResponsibleUnitTypeFilterResponseSchema,
   inventorySourceBankFilterItemSchema,
   inventorySourceBankFilterResponseSchema,
+  inventoryInventoryOrderIdParamSchema,
 } from './dictionary.schema.ts';
 import {
   getInventoryAccountsListRequestSchema,
@@ -40,9 +40,13 @@ import {
   inventoryAccountStatusSingleSchema,
   inventoryAccountIdsSchema,
   inventoryAccountIdSchema,
+  inventoryAccountIdParamSchema,
   accountVersionedIdSchema,
   accountVersionedIdsSchema,
   inventoryAccountUpdatedResponseSchema,
+  inventoryDecimalStringSchema,
+  inventoryAccountListSortColumnSchema,
+  inventoryAccountsListSortingSchema,
 } from './accounts.schema.ts';
 import {
   inventoryStatisticsExportRequestSchema,
@@ -56,62 +60,76 @@ import {
   inventoryColumnsUpdateSchema,
   inventoryInventoryStateResponseSchema,
   inventoryReportExportItemSchema,
-} from "./inventory-common.schema.ts";
+  inventoryInventoryStateQuerySchema,
+  inventoryColumnsQuerySchema,
+} from './inventory-common.schema.ts';
+
+import { registerOpenApiComponent } from '../utils/registerOpenApiComponent.ts';
+
 /**
  * Регистрация Zod-схем подсистемы инвентаризации (front API-28) в OpenAPI-реестре.
  */
-export function registerInventoryOpenApiSchemas(registry: OpenApiSchemaRegistry) {
-  registerInventoryEnumsOpenApiSchemas(registry);
+export function registerInventoryOpenApiSchemas() {
+  registerInventoryEnumsOpenApiSchemas();
 
-  registry.add(inventoryOrderListItemSchema, { id: 'InventoryOrderListItemDto' });
-  registry.add(inventoryOrdersListResponseSchema, { id: 'InventoryOrdersListResponseDto' });
-  registry.add(createInventoryOrderSchema, { id: 'InventoryCreateOrderDto' });
-  registry.add(updateInventoryOrderSchema, { id: 'InventoryUpdateOrderDto' });
-  registry.add(inventoryOrderMutationResponseSchema, { id: 'InventoryOrderMutationResponseDto' });
+  registerOpenApiComponent(inventoryInventoryOrderIdParamSchema, 'InventoryInventoryOrderIdParamDto');
+  registerOpenApiComponent(inventoryInventoryStateQuerySchema, 'InventoryInventoryStateQueryDto');
+  registerOpenApiComponent(inventoryColumnsQuerySchema, 'InventoryColumnsQueryDto');
 
-  registry.add(inventoryBs2FilterItemSchema, { id: 'InventoryBs2FilterItemDto' });
-  registry.add(inventoryBs2FilterResponseSchema, { id: 'InventoryBs2FilterResponseDto' });
-  registry.add(inventoryAccountTypeFilterItemSchema, { id: 'InventoryAccountTypeFilterItemDto' });
-  registry.add(inventoryAccountTypeFilterResponseSchema, { id: 'InventoryAccountTypeFilterResponseDto' });
-  registry.add(inventoryResponsibleUnitFilterItemSchema, { id: 'InventoryResponsibleUnitFilterItemDto' });
-  registry.add(inventoryResponsibleUnitFilterResponseSchema, { id: 'InventoryResponsibleUnitFilterResponseDto' });
-  registry.add(inventoryResponsibleUnitTypeFilterItemSchema, { id: 'InventoryResponsibleUnitTypeFilterItemDto' });
-  registry.add(inventoryResponsibleUnitTypeFilterResponseSchema, { id: 'InventoryResponsibleUnitTypeFilterResponseDto' });
-  registry.add(inventoryAccountStatusFilterItemSchema, { id: 'InventoryAccountStatusFilterItemDto' });
-  registry.add(inventoryAccountStatusFilterResponseSchema, { id: 'InventoryAccountStatusFilterResponseDto' });
-  registry.add(inventorySourceBankFilterItemSchema, { id: 'InventorySourceBankFilterItemDto' });
-  registry.add(inventorySourceBankFilterResponseSchema, { id: 'InventorySourceBankFilterResponseDto' });
-  registry.add(inventoryProductFilterItemSchema, { id: 'InventoryProductFilterItemDto' });
-  registry.add(inventoryProductFilterResponseSchema, { id: 'InventoryProductFilterResponseDto' });
-  registry.add(inventoryManualControlFilterItemSchema, { id: 'InventoryManualControlFilterItemDto' });
-  registry.add(inventoryManualControlFilterResponseSchema, { id: 'InventoryManualControlFilterResponseDto' });
-  
-  registry.add(inventoryAccountsListFilterSchema, { id: 'InventoryAccountsListFilterDto' });
-  registry.add(getInventoryAccountsListRequestSchema, { id: 'InventoryGetAccountsListRequestDto' });
-  registry.add(inventoryAccountsListResponseSchema, { id: 'InventoryAccountsListResponseDto' });
-  registry.add(inventoryAccountListItemSchema, { id: 'InventoryAccountListItemDto' });
-  registry.add(inventoryAccountStatusSingleSchema, { id: 'InventoryAccountStatusSingleDto' });
-  registry.add(accountVersionedIdSchema, { id: 'InventoryAccountVersionedIdDto' });
-  registry.add(accountVersionedIdsSchema, { id: 'InventoryAccountVersionedIdsDto' });
-  registry.add(inventoryAccountUpdatedResponseSchema, { id: 'InventoryAccountUpdatedResponseDto' });
-  registry.add(inventoryAccountDetailSchema, { id: 'InventoryAccountDetailDto' });
-  registry.add(inventoryAccountHistoryItemSchema, { id: 'InventoryAccountHistoryItemDto' });
-  registry.add(inventoryAccountHistoryResponseSchema, { id: 'InventoryAccountHistoryResponseDto' });
-  registry.add(inventoryManualUnitRequestSchema, { id: 'InventoryManualUnitRequestDto' });
-  registry.add(inventoryManualUnitBulkRequestSchema, { id: 'InventoryManualUnitBulkRequestDto' });
-  registry.add(inventoryAccountIdsSchema, { id: 'InventoryAccountsIdsDto' });
-  registry.add(inventoryAccountIdSchema, { id: 'InventoryAccountsIdDto' });
-  registry.add(inventoryAccountsExportRequestSchema, { id: 'InventoryAccountsExportRequestDto' });
-  registry.add(inventoryAccountsExportResponseSchema, { id: 'InventoryAccountsExportResponseDto' });
+  registerOpenApiComponent(inventoryDecimalStringSchema, 'InventoryDecimalStringDto');
+  registerOpenApiComponent(inventoryAccountListSortColumnSchema, 'InventoryAccountListSortColumnEnum');
+  registerOpenApiComponent(inventoryAccountsListSortingSchema, 'InventoryAccountsListSortingDto');
+  registerOpenApiComponent(inventoryAccountIdParamSchema, 'InventoryAccountIdParamDto');
 
-  registry.add(inventoryStatisticsFilterSchema, { id: 'InventoryStatisticsFilterDto' });
-  registry.add(inventoryStatisticsExportRequestSchema, { id: 'InventoryStatisticsExportRequestDto' });
-  registry.add(inventoryStatisticsExportResponseSchema, { id: 'InventoryStatisticsResponseDto' });
+  registerOpenApiComponent(inventoryOrderListItemSchema, 'InventoryOrderListItemDto');
+  registerOpenApiComponent(inventoryOrdersListResponseSchema, 'InventoryOrdersListResponseDto');
+  registerOpenApiComponent(createInventoryOrderSchema, 'InventoryCreateOrderDto');
+  registerOpenApiComponent(updateInventoryOrderSchema, 'InventoryUpdateOrderDto');
+  registerOpenApiComponent(inventoryOrderMutationResponseSchema, 'InventoryOrderMutationResponseDto');
 
-  registry.add(inventoryColumnSchema, { id: 'InventoryColumnDto' });
-  registry.add(inventoryColumnsResponseSchema, { id: 'InventoryColumnsResponseDto' });
-  registry.add(inventoryColumnsUpdateSchema, { id: 'InventoryColumnsUpdateDto' });
-  registry.add(inventoryInventoryStateResponseSchema, { id: 'InventoryInventoryStateResponseDto' });
-  registry.add(inventoryReportExportItemSchema, { id: 'InventoryReportExportItemDto' });
-  registry.add(inventoryActiveStateSchema, { id: 'InventoryActiveStateDto' });
+  registerOpenApiComponent(inventoryBs2FilterItemSchema, 'InventoryBs2FilterItemDto');
+  registerOpenApiComponent(inventoryBs2FilterResponseSchema, 'InventoryBs2FilterResponseDto');
+  registerOpenApiComponent(inventoryAccountTypeFilterItemSchema, 'InventoryAccountTypeFilterItemDto');
+  registerOpenApiComponent(inventoryAccountTypeFilterResponseSchema, 'InventoryAccountTypeFilterResponseDto');
+  registerOpenApiComponent(inventoryResponsibleUnitFilterItemSchema, 'InventoryResponsibleUnitFilterItemDto');
+  registerOpenApiComponent(inventoryResponsibleUnitFilterResponseSchema, 'InventoryResponsibleUnitFilterResponseDto');
+  registerOpenApiComponent(inventoryResponsibleUnitTypeFilterItemSchema, 'InventoryResponsibleUnitTypeFilterItemDto');
+  registerOpenApiComponent(inventoryResponsibleUnitTypeFilterResponseSchema, 'InventoryResponsibleUnitTypeFilterResponseDto');
+  registerOpenApiComponent(inventoryAccountStatusFilterItemSchema, 'InventoryAccountStatusFilterItemDto');
+  registerOpenApiComponent(inventoryAccountStatusFilterResponseSchema, 'InventoryAccountStatusFilterResponseDto');
+  registerOpenApiComponent(inventorySourceBankFilterItemSchema, 'InventorySourceBankFilterItemDto');
+  registerOpenApiComponent(inventorySourceBankFilterResponseSchema, 'InventorySourceBankFilterResponseDto');
+  registerOpenApiComponent(inventoryProductFilterItemSchema, 'InventoryProductFilterItemDto');
+  registerOpenApiComponent(inventoryProductFilterResponseSchema, 'InventoryProductFilterResponseDto');
+  registerOpenApiComponent(inventoryManualControlFilterItemSchema, 'InventoryManualControlFilterItemDto');
+  registerOpenApiComponent(inventoryManualControlFilterResponseSchema, 'InventoryManualControlFilterResponseDto');
+
+  registerOpenApiComponent(inventoryAccountsListFilterSchema, 'InventoryAccountsListFilterDto');
+  registerOpenApiComponent(getInventoryAccountsListRequestSchema, 'InventoryGetAccountsListRequestDto');
+  registerOpenApiComponent(inventoryAccountsListResponseSchema, 'InventoryAccountsListResponseDto');
+  registerOpenApiComponent(inventoryAccountListItemSchema, 'InventoryAccountListItemDto');
+  registerOpenApiComponent(inventoryAccountStatusSingleSchema, 'InventoryAccountStatusSingleDto');
+  registerOpenApiComponent(accountVersionedIdSchema, 'InventoryAccountVersionedIdDto');
+  registerOpenApiComponent(accountVersionedIdsSchema, 'InventoryAccountVersionedIdsDto');
+  registerOpenApiComponent(inventoryAccountUpdatedResponseSchema, 'InventoryAccountUpdatedResponseDto');
+  registerOpenApiComponent(inventoryAccountDetailSchema, 'InventoryAccountDetailDto');
+  registerOpenApiComponent(inventoryAccountHistoryItemSchema, 'InventoryAccountHistoryItemDto');
+  registerOpenApiComponent(inventoryAccountHistoryResponseSchema, 'InventoryAccountHistoryResponseDto');
+  registerOpenApiComponent(inventoryManualUnitRequestSchema, 'InventoryManualUnitRequestDto');
+  registerOpenApiComponent(inventoryManualUnitBulkRequestSchema, 'InventoryManualUnitBulkRequestDto');
+  registerOpenApiComponent(inventoryAccountIdsSchema, 'InventoryAccountsIdsDto');
+  registerOpenApiComponent(inventoryAccountIdSchema, 'InventoryAccountsIdDto');
+  registerOpenApiComponent(inventoryAccountsExportRequestSchema, 'InventoryAccountsExportRequestDto');
+  registerOpenApiComponent(inventoryAccountsExportResponseSchema, 'InventoryAccountsExportResponseDto');
+
+  registerOpenApiComponent(inventoryStatisticsFilterSchema, 'InventoryStatisticsFilterDto');
+  registerOpenApiComponent(inventoryStatisticsExportRequestSchema, 'InventoryStatisticsExportRequestDto');
+  registerOpenApiComponent(inventoryStatisticsExportResponseSchema, 'InventoryStatisticsResponseDto');
+
+  registerOpenApiComponent(inventoryColumnSchema, 'InventoryColumnDto');
+  registerOpenApiComponent(inventoryColumnsResponseSchema, 'InventoryColumnsResponseDto');
+  registerOpenApiComponent(inventoryColumnsUpdateSchema, 'InventoryColumnsUpdateDto');
+  registerOpenApiComponent(inventoryInventoryStateResponseSchema, 'InventoryInventoryStateResponseDto');
+  registerOpenApiComponent(inventoryReportExportItemSchema, 'InventoryReportExportItemDto');
+  registerOpenApiComponent(inventoryActiveStateSchema, 'InventoryActiveStateDto');
 }

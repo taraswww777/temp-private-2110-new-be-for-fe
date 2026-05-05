@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { copyToTfrResponseSchema, packageTfrResponseSchema } from '../../../../schemas/report-6406/packages.schema';
 
@@ -17,7 +18,7 @@ export const tfrRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.post('/transfer', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Скопировать список пакетов на ТФР',
       body: idListSchema,
     },
@@ -27,7 +28,7 @@ export const tfrRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.post('/{id}/cancel-copy', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Скопировать список пакетов на ТФР',
       params: idParamSchema,
     },
@@ -37,7 +38,7 @@ export const tfrRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.delete('/tfr', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Удалить список пакетов на ТФР',
       body: idListSchema,
     },
@@ -48,7 +49,7 @@ export const tfrRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.get('/tfr', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Получить список пакетов на ТФР',
       params: idParamSchema,
       response:{

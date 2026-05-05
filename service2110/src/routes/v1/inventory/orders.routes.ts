@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   createInventoryOrderSchema,
@@ -12,7 +13,7 @@ export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.get('/', {
     schema: {
-      tags: ['Inventory - Orders'],
+      tags: [OpenApiTag.InventoryOrders],
       summary: 'Список приказов инвентаризации',
       response: { 200: inventoryOrdersListResponseSchema },
     },
@@ -20,7 +21,7 @@ export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.post('/new', {
     schema: {
-      tags: ['Inventory - Orders'],
+      tags: [OpenApiTag.InventoryOrders],
       summary: 'Создать приказ инвентаризации',
       body: createInventoryOrderSchema,
       response: { 200: inventoryOrderMutationResponseSchema },
@@ -29,7 +30,7 @@ export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.put('/update', {
     schema: {
-      tags: ['Inventory - Orders'],
+      tags: [OpenApiTag.InventoryOrders],
       summary: 'Обновить приказ инвентаризации',
       body: updateInventoryOrderSchema,
       response: { 200: inventoryOrderMutationResponseSchema },

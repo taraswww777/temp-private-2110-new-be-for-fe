@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import {
@@ -18,7 +19,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
    */
   app.get('/branches', {
     schema: {
-      tags: ['Report 6406 - Dictionary'],
+      tags: [OpenApiTag.Report6406Dictionary],
       summary: 'Получить список филиалов',
       response: {
         200: branchesResponseSchema,
@@ -34,7 +35,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
    */
   app.get('/currencies', {
     schema: {
-      tags: ['Report 6406 - Dictionary'],
+      tags: [OpenApiTag.Report6406Dictionary],
       summary: 'Получить список валют',
       response: {
         200: currenciesResponseSchema,
@@ -50,7 +51,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
    */
   app.get('/sources', {
     schema: {
-      tags: ['Report 6406 - Dictionary'],
+      tags: [OpenApiTag.Report6406Dictionary],
       summary: 'Получить список источников счетов',
       response: {
         200: sourcesResponseSchema,
@@ -66,7 +67,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
    */
   app.get('/account-masks', {
     schema: {
-      tags: ['Report 6406 - Dictionary'],
+      tags: [OpenApiTag.Report6406Dictionary],
       summary: 'Получить маски счетов в виде связанного списка',
       response: {
         200: accountMasksResponseSchema,
@@ -82,7 +83,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
    */
   app.get('/employee/:login', {
     schema: {
-      tags: ['Report 6406 - Dictionary'],
+      tags: [OpenApiTag.Report6406Dictionary],
       summary: 'Получить данные о сотруднике по AD-логину',
       params: z.object({
         login: z.string().max(15),

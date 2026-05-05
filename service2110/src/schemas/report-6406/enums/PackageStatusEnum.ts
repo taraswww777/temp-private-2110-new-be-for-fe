@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
+import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers.ts';
 
 // Enum для статусов пакета
 export enum PackageStatusEnum {
@@ -38,3 +39,7 @@ export const PackageStatusEnumSchema = createEnumSchemaWithDescriptions(
   'PackageStatusEnum',
   'Статус пакета',
 );
+
+(function registerPackageStatusEnumOpenApi() {
+  registerReport6406EnumOpenApiSchema(packageStatusSchema, 'PackageStatusEnum');
+})();
