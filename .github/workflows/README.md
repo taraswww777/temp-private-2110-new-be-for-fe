@@ -16,15 +16,11 @@
 - **service2110** (Backend):
   - ✅ Lint (ESLint)
   - ✅ Build (TypeScript)
-- **taskViewerBe** (Task Viewer Backend):
-  - ✅ Lint (ESLint)
-  - ✅ Build (TypeScript)
-- **taskViewerFe** (Task Viewer Frontend):
-  - ✅ Lint (ESLint)
-  - ✅ Build (Vite)
+
+**Task Viewer** (`taskViewerBe` / `taskViewerFe`) после выноса в отдельный репозиторий проверяется в том репозитории (см. `pet-task-viewer/.github/workflows/ci.yml`, если каталог перенесён).
 
 **Кэширование:**
-- Используется `actions/cache@v4` для кэширования `node_modules` всех workspaces
+- Используется `actions/cache@v4` для кэширования `node_modules` корня и `service2110/node_modules`
 - Ключ кэша: `${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}`
 - Кэш очищается автоматически при изменении `package-lock.json`
 

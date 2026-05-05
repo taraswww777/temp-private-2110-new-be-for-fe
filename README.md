@@ -7,13 +7,14 @@ Backend сервис на стеке Fastify + TypeScript + PostgreSQL + Drizzle
 ```
 /
 ├── service2110/        # Service2110 (Fastify + TypeScript)
-├── taskViewerBe/       # Task Viewer Backend (вспомогательный инструмент)
-├── taskViewerFe/       # Task Viewer Frontend (вспомогательный инструмент)
 ├── docs/               # Документация и задачи
 │   └── tasks/         # Задачи в формате TASK-XXX
+├── pet-task-viewer/   # Task Viewer вынесен как отдельное приложение (отдельный репозиторий при переносе)
 ├── package.json       # Корневой package.json с workspace
 └── README.md          # Этот файл
 ```
+
+При работе только с Service2110 каталог `pet-task-viewer/` в этом монорепозитории можно не трогать или удалить после полного переноса в свой git remote.
 
 ## Требования
 
@@ -80,17 +81,11 @@ npm run docker:db:up        # Запустить PostgreSQL
 npm run docker:db:down      # Остановить PostgreSQL
 ```
 
-### Task Viewer (вспомогательный инструмент)
-
-```bash
-npm run taskViewer:dev      # Запустить Task Viewer (BE + FE)
-```
-
 ### CI проверки (локально)
 
 ```bash
-npm run ci:lint             # Запустить линтер для всех приложений
-npm run ci:build            # Собрать все приложения
+npm run ci:lint             # Линтер только Service2110
+npm run ci:build            # Сборка только Service2110
 npm run ci:check            # Полная проверка (lint + build)
 ```
 
@@ -183,29 +178,25 @@ npm run docs:preview
 
 ### Автоматические проверки
 
-При создании Pull Request автоматически запускаются проверки:
+При создании Pull Request автоматически запускаются проверки для **Service2110**:
 
-1. **Lint** - проверка кода ESLint для всех приложений
-2. **Build** - сборка TypeScript для всех приложений
-3. **Type Check** - проверка типов TypeScript
+1. **Lint** — ESLint  
+2. **Build** — сборка TypeScript (включая проверку типов в рамках сборки)
 
-**Проверяются приложения:**
-- Service2110 (основной Backend)
-- TaskViewer Backend
-- TaskViewer Frontend
+Отдельно репозиторий **Pet Task Viewer** (каталог `pet-task-viewer/` или собственный remote) содержит свой CI для `taskViewerBe` и `taskViewerFe`.
 
 ### Локальная проверка перед коммитом
 
 Запустите проверки локально перед созданием PR:
 
 ```bash
-# Полная проверка (lint + build)
+# Полная проверка Service2110 (lint + build)
 npm run ci:check
 
-# Только lint
+# Только lint Service2110
 npm run ci:lint
 
-# Только build
+# Только build Service2110
 npm run ci:build
 ```
 

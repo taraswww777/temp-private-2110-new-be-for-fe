@@ -3,34 +3,27 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "service2110",
-    "taskViewerBe",
-    "taskViewerFe"
+    "service2110"
   ],
   "scripts": {
     "service2110:dev": "npm run start:dev -w service2110",
     "service2110:checks": "npm run checks -w service2110",
     "service2110:typecheck": "npm run typecheck -w service2110",
-    "taskViewer:dev": "concurrently -n \"TaskViewer-BE,TaskViewer-FE\" -c \"magenta,green\" \"npm run start:dev -w taskViewerBe\" \"npm run dev -w taskViewerFe\"",
     "kill:port": "node scripts/kill-port.js",
     "kill:3000": "node scripts/kill-port.js 3000",
-    "kill:3002": "node scripts/kill-port.js 3002",
-    "kill:5173": "node scripts/kill-port.js 5173",
-    "kill:all": "npm run kill:3000 && npm run kill:3002 && npm run kill:5173",
+    "kill:all": "npm run kill:3000",
     "kill:node": "taskkill /F /IM node.exe 2>nul || echo \"✅ No node processes running\"",
     "predev": "npm run kill:3000",
-    "pretaskViewer:dev": "npm run kill:3002 && npm run kill:5173",
     "docs:generate": "node scripts/generate-swagger-html.js",
     "docs:preview": "npm run docs:generate && echo \"📄 Open docs/public/index.html in your browser\"",
-    "ci:lint": "npm run lint -w service2110 && npm run lint -w taskViewerBe && npm run lint -w taskViewerFe",
-    "ci:build": "npm run build -w service2110 && npm run build -w taskViewerBe && npm run build -w taskViewerFe",
+    "ci:lint": "npm run lint -w service2110",
+    "ci:build": "npm run build -w service2110",
     "ci:check": "npm run ci:lint && npm run ci:build",
     "ai-tasks:run": "node scripts/ai-tasks-runner/runner.js",
     "ai-tasks:dry-run": "node scripts/ai-tasks-runner/runner.js --dry-run"
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {
-    "concurrently": "9.2.1",
     "dotenv": "17.2.3"
   }
 }
