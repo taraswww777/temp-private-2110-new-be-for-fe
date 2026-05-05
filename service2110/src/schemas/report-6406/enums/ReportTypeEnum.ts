@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
+import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers.ts';
 
 // Enum для тип операции
 // Информация об операциях за период
@@ -32,3 +33,7 @@ export const ReportTypeEnumSchema = createEnumSchemaWithDescriptions(
   'ReportTypeEnum',
   'Тип отчёта',
 );
+
+(function registerReportTypeEnumOpenApi() {
+  registerReport6406EnumOpenApiSchema(reportTypeSchema, 'ReportTypeEnum');
+})();

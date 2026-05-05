@@ -1,0 +1,60 @@
+diff --git a/node_modules/@fastify/swagger/lib/spec/openapi/utils.js b/node_modules/@fastify/swagger/lib/spec/openapi/utils.js
+index b6fa281..8b1e64e 100644
+--- a/node_modules/@fastify/swagger/lib/spec/openapi/utils.js
++++ b/node_modules/@fastify/swagger/lib/spec/openapi/utils.js
+@@ -291,18 +291,21 @@ function resolveBodyParams (opts, body, schema, consumes, ref) {
+   }
+ }
+ 
+-function resolveCommonParams (opts, container, parameters, schema, ref, sharedSchemas, securityIgnores) {
++function resolveCommonParams (opts, container, parameters, schema, ref, sharedSchemas, securityIgnores, componentSchemas) {
+   const schemasPath = '#/components/schemas/'
++  const definitions = ref.definitions().definitions
++  const components = componentSchemas && typeof componentSchemas === 'object' ? componentSchemas : {}
++  const mergedForRef = Object.assign({}, definitions, components)
+   let resolved = convertJsonSchemaToOpenapi3(opts, ref.resolve(schema))
+ 
+   // if the resolved definition is in global schema
+-  if (resolved.$ref?.startsWith(schemasPath)) {
++  if (resolved && resolved.$ref && resolved.$ref.startsWith(schemasPath)) {
+     const parts = resolved.$ref.split(schemasPath)
+     const pathParts = parts[1].split('/')
+-    resolved = pathParts.reduce((resolved, pathPart) => resolved[pathPart], ref.definitions().definitions)
++    resolved = pathParts.reduce((acc, pathPart) => (acc && acc[pathPart]), mergedForRef)
+   }
+ 
+-  const arr = plainJsonObjectToOpenapi3(opts, container, resolved, { ...sharedSchemas, ...ref.definitions().definitions }, securityIgnores)
++  const arr = plainJsonObjectToOpenapi3(opts, container, resolved, Object.assign({}, sharedSchemas, components, definitions), securityIgnores)
+   arr.forEach(swaggerSchema => parameters.push(swaggerSchema))
+ }
+ 
+@@ -473,16 +476,16 @@ function prepareOpenapiMethod (opts, schema, ref, openapiObject, url) {
+     if (schema.tags) openapiMethod.tags = schema.tags
+     if (schema.description) openapiMethod.description = schema.description
+     if (schema.externalDocs) openapiMethod.externalDocs = schema.externalDocs
+-    if (schema.querystring) resolveCommonParams(opts, 'query', parameters, schema.querystring, ref, openapiObject.definitions, securityIgnores.query)
++    if (schema.querystring) resolveCommonParams(opts, 'query', parameters, schema.querystring, ref, openapiObject.definitions, securityIgnores.query, openapiObject.components && openapiObject.components.schemas)
+     if (schema.body) {
+       openapiMethod.requestBody = { content: {} }
+       resolveBodyParams(opts, openapiMethod.requestBody, schema.body, schema.consumes, ref)
+     }
+-    if (schema.params) resolveCommonParams(opts, 'path', parameters, schema.params, ref, openapiObject.definitions)
+-    if (schema.headers) resolveCommonParams(opts, 'header', parameters, schema.headers, ref, openapiObject.definitions, securityIgnores.header)
++    if (schema.params) resolveCommonParams(opts, 'path', parameters, schema.params, ref, openapiObject.definitions, undefined, openapiObject.components && openapiObject.components.schemas)
++    if (schema.headers) resolveCommonParams(opts, 'header', parameters, schema.headers, ref, openapiObject.definitions, securityIgnores.header, openapiObject.components && openapiObject.components.schemas)
+     // TODO: need to documentation, we treat it same as the querystring
+     // fastify do not support cookies schema in first place
+-    if (schema.cookies) resolveCommonParams(opts, 'cookie', parameters, schema.cookies, ref, openapiObject.definitions, securityIgnores.cookie)
++    if (schema.cookies) resolveCommonParams(opts, 'cookie', parameters, schema.cookies, ref, openapiObject.definitions, securityIgnores.cookie, openapiObject.components && openapiObject.components.schemas)
+     if (parameters.length > 0) openapiMethod.parameters = parameters
+     if (schema.deprecated) openapiMethod.deprecated = schema.deprecated
+     if (schema.security) openapiMethod.security = schema.security
+@@ -498,7 +501,7 @@ function prepareOpenapiMethod (opts, schema, ref, openapiObject, url) {
+   // If there is no schema or schema.params, we need to generate them
+   if ((!schema || !schema.params) && hasParams(url)) {
+     const schemaGenerated = generateParamsSchema(url)
+-    resolveCommonParams(opts, 'path', parameters, schemaGenerated.params, ref, openapiObject.definitions)
++    resolveCommonParams(opts, 'path', parameters, schemaGenerated.params, ref, openapiObject.definitions, undefined, openapiObject.components && openapiObject.components.schemas)
+     openapiMethod.parameters = parameters
+   }
+ 

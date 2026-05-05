@@ -10,6 +10,8 @@ import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 import { branchSchema, sourceSchema } from './references.schema.ts';
 
+import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+
 export type CurrencyType = z.infer<typeof currencySchema>;
 export type FileFormatType = z.infer<typeof fileFormatSchema>;
 
@@ -174,4 +176,16 @@ export const tasksListResponseSchema = z.object({
 });
 
 export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
+
+(function registerTasksReport6406OpenApi() {
+  registerReport6406OpenApiSchema(taskPackageInfoSchema, 'TaskPackageInfoDto');
+  registerReport6406OpenApiSchema(taskListSortColumnSchema, 'TaskListSortColumnEnum');
+  registerReport6406OpenApiSchema(tasksListSortingSchema, 'TasksListSortingDto');
+  registerReport6406OpenApiSchema(createTaskSchema, 'CreateTaskDto');
+  registerReport6406OpenApiSchema(taskListItemSchema, 'TaskListItemDto');
+  registerReport6406OpenApiSchema(tasksListFilterSchema, 'TasksListFilterDto');
+  registerReport6406OpenApiSchema(getTasksRequestSchema, 'GetTasksRequestDto');
+  registerReport6406OpenApiSchema(tasksListResponseSchema, 'TasksListResponseDto');
+  registerReport6406OpenApiSchema(taskDetailSchema, 'TaskDetailDto');
+})();
 

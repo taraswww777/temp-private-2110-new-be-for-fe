@@ -11,6 +11,1805 @@
   },
   "components": {
     "schemas": {
+      "Report6406DictEmployeeLoginPathParamDto": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "maxLength": 15
+          }
+        },
+        "required": [
+          "login"
+        ],
+        "additionalProperties": false
+      },
+      "Report6406DictBranchDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ИД филиала",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "codeCB": {
+            "type": "string",
+            "description": "Код ЦБ"
+          },
+          "name": {
+            "type": "string",
+            "description": "Название филиала"
+          }
+        },
+        "required": [
+          "id",
+          "codeCB",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "Report6406DictBranchesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Report6406DictBranchDto"
+        }
+      },
+      "Report6406DictCurrencyDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "Report6406DictCurrenciesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Report6406DictCurrencyDto"
+        }
+      },
+      "Report6406DictSourceDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ris": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "ris"
+        ],
+        "additionalProperties": false
+      },
+      "Report6406DictSourcesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Report6406DictSourceDto"
+        }
+      },
+      "Report6406DictEmployeeDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "login": {
+            "type": "string",
+            "maxLength": 15
+          }
+        },
+        "required": [
+          "fullName",
+          "login"
+        ],
+        "additionalProperties": false
+      },
+      "Report6406DictEmployeeResponseDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "login": {
+            "type": "string",
+            "maxLength": 15
+          }
+        },
+        "required": [
+          "fullName",
+          "login"
+        ],
+        "additionalProperties": false
+      },
+      "AccountMaskItemDto": {
+        "type": "object",
+        "properties": {
+          "firstAccount": {
+            "type": "string"
+          },
+          "secondAccounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "firstAccount",
+          "secondAccounts"
+        ],
+        "additionalProperties": false
+      },
+      "AccountMasksResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AccountMaskItemDto"
+        }
+      },
+      "ReportTypeEnum": {
+        "type": "string",
+        "enum": [
+          "LSOZ",
+          "LSOS",
+          "LSOP"
+        ],
+        "description": "Тип отчёта",
+        "x-enum-descriptions": [
+          "LSOZ",
+          "LSOS",
+          "LSOP"
+        ],
+        "x-enum-varnames": [
+          "LSOZ",
+          "LSOS",
+          "LSOP"
+        ],
+        "oneOf": [
+          {
+            "const": "LSOZ",
+            "description": "LSOZ",
+            "title": "LSOZ"
+          },
+          {
+            "const": "LSOS",
+            "description": "LSOS",
+            "title": "LSOS"
+          },
+          {
+            "const": "LSOP",
+            "description": "LSOP",
+            "title": "LSOP"
+          }
+        ]
+      },
+      "CurrencyEnum": {
+        "type": "string",
+        "enum": [
+          "RUB",
+          "FOREIGN"
+        ],
+        "description": "Валюта",
+        "x-enum-descriptions": [
+          "Рубли",
+          "Иностранная валюта"
+        ],
+        "x-enum-varnames": [
+          "RUB",
+          "FOREIGN"
+        ],
+        "oneOf": [
+          {
+            "const": "RUB",
+            "description": "Рубли",
+            "title": "RUB"
+          },
+          {
+            "const": "FOREIGN",
+            "description": "Иностранная валюта",
+            "title": "FOREIGN"
+          }
+        ]
+      },
+      "Report6406CurrencyIdSchema": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 999,
+        "description": "Валюта"
+      },
+      "FileFormatEnum": {
+        "type": "string",
+        "enum": [
+          "TXT",
+          "XLSX",
+          "XML"
+        ],
+        "description": "Формат файла",
+        "x-enum-descriptions": [
+          "Текстовый формат",
+          "Excel формат",
+          "XML формат"
+        ],
+        "x-enum-varnames": [
+          "TXT",
+          "XLSX",
+          "XML"
+        ],
+        "oneOf": [
+          {
+            "const": "TXT",
+            "description": "Текстовый формат",
+            "title": "TXT"
+          },
+          {
+            "const": "XLSX",
+            "description": "Excel формат",
+            "title": "XLSX"
+          },
+          {
+            "const": "XML",
+            "description": "XML формат",
+            "title": "XML"
+          }
+        ]
+      },
+      "TaskStatusEnum": {
+        "type": "string",
+        "enum": [
+          "task_create",
+          "task_loading",
+          "task_data",
+          "task_empty_data",
+          "task_fail_data",
+          "task_cancel_data",
+          "task_conversion",
+          "task_done",
+          "task_fail_generation",
+          "task_cancel_generation",
+          "task_delete"
+        ],
+        "description": "Статус задания (локальная модель task_*)",
+        "x-enum-descriptions": [
+          "Создано",
+          "Готовится к запуску",
+          "Выборка данных",
+          "Нет данных по заданным параметрам",
+          "Выборка не выполнена",
+          "Выборка данных отменена",
+          "Генерация",
+          "Выполнено",
+          "Генерация не выполнена",
+          "Генерация отменена",
+          "Удалено"
+        ],
+        "x-enum-varnames": [
+          "CREATE",
+          "LOADING",
+          "DATA",
+          "EMPTY_DATA",
+          "FAIL_DATA",
+          "CANCEL_DATA",
+          "CONVERSION",
+          "DONE",
+          "FAIL_GENERATION",
+          "CANCEL_GENERATION",
+          "DELETE"
+        ],
+        "oneOf": [
+          {
+            "const": "task_create",
+            "description": "Создано",
+            "title": "CREATE"
+          },
+          {
+            "const": "task_loading",
+            "description": "Готовится к запуску",
+            "title": "LOADING"
+          },
+          {
+            "const": "task_data",
+            "description": "Выборка данных",
+            "title": "DATA"
+          },
+          {
+            "const": "task_empty_data",
+            "description": "Нет данных по заданным параметрам",
+            "title": "EMPTY_DATA"
+          },
+          {
+            "const": "task_fail_data",
+            "description": "Выборка не выполнена",
+            "title": "FAIL_DATA"
+          },
+          {
+            "const": "task_cancel_data",
+            "description": "Выборка данных отменена",
+            "title": "CANCEL_DATA"
+          },
+          {
+            "const": "task_conversion",
+            "description": "Генерация",
+            "title": "CONVERSION"
+          },
+          {
+            "const": "task_done",
+            "description": "Выполнено",
+            "title": "DONE"
+          },
+          {
+            "const": "task_fail_generation",
+            "description": "Генерация не выполнена",
+            "title": "FAIL_GENERATION"
+          },
+          {
+            "const": "task_cancel_generation",
+            "description": "Генерация отменена",
+            "title": "CANCEL_GENERATION"
+          },
+          {
+            "const": "task_delete",
+            "description": "Удалено",
+            "title": "DELETE"
+          }
+        ]
+      },
+      "BranchDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ИД филиала",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "codeCb": {
+            "type": "string",
+            "description": "Код филиала по ЦБ"
+          },
+          "name": {
+            "type": "string",
+            "description": "Название филиала"
+          }
+        },
+        "required": [
+          "id",
+          "codeCb",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "CurrencyDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "FormatDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "SourceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ris": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "ris"
+        ],
+        "additionalProperties": false
+      },
+      "BranchesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/BranchDto"
+        }
+      },
+      "CurrenciesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/CurrencyDto"
+        }
+      },
+      "FormatsResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FormatDto"
+        }
+      },
+      "SourcesResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SourceDto"
+        }
+      },
+      "TaskPackageInfoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "name": {
+            "type": "string"
+          },
+          "addedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "addedAt"
+        ],
+        "additionalProperties": false
+      },
+      "TaskListSortColumnEnum": {
+        "type": "string",
+        "enum": [
+          "createdAt",
+          "taskStatus",
+          "reportType",
+          "periodFrom",
+          "periodTo",
+          "createdBy"
+        ]
+      },
+      "TasksListSortingDto": {
+        "type": "object",
+        "properties": {
+          "sortOrder": {
+            "$ref": "#/components/schemas/SortOrderEnum"
+          },
+          "sortBy": {
+            "description": "Колонка для сортировки",
+            "$ref": "#/components/schemas/TaskListSortColumnEnum"
+          }
+        },
+        "required": [
+          "sortOrder",
+          "sortBy"
+        ],
+        "additionalProperties": false
+      },
+      "CreateTaskDto": {
+        "type": "object",
+        "properties": {
+          "branchList": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BranchDto"
+            },
+            "description": "Массив ИД филиалов"
+          },
+          "periodFrom": {
+            "description": "Дата начала отчётного периода 2023-01-01",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "periodTo": {
+            "description": "Дата окончания отчётного периода 2023-12-31",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "currencyId": {
+            "description": "Ид валюты (например: 810, 999)",
+            "$ref": "#/components/schemas/Report6406CurrencyIdSchema"
+          },
+          "fileFormat": {
+            "default": "TXT",
+            "$ref": "#/components/schemas/FileFormatEnum"
+          },
+          "sourceList": {
+            "description": "Источники данных",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceDto"
+            }
+          },
+          "accountList": {
+            "description": "Список счетов (20-значные номера)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountNumberSchema"
+            }
+          },
+          "secondOrderAccountList": {
+            "description": "Счета второго порядка (5-значные номера)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountSecondOrderSchema"
+            }
+          },
+          "operationTypeList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReportTypeEnum"
+            },
+            "description": "Тип операции"
+          }
+        },
+        "required": [
+          "branchList",
+          "currencyId",
+          "fileFormat",
+          "operationTypeList"
+        ],
+        "additionalProperties": false
+      },
+      "TaskListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ИД задания",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время создания 2026-04-30T07:46:40.449Z"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Логин сотрудника, создавшего задание"
+          },
+          "branchList": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BranchDto"
+            },
+            "description": "Массив ИД филиалов"
+          },
+          "periodFrom": {
+            "description": "Дата начала отчётного периода 2023-01-01",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "periodTo": {
+            "description": "Дата окончания отчётного периода 2023-12-31",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "currencyId": {
+            "description": "Ид валюты (например: 810, 999)",
+            "$ref": "#/components/schemas/Report6406CurrencyIdSchema"
+          },
+          "fileFormat": {
+            "default": "TXT",
+            "$ref": "#/components/schemas/FileFormatEnum"
+          },
+          "taskStatus": {
+            "description": "Статус задания",
+            "$ref": "#/components/schemas/TaskStatusEnum"
+          },
+          "totalFilesSize": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Размер файла; 0 — ещё не рассчитан"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время последнего обновления 2026-04-30T07:46:40.449Z"
+          },
+          "sourceList": {
+            "description": "Источники данных",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceDto"
+            }
+          },
+          "filesCount": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Количество файлов"
+          },
+          "packageId": {
+            "description": "ИД Пакета, в который входит задание",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "operationType": {
+            "description": "Тип операции",
+            "$ref": "#/components/schemas/ReportTypeEnum"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "createdBy",
+          "branchList",
+          "currencyId",
+          "fileFormat",
+          "taskStatus",
+          "totalFilesSize",
+          "updatedAt",
+          "filesCount",
+          "operationType"
+        ],
+        "additionalProperties": false
+      },
+      "TasksListFilterDto": {
+        "type": "object",
+        "properties": {
+          "packageId": {
+            "description": "ID пакета",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "operationTypeList": {
+            "description": "Типы отчётов",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReportTypeEnum"
+            }
+          },
+          "branchIdList": {
+            "description": "Массив ИД филиалов",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "taskStatusList": {
+            "description": "Статусы заданий",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskStatusEnum"
+            }
+          },
+          "fileFormatList": {
+            "description": "Форматы файла",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FileFormatEnum"
+            }
+          },
+          "sourceIdList": {
+            "description": "Идентификаторы источников данных",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "accountList": {
+            "description": "Список счетов (20-значные номера)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountNumberSchema"
+            }
+          },
+          "secondOrderAccountList": {
+            "description": "Счета второго порядка (5-значные номера)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountSecondOrderSchema"
+            }
+          },
+          "currencyIdList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Report6406CurrencyIdSchema"
+            }
+          },
+          "createdByList": {
+            "description": "Логин создателя пакета",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "periodFrom": {
+            "description": "Дата начала отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "periodTo": {
+            "description": "Дата окончания отчётного периода YYYY-MM-DD",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "createdAtFrom": {
+            "description": "Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "createdAtTo": {
+            "description": "Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetTasksRequestDto": {
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationRequestDto"
+          },
+          "sorting": {
+            "description": "Параметры сортировки (колонка — фиксированный набор)",
+            "$ref": "#/components/schemas/TasksListSortingDto"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/TasksListFilterDto"
+          }
+        },
+        "required": [
+          "pagination",
+          "sorting"
+        ],
+        "additionalProperties": false
+      },
+      "TasksListResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskListItemDto"
+            },
+            "description": "Список заданий"
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество заданий"
+          }
+        },
+        "required": [
+          "items",
+          "totalItems"
+        ],
+        "additionalProperties": false
+      },
+      "TaskDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ИД задания",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время создания 2026-04-30T07:46:40.449Z"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "Логин сотрудника, создавшего задание"
+          },
+          "branchList": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BranchDto"
+            },
+            "description": "Массив ИД филиалов"
+          },
+          "periodFrom": {
+            "description": "Дата начала отчётного периода 2023-01-01",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "periodTo": {
+            "description": "Дата окончания отчётного периода 2023-12-31",
+            "$ref": "#/components/schemas/DateSchema"
+          },
+          "currencyId": {
+            "description": "Ид валюты (например: 810, 999)",
+            "$ref": "#/components/schemas/Report6406CurrencyIdSchema"
+          },
+          "fileFormat": {
+            "default": "TXT",
+            "$ref": "#/components/schemas/FileFormatEnum"
+          },
+          "taskStatus": {
+            "description": "Статус задания",
+            "$ref": "#/components/schemas/TaskStatusEnum"
+          },
+          "totalFilesSize": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Размер файла; 0 — ещё не рассчитан"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время последнего обновления 2026-04-30T07:46:40.449Z"
+          },
+          "sourceList": {
+            "description": "Источники данных",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceDto"
+            }
+          },
+          "filesCount": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Количество файлов"
+          },
+          "packageId": {
+            "description": "ИД Пакета, в который входит задание",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "accountList": {
+            "description": "Список счетов (20-значные номера)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountNumberSchema"
+            }
+          },
+          "secondOrderAccountList": {
+            "description": "Счета второго порядка (5-значные номера)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountSecondOrderSchema"
+            }
+          },
+          "operationType": {
+            "description": "Тип операции",
+            "$ref": "#/components/schemas/ReportTypeEnum"
+          },
+          "s3Path": {
+            "description": "ID папки в S3",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "createdBy",
+          "branchList",
+          "currencyId",
+          "fileFormat",
+          "taskStatus",
+          "totalFilesSize",
+          "updatedAt",
+          "filesCount",
+          "operationType"
+        ],
+        "additionalProperties": false
+      },
+      "TaskStatusHistoryItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "taskId": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "taskStatus": {
+            "$ref": "#/components/schemas/TaskStatusEnum"
+          },
+          "changedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время изменения"
+          },
+          "changedBy": {
+            "type": "string",
+            "description": "Инициатор изменения. Логин или ФИО"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "taskId",
+          "taskStatus",
+          "changedAt",
+          "changedBy"
+        ],
+        "additionalProperties": false
+      },
+      "TaskStatusHistoryResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TaskStatusHistoryItemDto"
+        }
+      },
+      "FileStatusEnum": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "CONVERTING",
+          "COMPLETED",
+          "FAILED"
+        ],
+        "description": "Статус конвертации файла",
+        "x-enum-descriptions": [
+          "Ожидает обработки",
+          "Идёт конвертация файла",
+          "Конвертация успешно завершена",
+          "Конвертация завершилась ошибкой"
+        ],
+        "x-enum-varnames": [
+          "PENDING",
+          "CONVERTING",
+          "COMPLETED",
+          "FAILED"
+        ],
+        "oneOf": [
+          {
+            "const": "PENDING",
+            "description": "Ожидает обработки",
+            "title": "PENDING"
+          },
+          {
+            "const": "CONVERTING",
+            "description": "Идёт конвертация файла",
+            "title": "CONVERTING"
+          },
+          {
+            "const": "COMPLETED",
+            "description": "Конвертация успешно завершена",
+            "title": "COMPLETED"
+          },
+          {
+            "const": "FAILED",
+            "description": "Конвертация завершилась ошибкой",
+            "title": "FAILED"
+          }
+        ]
+      },
+      "TaskFilePathParamsDto": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "fileId": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          }
+        },
+        "required": [
+          "taskId",
+          "fileId"
+        ],
+        "additionalProperties": false
+      },
+      "TaskFileSortByEnum": {
+        "type": "string",
+        "enum": [
+          "status",
+          "fileName",
+          "fileSize",
+          "createdAt"
+        ]
+      },
+      "TaskFilesQueryDto": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "default": 1,
+            "description": "Номер страницы (начиная с 1)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "limit": {
+            "default": 20,
+            "description": "Размер страницы",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "sortBy": {
+            "default": "status",
+            "$ref": "#/components/schemas/TaskFileSortByEnum"
+          },
+          "sortOrder": {
+            "$ref": "#/components/schemas/SortOrderEnum"
+          },
+          "status": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FileStatusEnum"
+            }
+          }
+        },
+        "required": [
+          "page",
+          "limit",
+          "sortBy",
+          "sortOrder"
+        ],
+        "additionalProperties": false
+      },
+      "TaskFileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "fileSize": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Размер файла в байтах (например, 10485760 = 10 MB)"
+          }
+        },
+        "required": [
+          "id",
+          "fileName",
+          "fileSize"
+        ],
+        "additionalProperties": false
+      },
+      "TaskFilesResponseDto": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskFileDto"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMetadataDto"
+          }
+        },
+        "required": [
+          "taskId",
+          "files",
+          "pagination"
+        ],
+        "additionalProperties": false
+      },
+      "TaskFileUrlItemDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "fileName"
+        ],
+        "additionalProperties": false
+      },
+      "TaskFileUrlResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TaskFileUrlItemDto"
+        }
+      },
+      "RetryFileConversionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FileStatusEnum"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "PackageStatusEnum": {
+        "type": "string",
+        "enum": [
+          "pack_create",
+          "pack_transfer",
+          "pack_done",
+          "pack_fail",
+          "pack_cancel",
+          "pack_delete"
+        ],
+        "description": "Статус пакета",
+        "x-enum-descriptions": [
+          "Создано",
+          "Копирование",
+          "Выполнено",
+          "Не выполнено",
+          "Отменено",
+          "Удалено"
+        ],
+        "x-enum-varnames": [
+          "CREATE",
+          "TRANSFER",
+          "DONE",
+          "FAIL",
+          "CANCEL",
+          "DELETE"
+        ],
+        "oneOf": [
+          {
+            "const": "pack_create",
+            "description": "Создано",
+            "title": "CREATE"
+          },
+          {
+            "const": "pack_transfer",
+            "description": "Копирование",
+            "title": "TRANSFER"
+          },
+          {
+            "const": "pack_done",
+            "description": "Выполнено",
+            "title": "DONE"
+          },
+          {
+            "const": "pack_fail",
+            "description": "Не выполнено",
+            "title": "FAIL"
+          },
+          {
+            "const": "pack_cancel",
+            "description": "Отменено",
+            "title": "CANCEL"
+          },
+          {
+            "const": "pack_delete",
+            "description": "Удалено",
+            "title": "DELETE"
+          }
+        ]
+      },
+      "PackageStatusHistoryItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "packageId": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "packageStatus": {
+            "$ref": "#/components/schemas/PackageStatusEnum"
+          },
+          "changedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время изменения"
+          },
+          "changedBy": {
+            "type": "string",
+            "description": "Инициатор изменения. Логин или ФИО"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "packageId",
+          "packageStatus",
+          "changedAt",
+          "changedBy"
+        ],
+        "additionalProperties": false
+      },
+      "PackageStatusHistoryResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PackageStatusHistoryItemDto"
+        }
+      },
+      "PackageIdPathParamDto": {
+        "type": "object",
+        "properties": {
+          "packageId": {
+            "description": "ИД пакета",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          }
+        },
+        "required": [
+          "packageId"
+        ],
+        "additionalProperties": false
+      },
+      "PackageListSortColumnEnum": {
+        "type": "string",
+        "enum": [
+          "createdAt",
+          "name",
+          "tasksCount",
+          "totalSize"
+        ]
+      },
+      "PackageListSortingDto": {
+        "type": "object",
+        "properties": {
+          "sortOrder": {
+            "$ref": "#/components/schemas/SortOrderEnum"
+          },
+          "sortBy": {
+            "description": "Колонка для сортировки",
+            "$ref": "#/components/schemas/TaskListSortColumnEnum"
+          }
+        },
+        "required": [
+          "sortOrder",
+          "sortBy"
+        ],
+        "additionalProperties": false,
+        "description": "Параметры сортировки (колонка — фиксированный набор)"
+      },
+      "PackageListFilterDto": {
+        "type": "object",
+        "properties": {
+          "packageId": {
+            "description": "ID пакета",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "name": {
+            "type": "string",
+            "description": "Наименование пакета"
+          },
+          "packageStatus": {
+            "description": "Статусы заданий",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageStatusEnum"
+            }
+          },
+          "createdAtFrom": {
+            "description": "Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "createdAtTo": {
+            "description": "Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "copiedFrom": {
+            "description": "Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "copiedTo": {
+            "description": "Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "isEmpty": {
+            "description": "Показать пустые пакеты",
+            "default": false,
+            "type": "boolean"
+          },
+          "createdByList": {
+            "description": "Логин создателя пакета",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreatePackageDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Название пакета"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "UpdatePackageDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Новое название пакета"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "PackageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ИД пакета",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Название пакета"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время создания пакета"
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Логин сотрудника, создавшего пакет"
+          },
+          "lastCopiedToTfrAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Дата последнего копирования в ТФР (ISO 8601), например  2026-04-30T12:20:50.979Z"
+          },
+          "totalTasksCount": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Количество заданий в пакете"
+          },
+          "totalFilesSize": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общий размер пакета в мегабайтах (сумма размеров всех файлов)"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время последнего обновления, например  2026-04-30T12:20:50.979Z"
+          },
+          "status": {
+            "description": "Текущий статус пакета",
+            "$ref": "#/components/schemas/PackageStatusEnum"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "createdAt",
+          "createdBy",
+          "lastCopiedToTfrAt",
+          "totalTasksCount",
+          "totalFilesSize",
+          "updatedAt",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "GetPackagesListRequestDto": {
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationRequestDto"
+          },
+          "sorting": {
+            "$ref": "#/components/schemas/PackageListSortingDto"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/PackageListFilterDto"
+          }
+        },
+        "required": [
+          "pagination",
+          "sorting"
+        ],
+        "additionalProperties": false
+      },
+      "PackagesListResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageDto"
+            },
+            "description": "Список пакетов"
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество заданий"
+          }
+        },
+        "required": [
+          "items",
+          "totalItems"
+        ],
+        "additionalProperties": false
+      },
+      "UpdatePackageResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ИД пакета",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "name": {
+            "type": "string",
+            "description": "Обновлённое название пакета"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время обновления"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "updatedAt"
+        ],
+        "additionalProperties": false
+      },
+      "AddTasksToPackageRequestDto": {
+        "type": "object",
+        "properties": {
+          "taskIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            },
+            "description": "Массив ИД заданий для добавления в пакет (минимум 1)"
+          }
+        },
+        "required": [
+          "taskIds"
+        ],
+        "additionalProperties": false
+      },
+      "CopyToTfrResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ИД пакета",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "lastCopiedToTfrAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время последнего копирования в ТФР"
+          },
+          "message": {
+            "type": "string",
+            "description": "Сообщение о результате операции"
+          }
+        },
+        "required": [
+          "id",
+          "lastCopiedToTfrAt",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "PackageTfrResponseDto": {
+        "type": "object",
+        "properties": {
+          "packageId": {
+            "description": "ИД пакета",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "packageName": {
+            "type": "string",
+            "description": "Имя пакета"
+          },
+          "tfrCopyDate": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата и время копирования в ТФР"
+          },
+          "size": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Размер пакета в мегабайтах"
+          }
+        },
+        "required": [
+          "packageId",
+          "packageName",
+          "tfrCopyDate",
+          "size"
+        ],
+        "additionalProperties": false
+      },
+      "StorageCodeEnum": {
+        "type": "string",
+        "enum": [
+          "TFR",
+          "CEPH",
+          "ARCHIVE"
+        ],
+        "description": "Код хранилища",
+        "x-enum-descriptions": [
+          "Территориальный финансовый репозиторий",
+          "Объектное хранилище (S3)",
+          "Локальное хранилище"
+        ],
+        "x-enum-varnames": [
+          "TFR",
+          "CEPH",
+          "ARCHIVE"
+        ],
+        "oneOf": [
+          {
+            "const": "TFR",
+            "description": "Территориальный финансовый репозиторий",
+            "title": "TFR"
+          },
+          {
+            "const": "CEPH",
+            "description": "Объектное хранилище (S3)",
+            "title": "CEPH"
+          },
+          {
+            "const": "ARCHIVE",
+            "description": "Локальное хранилище",
+            "title": "ARCHIVE"
+          }
+        ]
+      },
+      "StorageVolumeItemDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Код хранилища (TFR, S3, LOCAL)",
+            "$ref": "#/components/schemas/StorageCodeEnum"
+          },
+          "totalSize": {
+            "type": "number",
+            "description": "Общий объём хранилища в Mb"
+          },
+          "freeSize": {
+            "type": "number",
+            "description": "Свободный размер хранилища в Mb"
+          },
+          "reservedSize": {
+            "type": "number",
+            "description": "Размер зарезервированного места в Mb"
+          },
+          "percent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Процент заполнения (0–100)"
+          }
+        },
+        "required": [
+          "code",
+          "totalSize",
+          "freeSize",
+          "percent"
+        ],
+        "additionalProperties": false
+      },
+      "StorageVolumeListResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/StorageVolumeItemDto"
+        }
+      },
+      "ExportTasksResponseDto": {
+        "type": "object",
+        "properties": {
+          "exportId": {
+            "description": "ИД экспорта",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "status": {
+            "description": "Статус экспорта",
+            "$ref": "#/components/schemas/TaskStatusEnum"
+          },
+          "fileUrl": {
+            "type": "string",
+            "description": "URL для скачивания файла"
+          },
+          "fileSize": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Размер экспортированного файла в байтах (например, 52428800 = 50 MB)"
+          },
+          "downloadUrlExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата истечения срока действия ссылки"
+          },
+          "recordsCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Количество записей в экспортированном файле"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "Дата создания экспорта"
+          }
+        },
+        "required": [
+          "exportId",
+          "status",
+          "fileUrl",
+          "fileSize",
+          "downloadUrlExpiresAt",
+          "recordsCount",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "IntegerIdSchema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 9007199254740991,
+        "description": "Integer ID"
+      },
+      "IdPathParamDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "IdListSchema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/IntegerIdSchema"
+        }
+      },
+      "UuidSchema": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+        "description": "UUID"
+      },
+      "UuidPathParamDto": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "$ref": "#/components/schemas/UuidSchema"
+          }
+        },
+        "required": [
+          "uuid"
+        ],
+        "additionalProperties": false
+      },
+      "AccountNumberSchema": {
+        "type": "string",
+        "minLength": 20,
+        "maxLength": 20,
+        "pattern": "^\\d+$",
+        "description": "Счёт (20-значный номер)"
+      },
+      "AccountSecondOrderSchema": {
+        "type": "string",
+        "minLength": 5,
+        "maxLength": 5,
+        "pattern": "^\\d+$",
+        "description": "Счёт второго порядка (5-значный номер)"
+      },
       "PaginationRequestDto": {
         "type": "object",
         "properties": {
@@ -146,13 +1945,7 @@
       },
       "ProcessDto": {
         "minItems": 1,
-        "type": "array",
-        "items": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 9007199254740991,
-          "description": "Integer ID"
-        }
+        "$ref": "#/components/schemas/IdListSchema"
       },
       "ProcessResponseDto": {
         "type": "object",
@@ -187,10 +1980,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "success": {
             "type": "boolean"
@@ -202,1490 +1992,6 @@
         "required": [
           "id",
           "success"
-        ],
-        "additionalProperties": false
-      },
-      "CurrencyEnum": {
-        "type": "string",
-        "enum": [
-          "RUB",
-          "FOREIGN"
-        ],
-        "description": "Валюта",
-        "x-enum-descriptions": [
-          "Рубли",
-          "Иностранная валюта"
-        ],
-        "x-enum-varnames": [
-          "RUB",
-          "FOREIGN"
-        ],
-        "oneOf": [
-          {
-            "const": "RUB",
-            "description": "Рубли",
-            "title": "RUB"
-          },
-          {
-            "const": "FOREIGN",
-            "description": "Иностранная валюта",
-            "title": "FOREIGN"
-          }
-        ]
-      },
-      "FileFormatEnum": {
-        "type": "string",
-        "enum": [
-          "TXT",
-          "XLSX",
-          "XML"
-        ],
-        "description": "Формат файла",
-        "x-enum-descriptions": [
-          "Текстовый формат",
-          "Excel формат",
-          "XML формат"
-        ],
-        "x-enum-varnames": [
-          "TXT",
-          "XLSX",
-          "XML"
-        ],
-        "oneOf": [
-          {
-            "const": "TXT",
-            "description": "Текстовый формат",
-            "title": "TXT"
-          },
-          {
-            "const": "XLSX",
-            "description": "Excel формат",
-            "title": "XLSX"
-          },
-          {
-            "const": "XML",
-            "description": "XML формат",
-            "title": "XML"
-          }
-        ]
-      },
-      "ReportTypeEnum": {
-        "type": "string",
-        "enum": [
-          "LSOZ",
-          "LSOS",
-          "LSOP"
-        ],
-        "description": "Тип отчёта",
-        "x-enum-descriptions": [
-          "LSOZ",
-          "LSOS",
-          "LSOP"
-        ],
-        "x-enum-varnames": [
-          "LSOZ",
-          "LSOS",
-          "LSOP"
-        ],
-        "oneOf": [
-          {
-            "const": "LSOZ",
-            "description": "LSOZ",
-            "title": "LSOZ"
-          },
-          {
-            "const": "LSOS",
-            "description": "LSOS",
-            "title": "LSOS"
-          },
-          {
-            "const": "LSOP",
-            "description": "LSOP",
-            "title": "LSOP"
-          }
-        ]
-      },
-      "TaskStatusEnum": {
-        "type": "string",
-        "enum": [
-          "task_create",
-          "task_loading",
-          "task_data",
-          "task_empty_data",
-          "task_fail_data",
-          "task_cancel_data",
-          "task_conversion",
-          "task_done",
-          "task_fail_generation",
-          "task_cancel_generation",
-          "task_delete"
-        ],
-        "description": "Статус задания (локальная модель task_*)",
-        "x-enum-descriptions": [
-          "Создано",
-          "Готовится к запуску",
-          "Выборка данных",
-          "Нет данных по заданным параметрам",
-          "Выборка не выполнена",
-          "Выборка данных отменена",
-          "Генерация",
-          "Выполнено",
-          "Генерация не выполнена",
-          "Генерация отменена",
-          "Удалено"
-        ],
-        "x-enum-varnames": [
-          "CREATE",
-          "LOADING",
-          "DATA",
-          "EMPTY_DATA",
-          "FAIL_DATA",
-          "CANCEL_DATA",
-          "CONVERSION",
-          "DONE",
-          "FAIL_GENERATION",
-          "CANCEL_GENERATION",
-          "DELETE"
-        ],
-        "oneOf": [
-          {
-            "const": "task_create",
-            "description": "Создано",
-            "title": "CREATE"
-          },
-          {
-            "const": "task_loading",
-            "description": "Готовится к запуску",
-            "title": "LOADING"
-          },
-          {
-            "const": "task_data",
-            "description": "Выборка данных",
-            "title": "DATA"
-          },
-          {
-            "const": "task_empty_data",
-            "description": "Нет данных по заданным параметрам",
-            "title": "EMPTY_DATA"
-          },
-          {
-            "const": "task_fail_data",
-            "description": "Выборка не выполнена",
-            "title": "FAIL_DATA"
-          },
-          {
-            "const": "task_cancel_data",
-            "description": "Выборка данных отменена",
-            "title": "CANCEL_DATA"
-          },
-          {
-            "const": "task_conversion",
-            "description": "Генерация",
-            "title": "CONVERSION"
-          },
-          {
-            "const": "task_done",
-            "description": "Выполнено",
-            "title": "DONE"
-          },
-          {
-            "const": "task_fail_generation",
-            "description": "Генерация не выполнена",
-            "title": "FAIL_GENERATION"
-          },
-          {
-            "const": "task_cancel_generation",
-            "description": "Генерация отменена",
-            "title": "CANCEL_GENERATION"
-          },
-          {
-            "const": "task_delete",
-            "description": "Удалено",
-            "title": "DELETE"
-          }
-        ]
-      },
-      "PackageStatusEnum": {
-        "type": "string",
-        "enum": [
-          "pack_create",
-          "pack_transfer",
-          "pack_done",
-          "pack_fail",
-          "pack_cancel",
-          "pack_delete"
-        ],
-        "description": "Статус пакета",
-        "x-enum-descriptions": [
-          "Создано",
-          "Копирование",
-          "Выполнено",
-          "Не выполнено",
-          "Отменено",
-          "Удалено"
-        ],
-        "x-enum-varnames": [
-          "CREATE",
-          "TRANSFER",
-          "DONE",
-          "FAIL",
-          "CANCEL",
-          "DELETE"
-        ],
-        "oneOf": [
-          {
-            "const": "pack_create",
-            "description": "Создано",
-            "title": "CREATE"
-          },
-          {
-            "const": "pack_transfer",
-            "description": "Копирование",
-            "title": "TRANSFER"
-          },
-          {
-            "const": "pack_done",
-            "description": "Выполнено",
-            "title": "DONE"
-          },
-          {
-            "const": "pack_fail",
-            "description": "Не выполнено",
-            "title": "FAIL"
-          },
-          {
-            "const": "pack_cancel",
-            "description": "Отменено",
-            "title": "CANCEL"
-          },
-          {
-            "const": "pack_delete",
-            "description": "Удалено",
-            "title": "DELETE"
-          }
-        ]
-      },
-      "FileStatusEnum": {
-        "type": "string",
-        "enum": [
-          "PENDING",
-          "CONVERTING",
-          "COMPLETED",
-          "FAILED"
-        ],
-        "description": "Статус конвертации файла",
-        "x-enum-descriptions": [
-          "Ожидает обработки",
-          "Идёт конвертация файла",
-          "Конвертация успешно завершена",
-          "Конвертация завершилась ошибкой"
-        ],
-        "x-enum-varnames": [
-          "PENDING",
-          "CONVERTING",
-          "COMPLETED",
-          "FAILED"
-        ],
-        "oneOf": [
-          {
-            "const": "PENDING",
-            "description": "Ожидает обработки",
-            "title": "PENDING"
-          },
-          {
-            "const": "CONVERTING",
-            "description": "Идёт конвертация файла",
-            "title": "CONVERTING"
-          },
-          {
-            "const": "COMPLETED",
-            "description": "Конвертация успешно завершена",
-            "title": "COMPLETED"
-          },
-          {
-            "const": "FAILED",
-            "description": "Конвертация завершилась ошибкой",
-            "title": "FAILED"
-          }
-        ]
-      },
-      "StorageCodeEnum": {
-        "type": "string",
-        "enum": [
-          "TFR",
-          "CEPH",
-          "ARCHIVE"
-        ],
-        "description": "Код хранилища",
-        "x-enum-descriptions": [
-          "Территориальный финансовый репозиторий",
-          "Объектное хранилище (S3)",
-          "Локальное хранилище"
-        ],
-        "x-enum-varnames": [
-          "TFR",
-          "CEPH",
-          "ARCHIVE"
-        ],
-        "oneOf": [
-          {
-            "const": "TFR",
-            "description": "Территориальный финансовый репозиторий",
-            "title": "TFR"
-          },
-          {
-            "const": "CEPH",
-            "description": "Объектное хранилище (S3)",
-            "title": "CEPH"
-          },
-          {
-            "const": "ARCHIVE",
-            "description": "Локальное хранилище",
-            "title": "ARCHIVE"
-          }
-        ]
-      },
-      "BranchDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД филиала"
-          },
-          "codeCb": {
-            "type": "string",
-            "description": "Код филиала по ЦБ"
-          },
-          "name": {
-            "type": "string",
-            "description": "Название филиала"
-          }
-        },
-        "required": [
-          "id",
-          "codeCb",
-          "name"
-        ],
-        "additionalProperties": false
-      },
-      "CurrencyDto": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "code",
-          "name"
-        ],
-        "additionalProperties": false
-      },
-      "FormatDto": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "code",
-          "name"
-        ],
-        "additionalProperties": false
-      },
-      "SourceDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "code": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "ris": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "code",
-          "name",
-          "ris"
-        ],
-        "additionalProperties": false
-      },
-      "BranchesResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/BranchDto"
-        }
-      },
-      "CurrenciesResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/CurrencyDto"
-        }
-      },
-      "FormatsResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/FormatDto"
-        }
-      },
-      "SourcesResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/SourceDto"
-        }
-      },
-      "CreateTaskDto": {
-        "type": "object",
-        "properties": {
-          "branchList": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BranchDto"
-            },
-            "description": "Массив ИД филиалов"
-          },
-          "periodFrom": {
-            "description": "Дата начала отчётного периода 2023-01-01",
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "periodTo": {
-            "description": "Дата окончания отчётного периода 2023-12-31",
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "currencyId": {
-            "type": "number",
-            "minimum": 100,
-            "maximum": 999,
-            "description": "Ид валюты (например: 810, 999)"
-          },
-          "fileFormat": {
-            "default": "TXT",
-            "$ref": "#/components/schemas/FileFormatEnum"
-          },
-          "sourceList": {
-            "description": "Источники данных",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SourceDto"
-            }
-          },
-          "accountList": {
-            "description": "Список счетов (20-значные номера)",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 20,
-              "maxLength": 20,
-              "pattern": "^\\d+$",
-              "description": "Счёт (20-значный номер)"
-            }
-          },
-          "secondOrderAccountList": {
-            "description": "Счета второго порядка (5-значные номера)",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 5,
-              "maxLength": 5,
-              "pattern": "^\\d+$",
-              "description": "Счёт второго порядка (5-значный номер)"
-            }
-          },
-          "operationTypeList": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ReportTypeEnum"
-            },
-            "description": "Тип операции"
-          }
-        },
-        "required": [
-          "branchList",
-          "currencyId",
-          "fileFormat",
-          "operationTypeList"
-        ],
-        "additionalProperties": false
-      },
-      "TaskListItemDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД задания"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время создания 2026-04-30T07:46:40.449Z"
-          },
-          "createdBy": {
-            "type": "string",
-            "description": "Логин сотрудника, создавшего задание"
-          },
-          "branchList": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BranchDto"
-            },
-            "description": "Массив ИД филиалов"
-          },
-          "periodFrom": {
-            "description": "Дата начала отчётного периода 2023-01-01",
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "periodTo": {
-            "description": "Дата окончания отчётного периода 2023-12-31",
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "currencyId": {
-            "type": "number",
-            "minimum": 100,
-            "maximum": 999,
-            "description": "Ид валюты (например: 810, 999)"
-          },
-          "fileFormat": {
-            "default": "TXT",
-            "$ref": "#/components/schemas/FileFormatEnum"
-          },
-          "taskStatus": {
-            "description": "Статус задания",
-            "$ref": "#/components/schemas/TaskStatusEnum"
-          },
-          "totalFilesSize": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Размер файла; 0 — ещё не рассчитан"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время последнего обновления 2026-04-30T07:46:40.449Z"
-          },
-          "sourceList": {
-            "description": "Источники данных",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SourceDto"
-            }
-          },
-          "filesCount": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество файлов"
-          },
-          "packageId": {
-            "description": "ИД Пакета, в который входит задание",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "operationType": {
-            "description": "Тип операции",
-            "$ref": "#/components/schemas/ReportTypeEnum"
-          }
-        },
-        "required": [
-          "id",
-          "createdAt",
-          "createdBy",
-          "branchList",
-          "currencyId",
-          "fileFormat",
-          "taskStatus",
-          "totalFilesSize",
-          "updatedAt",
-          "filesCount",
-          "operationType"
-        ],
-        "additionalProperties": false
-      },
-      "TasksListFilterDto": {
-        "type": "object",
-        "properties": {
-          "packageId": {
-            "description": "ID пакета",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "operationTypeList": {
-            "description": "Типы отчётов",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ReportTypeEnum"
-            }
-          },
-          "branchIdList": {
-            "description": "Массив ИД филиалов",
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            }
-          },
-          "taskStatusList": {
-            "description": "Статусы заданий",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TaskStatusEnum"
-            }
-          },
-          "fileFormatList": {
-            "description": "Форматы файла",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileFormatEnum"
-            }
-          },
-          "sourceIdList": {
-            "description": "Идентификаторы источников данных",
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            }
-          },
-          "accountList": {
-            "description": "Список счетов (20-значные номера)",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 20,
-              "maxLength": 20,
-              "pattern": "^\\d+$",
-              "description": "Счёт (20-значный номер)"
-            }
-          },
-          "secondOrderAccountList": {
-            "description": "Счета второго порядка (5-значные номера)",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 5,
-              "maxLength": 5,
-              "pattern": "^\\d+$",
-              "description": "Счёт второго порядка (5-значный номер)"
-            }
-          },
-          "currencyIdList": {
-            "type": "array",
-            "items": {
-              "type": "number",
-              "minimum": 100,
-              "maximum": 999,
-              "description": "Валюта"
-            }
-          },
-          "createdByList": {
-            "description": "Логин создателя пакета",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "periodFrom": {
-            "description": "Дата начала отчётного периода YYYY-MM-DD",
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "periodTo": {
-            "description": "Дата окончания отчётного периода YYYY-MM-DD",
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "createdAtFrom": {
-            "description": "Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z",
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-          },
-          "createdAtTo": {
-            "description": "Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z",
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetTasksRequestDto": {
-        "type": "object",
-        "properties": {
-          "pagination": {
-            "$ref": "#/components/schemas/PaginationRequestDto"
-          },
-          "sorting": {
-            "type": "object",
-            "properties": {
-              "sortOrder": {
-                "$ref": "#/components/schemas/SortOrderEnum"
-              },
-              "sortBy": {
-                "type": "string",
-                "enum": [
-                  "createdAt",
-                  "taskStatus",
-                  "reportType",
-                  "periodFrom",
-                  "periodTo",
-                  "createdBy"
-                ],
-                "description": "Колонка для сортировки"
-              }
-            },
-            "required": [
-              "sortOrder",
-              "sortBy"
-            ],
-            "additionalProperties": false,
-            "description": "Параметры сортировки (колонка — фиксированный набор)"
-          },
-          "filter": {
-            "$ref": "#/components/schemas/TasksListFilterDto"
-          }
-        },
-        "required": [
-          "pagination",
-          "sorting"
-        ],
-        "additionalProperties": false
-      },
-      "TasksListResponseDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TaskListItemDto"
-            },
-            "description": "Список заданий"
-          },
-          "totalItems": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общее количество заданий"
-          }
-        },
-        "required": [
-          "items",
-          "totalItems"
-        ],
-        "additionalProperties": false
-      },
-      "TaskDetailDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД задания"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время создания 2026-04-30T07:46:40.449Z"
-          },
-          "createdBy": {
-            "type": "string",
-            "description": "Логин сотрудника, создавшего задание"
-          },
-          "branchList": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BranchDto"
-            },
-            "description": "Массив ИД филиалов"
-          },
-          "periodFrom": {
-            "description": "Дата начала отчётного периода 2023-01-01",
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "periodTo": {
-            "description": "Дата окончания отчётного периода 2023-12-31",
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "currencyId": {
-            "type": "number",
-            "minimum": 100,
-            "maximum": 999,
-            "description": "Ид валюты (например: 810, 999)"
-          },
-          "fileFormat": {
-            "default": "TXT",
-            "$ref": "#/components/schemas/FileFormatEnum"
-          },
-          "taskStatus": {
-            "description": "Статус задания",
-            "$ref": "#/components/schemas/TaskStatusEnum"
-          },
-          "totalFilesSize": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Размер файла; 0 — ещё не рассчитан"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время последнего обновления 2026-04-30T07:46:40.449Z"
-          },
-          "sourceList": {
-            "description": "Источники данных",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SourceDto"
-            }
-          },
-          "filesCount": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество файлов"
-          },
-          "packageId": {
-            "description": "ИД Пакета, в который входит задание",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "accountList": {
-            "description": "Список счетов (20-значные номера)",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 20,
-              "maxLength": 20,
-              "pattern": "^\\d+$",
-              "description": "Счёт (20-значный номер)"
-            }
-          },
-          "secondOrderAccountList": {
-            "description": "Счета второго порядка (5-значные номера)",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 5,
-              "maxLength": 5,
-              "pattern": "^\\d+$",
-              "description": "Счёт второго порядка (5-значный номер)"
-            }
-          },
-          "operationType": {
-            "description": "Тип операции",
-            "$ref": "#/components/schemas/ReportTypeEnum"
-          },
-          "s3Path": {
-            "description": "ID папки в S3",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "createdAt",
-          "createdBy",
-          "branchList",
-          "currencyId",
-          "fileFormat",
-          "taskStatus",
-          "totalFilesSize",
-          "updatedAt",
-          "filesCount",
-          "operationType"
-        ],
-        "additionalProperties": false
-      },
-      "TaskStatusHistoryItemDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "taskId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "taskStatus": {
-            "$ref": "#/components/schemas/TaskStatusEnum"
-          },
-          "changedAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время изменения"
-          },
-          "changedBy": {
-            "type": "string",
-            "description": "Инициатор изменения. Логин или ФИО"
-          },
-          "note": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "taskId",
-          "taskStatus",
-          "changedAt",
-          "changedBy"
-        ],
-        "additionalProperties": false
-      },
-      "TaskStatusHistoryResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TaskStatusHistoryItemDto"
-        }
-      },
-      "TaskFileDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "fileName": {
-            "type": "string"
-          },
-          "fileSize": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Размер файла в байтах (например, 10485760 = 10 MB)"
-          }
-        },
-        "required": [
-          "id",
-          "fileName",
-          "fileSize"
-        ],
-        "additionalProperties": false
-      },
-      "TaskFilesResponseDto": {
-        "type": "object",
-        "properties": {
-          "taskId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "files": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TaskFileDto"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/PaginationMetadataDto"
-          }
-        },
-        "required": [
-          "taskId",
-          "files",
-          "pagination"
-        ],
-        "additionalProperties": false
-      },
-      "TaskFileUrlItemDto": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string"
-          },
-          "fileName": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "url",
-          "fileName"
-        ],
-        "additionalProperties": false
-      },
-      "TaskFileUrlResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TaskFileUrlItemDto"
-        }
-      },
-      "RetryFileConversionResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FileStatusEnum"
-          },
-          "message": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "status",
-          "message"
-        ],
-        "additionalProperties": false
-      },
-      "CreatePackageDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255,
-            "description": "Название пакета"
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "additionalProperties": false
-      },
-      "UpdatePackageDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255,
-            "description": "Новое название пакета"
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "additionalProperties": false
-      },
-      "PackageDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД пакета"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255,
-            "description": "Название пакета"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время создания пакета"
-          },
-          "createdBy": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255,
-            "description": "Логин сотрудника, создавшего пакет"
-          },
-          "lastCopiedToTfrAt": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Дата последнего копирования в ТФР (ISO 8601), например  2026-04-30T12:20:50.979Z"
-          },
-          "totalTasksCount": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество заданий в пакете"
-          },
-          "totalFilesSize": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общий размер пакета в мегабайтах (сумма размеров всех файлов)"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время последнего обновления, например  2026-04-30T12:20:50.979Z"
-          },
-          "status": {
-            "description": "Текущий статус пакета",
-            "$ref": "#/components/schemas/PackageStatusEnum"
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "createdAt",
-          "createdBy",
-          "lastCopiedToTfrAt",
-          "totalTasksCount",
-          "totalFilesSize",
-          "updatedAt",
-          "status"
-        ],
-        "additionalProperties": false
-      },
-      "PackagesListResponseDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PackageDto"
-            },
-            "description": "Список пакетов"
-          },
-          "totalItems": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общее количество заданий"
-          }
-        },
-        "required": [
-          "items",
-          "totalItems"
-        ],
-        "additionalProperties": false
-      },
-      "UpdatePackageResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД пакета"
-          },
-          "name": {
-            "type": "string",
-            "description": "Обновлённое название пакета"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время обновления"
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "updatedAt"
-        ],
-        "additionalProperties": false
-      },
-      "AddTasksToPackageRequestDto": {
-        "type": "object",
-        "properties": {
-          "taskIds": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
-            },
-            "description": "Массив ИД заданий для добавления в пакет (минимум 1)"
-          }
-        },
-        "required": [
-          "taskIds"
-        ],
-        "additionalProperties": false
-      },
-      "CopyToTfrResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД пакета"
-          },
-          "lastCopiedToTfrAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время последнего копирования в ТФР"
-          },
-          "message": {
-            "type": "string",
-            "description": "Сообщение о результате операции"
-          }
-        },
-        "required": [
-          "id",
-          "lastCopiedToTfrAt",
-          "message"
-        ],
-        "additionalProperties": false
-      },
-      "PackageStatusHistoryItemDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "packageId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
-          },
-          "packageStatus": {
-            "$ref": "#/components/schemas/PackageStatusEnum"
-          },
-          "changedAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время изменения"
-          },
-          "changedBy": {
-            "type": "string",
-            "description": "Инициатор изменения. Логин или ФИО"
-          },
-          "note": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "packageId",
-          "packageStatus",
-          "changedAt",
-          "changedBy"
-        ],
-        "additionalProperties": false
-      },
-      "PackageStatusHistoryResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/PackageStatusHistoryItemDto"
-        }
-      },
-      "ExportTasksResponseDto": {
-        "type": "object",
-        "properties": {
-          "exportId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД экспорта"
-          },
-          "status": {
-            "description": "Статус экспорта",
-            "$ref": "#/components/schemas/TaskStatusEnum"
-          },
-          "fileUrl": {
-            "type": "string",
-            "description": "URL для скачивания файла"
-          },
-          "fileSize": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Размер экспортированного файла в байтах (например, 52428800 = 50 MB)"
-          },
-          "downloadUrlExpiresAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата истечения срока действия ссылки"
-          },
-          "recordsCount": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество записей в экспортированном файле"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата создания экспорта"
-          }
-        },
-        "required": [
-          "exportId",
-          "status",
-          "fileUrl",
-          "fileSize",
-          "downloadUrlExpiresAt",
-          "recordsCount",
-          "createdAt"
-        ],
-        "additionalProperties": false
-      },
-      "StorageVolumeItemDto": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "description": "Код хранилища (TFR, S3, LOCAL)",
-            "$ref": "#/components/schemas/StorageCodeEnum"
-          },
-          "totalSize": {
-            "type": "number",
-            "description": "Общий объём хранилища в Mb"
-          },
-          "freeSize": {
-            "type": "number",
-            "description": "Свободный размер хранилища в Mb"
-          },
-          "reservedSize": {
-            "type": "number",
-            "description": "Размер зарезервированного места в Mb"
-          },
-          "percent": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 100,
-            "description": "Процент заполнения (0–100)"
-          }
-        },
-        "required": [
-          "code",
-          "totalSize",
-          "freeSize",
-          "percent"
-        ],
-        "additionalProperties": false
-      },
-      "StorageVolumeListResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/StorageVolumeItemDto"
-        }
-      },
-      "AccountMaskItemDto": {
-        "type": "object",
-        "properties": {
-          "firstAccount": {
-            "type": "string"
-          },
-          "secondAccounts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "firstAccount",
-          "secondAccounts"
-        ],
-        "additionalProperties": false
-      },
-      "AccountMasksResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/AccountMaskItemDto"
-        }
-      },
-      "PackageTfrResponseDto": {
-        "type": "object",
-        "properties": {
-          "packageId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "ИД пакета"
-          },
-          "packageName": {
-            "type": "string",
-            "description": "Имя пакета"
-          },
-          "tfrCopyDate": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "description": "Дата и время копирования в ТФР"
-          },
-          "size": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Размер пакета в мегабайтах"
-          }
-        },
-        "required": [
-          "packageId",
-          "packageName",
-          "tfrCopyDate",
-          "size"
         ],
         "additionalProperties": false
       },
@@ -1743,14 +2049,86 @@
         ],
         "description": "Статус формирования отчета"
       },
+      "InventoryInventoryOrderIdParamDto": {
+        "type": "object",
+        "properties": {
+          "inventoryOrderId": {
+            "$ref": "#/components/schemas/UuidSchema"
+          }
+        },
+        "required": [
+          "inventoryOrderId"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryInventoryStateQueryDto": {
+        "type": "object",
+        "properties": {
+          "inventoryOrderId": {
+            "$ref": "#/components/schemas/UuidSchema"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InventoryColumnsQueryDto": {
+        "type": "object",
+        "properties": {
+          "tableName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tableName"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryDecimalStringDto": {
+        "type": "string",
+        "description": "Десятичное значение как строка (как в DOC string($decimal))"
+      },
+      "InventoryAccountListSortColumnEnum": {
+        "type": "string",
+        "enum": [
+          "id",
+          "accountNumber",
+          "accountSurrogateId",
+          "updatedAt"
+        ]
+      },
+      "InventoryAccountsListSortingDto": {
+        "type": "object",
+        "properties": {
+          "sortOrder": {
+            "$ref": "#/components/schemas/SortOrderEnum"
+          },
+          "sortBy": {
+            "description": "Колонка для сортировки",
+            "$ref": "#/components/schemas/InventoryAccountListSortColumnEnum"
+          }
+        },
+        "required": [
+          "sortOrder",
+          "sortBy"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryAccountIdParamDto": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "$ref": "#/components/schemas/UuidSchema"
+          }
+        },
+        "required": [
+          "accountId"
+        ],
+        "additionalProperties": false
+      },
       "InventoryOrderListItemDto": {
         "type": "object",
         "properties": {
           "invertoryOrderId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "orderNumber": {
             "type": "string",
@@ -1828,10 +2206,7 @@
         "type": "object",
         "properties": {
           "invertoryOrderId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "orderNumber": {
             "type": "string"
@@ -1867,10 +2242,7 @@
         "type": "object",
         "properties": {
           "invertoryOrderId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           }
         },
         "required": [
@@ -1882,10 +2254,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "bs2Name": {
             "type": "integer",
@@ -1910,10 +2279,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "accountTypeName": {
             "type": "integer",
@@ -1937,10 +2303,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "responsibleUnitName": {
             "type": "string"
@@ -1962,10 +2325,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "responsibleUnitTypeName": {
             "type": "string"
@@ -1987,10 +2347,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "inventoryAccountStatusName": {
             "type": "string"
@@ -2012,10 +2369,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "sourceBankName": {
             "type": "string"
@@ -2037,10 +2391,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "productName": {
             "type": "string"
@@ -2062,10 +2413,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "manualControlRuleNumber": {
             "type": "integer",
@@ -2092,10 +2440,7 @@
             "description": "БС-2 (массив int)",
             "type": "array",
             "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
+              "$ref": "#/components/schemas/IntegerIdSchema"
             }
           },
           "accountNum": {
@@ -2106,10 +2451,7 @@
             "description": "Типы счёта (массив)",
             "type": "array",
             "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
+              "$ref": "#/components/schemas/IntegerIdSchema"
             }
           },
           "responsibleUnit": {
@@ -2145,10 +2487,7 @@
           "manualControlRuleNumber": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
+              "$ref": "#/components/schemas/IntegerIdSchema"
             }
           },
           "showZeroBalanceAccounts": {
@@ -2168,28 +2507,8 @@
             "$ref": "#/components/schemas/PaginationRequestDto"
           },
           "sorting": {
-            "type": "object",
-            "properties": {
-              "sortOrder": {
-                "$ref": "#/components/schemas/SortOrderEnum"
-              },
-              "sortBy": {
-                "type": "string",
-                "enum": [
-                  "id",
-                  "accountNumber",
-                  "accountSurrogateId",
-                  "updatedAt"
-                ],
-                "description": "Колонка для сортировки"
-              }
-            },
-            "required": [
-              "sortOrder",
-              "sortBy"
-            ],
-            "additionalProperties": false,
-            "description": "Параметры сортировки (колонка — фиксированный набор)"
+            "description": "Параметры сортировки (колонка — фиксированный набор)",
+            "$ref": "#/components/schemas/InventoryAccountsListSortingDto"
           },
           "filters": {
             "$ref": "#/components/schemas/InventoryAccountsListFilterDto"
@@ -2228,10 +2547,7 @@
         "type": "object",
         "properties": {
           "accountId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "accountNum": {
             "description": "Номер счёта (DOC: accountNum)",
@@ -2241,10 +2557,7 @@
             "$ref": "#/components/schemas/DateSchema"
           },
           "accountType": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "clientName": {
             "type": "string"
@@ -2256,10 +2569,7 @@
             "type": "string"
           },
           "bs2": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "accountName": {
             "type": "string"
@@ -2271,12 +2581,10 @@
             "type": "string"
           },
           "accountOutRubSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "accountOutSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "productCode": {
             "type": "string"
@@ -2285,10 +2593,7 @@
             "type": "string"
           },
           "manualControlRuleNumber": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "manualControlFlag": {
             "type": "boolean"
@@ -2297,20 +2602,16 @@
             "type": "string"
           },
           "reversedDebitSumRub": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "reversedDebitSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "reversedCreditSumRub": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "reversedCreditSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "sourceBank": {
             "type": "string"
@@ -2328,8 +2629,7 @@
             "type": "string"
           },
           "discrepancySum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "discrepancyReason": {
             "type": "string"
@@ -2347,10 +2647,7 @@
             "type": "boolean"
           },
           "version": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           }
         },
         "required": [
@@ -2363,10 +2660,7 @@
         "type": "object",
         "properties": {
           "accountId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "manualInventoryAccountStatus": {
             "type": "string"
@@ -2378,8 +2672,7 @@
             "type": "string"
           },
           "discrepancySum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "discrepancyReason": {
             "type": "string"
@@ -2391,10 +2684,7 @@
             "$ref": "#/components/schemas/DateSchema"
           },
           "version": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           }
         },
         "required": [
@@ -2408,16 +2698,10 @@
         "type": "object",
         "properties": {
           "accountId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "version": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           }
         },
         "required": [
@@ -2450,10 +2734,7 @@
         "type": "object",
         "properties": {
           "accountId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "accountNum": {
             "description": "Номер счёта (DOC: accountNum)",
@@ -2463,10 +2744,7 @@
             "$ref": "#/components/schemas/DateSchema"
           },
           "accountType": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "clientName": {
             "type": "string"
@@ -2478,10 +2756,7 @@
             "type": "string"
           },
           "bs2": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "accountName": {
             "type": "string"
@@ -2493,12 +2768,10 @@
             "type": "string"
           },
           "accountOutRubSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "accountOutSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "productCode": {
             "type": "string"
@@ -2507,10 +2780,7 @@
             "type": "string"
           },
           "manualControlRuleNumber": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "manualControlFlag": {
             "type": "boolean"
@@ -2519,20 +2789,16 @@
             "type": "string"
           },
           "reversedDebitSumRub": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "reversedDebitSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "reversedCreditSumRub": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "reversedCreditSum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "sourceBank": {
             "type": "string"
@@ -2550,8 +2816,7 @@
             "type": "string"
           },
           "discrepancySum": {
-            "type": "string",
-            "description": "Десятичное значение как строка (как в DOC string($decimal))"
+            "$ref": "#/components/schemas/InventoryDecimalStringDto"
           },
           "discrepancyReason": {
             "type": "string"
@@ -2569,10 +2834,7 @@
             "type": "boolean"
           },
           "version": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           }
         },
         "required": [
@@ -2619,10 +2881,7 @@
         "type": "object",
         "properties": {
           "accountId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "manualResponsibleUnit": {
             "type": "string"
@@ -2631,10 +2890,7 @@
             "type": "boolean"
           },
           "version": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Integer ID"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           }
         },
         "required": [
@@ -2668,10 +2924,7 @@
             "minItems": 1,
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-              "description": "UUID"
+              "$ref": "#/components/schemas/UuidSchema"
             }
           }
         },
@@ -2684,10 +2937,7 @@
         "type": "object",
         "properties": {
           "accountId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           }
         },
         "required": [
@@ -2701,10 +2951,7 @@
           "accountIds": {
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-              "description": "UUID"
+              "$ref": "#/components/schemas/UuidSchema"
             }
           },
           "filters": {
@@ -2726,10 +2973,7 @@
             "description": "БС-2 (массив int)",
             "type": "array",
             "items": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991,
-              "description": "Integer ID"
+              "$ref": "#/components/schemas/IntegerIdSchema"
             }
           },
           "responsibleUnit": {
@@ -2817,10 +3061,7 @@
         "type": "object",
         "properties": {
           "inventoryOrderId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "orderNumber": {
             "type": "string"
@@ -2847,10 +3088,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "UUID"
+            "$ref": "#/components/schemas/UuidSchema"
           },
           "fullName": {
             "type": "string"
@@ -2950,29 +3188,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 9007199254740991
-                      },
-                      "codeCB": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "codeCB",
-                      "name"
-                    ],
-                    "additionalProperties": false
-                  }
+                  "$ref": "#/components/schemas/Report6406DictBranchesResponseDto"
                 }
               }
             }
@@ -2992,23 +3208,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "name"
-                    ],
-                    "additionalProperties": false
-                  }
+                  "$ref": "#/components/schemas/Report6406DictCurrenciesResponseDto"
                 }
               }
             }
@@ -3028,28 +3228,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "ris": {
-                        "nullable": true,
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "name",
-                      "ris"
-                    ],
-                    "additionalProperties": false
-                  }
+                  "$ref": "#/components/schemas/Report6406DictSourcesResponseDto"
                 }
               }
             }
@@ -3100,22 +3279,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "fullName": {
-                      "type": "string",
-                      "maxLength": 50
-                    },
-                    "login": {
-                      "type": "string",
-                      "maxLength": 15
-                    }
-                  },
-                  "required": [
-                    "fullName",
-                    "login"
-                  ],
-                  "additionalProperties": false
+                  "$ref": "#/components/schemas/Report6406DictEmployeeResponseDto"
                 }
               }
             }
@@ -3218,9 +3382,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "id",
@@ -3311,9 +3473,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "id",
@@ -3351,7 +3511,8 @@
             },
             "in": "query",
             "name": "page",
-            "required": false
+            "required": false,
+            "description": "Номер страницы (начиная с 1)"
           },
           {
             "schema": {
@@ -3362,34 +3523,22 @@
             },
             "in": "query",
             "name": "limit",
-            "required": false
+            "required": false,
+            "description": "Размер страницы"
           },
           {
             "schema": {
-              "default": "status",
-              "type": "string",
-              "enum": [
-                "status",
-                "fileName",
-                "fileSize",
-                "createdAt"
-              ]
+              "$ref": "#/components/schemas/TaskFileSortByEnum"
             },
             "in": "query",
-            "name": "sortBy",
-            "required": false
+            "name": "sortBy"
           },
           {
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/SortOrderEnum"
-                }
-              ]
+              "$ref": "#/components/schemas/SortOrderEnum"
             },
             "in": "query",
-            "name": "sortOrder",
-            "required": false
+            "name": "sortOrder"
           },
           {
             "schema": {
@@ -3404,9 +3553,7 @@
           },
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "id",
@@ -3440,9 +3587,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991
+                  "$ref": "#/components/schemas/IntegerIdSchema"
                 }
               }
             }
@@ -3472,9 +3617,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "taskId",
@@ -3482,9 +3625,7 @@
           },
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "fileId",
@@ -3557,9 +3698,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/IntegerIdSchema"
+                    }
+                  ]
                 }
               }
             }
@@ -3615,91 +3758,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "pagination": {
-                    "$ref": "#/components/schemas/PaginationRequestDto"
-                  },
-                  "sorting": {
-                    "type": "object",
-                    "properties": {
-                      "sortOrder": {
-                        "$ref": "#/components/schemas/SortOrderEnum"
-                      },
-                      "sortBy": {
-                        "type": "string",
-                        "enum": [
-                          "createdAt",
-                          "taskStatus",
-                          "reportType",
-                          "periodFrom",
-                          "periodTo",
-                          "createdBy"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "sortBy"
-                    ]
-                  },
-                  "filter": {
-                    "type": "object",
-                    "properties": {
-                      "packageId": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 9007199254740991
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "packageStatus": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/PackageStatusEnum"
-                        }
-                      },
-                      "createdAtFrom": {
-                        "type": "string",
-                        "format": "date-time",
-                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                      },
-                      "createdAtTo": {
-                        "type": "string",
-                        "format": "date-time",
-                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                      },
-                      "copiedFrom": {
-                        "type": "string",
-                        "format": "date-time",
-                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                      },
-                      "copiedTo": {
-                        "type": "string",
-                        "format": "date-time",
-                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                      },
-                      "isEmpty": {
-                        "default": false,
-                        "type": "boolean"
-                      },
-                      "createdByList": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "required": [
-                  "pagination",
-                  "sorting"
-                ]
+                "$ref": "#/components/schemas/GetPackagesListRequestDto"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -3724,9 +3786,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "id",
@@ -3763,9 +3823,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "id",
@@ -3796,12 +3854,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991
-                }
+                "$ref": "#/components/schemas/IdListSchema"
               }
             }
           }
@@ -3809,9 +3862,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "packageId",
@@ -3843,12 +3894,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991
-                }
+                "$ref": "#/components/schemas/IdListSchema"
               }
             }
           }
@@ -3856,9 +3902,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "packageId",
@@ -3889,12 +3933,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991
-                }
+                "$ref": "#/components/schemas/IdListSchema"
               }
             }
           }
@@ -3915,9 +3954,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "id",
@@ -3941,12 +3978,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9007199254740991
-                }
+                "$ref": "#/components/schemas/IdListSchema"
               }
             }
           }
@@ -3965,9 +3997,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "id",
@@ -4000,9 +4030,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
+              "$ref": "#/components/schemas/IntegerIdSchema"
             },
             "in": "path",
             "name": "id",
@@ -4131,9 +4159,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "inventoryOrderId",
@@ -4163,9 +4189,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "inventoryOrderId",
@@ -4195,9 +4219,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "inventoryOrderId",
@@ -4227,9 +4249,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "inventoryOrderId",
@@ -4259,9 +4279,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "inventoryOrderId",
@@ -4291,9 +4309,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "inventoryOrderId",
@@ -4323,9 +4339,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "inventoryOrderId",
@@ -4355,9 +4369,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "inventoryOrderId",
@@ -4416,9 +4428,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "accountId",
@@ -4689,9 +4699,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "path",
             "name": "accountId",
@@ -4856,13 +4864,10 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              "$ref": "#/components/schemas/UuidSchema"
             },
             "in": "query",
-            "name": "inventoryOrderId",
-            "required": false
+            "name": "inventoryOrderId"
           }
         ],
         "responses": {

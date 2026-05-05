@@ -3,6 +3,8 @@ import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 
 import { zIdSchema } from '../common/id.schema.ts';
 
+import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+
 /**
  * Схема для записи истории статуса
  */
@@ -24,3 +26,8 @@ export type TaskStatusHistoryItem = z.infer<typeof taskStatusHistoryItemSchema>;
 export const taskStatusHistoryResponseSchema = z.array(taskStatusHistoryItemSchema);
 
 export type TaskStatusHistoryResponse = z.infer<typeof taskStatusHistoryResponseSchema>;
+
+(function registerTaskStatusHistoryReport6406OpenApi() {
+  registerReport6406OpenApiSchema(taskStatusHistoryItemSchema, 'TaskStatusHistoryItemDto');
+  registerReport6406OpenApiSchema(taskStatusHistoryResponseSchema, 'TaskStatusHistoryResponseDto');
+})();

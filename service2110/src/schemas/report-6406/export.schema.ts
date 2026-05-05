@@ -3,6 +3,8 @@ import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 
 import { zIdSchema } from '../common/id.schema.ts';
 
+import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+
 /**
  * Схема для ответа экспорта
  */
@@ -25,3 +27,7 @@ export const exportTasksResponseSchema = z.object({
 });
 
 export type ExportTasksResponse = z.infer<typeof exportTasksResponseSchema>;
+
+(function registerExportReport6406OpenApi() {
+  registerReport6406OpenApiSchema(exportTasksResponseSchema, 'ExportTasksResponseDto');
+})();

@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { packageStatusHistoryResponseSchema } from '../../../../schemas/report-6406/package-status-history.schema';
 import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
@@ -14,7 +15,7 @@ export const packageStatusHistoryRoutes: FastifyPluginAsync = async (fastify) =>
 
   app.get('/:id/status-history', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Получить историю статусов пакета',
       params: idParamSchema,
       response: {

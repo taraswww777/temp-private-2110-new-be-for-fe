@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   updatePackageSchema,
@@ -19,7 +20,7 @@ export const updatePackageRoute: FastifyPluginAsync = async (fastify) => {
 
   app.patch('/:id', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Обновить название пакета',
       params: idParamSchema,
       body: updatePackageSchema,

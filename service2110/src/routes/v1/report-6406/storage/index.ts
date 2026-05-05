@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { storageVolumeListResponseSchema } from '../../../../schemas/report-6406/storage.schema.ts';
 
@@ -11,7 +12,7 @@ export const storageRoutes: FastifyPluginAsync = async (fastify) => {
    */
   app.get('/volume', {
     schema: {
-      tags: ['Report 6406 - Storage'],
+      tags: [OpenApiTag.Report6406Storage],
       summary: 'Получить объём хранилищ',
       description: 'Возвращает массив сущностей по одному на каждое хранилище (корзина 1, корзина 2, ТФР). Каждый элемент содержит id, name, code, totalHuman, freeHuman, percent для отображения и key в JSX.',
       response: {

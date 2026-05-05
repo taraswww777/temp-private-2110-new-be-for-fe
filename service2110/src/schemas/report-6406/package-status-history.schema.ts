@@ -3,6 +3,8 @@ import { packageStatusSchema } from './enums/PackageStatusEnum.ts';
 
 import { zIdSchema } from '../common/id.schema.ts';
 
+import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+
 /**
  * Схема для записи истории статуса пакета
  */
@@ -23,3 +25,8 @@ export type PackageStatusHistoryItem = z.infer<typeof packageStatusHistoryItemSc
 export const packageStatusHistoryResponseSchema = z.array(packageStatusHistoryItemSchema);
 
 export type PackageStatusHistoryResponse = z.infer<typeof packageStatusHistoryResponseSchema>;
+
+(function registerPackageStatusHistoryReport6406OpenApi() {
+  registerReport6406OpenApiSchema(packageStatusHistoryItemSchema, 'PackageStatusHistoryItemDto');
+  registerReport6406OpenApiSchema(packageStatusHistoryResponseSchema, 'PackageStatusHistoryResponseDto');
+})();

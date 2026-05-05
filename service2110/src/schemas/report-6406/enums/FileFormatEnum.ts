@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
+import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers.ts';
 
 // Enum для форматов
 export enum FileFormatEnum {
@@ -29,3 +30,7 @@ export const FileFormatEnumSchema = createEnumSchemaWithDescriptions(
   'FileFormatEnum',
   'Формат файла отчёта',
 );
+
+(function registerFileFormatEnumOpenApi() {
+  registerReport6406EnumOpenApiSchema(fileFormatSchema, 'FileFormatEnum');
+})();

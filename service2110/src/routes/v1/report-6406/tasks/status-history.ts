@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   taskStatusHistoryResponseSchema,
@@ -17,7 +18,7 @@ export const statusHistoryRoutes: FastifyPluginAsync = async (fastify) => {
 
   app.get('/:id/status-history', {
     schema: {
-      tags: ['Report 6406 - Tasks'],
+      tags: [OpenApiTag.Report6406Tasks],
       summary: 'Получить полную историю изменений статусов задания',
       description: 'Возвращает полную историю всех изменений статусов задания в виде простого массива (без пагинации)',
       params: idParamSchema,

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
+import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers.ts';
 
 /**
  * Статусы задания (локальная статусная модель task_*)
@@ -52,3 +53,7 @@ export const TaskStatusEnumSchema = createEnumSchemaWithDescriptions(
   'TaskStatusEnum',
   'Статус задания',
 );
+
+(function registerTaskStatusEnumOpenApi() {
+  registerReport6406EnumOpenApiSchema(taskStatusSchema, 'TaskStatusEnum');
+})();

@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   inventoryStatisticsExportRequestSchema,
@@ -11,7 +12,7 @@ export const inventoryStatisticsRoutes: FastifyPluginAsync = async (fastify) => 
 
   app.get('/export', {
     schema: {
-      tags: ['Inventory - Statistics'],
+      tags: [OpenApiTag.InventoryStatistics],
       summary: 'Запрос списка сформированных статистик',
       response: { 200: inventoryStatisticsExportResponseSchema },
     },
@@ -20,7 +21,7 @@ export const inventoryStatisticsRoutes: FastifyPluginAsync = async (fastify) => 
 
   app.post('/export', {
     schema: {
-      tags: ['Inventory - Statistics'],
+      tags: [OpenApiTag.InventoryStatistics],
       summary: 'Экспорт статистики инвентаризации',
       body: inventoryStatisticsExportRequestSchema,
       response: { 200: z.null() },

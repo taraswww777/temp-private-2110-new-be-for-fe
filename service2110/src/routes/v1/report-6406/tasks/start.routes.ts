@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { processResponseSchema, processRequestSchema } from '../../../../schemas/common/process.schema.ts';
 
@@ -13,7 +14,7 @@ export const startTasksRoute: FastifyPluginAsync = async (fastify) => {
 
   app.post('/start', {
     schema: {
-      tags: ['Report 6406 - Tasks'],
+      tags: [OpenApiTag.Report6406Tasks],
       summary: 'Запустить задания на выполнение (переводит из статуса created в started)',
       description: 'Запускает задания на генерацию отчётов. Проверяет наличие свободного места в хранилище. Поддерживает запуск одного или нескольких заданий.',
       body: processRequestSchema,

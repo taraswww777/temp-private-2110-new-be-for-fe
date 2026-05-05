@@ -4,6 +4,8 @@ import { fileStatusZodSchema } from './enums/FileStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationMetadataSchema, paginationQuerySchema } from '../common/pagination.schema.ts';
 
+import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+
 
 /**
  * Схема для файла задания
@@ -15,6 +17,14 @@ export const taskFileSchema = z.object({
 });
 
 export type TaskFile = z.infer<typeof taskFileSchema>;
+
+/**
+ * Параметры пути для маршрута с taskId и fileId (например retry конвертации).
+ */
+export const taskFilePathParamsSchema = z.object({
+  taskId: zIdSchema,
+  fileId: zIdSchema,
+});
 
 /**
  * Допустимые колонки для сортировки файлов задания
@@ -65,4 +75,15 @@ export const taskFileUrlItemSchema = z.object({
 });
 
 export const taskFileUrlResponseSchema = z.array(taskFileUrlItemSchema);
+
+(function registerTaskFilesReport6406OpenApi() {
+  registerReport6406OpenApiSchema(taskFilePathParamsSchema, 'TaskFilePathParamsDto');
+  registerReport6406OpenApiSchema(taskFileSortBySchema, 'TaskFileSortByEnum');
+  registerReport6406OpenApiSchema(taskFilesQuerySchema, 'TaskFilesQueryDto');
+  registerReport6406OpenApiSchema(taskFileSchema, 'TaskFileDto');
+  registerReport6406OpenApiSchema(taskFilesResponseSchema, 'TaskFilesResponseDto');
+  registerReport6406OpenApiSchema(taskFileUrlItemSchema, 'TaskFileUrlItemDto');
+  registerReport6406OpenApiSchema(taskFileUrlResponseSchema, 'TaskFileUrlResponseDto');
+  registerReport6406OpenApiSchema(retryFileConversionResponseSchema, 'RetryFileConversionResponseDto');
+})();
 

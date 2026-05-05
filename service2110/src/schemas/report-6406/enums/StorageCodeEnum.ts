@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
+import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers.ts';
 
 /**
  * Код хранилища.
@@ -49,3 +50,7 @@ export const StorageCodeEnumSwaggerSchema = createEnumSchemaWithDescriptions(
   'StorageCodeEnum',
   'Код хранилища',
 );
+
+(function registerStorageCodeEnumOpenApi() {
+  registerReport6406EnumOpenApiSchema(storageCodeZodSchema, 'StorageCodeEnum');
+})();

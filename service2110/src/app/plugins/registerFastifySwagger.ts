@@ -7,6 +7,7 @@ import {
   createJsonSchemaTransformObject,
 } from 'fastify-type-provider-zod';
 import type { SwaggerTransformObject } from '@fastify/swagger';
+import type { OpenAPIV3 } from 'openapi-types';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import { join } from 'path';
@@ -14,6 +15,7 @@ import { writeFileSync } from 'fs';
 
 import { env } from '../../config/env.ts';
 import { openApiRegistry } from '../../schemas/schema-registry.ts';
+import { OPENAPI_TAG_SPEC } from '../../schemas/openapi-tags.ts';
 import { PackageStatusEnumSchema } from '../../schemas/report-6406/enums/PackageStatusEnum.ts';
 import { FileStatusEnumSwaggerSchema } from '../../schemas/report-6406/enums/FileStatusEnum.ts';
 import { ReportTypeEnumSchema } from '../../schemas/report-6406/enums/ReportTypeEnum.ts';
@@ -76,6 +78,26 @@ const DOCS_SKIP_LIST = [
 ];
 
 /**
+ * Схемы из Zod-реестра должны быть в openapi.components.schemas до обхода маршрутов:
+ * иначе @fastify/swagger при разборе params/querystring не находит $ref на *Input-компоненты
+ * (см. resolveCommonParams: lookup только в ref.definitions, ключи def-N).
+ */
+function buildZodOpenApiBootstrapSchemas(): Record<string, OpenAPIV3.SchemaObject> {
+  const toComponents = createJsonSchemaTransformObject({
+    schemaRegistry: openApiRegistry,
+  });
+  const withSchemas = toComponents({
+    openapiObject: {
+      openapi: '3.0.3',
+      info: { title: '', version: '0.0.0' },
+      paths: {},
+      components: { schemas: {} },
+    },
+  }) as OpenAPIV3.Document;
+  return (withSchemas.components?.schemas ?? {}) as Record<string, OpenAPIV3.SchemaObject>;
+}
+
+/**
  * transformObject-обёртка: вызывает библиотечный createJsonSchemaTransformObject,
  * затем обогащает enum-схемы расширениями (x-enum-descriptions и т.д.)
  */
@@ -130,6 +152,9 @@ export const registerFastifySwagger = async (app: CustomFastifyInstance) => {
   await app.register(fastifySwagger, {
     openapi: {
       openapi: '3.0.3',
+      components: {
+        schemas: buildZodOpenApiBootstrapSchemas(),
+      },
       info: {
         title: 'Backend API',
         description: 'API документация для Backend проекта на Fastify + TypeScript + PostgreSQL\n\n## Глоссарий терминов\n\n- **ТФР (Территориальный финансовый репозиторий)** - централизованное хранилище финансовых отчётов\n- **DAPP** - Data Application Processing - система обработки данных\n- **FC** - File Conversion - система конвертации файлов',
@@ -153,18 +178,7 @@ export const registerFastifySwagger = async (app: CustomFastifyInstance) => {
           description: 'Production server',
         },
       ],
-      tags: [
-        { name: 'Health', description: 'Health check endpoints' },
-        { name: 'Report 6406 - Dictionary', description: 'Справочники для формы отчётности 6406' },
-        { name: 'Report 6406 - Tasks', description: 'Задания на построение отчётов для формы 6406' },
-        { name: 'Report 6406 - Packages', description: 'Пакеты заданий для формы 6406' },
-        { name: 'Report 6406 - Storage', description: 'Мониторинг хранилища отчётов' },
-        { name: 'Inventory', description: 'Инвентаризация' },
-        { name: 'Inventory - Orders', description: 'Параметры инвентаризации' },
-        { name: 'Inventory - Dictionary', description: 'Словари фильтров инвентаризации' },
-        { name: 'Inventory - Accounts', description: 'Счета инвентаризации' },
-        { name: 'Inventory - Statistics', description: 'Статистика инвентаризации' },
-      ],
+      tags: OPENAPI_TAG_SPEC.map(({ name, description }) => ({ name, description })),
     },
     transform: createJsonSchemaTransform({
       skipList: DOCS_SKIP_LIST,

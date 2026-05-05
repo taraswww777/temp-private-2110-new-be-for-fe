@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
+import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   getPackageListRequestSchema,
@@ -17,7 +18,7 @@ export const listPackagesRoute: FastifyPluginAsync = async (fastify) => {
 
   app.post('/list', {
     schema: {
-      tags: ['Report 6406 - Packages'],
+      tags: [OpenApiTag.Report6406Packages],
       summary: 'Получить список пакетов с пагинацией',
       body: getPackageListRequestSchema,
       response: {

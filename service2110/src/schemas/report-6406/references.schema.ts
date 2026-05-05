@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 import { zIdSchema } from '../common/id.schema.ts';
 
+import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+
 /**
  * Схема для филиала
  */
@@ -72,3 +74,14 @@ export type Source = z.infer<typeof sourceSchema>;
 export const sourcesResponseSchema = z.array(sourceSchema);
 
 export type SourcesResponse = z.infer<typeof sourcesResponseSchema>;
+
+(function registerReferencesReport6406OpenApi() {
+  registerReport6406OpenApiSchema(branchSchema, 'BranchDto');
+  registerReport6406OpenApiSchema(currencyReferenceSchema, 'CurrencyDto');
+  registerReport6406OpenApiSchema(formatReferenceSchema, 'FormatDto');
+  registerReport6406OpenApiSchema(sourceSchema, 'SourceDto');
+  registerReport6406OpenApiSchema(branchesResponseSchema, 'BranchesResponseDto');
+  registerReport6406OpenApiSchema(currenciesResponseSchema, 'CurrenciesResponseDto');
+  registerReport6406OpenApiSchema(formatsResponseSchema, 'FormatsResponseDto');
+  registerReport6406OpenApiSchema(sourcesResponseSchema, 'SourcesResponseDto');
+})();
