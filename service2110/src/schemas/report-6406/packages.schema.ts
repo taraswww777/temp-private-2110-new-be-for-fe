@@ -3,7 +3,6 @@ import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { packageStatusSchema } from './enums/PackageStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
-import { taskListSortColumnSchema } from './tasks.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
 
@@ -72,7 +71,7 @@ export const packageListSortColumnSchema = z.enum([
 /** Схема сортировки для списка заданий (колонка — enum) */
 export const packageListSortingSchema = z.object({
   sortOrder: sortOrderSchema,
-  sortBy: taskListSortColumnSchema.describe('Колонка для сортировки'),
+  sortBy: packageListSortColumnSchema.describe('Колонка для сортировки'),
 }).describe('Параметры сортировки (колонка — фиксированный набор)');
 
 
