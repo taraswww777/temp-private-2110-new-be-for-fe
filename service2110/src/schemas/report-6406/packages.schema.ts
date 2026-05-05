@@ -52,6 +52,13 @@ export const packageSchema = basePackageSchema;
 export type Package = z.infer<typeof packageSchema>;
 
 /**
+ * Только packageId в path (маршруты add/remove задач в пакете).
+ */
+export const packageIdPathParamSchema = z.object({
+  packageId: zIdSchema.describe('ИД пакета'),
+});
+
+/**
  * Допустимые колонки для сортировки списка пакетов (детерминированный набор).
  */
 export const packageListSortColumnSchema = z.enum([
@@ -151,6 +158,7 @@ export const packageTfrResponseSchema = z.object({
 });
 
 (function registerPackagesReport6406OpenApi() {
+  registerReport6406OpenApiSchema(packageIdPathParamSchema, 'PackageIdPathParamDto');
   registerReport6406OpenApiSchema(packageListSortColumnSchema, 'PackageListSortColumnEnum');
   registerReport6406OpenApiSchema(packageListSortingSchema, 'PackageListSortingDto');
   registerReport6406OpenApiSchema(packageListFilterSchema, 'PackageListFilterDto');

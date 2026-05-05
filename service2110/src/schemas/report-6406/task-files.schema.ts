@@ -19,6 +19,14 @@ export const taskFileSchema = z.object({
 export type TaskFile = z.infer<typeof taskFileSchema>;
 
 /**
+ * Параметры пути для маршрута с taskId и fileId (например retry конвертации).
+ */
+export const taskFilePathParamsSchema = z.object({
+  taskId: zIdSchema,
+  fileId: zIdSchema,
+});
+
+/**
  * Допустимые колонки для сортировки файлов задания
  */
 export const taskFileSortBySchema = z.enum(['status', 'fileName', 'fileSize', 'createdAt']);
@@ -69,6 +77,7 @@ export const taskFileUrlItemSchema = z.object({
 export const taskFileUrlResponseSchema = z.array(taskFileUrlItemSchema);
 
 (function registerTaskFilesReport6406OpenApi() {
+  registerReport6406OpenApiSchema(taskFilePathParamsSchema, 'TaskFilePathParamsDto');
   registerReport6406OpenApiSchema(taskFileSortBySchema, 'TaskFileSortByEnum');
   registerReport6406OpenApiSchema(taskFilesQuerySchema, 'TaskFilesQueryDto');
   registerReport6406OpenApiSchema(taskFileSchema, 'TaskFileDto');

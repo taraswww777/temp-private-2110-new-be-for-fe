@@ -1,11 +1,11 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { z } from 'zod';
 import {
   accountMasksResponseSchema,
   branchesResponseSchema,
   currenciesResponseSchema,
+  employeeLoginPathParamSchema,
   employeeResponseSchema,
   sourcesResponseSchema,
 } from '../../../../schemas/report-6406/dictionary.schema';
@@ -85,9 +85,7 @@ export const dictionaryRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: [OpenApiTag.Report6406Dictionary],
       summary: 'Получить данные о сотруднике по AD-логину',
-      params: z.object({
-        login: z.string().max(15),
-      }),
+      params: employeeLoginPathParamSchema,
       response: {
         200: employeeResponseSchema,
       },

@@ -5,16 +5,12 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import {
   retryFileConversionResponseSchema,
+  taskFilePathParamsSchema,
   taskFilesQuerySchema,
   taskFilesResponseSchema,
   taskFileUrlResponseSchema,
 } from '../../../../schemas/report-6406/task-files.schema.ts';
 import { idParamSchema, zIdSchema } from '../../../../schemas/common/id.schema.ts';
-
-const taskFileParamsSchema = z.object({
-  taskId: zIdSchema,
-  fileId: zIdSchema,
-});
 
 export const filesRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -71,7 +67,7 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
       tags: [OpenApiTag.Report6406Tasks],
       summary: '⚠️ [Экспериментальный] Повторить конвертацию файла с ошибкой',
       description: 'Экспериментальная функция для повтора конвертации файлов. В текущей версии возвращает 501 Not Implemented.',
-      params: taskFileParamsSchema,
+      params: taskFilePathParamsSchema,
       response: {
         200: retryFileConversionResponseSchema,
       },

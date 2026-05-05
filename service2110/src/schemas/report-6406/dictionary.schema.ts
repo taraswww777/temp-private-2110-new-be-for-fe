@@ -75,6 +75,13 @@ export const employeeResponseSchema = employeeSchema;
 export type EmployeeResponse = z.infer<typeof employeeResponseSchema>;
 
 /**
+ * Параметры пути GET …/dictionary/employee/:login
+ */
+export const employeeLoginPathParamSchema = z.object({
+  login: z.string().max(15),
+});
+
+/**
  * Схема для маски счета (связанный список)
  */
 export const accountMaskItemSchema = z.object({
@@ -92,6 +99,7 @@ export const accountMasksResponseSchema = z.array(accountMaskItemSchema);
 export type AccountMasksResponse = z.infer<typeof accountMasksResponseSchema>;
 
 (function registerReport6406DictionaryOpenApi() {
+  registerReport6406OpenApiSchema(employeeLoginPathParamSchema, 'Report6406DictEmployeeLoginPathParamDto');
   registerReport6406OpenApiSchema(branchSchema, 'Report6406DictBranchDto');
   registerReport6406OpenApiSchema(branchesResponseSchema, 'Report6406DictBranchesResponseDto');
   registerReport6406OpenApiSchema(currencySchema, 'Report6406DictCurrencyDto');
