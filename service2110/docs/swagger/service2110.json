@@ -803,7 +803,8 @@
         },
         "required": [
           "pagination",
-          "sorting"
+          "sorting",
+          "filter"
         ],
         "additionalProperties": false
       },
@@ -1500,7 +1501,8 @@
         },
         "required": [
           "pagination",
-          "sorting"
+          "sorting",
+          "filter"
         ],
         "additionalProperties": false
       },

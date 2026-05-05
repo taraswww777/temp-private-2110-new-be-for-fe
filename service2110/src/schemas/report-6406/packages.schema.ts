@@ -94,7 +94,7 @@ export const packageListFilterSchema = z.object({
   isEmpty: z.boolean().default(false).optional().describe('Показать пустые пакеты'),
   /** без интеграции с карточкой фл этот фильтр createdByList не получится сделать нормально, будет много дефектов */
   createdByList: z.array(z.string()).optional().describe('Логин создателя пакета'),
-}).optional();
+});
 
 /**
  * Схема для query параметров списка пакетов (GET /api/v1/report-6406/packages).
