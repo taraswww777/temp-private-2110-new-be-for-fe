@@ -7,6 +7,7 @@ import {
   createJsonSchemaTransformObject,
 } from 'fastify-type-provider-zod';
 import type { SwaggerTransformObject } from '@fastify/swagger';
+import type { OpenAPIV3 } from 'openapi-types';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import { join } from 'path';
@@ -77,6 +78,26 @@ const DOCS_SKIP_LIST = [
 ];
 
 /**
+ * Схемы из Zod-реестра должны быть в openapi.components.schemas до обхода маршрутов:
+ * иначе @fastify/swagger при разборе params/querystring не находит $ref на *Input-компоненты
+ * (см. resolveCommonParams: lookup только в ref.definitions, ключи def-N).
+ */
+function buildZodOpenApiBootstrapSchemas(): Record<string, OpenAPIV3.SchemaObject> {
+  const toComponents = createJsonSchemaTransformObject({
+    schemaRegistry: openApiRegistry,
+  });
+  const withSchemas = toComponents({
+    openapiObject: {
+      openapi: '3.0.3',
+      info: { title: '', version: '0.0.0' },
+      paths: {},
+      components: { schemas: {} },
+    },
+  }) as OpenAPIV3.Document;
+  return (withSchemas.components?.schemas ?? {}) as Record<string, OpenAPIV3.SchemaObject>;
+}
+
+/**
  * transformObject-обёртка: вызывает библиотечный createJsonSchemaTransformObject,
  * затем обогащает enum-схемы расширениями (x-enum-descriptions и т.д.)
  */
@@ -131,6 +152,9 @@ export const registerFastifySwagger = async (app: CustomFastifyInstance) => {
   await app.register(fastifySwagger, {
     openapi: {
       openapi: '3.0.3',
+      components: {
+        schemas: buildZodOpenApiBootstrapSchemas(),
+      },
       info: {
         title: 'Backend API',
         description: 'API документация для Backend проекта на Fastify + TypeScript + PostgreSQL\n\n## Глоссарий терминов\n\n- **ТФР (Территориальный финансовый репозиторий)** - централизованное хранилище финансовых отчётов\n- **DAPP** - Data Application Processing - система обработки данных\n- **FC** - File Conversion - система конвертации файлов',

@@ -6,6 +6,7 @@
     "service2110"
   ],
   "scripts": {
+    "postinstall": "patch-package",
     "service2110:dev": "npm run start:dev -w service2110",
     "service2110:checks": "npm run checks -w service2110",
     "service2110:typecheck": "npm run typecheck -w service2110",
@@ -24,6 +25,7 @@
   },
   "description": "Monorepo with Backend project",
   "devDependencies": {
-    "dotenv": "17.2.3"
+    "dotenv": "17.2.3",
+    "patch-package": "^8.0.1"
   }
 }
