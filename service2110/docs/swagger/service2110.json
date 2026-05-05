@@ -1313,7 +1313,7 @@
           },
           "sortBy": {
             "description": "Колонка для сортировки",
-            "$ref": "#/components/schemas/TaskListSortColumnEnum"
+            "$ref": "#/components/schemas/PackageListSortColumnEnum"
           }
         },
         "required": [
