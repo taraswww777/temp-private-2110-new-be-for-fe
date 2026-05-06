@@ -1376,6 +1376,10 @@
             "items": {
               "type": "string"
             }
+          },
+          "employee": {
+            "type": "string",
+            "description": "Сотрудник"
           }
         },
         "additionalProperties": false
