@@ -24,9 +24,9 @@ export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
       tags: [OpenApiTag.InventoryOrders],
       summary: 'Создать приказ инвентаризации',
       body: createInventoryOrderSchema,
-      response: { 200: inventoryOrderMutationResponseSchema },
+      response: { 201: inventoryOrderMutationResponseSchema },
     },
-  }, async (_request, reply) => reply.status(200).send({ invertoryOrderId: String(1) }));
+  }, async (_request, reply) => reply.status(201).send({ invertoryOrderId: String(1) }));
 
   app.put('/update', {
     schema: {
