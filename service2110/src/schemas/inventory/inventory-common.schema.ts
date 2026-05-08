@@ -18,7 +18,7 @@ export const inventoryInventoryStateResponseSchema = z.object({
   inventoryDateFrom: dateSchema.optional(),
   inventoryDateTo: dateSchema.optional(),
   isActive: z.boolean().optional(),
-  status: inventoryProcessStatusSchema.optional(),
+  status: z.string().optional(),
 });
 
 export const inventoryColumnsQuerySchema = z.object({

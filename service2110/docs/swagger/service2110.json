@@ -3085,7 +3085,7 @@
             "type": "boolean"
           },
           "status": {
-            "$ref": "#/components/schemas/InventoryProcessStatusEnum"
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4156,7 +4156,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/bs2/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/bs2/{inventoryOrderId}": {
       "get": {
         "summary": "БС-2 (фильтр)",
         "tags": [
@@ -4186,7 +4186,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/account-type/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/account-type/{inventoryOrderId}": {
       "get": {
         "summary": "Тип счёта (фильтр)",
         "tags": [
@@ -4216,7 +4216,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/responsible-unit/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/responsible-unit/{inventoryOrderId}": {
       "get": {
         "summary": "Ответственное подразделение (фильтр)",
         "tags": [
@@ -4246,7 +4246,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/responsible-unit-type/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/responsible-unit-type/{inventoryOrderId}": {
       "get": {
         "summary": "Тип ответственного подразделения (фильтр)",
         "tags": [
@@ -4276,7 +4276,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/inventory-account-status/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/inventory-account-status/{inventoryOrderId}": {
       "get": {
         "summary": "Статус инвентаризации (фильтр)",
         "tags": [
@@ -4306,7 +4306,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/source-bank/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/source-bank/{inventoryOrderId}": {
       "get": {
         "summary": "Банк-источник (фильтр)",
         "tags": [
@@ -4336,7 +4336,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/product-name/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/product-name/{inventoryOrderId}": {
       "get": {
         "summary": "Продукт (фильтр)",
         "tags": [
@@ -4366,7 +4366,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/manual-control-rule-number/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/manual-control-rule-number/{inventoryOrderId}": {
       "get": {
         "summary": "Номер правила ручного контроля (фильтр)",
         "tags": [
