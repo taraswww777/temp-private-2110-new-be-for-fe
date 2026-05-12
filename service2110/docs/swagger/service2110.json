@@ -4861,7 +4861,7 @@
         }
       }
     },
-    "/api/v1/inventory/state": {
+    "/api/v1/inventory/inventory/state": {
       "get": {
         "summary": "Статус процесса инвентаризации",
         "tags": [

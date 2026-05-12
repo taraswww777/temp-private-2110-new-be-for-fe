@@ -14,7 +14,7 @@ import z from 'zod';
 export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
-  app.get('/state', {
+  app.get('/inventory/state', {
     schema: {
       tags: [OpenApiTag.Inventory],
       summary: 'Статус процесса инвентаризации',
