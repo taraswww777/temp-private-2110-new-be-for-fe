@@ -2006,41 +2006,49 @@
         "enum": [
           "in_progress",
           "pending",
+          "updating",
           "completed",
           "reopened"
         ],
         "description": "Статус процесса инвентаризации",
         "x-enum-descriptions": [
-          "В процессе выполнения инвентаризации",
-          "Ожидание",
-          "Завершено",
-          "Повторно открыто"
+          "инвентаризация активна",
+          "инвентаризация активна, но данные не обновлены",
+          "инвентаризация в стадии обновления. Любые изменения пользователями запрещены",
+          "инвентаризация завершена",
+          "повторное открытие инвентаризации"
         ],
         "x-enum-varnames": [
           "IN_PROGRESS",
           "PENDING",
+          "UPDATING",
           "COMPLETED",
           "REOPENED"
         ],
         "oneOf": [
           {
             "const": "in_progress",
-            "description": "В процессе выполнения инвентаризации",
+            "description": "инвентаризация активна",
             "title": "IN_PROGRESS"
           },
           {
             "const": "pending",
-            "description": "Ожидание",
+            "description": "инвентаризация активна, но данные не обновлены",
             "title": "PENDING"
           },
           {
+            "const": "updating",
+            "description": "инвентаризация в стадии обновления. Любые изменения пользователями запрещены",
+            "title": "UPDATING"
+          },
+          {
             "const": "completed",
-            "description": "Завершено",
+            "description": "инвентаризация завершена",
             "title": "COMPLETED"
           },
           {
             "const": "reopened",
-            "description": "Повторно открыто",
+            "description": "повторное открытие инвентаризации",
             "title": "REOPENED"
           }
         ]
@@ -4156,7 +4164,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/bs2/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/bs2/{inventoryOrderId}": {
       "get": {
         "summary": "БС-2 (фильтр)",
         "tags": [
@@ -4186,7 +4194,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/account-type/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/account-type/{inventoryOrderId}": {
       "get": {
         "summary": "Тип счёта (фильтр)",
         "tags": [
@@ -4216,7 +4224,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/responsible-unit/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/responsible-unit/{inventoryOrderId}": {
       "get": {
         "summary": "Ответственное подразделение (фильтр)",
         "tags": [
@@ -4246,7 +4254,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/responsible-unit-type/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/responsible-unit-type": {
       "get": {
         "summary": "Тип ответственного подразделения (фильтр)",
         "tags": [
@@ -4276,7 +4284,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/inventory-account-status/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/inventory-account-status": {
       "get": {
         "summary": "Статус инвентаризации (фильтр)",
         "tags": [
@@ -4306,7 +4314,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/source-bank/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/source-bank/{inventoryOrderId}": {
       "get": {
         "summary": "Банк-источник (фильтр)",
         "tags": [
@@ -4336,7 +4344,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/product-name/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/product-name/{inventoryOrderId}": {
       "get": {
         "summary": "Продукт (фильтр)",
         "tags": [
@@ -4366,7 +4374,7 @@
         }
       }
     },
-    "/api/v1/inventory/dictionary/filters/manual-control-rule-number/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/manual-control-rule-number/{inventoryOrderId}": {
       "get": {
         "summary": "Номер правила ручного контроля (фильтр)",
         "tags": [
@@ -4518,7 +4526,7 @@
         }
       }
     },
-    "/api/v1/inventory/accounts/bulk": {
+    "/api/v1/inventory/accounts/inventory/bulk": {
       "put": {
         "summary": "Установка статуса инвентаризации нескольких счетов по выборке",
         "tags": [
@@ -4547,7 +4555,7 @@
         }
       }
     },
-    "/api/v1/inventory/accounts/update-by-filter": {
+    "/api/v1/inventory/accounts/inventory/update-by-filter": {
       "put": {
         "summary": "Установка статуса инвентаризации нескольких счетов по фильтру",
         "tags": [
@@ -4861,7 +4869,7 @@
         }
       }
     },
-    "/api/v1/inventory/state": {
+    "/api/v1/inventory/inventory/state": {
       "get": {
         "summary": "Статус процесса инвентаризации",
         "tags": [

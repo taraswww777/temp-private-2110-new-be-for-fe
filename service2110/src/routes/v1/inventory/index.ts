@@ -7,7 +7,7 @@ import { inventoryCommonRoutes } from './inventory-common.routes.ts';
 
 export const inventoryRoutes: FastifyPluginAsync = async (fastify) => {
   await fastify.register(inventoryOrdersRoutes, { prefix: '/orders' });
-  await fastify.register(inventoryDictionaryRoutes, { prefix: '/dictionary' });
+  await fastify.register(inventoryDictionaryRoutes, { prefix: '/' });
   await fastify.register(inventoryAccountsRoutes, { prefix: '/accounts' });
   await fastify.register(inventoryStatisticsRoutes, { prefix: '/statistics' });
   await fastify.register(inventoryCommonRoutes, { prefix: '/' });
