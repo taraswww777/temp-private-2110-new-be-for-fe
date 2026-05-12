@@ -68,7 +68,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(200).send(null));
 
-  app.put('/bulk', {
+  app.put('/inventory/bulk', {
     schema: {
       tags: [OpenApiTag.InventoryAccounts],
       summary: 'Установка статуса инвентаризации нескольких счетов по выборке',

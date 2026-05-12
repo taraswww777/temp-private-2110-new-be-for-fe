@@ -4518,7 +4518,7 @@
         }
       }
     },
-    "/api/v1/inventory/accounts/bulk": {
+    "/api/v1/inventory/accounts/inventory/bulk": {
       "put": {
         "summary": "Установка статуса инвентаризации нескольких счетов по выборке",
         "tags": [
