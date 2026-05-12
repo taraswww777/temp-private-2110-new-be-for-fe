@@ -77,7 +77,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
 
-  app.put('/update-by-filter', {
+  app.put('/inventory/update-by-filter', {
     schema: {
       tags: [OpenApiTag.InventoryAccounts],
       summary: 'Установка статуса инвентаризации нескольких счетов по фильтру',

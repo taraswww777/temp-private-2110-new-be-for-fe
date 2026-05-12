@@ -4547,7 +4547,7 @@
         }
       }
     },
-    "/api/v1/inventory/accounts/update-by-filter": {
+    "/api/v1/inventory/accounts/inventory/update-by-filter": {
       "put": {
         "summary": "Установка статуса инвентаризации нескольких счетов по фильтру",
         "tags": [
