@@ -26,7 +26,7 @@ export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
       body: createInventoryOrderSchema,
       response: { 201: inventoryOrderMutationResponseSchema },
     },
-  }, async (_request, reply) => reply.status(201).send({ invertoryOrderId: String(1) }));
+  }, async (_request, reply) => reply.status(201).send({ inventoryOrderId: String(1) }));
 
   app.put('/update', {
     schema: {
@@ -35,5 +35,5 @@ export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
       body: updateInventoryOrderSchema,
       response: { 200: inventoryOrderMutationResponseSchema },
     },
-  }, async (_request, reply) => reply.status(200).send({ invertoryOrderId: String(1) }));
+  }, async (_request, reply) => reply.status(200).send({ inventoryOrderId: String(1) }));
 };

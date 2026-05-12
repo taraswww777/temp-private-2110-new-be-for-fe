@@ -6,7 +6,7 @@ import { inventoryProcessStatusSchema } from './enums/InventoryProcessStatusEnum
 
 /** Элемент списка приказов — поля ответа DOC; `orderFileLink` вместо сырого binary. */
 export const inventoryOrderListItemSchema = z.object({
-  invertoryOrderId: zUuidSchema,
+  inventoryOrderId: zUuidSchema,
   orderNumber: z.string().describe('Номер приказа'),
   orderDate: dateSchema.describe('Дата приказа YYYY-MM-DD'),
   inventoryDateFrom: dateSchema.describe('Дата начала инвентаризации'),
@@ -27,7 +27,7 @@ export const createInventoryOrderSchema = z.object({
 });
 
 export const updateInventoryOrderSchema = z.object({
-  invertoryOrderId: zUuidSchema,
+  inventoryOrderId: zUuidSchema,
   orderNumber: z.string(),
   orderDate: dateSchema,
   inventoryDateFrom: dateSchema,
@@ -37,5 +37,5 @@ export const updateInventoryOrderSchema = z.object({
 });
 
 export const inventoryOrderMutationResponseSchema = z.object({
-  invertoryOrderId: zUuidSchema,
+  inventoryOrderId: zUuidSchema,
 });

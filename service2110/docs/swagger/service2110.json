@@ -2141,7 +2141,7 @@
       "InventoryOrderListItemDto": {
         "type": "object",
         "properties": {
-          "invertoryOrderId": {
+          "inventoryOrderId": {
             "$ref": "#/components/schemas/UuidSchema"
           },
           "orderNumber": {
@@ -2173,7 +2173,7 @@
           }
         },
         "required": [
-          "invertoryOrderId",
+          "inventoryOrderId",
           "orderNumber",
           "orderDate",
           "inventoryDateFrom",
@@ -2219,7 +2219,7 @@
       "InventoryUpdateOrderDto": {
         "type": "object",
         "properties": {
-          "invertoryOrderId": {
+          "inventoryOrderId": {
             "$ref": "#/components/schemas/UuidSchema"
           },
           "orderNumber": {
@@ -2242,7 +2242,7 @@
           }
         },
         "required": [
-          "invertoryOrderId",
+          "inventoryOrderId",
           "orderNumber",
           "orderDate",
           "inventoryDateFrom",
@@ -2255,12 +2255,12 @@
       "InventoryOrderMutationResponseDto": {
         "type": "object",
         "properties": {
-          "invertoryOrderId": {
+          "inventoryOrderId": {
             "$ref": "#/components/schemas/UuidSchema"
           }
         },
         "required": [
-          "invertoryOrderId"
+          "inventoryOrderId"
         ],
         "additionalProperties": false
       },
