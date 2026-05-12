@@ -2006,41 +2006,49 @@
         "enum": [
           "in_progress",
           "pending",
+          "updating",
           "completed",
           "reopened"
         ],
         "description": "Статус процесса инвентаризации",
         "x-enum-descriptions": [
-          "В процессе выполнения инвентаризации",
-          "Ожидание",
-          "Завершено",
-          "Повторно открыто"
+          "инвентаризация активна",
+          "инвентаризация активна, но данные не обновлены",
+          "инвентаризация в стадии обновления. Любые изменения пользователями запрещены",
+          "инвентаризация завершена",
+          "повторное открытие инвентаризации"
         ],
         "x-enum-varnames": [
           "IN_PROGRESS",
           "PENDING",
+          "UPDATING",
           "COMPLETED",
           "REOPENED"
         ],
         "oneOf": [
           {
             "const": "in_progress",
-            "description": "В процессе выполнения инвентаризации",
+            "description": "инвентаризация активна",
             "title": "IN_PROGRESS"
           },
           {
             "const": "pending",
-            "description": "Ожидание",
+            "description": "инвентаризация активна, но данные не обновлены",
             "title": "PENDING"
           },
           {
+            "const": "updating",
+            "description": "инвентаризация в стадии обновления. Любые изменения пользователями запрещены",
+            "title": "UPDATING"
+          },
+          {
             "const": "completed",
-            "description": "Завершено",
+            "description": "инвентаризация завершена",
             "title": "COMPLETED"
           },
           {
             "const": "reopened",
-            "description": "Повторно открыто",
+            "description": "повторное открытие инвентаризации",
             "title": "REOPENED"
           }
         ]
@@ -3085,7 +3093,7 @@
             "type": "boolean"
           },
           "status": {
-            "type": "string"
+            "$ref": "#/components/schemas/InventoryProcessStatusEnum"
           }
         },
         "additionalProperties": false

@@ -6,35 +6,42 @@ import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWi
  * Статусы процесса инвентаризации (front API-28 / DOC).
  */
 export enum InventoryProcessStatusEnum {
-  /** В процессе */
+  /** инвентаризация активна */
   IN_PROGRESS = 'in_progress',
 
-  /** Ожидание */
+  /** инвентаризация активна, но данные не обновлены */
   PENDING = 'pending',
 
-  /** Завершено */
+  /** инвентаризация в стадии обновления. Любые изменения пользователями запрещены */
+  UPDATING = 'updating',
+
+  /** инвентаризация завершена */
   COMPLETED = 'completed',
 
-  /** Повторно открыто */
+  /** повторное открытие инвентаризации */
   REOPENED = 'reopened',
 }
 
 const InventoryProcessStatusDescriptions = {
   [InventoryProcessStatusEnum.IN_PROGRESS]: {
     value: InventoryProcessStatusEnum.IN_PROGRESS,
-    description: 'В процессе выполнения инвентаризации',
+    description: 'инвентаризация активна',
   },
   [InventoryProcessStatusEnum.PENDING]: {
     value: InventoryProcessStatusEnum.PENDING,
-    description: 'Ожидание',
+    description: 'инвентаризация активна, но данные не обновлены',
+  },
+  [InventoryProcessStatusEnum.UPDATING]: {
+    value: InventoryProcessStatusEnum.UPDATING,
+    description: 'инвентаризация в стадии обновления. Любые изменения пользователями запрещены',
   },
   [InventoryProcessStatusEnum.COMPLETED]: {
     value: InventoryProcessStatusEnum.COMPLETED,
-    description: 'Завершено',
+    description: 'инвентаризация завершена',
   },
   [InventoryProcessStatusEnum.REOPENED]: {
     value: InventoryProcessStatusEnum.REOPENED,
-    description: 'Повторно открыто',
+    description: 'повторное открытие инвентаризации',
   },
 } as const;
 
