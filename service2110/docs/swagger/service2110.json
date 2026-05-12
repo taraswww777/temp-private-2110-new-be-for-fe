@@ -4246,7 +4246,7 @@
         }
       }
     },
-    "/api/v1/inventory/filters/responsible-unit-type/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/responsible-unit-type": {
       "get": {
         "summary": "Тип ответственного подразделения (фильтр)",
         "tags": [
@@ -4276,7 +4276,7 @@
         }
       }
     },
-    "/api/v1/inventory/filters/inventory-account-status/{inventoryOrderId}": {
+    "/api/v1/inventory/filters/inventory-account-status": {
       "get": {
         "summary": "Статус инвентаризации (фильтр)",
         "tags": [
