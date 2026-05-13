@@ -2514,6 +2514,75 @@
         "additionalProperties": false,
         "description": "Фильтр для списка счетов"
       },
+      "InventoryExportParamsDto": {
+        "type": "object",
+        "properties": {
+          "bs2": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "accountNum": {
+            "type": "string"
+          },
+          "accountType": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "responsibleUnit": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "responsibleUnitType": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inventoryAccountStatus": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceBank": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "productName": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "manualControlRuleNumber": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "showZeroBalanceAccounts": {
+            "type": "boolean"
+          },
+          "isExclude": {
+            "type": "boolean"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "offset": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
       "InventoryGetAccountsListRequestDto": {
         "type": "object",
         "properties": {
@@ -3108,8 +3177,7 @@
             "type": "string"
           },
           "exportParams": {
-            "type": "string",
-            "description": "JSON-строка с параметрами"
+            "$ref": "#/components/schemas/InventoryExportParamsDto"
           },
           "filePath": {
             "type": "string"

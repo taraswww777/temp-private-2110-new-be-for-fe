@@ -62,6 +62,7 @@ import {
   inventoryReportExportItemSchema,
   inventoryInventoryStateQuerySchema,
   inventoryColumnsQuerySchema,
+  inventoryExportParamsSchema,
 } from './inventory-common.schema.ts';
 
 import { registerOpenApiComponent } from '../utils/registerOpenApiComponent.ts';
@@ -105,6 +106,7 @@ export function registerInventoryOpenApiSchemas() {
   registerOpenApiComponent(inventoryManualControlFilterResponseSchema, 'InventoryManualControlFilterResponseDto');
 
   registerOpenApiComponent(inventoryAccountsListFilterSchema, 'InventoryAccountsListFilterDto');
+  registerOpenApiComponent(inventoryExportParamsSchema, 'InventoryExportParamsDto');
   registerOpenApiComponent(getInventoryAccountsListRequestSchema, 'InventoryGetAccountsListRequestDto');
   registerOpenApiComponent(inventoryAccountsListResponseSchema, 'InventoryAccountsListResponseDto');
   registerOpenApiComponent(inventoryAccountListItemSchema, 'InventoryAccountListItemDto');
