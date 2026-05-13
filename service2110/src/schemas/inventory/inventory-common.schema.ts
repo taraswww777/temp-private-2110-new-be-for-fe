@@ -40,7 +40,7 @@ export const inventoryColumnSchema = z.object({
 export const inventoryColumnsResponseSchema = z.array(inventoryColumnSchema);
 
 export const inventoryExportParamsSchema = z.object({
-  bs2: z.array(zIdSchema).optional(),
+  bs2: z.array(zIdSchema).optional().describe('Балансовый Счёт Второго Порядка"'),
   accountNum: z.string().optional(),
   accountType: z.array(zIdSchema).optional(),
   responsibleUnit: z.array(z.string()).optional(),
