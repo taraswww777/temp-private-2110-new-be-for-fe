@@ -2004,11 +2004,11 @@
       "InventoryProcessStatusEnum": {
         "type": "string",
         "enum": [
-          "in_progress",
-          "pending",
-          "updating",
-          "completed",
-          "reopened"
+          "IN_PROGRESS",
+          "PENDING",
+          "UPDATING",
+          "COMPLETED",
+          "REOPENED"
         ],
         "description": "Статус процесса инвентаризации",
         "x-enum-descriptions": [
@@ -2027,27 +2027,27 @@
         ],
         "oneOf": [
           {
-            "const": "in_progress",
+            "const": "IN_PROGRESS",
             "description": "инвентаризация активна",
             "title": "IN_PROGRESS"
           },
           {
-            "const": "pending",
+            "const": "PENDING",
             "description": "инвентаризация активна, но данные не обновлены",
             "title": "PENDING"
           },
           {
-            "const": "updating",
+            "const": "UPDATING",
             "description": "инвентаризация в стадии обновления. Любые изменения пользователями запрещены",
             "title": "UPDATING"
           },
           {
-            "const": "completed",
+            "const": "COMPLETED",
             "description": "инвентаризация завершена",
             "title": "COMPLETED"
           },
           {
-            "const": "reopened",
+            "const": "REOPENED",
             "description": "повторное открытие инвентаризации",
             "title": "REOPENED"
           }
@@ -2518,6 +2518,7 @@
         "type": "object",
         "properties": {
           "bs2": {
+            "description": "Балансовый Счёт Второго Порядка\"",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/IntegerIdSchema"
