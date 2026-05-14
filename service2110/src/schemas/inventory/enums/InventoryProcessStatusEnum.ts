@@ -7,19 +7,19 @@ import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWi
  */
 export enum InventoryProcessStatusEnum {
   /** инвентаризация активна */
-  IN_PROGRESS = 'in_progress',
+  IN_PROGRESS = 'IN_PROGRESS',
 
   /** инвентаризация активна, но данные не обновлены */
-  PENDING = 'pending',
+  PENDING = 'PENDING',
 
   /** инвентаризация в стадии обновления. Любые изменения пользователями запрещены */
-  UPDATING = 'updating',
+  UPDATING = 'UPDATING',
 
   /** инвентаризация завершена */
-  COMPLETED = 'completed',
+  COMPLETED = 'COMPLETED',
 
   /** повторное открытие инвентаризации */
-  REOPENED = 'reopened',
+  REOPENED = 'REOPENED',
 }
 
 const InventoryProcessStatusDescriptions = {
