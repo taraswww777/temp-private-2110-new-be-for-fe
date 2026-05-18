@@ -81,13 +81,14 @@ export const inventoryAccountRowSchema = z.object({
   currencyIsoCode: z.string().optional(),
   clientInn: z.string().optional(),
   discrepancyDescription: z.string().optional(),
-  discrepancySum: inventoryDecimalStringSchema.optional(),
+  discrepancySum: z.number().optional(),
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
   resolutionDate: dateSchema.optional(),
   manualResponsibleUnit: z.string().optional(),
   isCriticalUpdated: z.boolean().optional(),
   version: zIdSchema,
+  isExclude: z.boolean().optional(),
 });
 
 export const inventoryAccountListItemSchema = inventoryAccountRowSchema;
@@ -140,7 +141,7 @@ export const inventoryAccountStatusSingleSchema = z.object({
   manualInventoryAccountStatus: z.string(),
   originalInventoryAccountStatus: z.string().optional(),
   discrepancyDescription: z.string().optional(),
-  discrepancySum: inventoryDecimalStringSchema.optional(),
+  discrepancySum: z.number().optional(),
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
   resolutionDate: dateSchema.optional(),
