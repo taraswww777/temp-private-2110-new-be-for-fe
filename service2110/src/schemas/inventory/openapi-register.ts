@@ -44,7 +44,7 @@ import {
   accountVersionedIdSchema,
   accountVersionedIdsSchema,
   inventoryAccountUpdatedResponseSchema,
-  inventoryDecimalStringSchema,
+  inventoryDecimalSchema,
   inventoryAccountListSortColumnSchema,
   inventoryAccountsListSortingSchema,
 } from './accounts.schema.ts';
@@ -77,7 +77,7 @@ export function registerInventoryOpenApiSchemas() {
   registerOpenApiComponent(inventoryInventoryStateQuerySchema, 'InventoryInventoryStateQueryDto');
   registerOpenApiComponent(inventoryColumnsQuerySchema, 'InventoryColumnsQueryDto');
 
-  registerOpenApiComponent(inventoryDecimalStringSchema, 'InventoryDecimalStringDto');
+  registerOpenApiComponent(inventoryDecimalSchema, 'InventoryDecimalDto');
   registerOpenApiComponent(inventoryAccountListSortColumnSchema, 'InventoryAccountListSortColumnEnum');
   registerOpenApiComponent(inventoryAccountsListSortingSchema, 'InventoryAccountsListSortingDto');
   registerOpenApiComponent(inventoryAccountIdParamSchema, 'InventoryAccountIdParamDto');

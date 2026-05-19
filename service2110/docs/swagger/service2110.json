@@ -2096,9 +2096,9 @@
         ],
         "additionalProperties": false
       },
-      "InventoryDecimalStringDto": {
-        "type": "string",
-        "description": "Десятичное значение как строка (как в DOC string($decimal))"
+      "InventoryDecimalDto": {
+        "type": "number",
+        "description": "Десятичное значение"
       },
       "InventoryAccountListSortColumnEnum": {
         "type": "string",
@@ -2665,10 +2665,10 @@
             "type": "string"
           },
           "accountOutRubSum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "accountOutSum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "productCode": {
             "type": "string"
@@ -2686,16 +2686,16 @@
             "type": "string"
           },
           "reversedDebitSumRub": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "reversedDebitSum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "reversedCreditSumRub": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "reversedCreditSum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "sourceBank": {
             "type": "string"
@@ -2713,7 +2713,7 @@
             "type": "string"
           },
           "discrepancySum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "discrepancyReason": {
             "type": "string"
@@ -2732,6 +2732,9 @@
           },
           "version": {
             "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "isExclude": {
+            "type": "boolean"
           }
         },
         "required": [
@@ -2756,7 +2759,7 @@
             "type": "string"
           },
           "discrepancySum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "discrepancyReason": {
             "type": "string"
@@ -2852,10 +2855,10 @@
             "type": "string"
           },
           "accountOutRubSum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "accountOutSum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "productCode": {
             "type": "string"
@@ -2873,16 +2876,16 @@
             "type": "string"
           },
           "reversedDebitSumRub": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "reversedDebitSum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "reversedCreditSumRub": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "reversedCreditSum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "sourceBank": {
             "type": "string"
@@ -2900,7 +2903,7 @@
             "type": "string"
           },
           "discrepancySum": {
-            "$ref": "#/components/schemas/InventoryDecimalStringDto"
+            "$ref": "#/components/schemas/InventoryDecimalDto"
           },
           "discrepancyReason": {
             "type": "string"
@@ -2919,6 +2922,9 @@
           },
           "version": {
             "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "isExclude": {
+            "type": "boolean"
           }
         },
         "required": [
