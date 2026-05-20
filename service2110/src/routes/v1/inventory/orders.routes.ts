@@ -19,7 +19,7 @@ export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(200).send([]));
 
-  app.post('/new', {
+  app.post('/', {
     schema: {
       tags: [OpenApiTag.InventoryOrders],
       summary: 'Создать приказ инвентаризации',
@@ -28,7 +28,7 @@ export const inventoryOrdersRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(201).send({ inventoryOrderId: String(1) }));
 
-  app.put('/update', {
+  app.put('/', {
     schema: {
       tags: [OpenApiTag.InventoryOrders],
       summary: 'Обновить приказ инвентаризации',

@@ -102,12 +102,24 @@ export const inventoryAccountDetailSchema = inventoryAccountRowSchema;
 export const inventoryAccountHistoryItemSchema = z.object({
   changeDate:dateTimeSchema,
   changedBy: z.string(),
-  fieldName: z.string(),
-  oldValue: z.string(),
-  newValue: z.string(),
+  manualInventoryAccountStatus: z.string().optional(),
+  discrepancyDescription: z.string().optional(),
+  discrepancySum: inventoryDecimalSchema.optional(),
+  discrepancyReason: z.string().optional(),
+ resolutionActions: z.string().optional(),
+  resolutionDate: dateSchema.optional(),
+  manualResponsibleUnit: z.string().optional(),
+  isExclude: z.boolean().optional(),
 });
 
-export const inventoryAccountHistoryResponseSchema = z.array(inventoryAccountHistoryItemSchema);
+export const inventoryAccountHistoryRequestSchema = z.object({
+   pagination: paginationQuerySchema,
+})
+
+export const inventoryAccountHistoryResponseSchema = z.object({
+  items: z.array(inventoryAccountHistoryItemSchema),
+  totalItems: z.number().int().min(0),
+});
 
 export const inventoryAccountIdParamSchema = z.object({
   accountId: zUuidSchema,
