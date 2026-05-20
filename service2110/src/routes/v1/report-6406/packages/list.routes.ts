@@ -4,7 +4,7 @@ import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   getPackageListRequestSchema,
-  getPackageListResponseSchema,
+  packsListResponseSchema,
 } from '../../../../schemas/report-6406/packages.schema';
 
 /**
@@ -19,10 +19,11 @@ export const listPackagesRoute: FastifyPluginAsync = async (fastify) => {
   app.post('/list', {
     schema: {
       tags: [OpenApiTag.Report6406Packages],
-      summary: 'Получить список пакетов с пагинацией',
+      summary: 'Поиск пакетов с фильтрацией',
+      description: 'Возвращает список пакетов с применением фильтров, сортировки и пагинации',
       body: getPackageListRequestSchema,
       response: {
-        200: getPackageListResponseSchema,
+        200: packsListResponseSchema,
       },
     },
   }, async (_request, reply) => {

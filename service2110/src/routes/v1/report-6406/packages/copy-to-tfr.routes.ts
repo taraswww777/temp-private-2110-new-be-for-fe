@@ -2,16 +2,15 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { copyToTfrResponseSchema, packageTfrResponseSchema } from '../../../../schemas/report-6406/packages.schema';
-
-import { idListSchema, idParamSchema } from '../../../../schemas/common/id.schema.ts';
+import {
+  packTfrInfoSchema,
+  packTransferRequestSchema,
+} from '../../../../schemas/report-6406/packages.schema.ts';
+import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
 import { z } from 'zod';
 
 /**
- * POST /api/v1/report-6406/packages/:packageId/copy-to-tfr
- * Скопировать пакет в ТФР
- * 
- * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
+ * TFR-операции с пакетами (mock для Swagger).
  */
 export const tfrRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -19,42 +18,44 @@ export const tfrRoutes: FastifyPluginAsync = async (fastify) => {
   app.post('/transfer', {
     schema: {
       tags: [OpenApiTag.Report6406Packages],
-      summary: 'Скопировать список пакетов на ТФР',
-      body: idListSchema,
+      summary: 'Передача пакетов в TFR',
+      description: 'Передаёт указанные пакеты в систему TFR для дальнейшей обработки',
+      body: packTransferRequestSchema,
     },
   }, async (_request, reply) => {
     return reply.status(200).send({} as any);
   });
 
-  app.post('/{id}/cancel-copy', {
+  app.post('/tfr-delete', {
     schema: {
       tags: [OpenApiTag.Report6406Packages],
-      summary: 'Скопировать список пакетов на ТФР',
+      summary: 'Удаление пакетов из TFR',
+      description: 'Удаляет указанные пакеты из системы TFR',
+      body: packTransferRequestSchema,
+    },
+  }, async (_request, reply) => {
+    return reply.status(200).send({} as any);
+  });
+
+  app.get('/info/tfr', {
+    schema: {
+      tags: [OpenApiTag.Report6406Packages],
+      summary: 'Получение информации о пакетах в TFR',
+      description: 'Возвращает список пакетов, переданных в систему TFR',
+      response: {
+        200: z.array(packTfrInfoSchema),
+      },
+    },
+  }, async (_request, reply) => {
+    return reply.status(200).send([] as any);
+  });
+
+  app.get('/{id}/cancel-copy', {
+    schema: {
+      tags: [OpenApiTag.Report6406Packages],
+      summary: 'Отмена копирования пакета',
+      description: 'Отменяет операцию копирования пакета в TFR',
       params: idParamSchema,
-    },
-  }, async (_request, reply) => {
-    return reply.status(200).send({} as any);
-  });
-
-  app.delete('/tfr', {
-    schema: {
-      tags: [OpenApiTag.Report6406Packages],
-      summary: 'Удалить список пакетов на ТФР',
-      body: idListSchema,
-    },
-  }, async (_request, reply) => {
-    return reply.status(200).send({} as any);
-  });
-
-
-  app.get('/tfr', {
-    schema: {
-      tags: [OpenApiTag.Report6406Packages],
-      summary: 'Получить список пакетов на ТФР',
-      params: idParamSchema,
-      response:{
-        200: z.array(packageTfrResponseSchema)
-      }
     },
   }, async (_request, reply) => {
     return reply.status(200).send({} as any);
