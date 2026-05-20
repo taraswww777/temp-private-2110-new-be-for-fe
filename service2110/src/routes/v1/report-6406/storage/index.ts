@@ -1,25 +1,47 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { storageVolumeListResponseSchema } from '../../../../schemas/report-6406/storage.schema.ts';
+import {
+  s3BucketListResponseSchema,
+  s3BucketPathParamSchema,
+  storageVolumeListResponseSchema,
+} from '../../../../schemas/report-6406/storage.schema.ts';
 
 export const storageRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   /**
-   * GET /api/v1/report-6406/storage/volume
-   * Получить массив хранилищ с объёмом (корзина 1, корзина 2, ТФР и т.д.)
+   * GET /api/v1/report-6406/storages/volume
+   * Получить информацию об объёме хранилищ
    */
   app.get('/volume', {
     schema: {
       tags: [OpenApiTag.Report6406Storage],
-      summary: 'Получить объём хранилищ',
-      description: 'Возвращает массив сущностей по одному на каждое хранилище (корзина 1, корзина 2, ТФР). Каждый элемент содержит id, name, code, totalHuman, freeHuman, percent для отображения и key в JSX.',
+      summary: 'Получение информации о хранилищах',
+      description: 'Возвращает информацию об объёме и свободном месте в хранилищах.',
       response: {
         200: storageVolumeListResponseSchema,
       },
     },
-  }, async (request, reply) => {
-    return reply.status(200).send({} as never);
+  }, async (_request, reply) => {
+    return reply.status(200).send([] as never);
+  });
+
+  /**
+   * GET /api/v1/report-6406/storages/s3/:bucket/list
+   * Получить список файлов в S3 bucket (тестовый)
+   */
+  app.get('/s3/:bucket/list', {
+    schema: {
+      tags: [OpenApiTag.Report6406Storage],
+      summary: 'Получение списка файлов в S3 (тестовый)',
+      description: 'Возвращает список файлов в указанном bucket (только для тестирования).',
+      params: s3BucketPathParamSchema,
+      response: {
+        200: s3BucketListResponseSchema,
+      },
+    },
+  }, async (_request, reply) => {
+    return reply.status(200).send([] as never);
   });
 };

@@ -25,7 +25,7 @@ export interface PresignedUrlResult {
  * @returns объект с URL и временем истечения
  */
 export function generateMockPresignedUrl(
-  fileId: TaskFile['id'],
+  fileId: TaskFile['fileId'],
   fileName: string
 ): PresignedUrlResult {
   const baseUrl = env.MOCK_FILE_STORAGE_URL || 'http://localhost:3000/mock-files';

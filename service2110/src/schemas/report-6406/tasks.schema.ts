@@ -94,7 +94,7 @@ export const taskDetailSchema = baseTaskSchema.extend({
   accountList,
   secondOrderAccountList,
   operationType,
-  s3Path: z.string().optional().describe('ID папки в S3'),
+  s3FolderId: z.string().max(255).optional().describe('ID папки в S3'),
 }).superRefine(dateRangeRefinement());
 
 export type TaskDetails = z.infer<typeof taskDetailSchema>;
@@ -186,6 +186,6 @@ export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
   registerReport6406OpenApiSchema(tasksListFilterSchema, 'TasksListFilterDto');
   registerReport6406OpenApiSchema(getTasksRequestSchema, 'GetTasksRequestDto');
   registerReport6406OpenApiSchema(tasksListResponseSchema, 'TasksListResponseDto');
-  registerReport6406OpenApiSchema(taskDetailSchema, 'TaskDetailDto');
+  registerReport6406OpenApiSchema(taskDetailSchema, 'TaskDetailResponseDto');
 })();
 

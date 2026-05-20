@@ -2,18 +2,17 @@ import { z } from 'zod';
 import { SortOrderEnum, sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { fileStatusZodSchema } from './enums/FileStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
-import { paginationMetadataSchema, paginationQuerySchema } from '../common/pagination.schema.ts';
+import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
 
-
 /**
- * Схема для файла задания
+ * Файл задания (TaskFileDto по новому OAS).
  */
 export const taskFileSchema = z.object({
-  id: zIdSchema,
-  fileName: z.string(),
-  fileSize: z.number().int().min(0).describe('Размер файла в байтах (например, 10485760 = 10 MB)'),
+  fileId: zIdSchema.describe('ИД файла'),
+  linkResult: z.string().max(255).describe('Ссылка на файл'),
+  size: z.number().int().min(0).describe('Размер файла'),
 });
 
 export type TaskFile = z.infer<typeof taskFileSchema>;
@@ -27,13 +26,13 @@ export const taskFilePathParamsSchema = z.object({
 });
 
 /**
- * Допустимые колонки для сортировки файлов задания
+ * Допустимые колонки для сортировки файлов задания (presigned/retry endpoints).
  */
 export const taskFileSortBySchema = z.enum(['status', 'fileName', 'fileSize', 'createdAt']);
 export type TaskFileSortBy = z.infer<typeof taskFileSortBySchema>;
 
 /**
- * Схема для query параметров списка файлов
+ * Query-параметры списка файлов (legacy, presigned/retry endpoints).
  */
 export const taskFilesQuerySchema = paginationQuerySchema.extend({
   sortBy: taskFileSortBySchema.default('status'),
@@ -44,12 +43,18 @@ export const taskFilesQuerySchema = paginationQuerySchema.extend({
 export type TaskFilesQuery = z.infer<typeof taskFilesQuerySchema>;
 
 /**
- * Схема для ответа со списком файлов
+ * Тело POST /api/v1/report-6406/tasks/{id}/files (PaginationRequestDto).
+ */
+export const taskFilesRequestSchema = paginationQuerySchema;
+
+export type TaskFilesRequest = z.infer<typeof taskFilesRequestSchema>;
+
+/**
+ * Ответ POST /api/v1/report-6406/tasks/{id}/files (TaskFilesResponseDto).
  */
 export const taskFilesResponseSchema = z.object({
-  taskId: zIdSchema,
-  files: z.array(taskFileSchema),
-  pagination: paginationMetadataSchema,
+  files: z.array(taskFileSchema).describe('Список файлов'),
+  totalItems: z.number().int().min(0).describe('Общее количество файлов'),
 });
 
 export type TaskFilesResponse = z.infer<typeof taskFilesResponseSchema>;
@@ -65,7 +70,6 @@ export const retryFileConversionResponseSchema = z.object({
 
 export type RetryFileConversionResponse = z.infer<typeof retryFileConversionResponseSchema>;
 
-
 /**
  * Схема для ответа со списком ссылок для файлов
  */
@@ -80,10 +84,10 @@ export const taskFileUrlResponseSchema = z.array(taskFileUrlItemSchema);
   registerReport6406OpenApiSchema(taskFilePathParamsSchema, 'TaskFilePathParamsDto');
   registerReport6406OpenApiSchema(taskFileSortBySchema, 'TaskFileSortByEnum');
   registerReport6406OpenApiSchema(taskFilesQuerySchema, 'TaskFilesQueryDto');
+  registerReport6406OpenApiSchema(taskFilesRequestSchema, 'PaginationRequestDto');
   registerReport6406OpenApiSchema(taskFileSchema, 'TaskFileDto');
   registerReport6406OpenApiSchema(taskFilesResponseSchema, 'TaskFilesResponseDto');
   registerReport6406OpenApiSchema(taskFileUrlItemSchema, 'TaskFileUrlItemDto');
   registerReport6406OpenApiSchema(taskFileUrlResponseSchema, 'TaskFileUrlResponseDto');
   registerReport6406OpenApiSchema(retryFileConversionResponseSchema, 'RetryFileConversionResponseDto');
 })();
-
