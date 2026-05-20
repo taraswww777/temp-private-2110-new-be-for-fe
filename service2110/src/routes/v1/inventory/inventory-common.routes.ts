@@ -10,6 +10,8 @@ import {
   inventoryActiveStateSchema,
 } from '../../../schemas/inventory/inventory-common.schema.ts';
 import z from 'zod';
+import { accountVersionedIdsSchema, inventoryAccountsExportRequestSchema, inventoryAccountsExportResponseSchema, inventoryAccountsListFilterSchema, inventoryAccountStatusSingleSchema, inventoryAccountUpdatedResponseSchema, inventoryManualUnitBulkRequestSchema } from '../../../schemas/inventory/accounts.schema.ts';
+import { inventoryStatisticsExportRequestSchema, inventoryStatisticsExportResponseSchema } from '../../../schemas/inventory/statistics.schema.ts';
 
 export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -42,7 +44,7 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(200).send([]));
 
-    app.put('/inventory-active', {
+  app.patch('/settings/inventory-active-status', {
     schema: {
       tags: [OpenApiTag.Inventory],
       summary: 'Запрос изменения активности инвентаризации',
@@ -50,4 +52,86 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
+
+  app.patch('/bulk-manual-units', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Смена ответственного для выбранных счетов',
+      body: inventoryManualUnitBulkRequestSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
+  
+  app.patch('/bulk-inventory', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Установка статуса инвентаризации нескольких счетов по выборке',
+      body: accountVersionedIdsSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
+
+  app.patch('/bulk-exclude', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Исключение выбранных счетов из инвентаризации',
+      body: accountVersionedIdsSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
+
+
+  app.patch('/bulk-include', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Включение выбранных счетов из инвентаризации',
+      body: accountVersionedIdsSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
+
+  app.post('/accounts-export', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Экспорт реестра счетов',
+      body: inventoryAccountsExportRequestSchema,
+      response: { 200: z.null() },
+    },
+  }, async (_request, reply) => reply.status(200).send(null));
+
+  app.get('/statistics-export', {
+    schema: {
+      tags: [OpenApiTag.InventoryStatistics],
+      summary: 'Запрос списка сформированных статистик',
+      response: { 200: inventoryStatisticsExportResponseSchema },
+    },
+  }, async (_request, reply) =>
+    reply.status(200).send([]));
+
+  app.post('/statistics-export', {
+    schema: {
+      tags: [OpenApiTag.InventoryStatistics],
+      summary: 'Экспорт статистики инвентаризации',
+      body: inventoryStatisticsExportRequestSchema,
+      response: { 200: z.null() },
+    },
+  }, async (_request, reply) => reply.status(200).send(null));
+
+  app.patch('/inventory-status', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Установка статуса инвентаризации нескольких счетов по фильтру',
+      body: inventoryAccountsListFilterSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
+
+
+  app.get('/accounts-export', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Просмотр выгрузок',
+      response: { 200: inventoryAccountsExportResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send([]));
 };

@@ -17,14 +17,14 @@ export const inventoryDictionaryRoutes: FastifyPluginAsync = async (fastify) => 
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   const listFilters = [
-    ['/filters/bs2/:inventoryOrderId', 'БС-2 (фильтр)', inventoryBs2FilterResponseSchema],
-    ['/filters/account-type/:inventoryOrderId', 'Тип счёта (фильтр)', inventoryAccountTypeFilterResponseSchema],
-    ['/filters/responsible-unit/:inventoryOrderId', 'Ответственное подразделение (фильтр)', inventoryResponsibleUnitFilterResponseSchema],
-    ['/filters/responsible-unit-type', 'Тип ответственного подразделения (фильтр)', inventoryResponsibleUnitTypeFilterResponseSchema],
-    ['/filters/inventory-account-status', 'Статус инвентаризации (фильтр)', inventoryAccountStatusFilterResponseSchema],
-    ['/filters/source-bank/:inventoryOrderId', 'Банк-источник (фильтр)', inventorySourceBankFilterResponseSchema],
-    ['/filters/product-name/:inventoryOrderId', 'Продукт (фильтр)', inventoryProductFilterResponseSchema],
-    ['/filters/manual-control-rule-number/:inventoryOrderId', 'Номер правила ручного контроля (фильтр)', inventoryManualControlFilterResponseSchema],
+    ['orders/:inventoryOrderId/filters/bs2', 'БС-2 (фильтр)', inventoryBs2FilterResponseSchema],
+    ['/orders/:inventoryOrderId/filters/account-types', 'Тип счёта (фильтр)', inventoryAccountTypeFilterResponseSchema],
+    ['/orders/:inventoryOrderId/filters/responsible-units', 'Ответственное подразделение (фильтр)', inventoryResponsibleUnitFilterResponseSchema],
+    ['/static-filters/responsible-unit-types', 'Тип ответственного подразделения (фильтр)', inventoryResponsibleUnitTypeFilterResponseSchema],
+    ['/static-filters/inventory-account-statuses', 'Статус инвентаризации (фильтр)', inventoryAccountStatusFilterResponseSchema],
+    ['/orders/:inventoryOrderId/filters/source-banks', 'Банк-источник (фильтр)', inventorySourceBankFilterResponseSchema],
+    ['/orders/:inventoryOrderId/filters/product-names', 'Продукт (фильтр)', inventoryProductFilterResponseSchema],
+    ['/orders/:inventoryOrderId/filters/manual-control-rule-numbers', 'Номер правила ручного контроля (фильтр)', inventoryManualControlFilterResponseSchema],
   ] as const;
 
   for (const [url, summary, response] of listFilters) {

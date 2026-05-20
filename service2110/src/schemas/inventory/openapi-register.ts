@@ -32,6 +32,7 @@ import {
   inventoryAccountDetailSchema,
   inventoryAccountListItemSchema,
   inventoryAccountHistoryItemSchema,
+  inventoryAccountHistoryRequestSchema,
   inventoryAccountHistoryResponseSchema,
   inventoryManualUnitRequestSchema,
   inventoryManualUnitBulkRequestSchema,
@@ -66,6 +67,7 @@ import {
 } from './inventory-common.schema.ts';
 
 import { registerOpenApiComponent } from '../utils/registerOpenApiComponent.ts';
+import { register } from 'node:module';
 
 /**
  * Регистрация Zod-схем подсистемы инвентаризации (front API-28) в OpenAPI-реестре.
@@ -116,6 +118,7 @@ export function registerInventoryOpenApiSchemas() {
   registerOpenApiComponent(inventoryAccountUpdatedResponseSchema, 'InventoryAccountUpdatedResponseDto');
   registerOpenApiComponent(inventoryAccountDetailSchema, 'InventoryAccountDetailDto');
   registerOpenApiComponent(inventoryAccountHistoryItemSchema, 'InventoryAccountHistoryItemDto');
+  registerOpenApiComponent(inventoryAccountHistoryRequestSchema, 'InventoryAccountHistoryRequestDto');
   registerOpenApiComponent(inventoryAccountHistoryResponseSchema, 'InventoryAccountHistoryResponseDto');
   registerOpenApiComponent(inventoryManualUnitRequestSchema, 'InventoryManualUnitRequestDto');
   registerOpenApiComponent(inventoryManualUnitBulkRequestSchema, 'InventoryManualUnitBulkRequestDto');
