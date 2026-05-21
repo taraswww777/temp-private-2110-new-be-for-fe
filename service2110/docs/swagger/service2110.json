@@ -1009,7 +1009,7 @@
         ],
         "additionalProperties": false
       },
-      "PaginationRequestDto": {
+      "TaskFilesRequestDto": {
         "type": "object",
         "properties": {
           "page": {
@@ -1025,14 +1025,28 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 100
+          },
+          "sortBy": {
+            "default": "status",
+            "$ref": "#/components/schemas/TaskFileSortByEnum"
+          },
+          "sortOrder": {
+            "$ref": "#/components/schemas/SortOrderEnum"
+          },
+          "status": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FileStatusEnum"
+            }
           }
         },
         "required": [
           "page",
-          "limit"
+          "limit",
+          "sortBy",
+          "sortOrder"
         ],
-        "additionalProperties": false,
-        "description": "Параметры пагинации"
+        "additionalProperties": false
       },
       "TaskFileDto": {
         "type": "object",
@@ -1075,11 +1089,16 @@
             "minimum": 0,
             "maximum": 9007199254740991,
             "description": "Общее количество файлов"
+          },
+          "pagination": {
+            "description": "Метаданные пагинации",
+            "$ref": "#/components/schemas/PaginationMetadataDto"
           }
         },
         "required": [
           "files",
-          "totalItems"
+          "totalItems",
+          "pagination"
         ],
         "additionalProperties": false
       },
@@ -1814,6 +1833,31 @@
         "maxLength": 5,
         "pattern": "^\\d+$",
         "description": "Счёт второго порядка (5-значный номер)"
+      },
+      "PaginationRequestDto": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "default": 1,
+            "description": "Номер страницы (начиная с 1)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "limit": {
+            "default": 20,
+            "description": "Размер страницы",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "page",
+          "limit"
+        ],
+        "additionalProperties": false,
+        "description": "Параметры пагинации"
       },
       "PaginationMetadataDto": {
         "type": "object",
@@ -3232,52 +3276,6 @@
     }
   },
   "paths": {
-    "/mock-files/{fileId}/{fileName}": {
-      "get": {
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "path",
-            "name": "fileId",
-            "required": true
-          },
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "path",
-            "name": "fileName",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response"
-          }
-        }
-      }
-    },
-    "/mock-files/exports/{fileName}": {
-      "get": {
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "path",
-            "name": "fileName",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response"
-          }
-        }
-      }
-    },
     "/api/v1/report-6406/dictionaries/branches": {
       "get": {
         "summary": "Получение списка филиалов",
@@ -3612,7 +3610,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PaginationRequestDto"
+                "$ref": "#/components/schemas/TaskFilesRequestDto"
               }
             }
           }
@@ -5089,10 +5087,6 @@
     }
   ],
   "tags": [
-    {
-      "name": "Health",
-      "description": "Health check endpoints"
-    },
     {
       "name": "Report 6406 - Dictionary",
       "description": "Справочники для формы отчётности 6406"

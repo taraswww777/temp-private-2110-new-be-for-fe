@@ -3,7 +3,6 @@
  * Значения совпадают с прежними строковыми литералами в `tags: [...]`.
  */
 export enum OpenApiTag {
-  Health = 'Health',
   Report6406Dictionary = 'Report 6406 - Dictionary',
   Report6406Tasks = 'Report 6406 - Tasks',
   Report6406Packages = 'Report 6406 - Packages',
@@ -16,7 +15,6 @@ export enum OpenApiTag {
 }
 
 export const OPENAPI_TAG_SPEC: ReadonlyArray<{ name: OpenApiTag; description: string }> = [
-  { name: OpenApiTag.Health, description: 'Health check endpoints' },
   {
     name: OpenApiTag.Report6406Dictionary,
     description: 'Справочники для формы отчётности 6406',

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { SortOrderEnum, sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { fileStatusZodSchema } from './enums/FileStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
-import { paginationQuerySchema } from '../common/pagination.schema.ts';
+import { paginationMetadataSchema, paginationQuerySchema } from '../common/pagination.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
 
@@ -32,7 +32,7 @@ export const taskFileSortBySchema = z.enum(['status', 'fileName', 'fileSize', 'c
 export type TaskFileSortBy = z.infer<typeof taskFileSortBySchema>;
 
 /**
- * Query-параметры списка файлов (legacy, presigned/retry endpoints).
+ * Параметры списка файлов: пагинация, сортировка, фильтр по статусу.
  */
 export const taskFilesQuerySchema = paginationQuerySchema.extend({
   sortBy: taskFileSortBySchema.default('status'),
@@ -43,9 +43,10 @@ export const taskFilesQuerySchema = paginationQuerySchema.extend({
 export type TaskFilesQuery = z.infer<typeof taskFilesQuerySchema>;
 
 /**
- * Тело POST /api/v1/report-6406/tasks/{id}/files (PaginationRequestDto).
+ * Тело POST /api/v1/report-6406/tasks/{id}/files.
+ * Пагинация (page, limit) + сортировка и фильтр по статусу.
  */
-export const taskFilesRequestSchema = paginationQuerySchema;
+export const taskFilesRequestSchema = taskFilesQuerySchema;
 
 export type TaskFilesRequest = z.infer<typeof taskFilesRequestSchema>;
 
@@ -55,6 +56,7 @@ export type TaskFilesRequest = z.infer<typeof taskFilesRequestSchema>;
 export const taskFilesResponseSchema = z.object({
   files: z.array(taskFileSchema).describe('Список файлов'),
   totalItems: z.number().int().min(0).describe('Общее количество файлов'),
+  pagination: paginationMetadataSchema.describe('Метаданные пагинации'),
 });
 
 export type TaskFilesResponse = z.infer<typeof taskFilesResponseSchema>;
@@ -84,7 +86,7 @@ export const taskFileUrlResponseSchema = z.array(taskFileUrlItemSchema);
   registerReport6406OpenApiSchema(taskFilePathParamsSchema, 'TaskFilePathParamsDto');
   registerReport6406OpenApiSchema(taskFileSortBySchema, 'TaskFileSortByEnum');
   registerReport6406OpenApiSchema(taskFilesQuerySchema, 'TaskFilesQueryDto');
-  registerReport6406OpenApiSchema(taskFilesRequestSchema, 'PaginationRequestDto');
+  registerReport6406OpenApiSchema(taskFilesRequestSchema, 'TaskFilesRequestDto');
   registerReport6406OpenApiSchema(taskFileSchema, 'TaskFileDto');
   registerReport6406OpenApiSchema(taskFilesResponseSchema, 'TaskFilesResponseDto');
   registerReport6406OpenApiSchema(taskFileUrlItemSchema, 'TaskFileUrlItemDto');
