@@ -86,6 +86,3 @@ export const dictionaryEmployeeRoute: FastifyPluginAsync = async (fastify) => {
     return reply.status(200).send({} as never);
   });
 };
-
-/** @deprecated используйте dictionariesRoutes */
-export const dictionaryRoutes = dictionariesRoutes;

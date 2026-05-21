@@ -1672,27 +1672,6 @@
           "$ref": "#/components/schemas/StorageResponse"
         }
       },
-      "S3BucketPathParamDto": {
-        "type": "object",
-        "properties": {
-          "bucket": {
-            "type": "string",
-            "maxLength": 255,
-            "description": "Имя bucket в S3"
-          }
-        },
-        "required": [
-          "bucket"
-        ],
-        "additionalProperties": false
-      },
-      "S3BucketListResponseDto": {
-        "type": "array",
-        "items": {
-          "type": "string",
-          "maxLength": 255
-        }
-      },
       "StorageCodeEnum": {
         "type": "string",
         "enum": [
@@ -4152,39 +4131,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StorageVolumeListResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/report-6406/storages/s3/{bucket}/list": {
-      "get": {
-        "summary": "Получение списка файлов в S3 (тестовый)",
-        "tags": [
-          "Report 6406 - Storage"
-        ],
-        "description": "Возвращает список файлов в указанном bucket (только для тестирования).",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "maxLength": 255
-            },
-            "in": "path",
-            "name": "bucket",
-            "required": true,
-            "description": "Имя bucket в S3"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/S3BucketListResponseDto"
                 }
               }
             }
