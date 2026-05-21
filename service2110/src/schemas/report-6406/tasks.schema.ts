@@ -5,6 +5,7 @@ import { currencyIdSchema, currencySchema } from './enums/CurrencyEnum.ts';
 import { FileFormatEnum, fileFormatSchema } from './enums/FileFormatEnum.ts';
 import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
+import { taskListSortColumnSchema } from './enums/TaskListSortColumnEnum.ts';
 import { dateRangeRefinement, dateSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
@@ -109,21 +110,9 @@ export const taskListItemSchema = baseTaskSchema.extend({
 
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
 
-/**
- * Допустимые колонки для сортировки списка заданий (детерминированный набор),
- * Набор полей скорее всего изменится
- */
-export const taskListSortColumnSchema = z.enum([
-  'createdAt',
-  'taskStatus',
-  'reportType',
-  'periodFrom',
-  'periodTo',
-  'createdBy'
-]);
-
 export type TaskListSortColumn = z.infer<typeof taskListSortColumnSchema>;
 
+export { taskListSortColumnSchema };
 
 /** Схема сортировки для списка заданий (колонка — enum) */
 export const tasksListSortingSchema = z.object({

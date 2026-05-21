@@ -24,6 +24,9 @@ import { CurrencyEnumSchema } from '../../schemas/report-6406/enums/CurrencyEnum
 import { FileFormatEnumSchema } from '../../schemas/report-6406/enums/FileFormatEnum.ts';
 import { TaskStatusEnumSchema } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
 import { StorageCodeEnumSwaggerSchema } from '../../schemas/report-6406/enums/StorageCodeEnum.ts';
+import { TaskListSortColumnEnumSchema } from '../../schemas/report-6406/enums/TaskListSortColumnEnum.ts';
+import { PackageListSortColumnEnumSchema } from '../../schemas/report-6406/enums/PackageListSortColumnEnum.ts';
+import { TaskFileSortByEnumSchema } from '../../schemas/report-6406/enums/TaskFileSortByEnum.ts';
 import { InventoryProcessStatusEnumSchema } from '../../schemas/inventory/enums/InventoryProcessStatusEnum.ts';
 
 type CustomFastifyInstance = FastifyInstance<
@@ -49,6 +52,9 @@ const swaggerExtendedEnumJsonSchemas: Record<string, Record<string, unknown>> = 
   FileFormatEnum: FileFormatEnumSchema,
   TaskStatusEnum: TaskStatusEnumSchema,
   StorageCodeEnum: StorageCodeEnumSwaggerSchema,
+  TaskListSortColumnEnum: TaskListSortColumnEnumSchema,
+  PackageListSortColumnEnum: PackageListSortColumnEnumSchema,
+  TaskFileSortByEnum: TaskFileSortByEnumSchema,
   InventoryProcessStatusEnum: InventoryProcessStatusEnumSchema,
 };
 

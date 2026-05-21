@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { SortOrderEnum, sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { fileStatusZodSchema } from './enums/FileStatusEnum.ts';
+import { TaskFileSortByEnum, taskFileSortBySchema } from './enums/TaskFileSortByEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationMetadataSchema, paginationQuerySchema } from '../common/pagination.schema.ts';
 
@@ -25,17 +26,15 @@ export const taskFilePathParamsSchema = z.object({
   fileId: zIdSchema,
 });
 
-/**
- * Допустимые колонки для сортировки файлов задания (presigned/retry endpoints).
- */
-export const taskFileSortBySchema = z.enum(['status', 'fileName', 'fileSize', 'createdAt']);
 export type TaskFileSortBy = z.infer<typeof taskFileSortBySchema>;
+
+export { taskFileSortBySchema };
 
 /**
  * Параметры списка файлов: пагинация, сортировка, фильтр по статусу.
  */
 export const taskFilesQuerySchema = paginationQuerySchema.extend({
-  sortBy: taskFileSortBySchema.default('status'),
+  sortBy: taskFileSortBySchema.default(TaskFileSortByEnum.STATUS),
   sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
   status: z.array(fileStatusZodSchema).optional(),
 });

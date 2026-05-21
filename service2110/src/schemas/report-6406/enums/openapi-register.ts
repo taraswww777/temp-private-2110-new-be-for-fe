@@ -5,7 +5,10 @@
 import './CurrencyEnum.ts';
 import './FileFormatEnum.ts';
 import './FileStatusEnum.ts';
+import './PackageListSortColumnEnum.ts';
 import './PackageStatusEnum.ts';
 import './ReportTypeEnum.ts';
+import './TaskFileSortByEnum.ts';
+import './TaskListSortColumnEnum.ts';
 import './TaskStatusEnum.ts';
 import './StorageCodeEnum.ts';

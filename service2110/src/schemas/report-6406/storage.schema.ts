@@ -1,12 +1,13 @@
 import { z } from 'zod';
 
+import { storageCodeZodSchema } from './enums/StorageCodeEnum.ts';
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
 
 /**
  * Информация о хранилище (StorageResponse по новому OAS).
  */
 export const storageResponseSchema = z.object({
-  code: z.string().max(255).describe('Код хранилища'),
+  code: storageCodeZodSchema,
   totalSize: z.number().int().min(0).describe('Общий объём хранилища в Mb'),
   freeSize: z.number().int().min(0).describe('Свободный размер хранилища в Mb'),
   percent: z.number().min(0).describe('Процент заполнения (0–100)'),

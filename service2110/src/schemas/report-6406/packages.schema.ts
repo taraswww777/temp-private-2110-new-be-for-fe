@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { packageStatusSchema } from './enums/PackageStatusEnum.ts';
+import { packageListSortColumnSchema } from './enums/PackageListSortColumnEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
@@ -57,16 +58,7 @@ export const packageIdPathParamSchema = z.object({
   packageId: zIdSchema.describe('ИД пакета'),
 });
 
-/**
- * Допустимые колонки для сортировки списка пакетов (детерминированный набор).
- */
-export const packageListSortColumnSchema = z.enum([
-  'createdAt',
-  'name',
-  'tasksCount',
-  'totalSize',
-]);
-
+export { packageListSortColumnSchema };
 
 /** Схема сортировки для списка заданий (колонка — enum) */
 export const packageListSortingSchema = z.object({

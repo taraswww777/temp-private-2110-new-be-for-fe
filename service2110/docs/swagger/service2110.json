@@ -377,6 +377,66 @@
           }
         ]
       },
+      "TaskListSortColumnEnum": {
+        "type": "string",
+        "enum": [
+          "createdAt",
+          "taskStatus",
+          "reportType",
+          "periodFrom",
+          "periodTo",
+          "createdBy"
+        ],
+        "description": "Колонка для сортировки списка заданий",
+        "x-enum-descriptions": [
+          "Дата создания",
+          "Статус задания",
+          "Тип отчёта",
+          "Начало отчётного периода",
+          "Конец отчётного периода",
+          "Автор задания"
+        ],
+        "x-enum-varnames": [
+          "CREATED_AT",
+          "TASK_STATUS",
+          "REPORT_TYPE",
+          "PERIOD_FROM",
+          "PERIOD_TO",
+          "CREATED_BY"
+        ],
+        "oneOf": [
+          {
+            "const": "createdAt",
+            "description": "Дата создания",
+            "title": "CREATED_AT"
+          },
+          {
+            "const": "taskStatus",
+            "description": "Статус задания",
+            "title": "TASK_STATUS"
+          },
+          {
+            "const": "reportType",
+            "description": "Тип отчёта",
+            "title": "REPORT_TYPE"
+          },
+          {
+            "const": "periodFrom",
+            "description": "Начало отчётного периода",
+            "title": "PERIOD_FROM"
+          },
+          {
+            "const": "periodTo",
+            "description": "Конец отчётного периода",
+            "title": "PERIOD_TO"
+          },
+          {
+            "const": "createdBy",
+            "description": "Автор задания",
+            "title": "CREATED_BY"
+          }
+        ]
+      },
       "FormatDto": {
         "type": "object",
         "properties": {
@@ -420,17 +480,6 @@
           "addedAt"
         ],
         "additionalProperties": false
-      },
-      "TaskListSortColumnEnum": {
-        "type": "string",
-        "enum": [
-          "createdAt",
-          "taskStatus",
-          "reportType",
-          "periodFrom",
-          "periodTo",
-          "createdBy"
-        ]
       },
       "TasksListSortingDto": {
         "type": "object",
@@ -945,6 +994,50 @@
           }
         ]
       },
+      "TaskFileSortByEnum": {
+        "type": "string",
+        "enum": [
+          "status",
+          "fileName",
+          "fileSize",
+          "createdAt"
+        ],
+        "description": "Колонка для сортировки файлов задания",
+        "x-enum-descriptions": [
+          "Статус файла",
+          "Имя файла",
+          "Размер файла",
+          "Дата создания"
+        ],
+        "x-enum-varnames": [
+          "STATUS",
+          "FILE_NAME",
+          "FILE_SIZE",
+          "CREATED_AT"
+        ],
+        "oneOf": [
+          {
+            "const": "status",
+            "description": "Статус файла",
+            "title": "STATUS"
+          },
+          {
+            "const": "fileName",
+            "description": "Имя файла",
+            "title": "FILE_NAME"
+          },
+          {
+            "const": "fileSize",
+            "description": "Размер файла",
+            "title": "FILE_SIZE"
+          },
+          {
+            "const": "createdAt",
+            "description": "Дата создания",
+            "title": "CREATED_AT"
+          }
+        ]
+      },
       "TaskFilePathParamsDto": {
         "type": "object",
         "properties": {
@@ -960,15 +1053,6 @@
           "fileId"
         ],
         "additionalProperties": false
-      },
-      "TaskFileSortByEnum": {
-        "type": "string",
-        "enum": [
-          "status",
-          "fileName",
-          "fileSize",
-          "createdAt"
-        ]
       },
       "TaskFilesQueryDto": {
         "type": "object",
@@ -1245,6 +1329,50 @@
           "$ref": "#/components/schemas/PackStatusHistoryResponseDto"
         }
       },
+      "PackageListSortColumnEnum": {
+        "type": "string",
+        "enum": [
+          "createdAt",
+          "name",
+          "tasksCount",
+          "totalSize"
+        ],
+        "description": "Колонка для сортировки списка пакетов",
+        "x-enum-descriptions": [
+          "Дата создания",
+          "Название пакета",
+          "Количество заданий",
+          "Общий размер"
+        ],
+        "x-enum-varnames": [
+          "CREATED_AT",
+          "NAME",
+          "TASKS_COUNT",
+          "TOTAL_SIZE"
+        ],
+        "oneOf": [
+          {
+            "const": "createdAt",
+            "description": "Дата создания",
+            "title": "CREATED_AT"
+          },
+          {
+            "const": "name",
+            "description": "Название пакета",
+            "title": "NAME"
+          },
+          {
+            "const": "tasksCount",
+            "description": "Количество заданий",
+            "title": "TASKS_COUNT"
+          },
+          {
+            "const": "totalSize",
+            "description": "Общий размер",
+            "title": "TOTAL_SIZE"
+          }
+        ]
+      },
       "PackageIdPathParamDto": {
         "type": "object",
         "properties": {
@@ -1257,15 +1385,6 @@
           "packageId"
         ],
         "additionalProperties": false
-      },
-      "PackageListSortColumnEnum": {
-        "type": "string",
-        "enum": [
-          "createdAt",
-          "name",
-          "tasksCount",
-          "totalSize"
-        ]
       },
       "PackageListSortingDto": {
         "type": "object",
@@ -1651,46 +1770,6 @@
         ],
         "additionalProperties": false
       },
-      "StorageResponse": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "maxLength": 255,
-            "description": "Код хранилища"
-          },
-          "totalSize": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общий объём хранилища в Mb"
-          },
-          "freeSize": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Свободный размер хранилища в Mb"
-          },
-          "percent": {
-            "type": "number",
-            "minimum": 0,
-            "description": "Процент заполнения (0–100)"
-          }
-        },
-        "required": [
-          "code",
-          "totalSize",
-          "freeSize",
-          "percent"
-        ],
-        "additionalProperties": false
-      },
-      "StorageVolumeListResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/StorageResponse"
-        }
-      },
       "StorageCodeEnum": {
         "type": "string",
         "enum": [
@@ -1726,6 +1805,44 @@
             "title": "ARCHIVE"
           }
         ]
+      },
+      "StorageResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/StorageCodeEnum"
+          },
+          "totalSize": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общий объём хранилища в Mb"
+          },
+          "freeSize": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Свободный размер хранилища в Mb"
+          },
+          "percent": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Процент заполнения (0–100)"
+          }
+        },
+        "required": [
+          "code",
+          "totalSize",
+          "freeSize",
+          "percent"
+        ],
+        "additionalProperties": false
+      },
+      "StorageVolumeListResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/StorageResponse"
+        }
       },
       "ExportTasksResponseDto": {
         "type": "object",
