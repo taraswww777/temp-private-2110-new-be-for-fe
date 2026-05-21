@@ -157,14 +157,20 @@ export const getTasksRequestSchema = z.object({
 export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;
 
 /**
- * Схема для ответа POST /api/v1/report-6406/tasks/list (пагинированный список)
+ * Схема для ответа POST /api/v1/report-6406/tasks/list (TaskListResponseDto).
  */
-export const tasksListResponseSchema = z.object({
-  items: z.array(taskListItemSchema).describe('Список заданий'),
+export const taskListResponseSchema = z.object({
+  results: z.array(taskListItemSchema).describe('Список заданий'),
   totalItems: z.number().int().min(0).describe('Общее количество заданий'),
 });
 
-export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
+export type TaskListResponse = z.infer<typeof taskListResponseSchema>;
+
+/** @deprecated используйте taskListResponseSchema */
+export const tasksListResponseSchema = taskListResponseSchema;
+
+/** @deprecated используйте TaskListResponse */
+export type TasksListResponse = TaskListResponse;
 
 (function registerTasksReport6406OpenApi() {
   registerReport6406OpenApiSchema(taskPackageInfoSchema, 'TaskPackageInfoDto');
@@ -174,7 +180,7 @@ export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
   registerReport6406OpenApiSchema(taskListItemSchema, 'TaskListItemDto');
   registerReport6406OpenApiSchema(tasksListFilterSchema, 'TasksListFilterDto');
   registerReport6406OpenApiSchema(getTasksRequestSchema, 'GetTasksRequestDto');
-  registerReport6406OpenApiSchema(tasksListResponseSchema, 'TasksListResponseDto');
+  registerReport6406OpenApiSchema(taskListResponseSchema, 'TaskListResponseDto');
   registerReport6406OpenApiSchema(taskDetailSchema, 'TaskDetailResponseDto');
 })();
 

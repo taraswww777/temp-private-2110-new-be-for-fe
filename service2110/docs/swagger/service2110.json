@@ -771,10 +771,10 @@
         ],
         "additionalProperties": false
       },
-      "TasksListResponseDto": {
+      "TaskListResponseDto": {
         "type": "object",
         "properties": {
-          "items": {
+          "results": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TaskListItemDto"
@@ -789,7 +789,7 @@
           }
         },
         "required": [
-          "items",
+          "results",
           "totalItems"
         ],
         "additionalProperties": false
@@ -3587,7 +3587,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TasksListResponseDto"
+                  "$ref": "#/components/schemas/TaskListResponseDto"
                 }
               }
             }

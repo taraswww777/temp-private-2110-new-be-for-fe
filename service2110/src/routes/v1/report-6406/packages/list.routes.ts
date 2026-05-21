@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
@@ -8,10 +7,10 @@ import {
 } from '../../../../schemas/report-6406/packages.schema';
 
 /**
- * GET /api/v1/report-6406/packages
- * Получить список пакетов с пагинацией
- * 
- * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
+ * POST /api/v1/report-6406/packages/list
+ * Поиск пакетов с фильтрацией
+ *
+ * MOCK: Возвращает пустой список для генерации Swagger-спецификации
  */
 export const listPackagesRoute: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -27,6 +26,6 @@ export const listPackagesRoute: FastifyPluginAsync = async (fastify) => {
       },
     },
   }, async (_request, reply) => {
-    return reply.status(200).send({} as any);
+    return reply.status(200).send({ results: [], totalItems: 0 });
   });
 };
