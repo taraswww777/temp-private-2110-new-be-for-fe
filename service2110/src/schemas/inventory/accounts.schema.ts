@@ -119,6 +119,7 @@ export const inventoryAccountHistoryRequestSchema = z.object({
 export const inventoryAccountHistoryResponseSchema = z.object({
   items: z.array(inventoryAccountHistoryItemSchema),
   totalItems: z.number().int().min(0),
+  nextElement: inventoryAccountHistoryItemSchema.optional(),
 });
 
 export const inventoryAccountIdParamSchema = z.object({
