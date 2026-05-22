@@ -6,7 +6,7 @@ import { z } from 'zod';
 import {
   retryFileConversionResponseSchema,
   taskFilePathParamsSchema,
-  taskFilesQuerySchema,
+  taskFilesRequestSchema,
   taskFilesResponseSchema,
   taskFileUrlResponseSchema,
 } from '../../../../schemas/report-6406/task-files.schema.ts';
@@ -16,18 +16,18 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   /**
-   * GET /api/v1/report-6406/tasks/:id/files
-   * Получить список файлов задания
+   * POST /api/v1/report-6406/tasks/:id/files
+   * Получить список файлов задания с пагинацией
    *
    * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
    */
-  app.get('/:id/files', {
+  app.post('/:id/files', {
     schema: {
       tags: [OpenApiTag.Report6406Tasks],
-      summary: 'Получить список файлов задания',
-      description: 'Возвращает список файлов без pre-signed URLs для скачивания.',
+      summary: 'Получение файлов задачи с пагинацией',
+      description: 'Возвращает список файлов задачи с поддержкой пагинации.',
       params: idParamSchema,
-      querystring: taskFilesQuerySchema,
+      body: taskFilesRequestSchema,
       response: {
         200: taskFilesResponseSchema,
       },
@@ -37,8 +37,8 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   /**
-   * GET /api/v1/report-6406/tasks/files/presigned-urls
-   * Получить список файлов задания
+   * POST /api/v1/report-6406/tasks/files/presigned-urls
+   * Получить presigned URL для скачивания файлов
    *
    * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
    */
@@ -59,7 +59,7 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
   /**
    * POST /api/v1/report-6406/tasks/:taskId/files/:fileId/retry
    * Повторить конвертацию файла с ошибкой (экспериментальный endpoint)
-   * 
+   *
    * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
    */
   app.post('/:taskId/files/:fileId/retry', {

@@ -7,19 +7,19 @@ export const storageRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   /**
-   * GET /api/v1/report-6406/storage/volume
-   * Получить массив хранилищ с объёмом (корзина 1, корзина 2, ТФР и т.д.)
+   * GET /api/v1/report-6406/storages/volume
+   * Получить информацию об объёме хранилищ
    */
   app.get('/volume', {
     schema: {
       tags: [OpenApiTag.Report6406Storage],
-      summary: 'Получить объём хранилищ',
-      description: 'Возвращает массив сущностей по одному на каждое хранилище (корзина 1, корзина 2, ТФР). Каждый элемент содержит id, name, code, totalHuman, freeHuman, percent для отображения и key в JSX.',
+      summary: 'Получение информации о хранилищах',
+      description: 'Возвращает информацию об объёме и свободном месте в хранилищах.',
       response: {
         200: storageVolumeListResponseSchema,
       },
     },
-  }, async (request, reply) => {
-    return reply.status(200).send({} as never);
+  }, async (_request, reply) => {
+    return reply.status(200).send([] as never);
   });
 };

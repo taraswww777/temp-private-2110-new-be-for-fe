@@ -5,12 +5,12 @@ import { zIdSchema } from '../common/id.schema.ts';
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
 
 /**
- * Схема для филиала
+ * Схема для филиала (BranchDto).
  */
 export const branchSchema = z.object({
   id: zIdSchema.describe('ИД филиала'),
-  codeCB: z.string().describe('Код ЦБ'),
-  name: z.string().describe('Название филиала'),
+  codeCb: z.string().max(255).describe('Код ЦБ'),
+  name: z.string().max(255).describe('Название филиала'),
 });
 
 export type Branch = z.infer<typeof branchSchema>;
@@ -23,11 +23,12 @@ export const branchesResponseSchema = z.array(branchSchema);
 export type BranchesResponse = z.infer<typeof branchesResponseSchema>;
 
 /**
- * Схема для валюты
+ * Схема для валюты (CurrencyDto).
  */
 export const currencySchema = z.object({
-  code: z.string(),
-  name: z.string(),
+  id: zIdSchema.describe('ИД валюты'),
+  code: z.string().max(255).describe('Код валюты'),
+  name: z.string().max(255).describe('Название валюты'),
 });
 
 export type Currency = z.infer<typeof currencySchema>;
@@ -40,12 +41,13 @@ export const currenciesResponseSchema = z.array(currencySchema);
 export type CurrenciesResponse = z.infer<typeof currenciesResponseSchema>;
 
 /**
- * Схема для источника
+ * Схема для источника (SourceDto).
  */
 export const sourceSchema = z.object({
-  code: z.string(),
-  name: z.string(),
-  ris: z.string().nullable(),
+  id: zIdSchema.describe('ИД источника'),
+  code: z.string().max(255).describe('Код источника'),
+  name: z.string().max(255).describe('Название источника'),
+  ris: z.string().max(255).nullable().describe('RIS'),
 });
 
 export type Source = z.infer<typeof sourceSchema>;
@@ -82,32 +84,41 @@ export const employeeLoginPathParamSchema = z.object({
 });
 
 /**
- * Схема для маски счета (связанный список)
+ * Счёт (AccountDto по новому OAS).
  */
-export const accountMaskItemSchema = z.object({
-  firstAccount: z.string(),
-  secondAccounts: z.array(z.string())
+export const accountSchema = z.object({
+  secondAccounts: z.array(z.string().max(255)).describe('Счета второго порядка'),
 });
+
+export type Account = z.infer<typeof accountSchema>;
+
+/**
+ * Ответ GET /dictionaries/accounts.
+ */
+export const accountsResponseSchema = z.array(accountSchema);
+
+export type AccountsResponse = z.infer<typeof accountsResponseSchema>;
+
+/** @deprecated используйте accountSchema */
+export const accountMaskItemSchema = accountSchema;
 
 export type AccountMaskItem = z.infer<typeof accountMaskItemSchema>;
 
-/**
- * Схема для ответа со списком масок счетов
- */
-export const accountMasksResponseSchema = z.array(accountMaskItemSchema);
+/** @deprecated используйте accountsResponseSchema */
+export const accountMasksResponseSchema = accountsResponseSchema;
 
 export type AccountMasksResponse = z.infer<typeof accountMasksResponseSchema>;
 
 (function registerReport6406DictionaryOpenApi() {
   registerReport6406OpenApiSchema(employeeLoginPathParamSchema, 'Report6406DictEmployeeLoginPathParamDto');
-  registerReport6406OpenApiSchema(branchSchema, 'Report6406DictBranchDto');
-  registerReport6406OpenApiSchema(branchesResponseSchema, 'Report6406DictBranchesResponseDto');
-  registerReport6406OpenApiSchema(currencySchema, 'Report6406DictCurrencyDto');
-  registerReport6406OpenApiSchema(currenciesResponseSchema, 'Report6406DictCurrenciesResponseDto');
-  registerReport6406OpenApiSchema(sourceSchema, 'Report6406DictSourceDto');
-  registerReport6406OpenApiSchema(sourcesResponseSchema, 'Report6406DictSourcesResponseDto');
+  registerReport6406OpenApiSchema(branchSchema, 'BranchDto');
+  registerReport6406OpenApiSchema(branchesResponseSchema, 'BranchesResponseDto');
+  registerReport6406OpenApiSchema(currencySchema, 'CurrencyDto');
+  registerReport6406OpenApiSchema(currenciesResponseSchema, 'CurrenciesResponseDto');
+  registerReport6406OpenApiSchema(sourceSchema, 'SourceDto');
+  registerReport6406OpenApiSchema(sourcesResponseSchema, 'SourcesResponseDto');
   registerReport6406OpenApiSchema(employeeSchema, 'Report6406DictEmployeeDto');
   registerReport6406OpenApiSchema(employeeResponseSchema, 'Report6406DictEmployeeResponseDto');
-  registerReport6406OpenApiSchema(accountMaskItemSchema, 'AccountMaskItemDto');
-  registerReport6406OpenApiSchema(accountMasksResponseSchema, 'AccountMasksResponseDto');
+  registerReport6406OpenApiSchema(accountSchema, 'AccountDto');
+  registerReport6406OpenApiSchema(accountsResponseSchema, 'AccountsResponseDto');
 })();

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { packageStatusSchema } from './enums/PackageStatusEnum.ts';
+import { packageListSortColumnSchema } from './enums/PackageListSortColumnEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
@@ -13,7 +14,7 @@ import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
 export const basePackageSchema = z.object({
   id: zIdSchema.describe('ИД пакета'),
   name: z.string().min(1).max(255).describe('Название пакета'),
-  createdAt: z.iso.datetime().describe('Дата и время создания пакета'),
+  createdAt: z.iso.datetime().describe('Дата и время создания пакета, например 2026-04-30T12:20:50.979Z'),
   createdBy: z.string().min(1).max(255).describe('Логин сотрудника, создавшего пакет'),
   lastCopiedToTfrAt: z.iso.datetime().nullable().describe('Дата последнего копирования в ТФР (ISO 8601), например  2026-04-30T12:20:50.979Z'),
   totalTasksCount: z.number().int().min(0).describe('Количество заданий в пакете').default(0),
@@ -57,16 +58,7 @@ export const packageIdPathParamSchema = z.object({
   packageId: zIdSchema.describe('ИД пакета'),
 });
 
-/**
- * Допустимые колонки для сортировки списка пакетов (детерминированный набор).
- */
-export const packageListSortColumnSchema = z.enum([
-  'createdAt',
-  'name',
-  'tasksCount',
-  'totalSize',
-]);
-
+export { packageListSortColumnSchema };
 
 /** Схема сортировки для списка заданий (колонка — enum) */
 export const packageListSortingSchema = z.object({
@@ -74,48 +66,61 @@ export const packageListSortingSchema = z.object({
   sortBy: packageListSortColumnSchema.describe('Колонка для сортировки'),
 }).describe('Параметры сортировки (колонка — фиксированный набор)');
 
-
 /**
- * Схема фильтров для списка заданий.
- * Имена полей согласованы с baseTaskSchema.
- * Все поля optional — отсутствие поля (undefined/null) означает, что оно не участвует в фильтрации.
+ * Фильтры списка пакетов (PackFilterDto по новому OAS).
  */
-export const packageListFilterSchema = z.object({
-  packageId: zIdSchema.optional().describe('ID пакета'),
-  name: z.string().describe('Наименование пакета').optional(),
-  packageStatus: z.array(packageStatusSchema).optional().describe('Статусы заданий'),
-  createdAtFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
-  createdAtTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
-
-  copiedFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
-  copiedTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
-
-  isEmpty: z.boolean().default(false).optional().describe('Показать пустые пакеты'),
-  /** без интеграции с карточкой фл этот фильтр createdByList не получится сделать нормально, будет много дефектов */
-  createdByList: z.array(z.string()).optional().describe('Логин создателя пакета'),
-  employee: z.string().describe('Сотрудник').optional(),
+export const packFilterSchema = z.object({
+  name: z.string().max(255).optional().describe('Наименование пакета'),
+  status: z.array(packageStatusSchema).optional().describe('Статусы пакета'),
+  createdFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601), например 2026-04-30T11:56:16.055Z'),
+  createdTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601), например 2026-04-30T11:56:16.055Z'),
+  createdBy: z.array(z.string()).optional().describe('Логины создателей пакета'),
+  isEmpty: z.boolean().optional().describe('Показать пустые пакеты'),
 });
 
+export type PackFilter = z.infer<typeof packFilterSchema>;
+
+/** @deprecated используйте packFilterSchema */
+export const packageListFilterSchema = packFilterSchema;
+
 /**
- * Схема для query параметров списка пакетов (GET /api/v1/report-6406/packages).
- * Включает пагинацию, сортировку и поиск по названию.
+ * Схема тела POST /api/v1/report-6406/packages/list (GetPacksRequestDto).
  */
 export const getPackageListRequestSchema = z.object({
   pagination: paginationQuerySchema,
   sorting: packageListSortingSchema,
-  filter: packageListFilterSchema,
+  filter: packFilterSchema,
 });
 
 /**
- * Схема для ответа GET /api/v1/report-6406/packages (пагинированный список пакетов).
+ * Элемент списка пакетов (PackListItemDto).
  */
-export const getPackageListResponseSchema = z.object({
-  items: z.array(packageSchema).describe('Список пакетов'),
-  totalItems: z.number().int().min(0).describe('Общее количество заданий'),
+export const packListItemSchema = z.object({
+  id: zIdSchema.describe('ИД пакета'),
+  name: z.string().max(255).describe('Название пакета'),
+  status: packageStatusSchema.describe('Текущий статус пакета'),
+  totalFilesSize: z.number().int().min(0).describe('Общий размер пакета в мегабайтах').default(0),
+  lastCopiedToTfrAt: z.iso.datetime().nullable().describe('Дата последнего копирования в ТФР (ISO 8601), например 2026-04-30T12:20:50.979Z'),
+  createdAt: z.iso.datetime().describe('Дата и время создания пакета, например 2026-04-30T12:20:50.979Z'),
+  createdBy: z.string().max(255).describe('Логин создателя пакета'),
 });
 
-export type PackagesListResponse = z.infer<typeof getPackageListResponseSchema>;
+export type PackListItem = z.infer<typeof packListItemSchema>;
 
+/**
+ * Ответ POST /api/v1/report-6406/packages/list (PacksListResponseDto).
+ */
+export const packsListResponseSchema = z.object({
+  results: z.array(packListItemSchema).describe('Список пакетов'),
+  totalItems: z.number().int().min(0).describe('Общее количество пакетов'),
+});
+
+export type PacksListResponse = z.infer<typeof packsListResponseSchema>;
+
+/** @deprecated используйте packsListResponseSchema */
+export const getPackageListResponseSchema = packsListResponseSchema;
+
+export type PackagesListResponse = z.infer<typeof getPackageListResponseSchema>;
 
 /**
  * Схема для ответа при обновлении пакета (PUT /api/v1/report-6406/packages/{id}).
@@ -124,7 +129,7 @@ export type PackagesListResponse = z.infer<typeof getPackageListResponseSchema>;
 export const updatePackageResponseSchema = z.object({
   id: zIdSchema.describe('ИД пакета'),
   name: z.string().describe('Обновлённое название пакета'),
-  updatedAt: z.iso.datetime().describe('Дата и время обновления'),
+  updatedAt: z.iso.datetime().describe('Дата и время обновления, например 2026-04-30T12:20:50.979Z'),
 });
 
 export type UpdatePackageResponse = z.infer<typeof updatePackageResponseSchema>;
@@ -139,36 +144,55 @@ export const addTasksToPackageSchema = z.object({
 export type AddTasksToPackageInput = z.infer<typeof addTasksToPackageSchema>;
 
 /**
+ * Запрос на передачу/удаление пакетов в TFR (PackTransferRequest).
+ */
+export const packTransferRequestSchema = z.object({
+  packIds: z.array(zIdSchema).min(1).describe('Идентификаторы пакетов'),
+});
+
+export type PackTransferRequest = z.infer<typeof packTransferRequestSchema>;
+
+/**
  * Схема для ответа при копировании пакета в ТФР (POST /api/v1/report-6406/packages/{id}/copy-to-tfr).
  * Возвращает информацию об успешном копировании.
  */
 export const copyToTfrResponseSchema = z.object({
   id: zIdSchema.describe('ИД пакета'),
-  lastCopiedToTfrAt: z.iso.datetime().describe('Дата и время последнего копирования в ТФР'),
+  lastCopiedToTfrAt: z.iso.datetime().describe('Дата и время последнего копирования в ТФР, например 2026-04-30T12:20:50.979Z'),
   message: z.string().describe('Сообщение о результате операции'),
 });
 
 export type CopyToTfrResponse = z.infer<typeof copyToTfrResponseSchema>;
 
-export const packageTfrResponseSchema = z.object({
-  packageId: zIdSchema.describe('ИД пакета'),
-  packageName: z.string().describe('Имя пакета'),
-  tfrCopyDate: z.iso.datetime().describe('Дата и время копирования в ТФР'),
+/**
+ * Информация о пакете в TFR (PackTfrInfoDto).
+ */
+export const packTfrInfoSchema = z.object({
+  packId: zIdSchema.describe('ИД пакета'),
+  packName: z.string().max(255).describe('Имя пакета'),
+  tfrCopyDate: z.string().max(255).describe('Дата копирования в TFR, например 2026-04-30T12:20:50.979Z'),
   size: z.number().int().min(0).describe('Размер пакета в мегабайтах').default(0),
 });
+
+export type PackTfrInfo = z.infer<typeof packTfrInfoSchema>;
+
+/** @deprecated используйте packTfrInfoSchema */
+export const packageTfrResponseSchema = packTfrInfoSchema;
 
 (function registerPackagesReport6406OpenApi() {
   registerReport6406OpenApiSchema(packageIdPathParamSchema, 'PackageIdPathParamDto');
   registerReport6406OpenApiSchema(packageListSortColumnSchema, 'PackageListSortColumnEnum');
   registerReport6406OpenApiSchema(packageListSortingSchema, 'PackageListSortingDto');
-  registerReport6406OpenApiSchema(packageListFilterSchema, 'PackageListFilterDto');
+  registerReport6406OpenApiSchema(packFilterSchema, 'PackFilterDto');
   registerReport6406OpenApiSchema(createPackageSchema, 'CreatePackageDto');
   registerReport6406OpenApiSchema(updatePackageSchema, 'UpdatePackageDto');
   registerReport6406OpenApiSchema(packageSchema, 'PackageDto');
-  registerReport6406OpenApiSchema(getPackageListRequestSchema, 'GetPackagesListRequestDto');
-  registerReport6406OpenApiSchema(getPackageListResponseSchema, 'PackagesListResponseDto');
+  registerReport6406OpenApiSchema(getPackageListRequestSchema, 'GetPacksRequestDto');
+  registerReport6406OpenApiSchema(packListItemSchema, 'PackListItemDto');
+  registerReport6406OpenApiSchema(packsListResponseSchema, 'PacksListResponseDto');
   registerReport6406OpenApiSchema(updatePackageResponseSchema, 'UpdatePackageResponseDto');
   registerReport6406OpenApiSchema(addTasksToPackageSchema, 'AddTasksToPackageRequestDto');
+  registerReport6406OpenApiSchema(packTransferRequestSchema, 'PackTransferRequest');
   registerReport6406OpenApiSchema(copyToTfrResponseSchema, 'CopyToTfrResponseDto');
-  registerReport6406OpenApiSchema(packageTfrResponseSchema, 'PackageTfrResponseDto');
+  registerReport6406OpenApiSchema(packTfrInfoSchema, 'PackTfrInfoDto');
 })();

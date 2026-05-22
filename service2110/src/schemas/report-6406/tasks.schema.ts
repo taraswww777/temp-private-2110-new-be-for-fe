@@ -5,6 +5,7 @@ import { currencyIdSchema, currencySchema } from './enums/CurrencyEnum.ts';
 import { FileFormatEnum, fileFormatSchema } from './enums/FileFormatEnum.ts';
 import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
+import { taskListSortColumnSchema } from './enums/TaskListSortColumnEnum.ts';
 import { dateRangeRefinement, dateSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
@@ -94,7 +95,7 @@ export const taskDetailSchema = baseTaskSchema.extend({
   accountList,
   secondOrderAccountList,
   operationType,
-  s3Path: z.string().optional().describe('ID папки в S3'),
+  s3FolderId: z.string().max(255).optional().describe('ID папки в S3'),
 }).superRefine(dateRangeRefinement());
 
 export type TaskDetails = z.infer<typeof taskDetailSchema>;
@@ -109,21 +110,9 @@ export const taskListItemSchema = baseTaskSchema.extend({
 
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
 
-/**
- * Допустимые колонки для сортировки списка заданий (детерминированный набор),
- * Набор полей скорее всего изменится
- */
-export const taskListSortColumnSchema = z.enum([
-  'createdAt',
-  'taskStatus',
-  'reportType',
-  'periodFrom',
-  'periodTo',
-  'createdBy'
-]);
-
 export type TaskListSortColumn = z.infer<typeof taskListSortColumnSchema>;
 
+export { taskListSortColumnSchema };
 
 /** Схема сортировки для списка заданий (колонка — enum) */
 export const tasksListSortingSchema = z.object({
@@ -168,14 +157,20 @@ export const getTasksRequestSchema = z.object({
 export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;
 
 /**
- * Схема для ответа POST /api/v1/report-6406/tasks/list (пагинированный список)
+ * Схема для ответа POST /api/v1/report-6406/tasks/list (TaskListResponseDto).
  */
-export const tasksListResponseSchema = z.object({
-  items: z.array(taskListItemSchema).describe('Список заданий'),
+export const taskListResponseSchema = z.object({
+  results: z.array(taskListItemSchema).describe('Список заданий'),
   totalItems: z.number().int().min(0).describe('Общее количество заданий'),
 });
 
-export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
+export type TaskListResponse = z.infer<typeof taskListResponseSchema>;
+
+/** @deprecated используйте taskListResponseSchema */
+export const tasksListResponseSchema = taskListResponseSchema;
+
+/** @deprecated используйте TaskListResponse */
+export type TasksListResponse = TaskListResponse;
 
 (function registerTasksReport6406OpenApi() {
   registerReport6406OpenApiSchema(taskPackageInfoSchema, 'TaskPackageInfoDto');
@@ -185,7 +180,7 @@ export type TasksListResponse = z.infer<typeof tasksListResponseSchema>;
   registerReport6406OpenApiSchema(taskListItemSchema, 'TaskListItemDto');
   registerReport6406OpenApiSchema(tasksListFilterSchema, 'TasksListFilterDto');
   registerReport6406OpenApiSchema(getTasksRequestSchema, 'GetTasksRequestDto');
-  registerReport6406OpenApiSchema(tasksListResponseSchema, 'TasksListResponseDto');
-  registerReport6406OpenApiSchema(taskDetailSchema, 'TaskDetailDto');
+  registerReport6406OpenApiSchema(taskListResponseSchema, 'TaskListResponseDto');
+  registerReport6406OpenApiSchema(taskDetailSchema, 'TaskDetailResponseDto');
 })();
 

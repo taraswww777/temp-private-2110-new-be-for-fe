@@ -2,23 +2,24 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { processRequestSchema, processResponseSchema } from '../../../../schemas/common/process.schema.ts';
+import { processResponseSchema } from '../../../../schemas/common/process.schema.ts';
+import { idListSchema } from '../../../../schemas/common/id.schema.ts';
 
 /**
- * DELETE /api/v1/report-6406/packages
- * Универсальное удаление пакетов (одного или нескольких)
- * 
+ * POST /api/v1/report-6406/packages/delete/packages
+ * Массовое удаление пакетов
+ *
  * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
  */
 export const deletePackagesRoute: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
-  app.delete('/', {
+  app.post('/delete/packages', {
     schema: {
       tags: [OpenApiTag.Report6406Packages],
-      summary: 'Удалить один или несколько пакетов',
-      description: 'Удаляет пакеты. Возвращает 200 OK с детальной информацией о результате операции для каждого пакета.',
-      body: processRequestSchema,
+      summary: 'Массовое удаление пакетов',
+      description: 'Удаляет пакеты по списку идентификаторов. Возвращает детальную информацию о результате операции для каждого пакета.',
+      body: idListSchema,
       response: {
         200: processResponseSchema,
       },
