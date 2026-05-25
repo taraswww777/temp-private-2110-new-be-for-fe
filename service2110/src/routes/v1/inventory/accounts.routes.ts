@@ -25,7 +25,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
       body: getInventoryAccountsListRequestSchema,
       response: { 200: inventoryAccountsListResponseSchema },
     },
-  }, async (_request, reply) => reply.status(200).send({ items: [], totalItems: 0 }));
+  }, async (_request, reply) => reply.status(200).send({ itemsList: [], totalItems: 0 }));
 
   app.get('/:accountId', {
     schema: {
@@ -71,7 +71,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
       body: inventoryAccountHistoryRequestSchema,
       response: { 200: inventoryAccountHistoryResponseSchema },
     },
-  }, async (_request, reply) => reply.status(200).send({ items: [], totalItems: 0 }));
+  }, async (_request, reply) => reply.status(200).send({ itemsList: [], totalItems: 0 }));
 
   app.patch('/:accountId/critical-update', {
     schema: {

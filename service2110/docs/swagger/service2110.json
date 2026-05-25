@@ -2742,7 +2742,7 @@
       "InventoryAccountsListResponseDto": {
         "type": "object",
         "properties": {
-          "items": {
+          "itemsList": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/InventoryAccountDetailDto"
@@ -2757,7 +2757,7 @@
           }
         },
         "required": [
-          "items",
+          "itemsList",
           "totalItems"
         ],
         "additionalProperties": false
@@ -3123,7 +3123,7 @@
       "InventoryAccountHistoryResponseDto": {
         "type": "object",
         "properties": {
-          "items": {
+          "itemsList": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/InventoryAccountHistoryItemDto"
@@ -3139,7 +3139,7 @@
           }
         },
         "required": [
-          "items",
+          "itemsList",
           "totalItems"
         ],
         "additionalProperties": false

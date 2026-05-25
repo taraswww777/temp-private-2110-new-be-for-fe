@@ -93,7 +93,7 @@ export const inventoryAccountRowSchema = z.object({
 export const inventoryAccountListItemSchema = inventoryAccountRowSchema;
 
 export const inventoryAccountsListResponseSchema = z.object({
-  items: z.array(inventoryAccountListItemSchema).describe('Список счетов'),
+  itemsList: z.array(inventoryAccountListItemSchema).describe('Список счетов'),
   totalItems: z.number().int().min(0).describe('Общее количество счетов'),
 });
 
@@ -117,7 +117,7 @@ export const inventoryAccountHistoryRequestSchema = z.object({
 })
 
 export const inventoryAccountHistoryResponseSchema = z.object({
-  items: z.array(inventoryAccountHistoryItemSchema),
+  itemsList: z.array(inventoryAccountHistoryItemSchema),
   totalItems: z.number().int().min(0),
   nextElement: inventoryAccountHistoryItemSchema.optional(),
 });
