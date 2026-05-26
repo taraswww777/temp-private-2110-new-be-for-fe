@@ -4,6 +4,7 @@ import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+import { dateTimeSchema } from '../common/dateString.schema.ts';
 
 /**
  * Схема для ответа экспорта
@@ -17,7 +18,7 @@ export const exportTasksResponseSchema = z.object({
     .int()
     .min(0)
     .describe('Размер экспортированного файла в байтах (например, 52428800 = 50 MB)'),
-  downloadUrlExpiresAt: z.iso.datetime().describe('Дата истечения срока действия ссылки'),
+  downloadUrlExpiresAt: dateTimeSchema.describe('Дата истечения срока действия ссылки'),
   recordsCount: z
     .number()
     .int()

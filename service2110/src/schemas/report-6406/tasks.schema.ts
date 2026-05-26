@@ -6,7 +6,7 @@ import { FileFormatEnum, fileFormatSchema } from './enums/FileFormatEnum.ts';
 import { sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 import { taskListSortColumnSchema } from './enums/TaskListSortColumnEnum.ts';
-import { dateRangeRefinement, dateSchema } from '../common/dateString.schema.ts';
+import { dateRangeRefinement, dateSchema, dateTimeSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 import { branchSchema, sourceSchema } from './references.schema.ts';
@@ -33,7 +33,7 @@ const operationType = reportTypeSchema.describe('Тип операции');
  */
 export const baseTaskSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
-  createdAt: z.iso.datetime().describe('Дата и время создания 2026-04-30T07:46:40.449Z'),
+  createdAt: dateTimeSchema.describe('Дата и время создания 2026-04-30T07:46:40.449Z'),
   createdBy: z.string().describe('Логин сотрудника, создавшего задание'),
   branchList: z.array(branchSchema).min(1).describe('Массив ИД филиалов').nonempty(),
   periodFrom: dateSchema.optional().describe('Дата начала отчётного периода 2023-01-01'),
@@ -42,7 +42,7 @@ export const baseTaskSchema = z.object({
   fileFormat: fileFormatSchema.describe('Формат файла').default(FileFormatEnum.TXT),
   taskStatus: taskStatusSchema.describe('Статус задания'),
   totalFilesSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан').default(0),
-  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления 2026-04-30T07:46:40.449Z'),
+  updatedAt: dateTimeSchema.describe('Дата и время последнего обновления 2026-04-30T07:46:40.449Z'),
   sourceList: z.array(sourceSchema).optional().describe('Источники данных'),
   filesCount: z.number().int().min(0).describe('Количество файлов').default(0),
   packageId: zIdSchema.optional().describe('ИД Пакета, в который входит задание'),
@@ -81,7 +81,7 @@ export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export const taskPackageInfoSchema = z.object({
   id: zIdSchema,
   name: z.string(),
-  addedAt: z.iso.datetime(),
+  addedAt: dateTimeSchema,
 });
 
 export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
@@ -139,8 +139,8 @@ export const tasksListFilterSchema = z.object({
   createdByList: z.array(z.string()).optional().describe('Логин создателя пакета'),
   periodFrom: dateSchema.optional().describe('Дата начала отчётного периода YYYY-MM-DD'),
   periodTo: dateSchema.optional().describe('Дата окончания отчётного периода YYYY-MM-DD'),
-  createdAtFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
-  createdAtTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
+  createdAtFrom: dateTimeSchema.optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
+  createdAtTo: dateTimeSchema.optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
 });
 
 export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;

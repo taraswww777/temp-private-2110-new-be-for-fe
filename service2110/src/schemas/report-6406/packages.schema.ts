@@ -6,6 +6,7 @@ import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+import { dateTimeSchema } from '../common/dateString.schema.ts';
 
 /**
  * Базовая схема пакета — все поля, общие для detail, list и create.
@@ -14,12 +15,12 @@ import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
 export const basePackageSchema = z.object({
   id: zIdSchema.describe('ИД пакета'),
   name: z.string().min(1).max(255).describe('Название пакета'),
-  createdAt: z.iso.datetime().describe('Дата и время создания пакета, например 2026-04-30T12:20:50.979Z'),
+  createdAt: dateTimeSchema.describe('Дата и время создания пакета, например 2026-04-30T12:20:50.979Z'),
   createdBy: z.string().min(1).max(255).describe('Логин сотрудника, создавшего пакет'),
-  lastCopiedToTfrAt: z.iso.datetime().nullable().describe('Дата последнего копирования в ТФР (ISO 8601), например  2026-04-30T12:20:50.979Z'),
+  lastCopiedToTfrAt: dateTimeSchema.nullable().describe('Дата последнего копирования в ТФР (ISO 8601), например  2026-04-30T12:20:50.979Z'),
   totalTasksCount: z.number().int().min(0).describe('Количество заданий в пакете').default(0),
   totalFilesSize: z.number().int().min(0).describe('Общий размер пакета в мегабайтах (сумма размеров всех файлов)').default(0),
-  updatedAt: z.iso.datetime().describe('Дата и время последнего обновления, например  2026-04-30T12:20:50.979Z'),
+  updatedAt: dateTimeSchema.describe('Дата и время последнего обновления, например  2026-04-30T12:20:50.979Z'),
   status: packageStatusSchema.describe('Текущий статус пакета'),
 });
 
@@ -72,8 +73,8 @@ export const packageListSortingSchema = z.object({
 export const packFilterSchema = z.object({
   name: z.string().max(255).optional().describe('Наименование пакета'),
   status: z.array(packageStatusSchema).optional().describe('Статусы пакета'),
-  createdFrom: z.iso.datetime().optional().describe('Дата создания от (ISO 8601), например 2026-04-30T11:56:16.055Z'),
-  createdTo: z.iso.datetime().optional().describe('Дата создания до (ISO 8601), например 2026-04-30T11:56:16.055Z'),
+  createdFrom: dateTimeSchema.optional(),
+  createdTo: dateTimeSchema.optional(),
   createdBy: z.array(z.string()).optional().describe('Логины создателей пакета'),
   isEmpty: z.boolean().optional().describe('Показать пустые пакеты'),
 });
@@ -100,8 +101,8 @@ export const packListItemSchema = z.object({
   name: z.string().max(255).describe('Название пакета'),
   status: packageStatusSchema.describe('Текущий статус пакета'),
   totalFilesSize: z.number().int().min(0).describe('Общий размер пакета в мегабайтах').default(0),
-  lastCopiedToTfrAt: z.iso.datetime().nullable().describe('Дата последнего копирования в ТФР (ISO 8601), например 2026-04-30T12:20:50.979Z'),
-  createdAt: z.iso.datetime().describe('Дата и время создания пакета, например 2026-04-30T12:20:50.979Z'),
+  lastCopiedToTfrAt: dateTimeSchema.nullable().describe('Дата последнего копирования в ТФР (ISO 8601), например 2026-04-30T12:20:50.979Z'),
+  createdAt: dateTimeSchema.describe('Дата и время создания пакета, например 2026-04-30T12:20:50.979Z'),
   createdBy: z.string().max(255).describe('Логин создателя пакета'),
 });
 
@@ -129,7 +130,7 @@ export type PackagesListResponse = z.infer<typeof getPackageListResponseSchema>;
 export const updatePackageResponseSchema = z.object({
   id: zIdSchema.describe('ИД пакета'),
   name: z.string().describe('Обновлённое название пакета'),
-  updatedAt: z.iso.datetime().describe('Дата и время обновления, например 2026-04-30T12:20:50.979Z'),
+  updatedAt: dateTimeSchema.describe('Дата и время обновления, например 2026-04-30T12:20:50.979Z'),
 });
 
 export type UpdatePackageResponse = z.infer<typeof updatePackageResponseSchema>;
@@ -158,7 +159,7 @@ export type PackTransferRequest = z.infer<typeof packTransferRequestSchema>;
  */
 export const copyToTfrResponseSchema = z.object({
   id: zIdSchema.describe('ИД пакета'),
-  lastCopiedToTfrAt: z.iso.datetime().describe('Дата и время последнего копирования в ТФР, например 2026-04-30T12:20:50.979Z'),
+  lastCopiedToTfrAt: dateTimeSchema.describe('Дата и время последнего копирования в ТФР, например 2026-04-30T12:20:50.979Z'),
   message: z.string().describe('Сообщение о результате операции'),
 });
 

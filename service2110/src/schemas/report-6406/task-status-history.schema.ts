@@ -4,6 +4,7 @@ import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+import { dateTimeSchema } from '../common/dateString.schema.ts';
 
 /**
  * Схема для записи истории статуса
@@ -12,7 +13,7 @@ export const taskStatusHistoryItemSchema = z.object({
   id: zIdSchema,
   taskId: zIdSchema,
   taskStatus: taskStatusSchema,
-  changedAt: z.iso.datetime().describe('Дата и время изменения'),
+  changedAt: dateTimeSchema.describe('Дата и время изменения'),
   changedBy: z.string().describe('Инициатор изменения. Логин или ФИО'),
   note: z.string().optional(),
 });
