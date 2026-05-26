@@ -10,3 +10,18 @@ export enum InventoryReportStatusEnum {
 export const inventoryReportStatusSchema = z
   .enum(InventoryReportStatusEnum)
   .describe('Статус формирования отчета');
+
+export enum InventoryUserRolesEnum {
+  INVENTORY = "inventory",
+  REPORTS = "6406u",
+}
+
+export const inventoryUserRolesSchema = z.enum(InventoryUserRolesEnum);
+
+export enum InventoryAssignmentsEnum {
+  ADMIN = "ADMIN",
+  MANAGER = "MANAGER",
+  USER = "USER",
+}
+
+export const inventoryAssignmentsSchema = z.enum(InventoryAssignmentsEnum);

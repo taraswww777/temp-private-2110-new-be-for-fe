@@ -2198,6 +2198,21 @@
         ],
         "description": "Статус формирования отчета"
       },
+      "InventoryUserRolesEnum": {
+        "type": "string",
+        "enum": [
+          "inventory",
+          "6406u"
+        ]
+      },
+      "InventoryAssignmentsEnum": {
+        "type": "string",
+        "enum": [
+          "ADMIN",
+          "MANAGER",
+          "USER"
+        ]
+      },
       "InventoryInventoryOrderIdParamDto": {
         "type": "object",
         "properties": {
@@ -3390,6 +3405,43 @@
         },
         "required": [
           "status"
+        ],
+        "additionalProperties": false
+      },
+      "inventoryRoleAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/InventoryUserRolesEnum"
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventoryAssignmentsEnum"
+            }
+          }
+        },
+        "required": [
+          "role",
+          "assignments"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryUserRolesResponseDto": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "roleAssignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/inventoryRoleAssignmentDto"
+            }
+          }
+        },
+        "required": [
+          "login"
         ],
         "additionalProperties": false
       }
@@ -5184,6 +5236,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InventoryAccountUpdatedResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/user/roles": {
+      "get": {
+        "summary": "Просмотр ролей пользователя",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryUserRolesResponseDto"
                 }
               }
             }

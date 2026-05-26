@@ -8,6 +8,7 @@ import {
   inventoryInventoryStateQuerySchema,
   inventoryInventoryStateResponseSchema,
   inventoryActiveStateSchema,
+  inventoryUserRolesResponseSchema,
 } from '../../../schemas/inventory/inventory-common.schema.ts';
 import z from 'zod';
 import { accountVersionedIdsSchema, inventoryAccountsExportRequestSchema, inventoryAccountsExportResponseSchema, inventoryAccountsListFilterSchema, inventoryAccountStatusSingleSchema, inventoryAccountUpdatedResponseSchema, inventoryManualUnitBulkRequestSchema } from '../../../schemas/inventory/accounts.schema.ts';
@@ -134,4 +135,12 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
       response: { 200: inventoryAccountsExportResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send([]));
+
+  app.get('/user/roles', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Просмотр ролей пользователя',
+      response: { 200: inventoryUserRolesResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ login: 'vtb1234567', roleAssignments: [] }));
 };
