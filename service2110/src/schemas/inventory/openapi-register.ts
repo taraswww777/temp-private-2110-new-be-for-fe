@@ -56,6 +56,8 @@ import {
 } from './statistics.schema.ts';
 import {
   inventoryActiveStateSchema,
+  inventoryRoleAssignmentSchema,
+  inventoryUserRolesResponseSchema,
   inventoryColumnSchema,
   inventoryColumnsResponseSchema,
   inventoryColumnsUpdateSchema,
@@ -137,4 +139,6 @@ export function registerInventoryOpenApiSchemas() {
   registerOpenApiComponent(inventoryInventoryStateResponseSchema, 'InventoryInventoryStateResponseDto');
   registerOpenApiComponent(inventoryReportExportItemSchema, 'InventoryReportExportItemDto');
   registerOpenApiComponent(inventoryActiveStateSchema, 'InventoryActiveStateDto');
+  registerOpenApiComponent(inventoryRoleAssignmentSchema, 'inventoryRoleAssignmentDto');
+  registerOpenApiComponent(inventoryUserRolesResponseSchema, 'InventoryUserRolesResponseDto');
 }

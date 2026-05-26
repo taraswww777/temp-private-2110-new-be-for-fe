@@ -1,5 +1,5 @@
 import { inventoryProcessStatusSchema } from './InventoryProcessStatusEnum.ts';
-import { inventoryReportStatusSchema } from './InventoryReportStatusEnum.ts';
+import { inventoryAssignmentsSchema, inventoryReportStatusSchema, inventoryUserRolesSchema } from './InventoryReportStatusEnum.ts';
 
 import { registerOpenApiComponent } from '../../utils/registerOpenApiComponent.ts';
 
@@ -9,4 +9,6 @@ import { registerOpenApiComponent } from '../../utils/registerOpenApiComponent.t
 export function registerInventoryEnumsOpenApiSchemas() {
   registerOpenApiComponent(inventoryProcessStatusSchema, 'InventoryProcessStatusEnum');
   registerOpenApiComponent(inventoryReportStatusSchema, 'InventoryReportStatusEnum');
+  registerOpenApiComponent(inventoryUserRolesSchema, 'InventoryUserRolesEnum');
+  registerOpenApiComponent(inventoryAssignmentsSchema, 'InventoryAssignmentsEnum');
 }
