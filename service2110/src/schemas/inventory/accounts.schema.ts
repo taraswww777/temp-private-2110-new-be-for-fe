@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { sortOrderSchema } from '../common/SortOrderEnum.ts';
-import { dateSchema, dateTimeSchema } from '../common/dateString.schema.ts';
+import { dateTimeSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
 import { zUuidSchema } from '../common/uuid.schema.ts';
@@ -55,14 +55,14 @@ export const getInventoryAccountsListRequestSchema = z.object({
 export const inventoryAccountRowSchema = z.object({
   accountId: zUuidSchema,
   accountNum: z.string().optional().describe('Номер счёта (DOC: accountNum)'),
-  accountOpenDate: dateSchema.optional(),
+  accountOpenDate: dateTimeSchema.optional(),
   accountType: zIdSchema.optional(),
   clientName: z.string().optional(),
   agreementNum: z.string().optional(),
   originalResponsibleUnit: z.string().optional(),
   bs2: zIdSchema.optional(),
   accountName: z.string().optional(),
-  lastOperationDate: dateSchema.optional(),
+  lastOperationDate: dateTimeSchema.optional(),
   agreementStatus: z.string().optional(),
   accountOutRubSum: inventoryDecimalSchema.optional(),
   accountOutSum: inventoryDecimalSchema.optional(),
@@ -76,14 +76,14 @@ export const inventoryAccountRowSchema = z.object({
   reversedCreditSumRub: inventoryDecimalSchema.optional(),
   reversedCreditSum: inventoryDecimalSchema.optional(),
   sourceBank: z.string().optional(),
-  dataDate: dateSchema.optional(),
+  dataDate: dateTimeSchema.optional(),
   currencyIsoCode: z.string().optional(),
   clientInn: z.string().optional(),
   discrepancyDescription: z.string().optional(),
   discrepancySum: inventoryDecimalSchema.optional(),
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
-  resolutionDate: dateSchema.optional(),
+  resolutionDate: dateTimeSchema.optional(),
   manualResponsibleUnit: z.string().optional(),
   isCriticalUpdated: z.boolean().optional(),
   version: zIdSchema,
@@ -107,7 +107,7 @@ export const inventoryAccountHistoryItemSchema = z.object({
   discrepancySum: inventoryDecimalSchema.optional(),
   discrepancyReason: z.string().optional(),
  resolutionActions: z.string().optional(),
-  resolutionDate: dateSchema.optional(),
+  resolutionDate: dateTimeSchema.optional(),
   manualResponsibleUnit: z.string().optional(),
   isExclude: z.boolean().optional(),
 });
@@ -156,7 +156,7 @@ export const inventoryAccountStatusSingleSchema = z.object({
   discrepancySum: inventoryDecimalSchema.optional(),
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
-  resolutionDate: dateSchema.optional(),
+  resolutionDate: dateTimeSchema.optional(),
   version: zIdSchema,
 });
 
