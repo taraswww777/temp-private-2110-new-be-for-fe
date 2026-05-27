@@ -12,7 +12,7 @@ export const inventoryReportStatusSchema = z
   .describe('Статус формирования отчета');
 
 export enum InventoryUserRolesEnum {
-  INVENTORY = "inventory",
+  INVENTORY = "Inventory",
   REPORTS = "6406u",
 }
 
