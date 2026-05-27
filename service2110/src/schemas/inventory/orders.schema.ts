@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { dateSchema } from '../common/dateString.schema.ts';
+import { dateTimeSchema } from '../common/dateString.schema.ts';
 import { zUuidSchema } from '../common/uuid.schema.ts';
 import { inventoryProcessStatusSchema } from './enums/InventoryProcessStatusEnum.ts';
 
@@ -8,9 +8,9 @@ import { inventoryProcessStatusSchema } from './enums/InventoryProcessStatusEnum
 export const inventoryOrderListItemSchema = z.object({
   inventoryOrderId: zUuidSchema,
   orderNumber: z.string().describe('Номер приказа'),
-  orderDate: dateSchema.describe('Дата приказа YYYY-MM-DD'),
-  inventoryDateFrom: dateSchema.describe('Дата начала инвентаризации'),
-  inventoryDateTo: dateSchema.describe('Дата окончания инвентаризации'),
+  orderDate: dateTimeSchema.describe('Дата приказа'),
+  inventoryDateFrom: dateTimeSchema.describe('Дата начала инвентаризации'),
+  inventoryDateTo: dateTimeSchema.describe('Дата окончания инвентаризации'),
   orderFileLink: z.string().optional().describe('Ссылка на файл приказа (DOC: orderFileLink)'),
   isActive: z.boolean().optional().describe('Приказ актуален на данный момент'),
   inventoryOrderStatus: inventoryProcessStatusSchema,
@@ -20,18 +20,18 @@ export const inventoryOrdersListResponseSchema = z.array(inventoryOrderListItemS
 
 export const createInventoryOrderSchema = z.object({
   orderNumber: z.string(),
-  orderDate: dateSchema,
-  inventoryDateFrom: dateSchema,
-  inventoryDateTo: dateSchema,
+  orderDate: dateTimeSchema,
+  inventoryDateFrom: dateTimeSchema,
+  inventoryDateTo: dateTimeSchema,
   orderFile: z.string('Ссылка на файл'),
 });
 
 export const updateInventoryOrderSchema = z.object({
   inventoryOrderId: zUuidSchema,
   orderNumber: z.string(),
-  orderDate: dateSchema,
-  inventoryDateFrom: dateSchema,
-  inventoryDateTo: dateSchema,
+  orderDate: dateTimeSchema,
+  inventoryDateFrom: dateTimeSchema,
+  inventoryDateTo: dateTimeSchema,
   orderFile: z.string('Ссылка на файл'),
   isActive: z.boolean(),
 });

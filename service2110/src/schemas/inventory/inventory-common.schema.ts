@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { inventoryProcessStatusSchema } from './enums/InventoryProcessStatusEnum.ts';
-import { dateSchema } from '../common/dateString.schema.ts';
+import { dateTimeSchema } from '../common/dateString.schema.ts';
 import { zUuidSchema } from '../common/uuid.schema.ts';
 import { inventoryAssignmentsSchema, inventoryReportStatusSchema, inventoryUserRolesSchema } from './enums/InventoryReportStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
@@ -15,9 +15,9 @@ export { inventoryProcessStatusSchema };
 export const inventoryInventoryStateResponseSchema = z.object({
   inventoryOrderId: zUuidSchema.optional(),
   orderNumber: z.string().optional(),
-  orderDate: dateSchema.optional(),
-  inventoryDateFrom: dateSchema.optional(),
-  inventoryDateTo: dateSchema.optional(),
+  orderDate: dateTimeSchema.optional(),
+  inventoryDateFrom: dateTimeSchema.optional(),
+  inventoryDateTo: dateTimeSchema.optional(),
   isActive: z.boolean().optional(),
   status: inventoryProcessStatusSchema.optional(),
 });
@@ -61,7 +61,7 @@ export const inventoryReportExportItemSchema = z.object({
   exportParams: inventoryExportParamsSchema,
   filePath: z.string(),
   status: inventoryReportStatusSchema.optional(),
-  createdAt: dateSchema.optional(),
+  createdAt: dateTimeSchema.optional(),
 });
 
 export const inventoryActiveStateSchema = z.object({
