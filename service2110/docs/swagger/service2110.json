@@ -2299,19 +2299,19 @@
             "description": "Номер приказа"
           },
           "orderDate": {
-            "description": "Дата приказа YYYY-MM-DD",
-            "$ref": "#/components/schemas/DateSchema"
+            "description": "Дата приказа",
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateFrom": {
             "description": "Дата начала инвентаризации",
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateTo": {
             "description": "Дата окончания инвентаризации",
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "orderFileLink": {
-            "description": "Ссылка на файл приказа (DOC: orderFileLink)",
+          "orderFileName": {
+            "description": "Имя файла приказа",
             "type": "string"
           },
           "isActive": {
@@ -2345,24 +2345,20 @@
             "type": "string"
           },
           "orderDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateFrom": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateTo": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "orderFile": {
-            "type": "string"
+            "$ref": "#/components/schemas/DateTimeSchema"
           }
         },
         "required": [
           "orderNumber",
           "orderDate",
           "inventoryDateFrom",
-          "inventoryDateTo",
-          "orderFile"
+          "inventoryDateTo"
         ],
         "additionalProperties": false
       },
@@ -2376,16 +2372,13 @@
             "type": "string"
           },
           "orderDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateFrom": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateTo": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "orderFile": {
-            "type": "string"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "isActive": {
             "type": "boolean"
@@ -2397,7 +2390,6 @@
           "orderDate",
           "inventoryDateFrom",
           "inventoryDateTo",
-          "orderFile",
           "isActive"
         ],
         "additionalProperties": false
@@ -2788,7 +2780,7 @@
             "type": "string"
           },
           "accountOpenDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "accountType": {
             "$ref": "#/components/schemas/IntegerIdSchema"
@@ -2809,7 +2801,7 @@
             "type": "string"
           },
           "lastOperationDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "agreementStatus": {
             "type": "string"
@@ -2851,7 +2843,7 @@
             "type": "string"
           },
           "dataDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "currencyIsoCode": {
             "type": "string"
@@ -2872,7 +2864,7 @@
             "type": "string"
           },
           "resolutionDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "manualResponsibleUnit": {
             "type": "string"
@@ -2918,7 +2910,7 @@
             "type": "string"
           },
           "resolutionDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "version": {
             "$ref": "#/components/schemas/IntegerIdSchema"
@@ -2978,7 +2970,7 @@
             "type": "string"
           },
           "accountOpenDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "accountType": {
             "$ref": "#/components/schemas/IntegerIdSchema"
@@ -2999,7 +2991,7 @@
             "type": "string"
           },
           "lastOperationDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "agreementStatus": {
             "type": "string"
@@ -3041,7 +3033,7 @@
             "type": "string"
           },
           "dataDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "currencyIsoCode": {
             "type": "string"
@@ -3062,7 +3054,7 @@
             "type": "string"
           },
           "resolutionDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "manualResponsibleUnit": {
             "type": "string"
@@ -3108,7 +3100,7 @@
             "type": "string"
           },
           "resolutionDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "manualResponsibleUnit": {
             "type": "string"
@@ -3349,13 +3341,13 @@
             "type": "string"
           },
           "orderDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateFrom": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateTo": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "isActive": {
             "type": "boolean"
@@ -3385,7 +3377,7 @@
             "$ref": "#/components/schemas/InventoryReportStatusEnum"
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           }
         },
         "required": [
