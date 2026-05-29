@@ -5275,7 +5275,7 @@
         }
       }
     },
-    "/inventory/download": {
+    "/api/v1/inventory/download": {
       "get": {
         "summary": "Скачать файл",
         "tags": [
@@ -5312,7 +5312,7 @@
         }
       }
     },
-    "/inventory/file": {
+    "/api/v1/inventory/file": {
       "delete": {
         "summary": "Удалить файл",
         "tags": [
@@ -5352,7 +5352,7 @@
         }
       }
     },
-    "/inventory/upload": {
+    "/api/v1/inventory/upload": {
       "post": {
         "summary": "Загрузить файл",
         "tags": [
@@ -5364,13 +5364,13 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "request": {
+                  "entityInfo": {
                     "$ref": "#/components/schemas/InventoryFileDto"
                   },
                   "file": {}
                 },
                 "required": [
-                  "request",
+                  "entityInfo",
                   "file"
                 ]
               }

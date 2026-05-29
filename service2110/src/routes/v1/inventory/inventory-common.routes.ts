@@ -9,6 +9,7 @@ import {
   inventoryInventoryStateResponseSchema,
   inventoryActiveStateSchema,
   inventoryUserRolesResponseSchema,
+  inventoryFileSchema,
 } from '../../../schemas/inventory/inventory-common.schema.ts';
 import z from 'zod';
 import { accountVersionedIdsSchema, inventoryAccountsExportRequestSchema, inventoryAccountsExportResponseSchema, inventoryAccountsListFilterSchema, inventoryAccountStatusSingleSchema, inventoryAccountUpdatedResponseSchema, inventoryManualUnitBulkRequestSchema } from '../../../schemas/inventory/accounts.schema.ts';
@@ -143,4 +144,35 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
       response: { 200: inventoryUserRolesResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send({ login: 'vtb1234567', roleAssignments: [] }));
+
+ app.get('/download', {
+    schema: {
+      tags: [OpenApiTag.Inventory],
+      summary: 'Скачать файл',
+      querystring: inventoryFileSchema,
+      response: { 200: z.file() },
+    },
+  }, async (_request, reply) => reply.status(200).send({} as never));
+
+  app.delete('/file', {
+    schema: {
+      tags: [OpenApiTag.Inventory],
+      summary: 'Удалить файл',
+      querystring: inventoryFileSchema,
+      response: { 200: z.null() },
+    },
+  }, async (_request, reply) => reply.status(200).send(null));
+
+  app.post('/upload', {
+    schema: {
+      tags: [OpenApiTag.Inventory],
+      summary: 'Загрузить файл',
+      consumes: ['multipart/form-data'],
+      body: z.object({
+        entityInfo: inventoryFileSchema,
+        file: z.any().describe('Файл задачи'),
+      }),
+      response: { 200: inventoryFileSchema },
+    },
+}, async (_request, reply) => reply.status(200).send({} as never));
 };
