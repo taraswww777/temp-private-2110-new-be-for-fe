@@ -2213,6 +2213,14 @@
           "USER"
         ]
       },
+      "InventoryEntityTypeEnum": {
+        "type": "string",
+        "enum": [
+          "ACCOUNTS",
+          "STATISTICS",
+          "ORDERS"
+        ]
+      },
       "InventoryInventoryOrderIdParamDto": {
         "type": "object",
         "properties": {
@@ -2299,19 +2307,19 @@
             "description": "Номер приказа"
           },
           "orderDate": {
-            "description": "Дата приказа YYYY-MM-DD",
-            "$ref": "#/components/schemas/DateSchema"
+            "description": "Дата приказа",
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateFrom": {
             "description": "Дата начала инвентаризации",
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateTo": {
             "description": "Дата окончания инвентаризации",
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "orderFileLink": {
-            "description": "Ссылка на файл приказа (DOC: orderFileLink)",
+          "orderFileName": {
+            "description": "Имя файла приказа",
             "type": "string"
           },
           "isActive": {
@@ -2345,24 +2353,20 @@
             "type": "string"
           },
           "orderDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateFrom": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateTo": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "orderFile": {
-            "type": "string"
+            "$ref": "#/components/schemas/DateTimeSchema"
           }
         },
         "required": [
           "orderNumber",
           "orderDate",
           "inventoryDateFrom",
-          "inventoryDateTo",
-          "orderFile"
+          "inventoryDateTo"
         ],
         "additionalProperties": false
       },
@@ -2376,16 +2380,13 @@
             "type": "string"
           },
           "orderDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateFrom": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateTo": {
-            "$ref": "#/components/schemas/DateSchema"
-          },
-          "orderFile": {
-            "type": "string"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "isActive": {
             "type": "boolean"
@@ -2397,7 +2398,6 @@
           "orderDate",
           "inventoryDateFrom",
           "inventoryDateTo",
-          "orderFile",
           "isActive"
         ],
         "additionalProperties": false
@@ -2788,7 +2788,7 @@
             "type": "string"
           },
           "accountOpenDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "accountType": {
             "$ref": "#/components/schemas/IntegerIdSchema"
@@ -2809,7 +2809,7 @@
             "type": "string"
           },
           "lastOperationDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "agreementStatus": {
             "type": "string"
@@ -2851,7 +2851,7 @@
             "type": "string"
           },
           "dataDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "currencyIsoCode": {
             "type": "string"
@@ -2872,7 +2872,7 @@
             "type": "string"
           },
           "resolutionDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "manualResponsibleUnit": {
             "type": "string"
@@ -2918,7 +2918,7 @@
             "type": "string"
           },
           "resolutionDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "version": {
             "$ref": "#/components/schemas/IntegerIdSchema"
@@ -2978,7 +2978,7 @@
             "type": "string"
           },
           "accountOpenDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "accountType": {
             "$ref": "#/components/schemas/IntegerIdSchema"
@@ -2999,7 +2999,7 @@
             "type": "string"
           },
           "lastOperationDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "agreementStatus": {
             "type": "string"
@@ -3041,7 +3041,7 @@
             "type": "string"
           },
           "dataDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "currencyIsoCode": {
             "type": "string"
@@ -3062,7 +3062,7 @@
             "type": "string"
           },
           "resolutionDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "manualResponsibleUnit": {
             "type": "string"
@@ -3108,7 +3108,7 @@
             "type": "string"
           },
           "resolutionDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "manualResponsibleUnit": {
             "type": "string"
@@ -3349,13 +3349,13 @@
             "type": "string"
           },
           "orderDate": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateFrom": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "inventoryDateTo": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "isActive": {
             "type": "boolean"
@@ -3385,7 +3385,7 @@
             "$ref": "#/components/schemas/InventoryReportStatusEnum"
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateSchema"
+            "$ref": "#/components/schemas/DateTimeSchema"
           }
         },
         "required": [
@@ -3443,6 +3443,18 @@
         "required": [
           "login"
         ],
+        "additionalProperties": false
+      },
+      "InventoryFileDto": {
+        "type": "object",
+        "properties": {
+          "entityId": {
+            "$ref": "#/components/schemas/UuidSchema"
+          },
+          "entityType": {
+            "$ref": "#/components/schemas/InventoryEntityTypeEnum"
+          }
+        },
         "additionalProperties": false
       }
     }
@@ -5256,6 +5268,123 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InventoryUserRolesResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/download": {
+      "get": {
+        "summary": "Скачать файл",
+        "tags": [
+          "Inventory"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/UuidSchema"
+            },
+            "in": "query",
+            "name": "entityId"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/InventoryEntityTypeEnum"
+            },
+            "in": "query",
+            "name": "entityType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/file": {
+      "delete": {
+        "summary": "Удалить файл",
+        "tags": [
+          "Inventory"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/UuidSchema"
+            },
+            "in": "query",
+            "name": "entityId"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/InventoryEntityTypeEnum"
+            },
+            "in": "query",
+            "name": "entityType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/upload": {
+      "post": {
+        "summary": "Загрузить файл",
+        "tags": [
+          "Inventory"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "entityInfo": {
+                    "$ref": "#/components/schemas/InventoryFileDto"
+                  },
+                  "file": {}
+                },
+                "required": [
+                  "entityInfo",
+                  "file"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryFileDto"
                 }
               }
             }

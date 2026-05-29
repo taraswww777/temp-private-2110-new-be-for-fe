@@ -5,9 +5,15 @@ import { dateTimeSchema } from '../common/dateString.schema.ts';
 import { zUuidSchema } from '../common/uuid.schema.ts';
 import { inventoryAssignmentsSchema, inventoryReportStatusSchema, inventoryUserRolesSchema } from './enums/InventoryReportStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
+import { inventoryEntityTypeSchema } from './enums/InventoryEntityTypeEnum.ts';
 
 export const inventoryInventoryStateQuerySchema = z.object({
   inventoryOrderId: zUuidSchema.optional(),
+});
+
+export const inventoryFileSchema = z.object({
+  entityId: zUuidSchema.optional(),
+  entityType: inventoryEntityTypeSchema.optional(),
 });
 
 export { inventoryProcessStatusSchema };

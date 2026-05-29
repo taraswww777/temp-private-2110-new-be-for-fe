@@ -66,6 +66,7 @@ import {
   inventoryInventoryStateQuerySchema,
   inventoryColumnsQuerySchema,
   inventoryExportParamsSchema,
+  inventoryFileSchema,
 } from './inventory-common.schema.ts';
 
 import { registerOpenApiComponent } from '../utils/registerOpenApiComponent.ts';
@@ -141,4 +142,5 @@ export function registerInventoryOpenApiSchemas() {
   registerOpenApiComponent(inventoryActiveStateSchema, 'InventoryActiveStateDto');
   registerOpenApiComponent(inventoryRoleAssignmentSchema, 'inventoryRoleAssignmentDto');
   registerOpenApiComponent(inventoryUserRolesResponseSchema, 'InventoryUserRolesResponseDto');
+  registerOpenApiComponent(inventoryFileSchema, 'InventoryFileDto');
 }
