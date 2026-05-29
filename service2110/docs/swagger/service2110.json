@@ -2213,6 +2213,14 @@
           "USER"
         ]
       },
+      "InventoryEntityTypeEnum": {
+        "type": "string",
+        "enum": [
+          "ACCOUNTS",
+          "STATISTICS",
+          "ORDERS"
+        ]
+      },
       "InventoryInventoryOrderIdParamDto": {
         "type": "object",
         "properties": {
@@ -3435,6 +3443,18 @@
         "required": [
           "login"
         ],
+        "additionalProperties": false
+      },
+      "InventoryFileDto": {
+        "type": "object",
+        "properties": {
+          "entityId": {
+            "$ref": "#/components/schemas/UuidSchema"
+          },
+          "entityType": {
+            "$ref": "#/components/schemas/InventoryEntityTypeEnum"
+          }
+        },
         "additionalProperties": false
       }
     }
@@ -5248,6 +5268,123 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InventoryUserRolesResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/download": {
+      "get": {
+        "summary": "Скачать файл",
+        "tags": [
+          "Inventory"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/UuidSchema"
+            },
+            "in": "query",
+            "name": "entityId"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/InventoryEntityTypeEnum"
+            },
+            "in": "query",
+            "name": "entityType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/file": {
+      "delete": {
+        "summary": "Удалить файл",
+        "tags": [
+          "Inventory"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/UuidSchema"
+            },
+            "in": "query",
+            "name": "entityId"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/InventoryEntityTypeEnum"
+            },
+            "in": "query",
+            "name": "entityType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/upload": {
+      "post": {
+        "summary": "Загрузить файл",
+        "tags": [
+          "Inventory"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "request": {
+                    "$ref": "#/components/schemas/InventoryFileDto"
+                  },
+                  "file": {}
+                },
+                "required": [
+                  "request",
+                  "file"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryFileDto"
                 }
               }
             }
