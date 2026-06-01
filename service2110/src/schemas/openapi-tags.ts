@@ -11,6 +11,7 @@ export enum OpenApiTag {
   InventoryOrders = 'Inventory - Orders',
   InventoryDictionary = 'Inventory - Dictionary',
   InventoryAccounts = 'Inventory - Accounts',
+  InventoryApproval = 'Inventory - Approval',
   InventoryStatistics = 'Inventory - Statistics',
 }
 
@@ -35,5 +36,6 @@ export const OPENAPI_TAG_SPEC: ReadonlyArray<{ name: OpenApiTag; description: st
   { name: OpenApiTag.InventoryOrders, description: 'Параметры инвентаризации' },
   { name: OpenApiTag.InventoryDictionary, description: 'Словари фильтров инвентаризации' },
   { name: OpenApiTag.InventoryAccounts, description: 'Счета инвентаризации' },
+  { name: OpenApiTag.InventoryApproval, description: 'Согласование ОП' },
   { name: OpenApiTag.InventoryStatistics, description: 'Статистика инвентаризации' },
 ];

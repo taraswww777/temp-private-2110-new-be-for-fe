@@ -175,4 +175,13 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
       response: { 200: inventoryFileSchema },
     },
 }, async (_request, reply) => reply.status(200).send({} as never));
+
+  app.patch('/bulk-approval', {
+    schema: {
+      tags: [OpenApiTag.Inventory],
+      summary: 'Подтверждение смены ответственного подразделения',
+      body: accountVersionedIdsSchema,
+      response: { 200: inventoryAccountUpdatedResponseSchema },
+    },
+  }, async (_request, reply) => reply.status(200).send({ updatedCount: 0 }));
 };

@@ -54,3 +54,10 @@ export const inventoryManualControlFilterItemSchema = z.object({
   manualControlRuleNumber: z.number().int(),
 });
 export const inventoryManualControlFilterResponseSchema = z.array(inventoryManualControlFilterItemSchema);
+
+export const inventorySenderNamesFilterItemSchema = z.object({
+  adLogin: z.string(),
+  senderName: z.string(),
+});
+
+export const inventorySenderNamesFilterResponseSchema = z.array(inventorySenderNamesFilterItemSchema);
