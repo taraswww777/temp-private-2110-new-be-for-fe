@@ -137,7 +137,7 @@ export const inventoryAccountIdsSchema = z.object({
 export const inventoryManualUnitRequestSchema = z.object({
   accountId: zUuidSchema,
   manualResponsibleUnit: z.string().optional(),
-  force: z.boolean().nullable(),
+  force: z.boolean().optional(),
   version: zIdSchema,
 });
 

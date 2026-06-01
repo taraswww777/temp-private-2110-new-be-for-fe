@@ -3191,14 +3191,7 @@
             "type": "string"
           },
           "force": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ]
+            "type": "boolean"
           },
           "version": {
             "$ref": "#/components/schemas/IntegerIdSchema"
@@ -3206,7 +3199,6 @@
         },
         "required": [
           "accountId",
-          "force",
           "version"
         ],
         "additionalProperties": false
