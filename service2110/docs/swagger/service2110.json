@@ -3190,7 +3190,7 @@
           "manualResponsibleUnit": {
             "type": "string"
           },
-          "force": {
+          "isForce": {
             "type": "boolean"
           },
           "version": {
@@ -3209,7 +3209,7 @@
           "manualResponsibleUnit": {
             "type": "string"
           },
-          "force": {
+          "isForce": {
             "type": "boolean"
           },
           "accounts": {
