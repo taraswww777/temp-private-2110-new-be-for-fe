@@ -135,7 +135,6 @@ export const inventoryAccountIdsSchema = z.object({
 });
 
 export const inventoryManualUnitRequestSchema = z.object({
-  accountId: zUuidSchema,
   manualResponsibleUnit: z.string().optional(),
   isForce: z.boolean().optional(),
   version: zIdSchema,
@@ -148,8 +147,7 @@ export const inventoryAccountsExportRequestSchema = z.object({
 
 export const inventoryAccountsExportResponseSchema =  z.array(inventoryReportExportItemSchema);
 
-export const inventoryAccountStatusSingleSchema = z.object({
-  accountId: zUuidSchema,
+export const inventoryAccountStatusSingleRequestSchema = z.object({
   manualInventoryAccountStatus: z.string(),
   originalInventoryAccountStatus: z.string().optional(),
   discrepancyDescription: z.string().optional(),
@@ -158,6 +156,9 @@ export const inventoryAccountStatusSingleSchema = z.object({
   resolutionActions: z.string().optional(),
   resolutionDate: dateTimeSchema.optional(),
   version: zIdSchema,
+});
+export const inventoryAccountStatusSingleSchema = inventoryAccountStatusSingleRequestSchema.extend({
+  accountId: zUuidSchema,
 });
 
 export const accountVersionedIdSchema = z.object({
