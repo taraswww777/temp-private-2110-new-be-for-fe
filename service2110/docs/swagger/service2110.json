@@ -2597,6 +2597,28 @@
           "$ref": "#/components/schemas/InventoryManualControlFilterItemDto"
         }
       },
+      "InventorySenderNamesFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "adLogin": {
+            "type": "string"
+          },
+          "senderName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "adLogin",
+          "senderName"
+        ],
+        "additionalProperties": false
+      },
+      "InventorySenderNamesFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventorySenderNamesFilterItemDto"
+        }
+      },
       "InventoryAccountsListFilterDto": {
         "type": "object",
         "properties": {
@@ -3247,6 +3269,83 @@
         "items": {
           "$ref": "#/components/schemas/InventoryReportExportItemDto"
         }
+      },
+      "InventoryApprovalListFilterDto": {
+        "type": "object",
+        "properties": {
+          "bs2": {
+            "description": "БС-2 (массив int)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "originalResponsibleUnit": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "manualResponsibleUnit": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "productName": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "senderAdLogin": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "description": "Фильтр для списка счетов"
+      },
+      "InventoryGetApprovalListRequestDto": {
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationRequestDto"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/InventoryApprovalListFilterDto"
+          }
+        },
+        "required": [
+          "pagination",
+          "filters"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryApprovalListResponseDto": {
+        "type": "object",
+        "properties": {
+          "itemsList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventoryAccountDetailDto"
+            },
+            "description": "Список счетов"
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество счетов"
+          }
+        },
+        "required": [
+          "itemsList",
+          "totalItems"
+        ],
+        "additionalProperties": false
       },
       "InventoryStatisticsFilterDto": {
         "type": "object",
@@ -4634,6 +4733,36 @@
         }
       }
     },
+    "/api/v1/inventory/orders/{inventoryOrderId}/filters/sender-names": {
+      "get": {
+        "summary": "От кого (фильтр)",
+        "tags": [
+          "Inventory - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/UuidSchema"
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorySenderNamesFilterResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/inventory/accounts": {
       "post": {
         "summary": "Список счетов инвентаризации (пагинация, сортировка, фильтры)",
@@ -4882,6 +5011,35 @@
                   "enum": [
                     null
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/approval": {
+      "post": {
+        "summary": "Список счетов на утверждение смены ответственного подразделения (пагинация, сортировка, фильтры)",
+        "tags": [
+          "Inventory - Approval"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryGetApprovalListRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryApprovalListResponseDto"
                 }
               }
             }
@@ -5391,6 +5549,35 @@
           }
         }
       }
+    },
+    "/api/v1/inventory/bulk-approval": {
+      "patch": {
+        "summary": "Подтверждение смены ответственного подразделения",
+        "tags": [
+          "Inventory"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryAccountVersionedIdsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountUpdatedResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "servers": [
@@ -5439,6 +5626,10 @@
     {
       "name": "Inventory - Accounts",
       "description": "Счета инвентаризации"
+    },
+    {
+      "name": "Inventory - Approval",
+      "description": "Согласование ОП"
     },
     {
       "name": "Inventory - Statistics",

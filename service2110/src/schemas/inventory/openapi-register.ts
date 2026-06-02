@@ -24,6 +24,8 @@ import {
   inventorySourceBankFilterItemSchema,
   inventorySourceBankFilterResponseSchema,
   inventoryInventoryOrderIdParamSchema,
+  inventorySenderNamesFilterResponseSchema,
+  inventorySenderNamesFilterItemSchema,
 } from './dictionary.schema.ts';
 import {
   getInventoryAccountsListRequestSchema,
@@ -71,6 +73,7 @@ import {
 
 import { registerOpenApiComponent } from '../utils/registerOpenApiComponent.ts';
 import { register } from 'node:module';
+import { getInventoryApprovalListRequestSchema, inventoryApprovalListFilterSchema, inventoryApprovalListResponseSchema } from './approval.schema.ts';
 
 /**
  * Регистрация Zod-схем подсистемы инвентаризации (front API-28) в OpenAPI-реестре.
@@ -109,6 +112,8 @@ export function registerInventoryOpenApiSchemas() {
   registerOpenApiComponent(inventoryProductFilterResponseSchema, 'InventoryProductFilterResponseDto');
   registerOpenApiComponent(inventoryManualControlFilterItemSchema, 'InventoryManualControlFilterItemDto');
   registerOpenApiComponent(inventoryManualControlFilterResponseSchema, 'InventoryManualControlFilterResponseDto');
+  registerOpenApiComponent(inventorySenderNamesFilterItemSchema, 'InventorySenderNamesFilterItemDto');
+  registerOpenApiComponent(inventorySenderNamesFilterResponseSchema, 'InventorySenderNamesFilterResponseDto');
 
   registerOpenApiComponent(inventoryAccountsListFilterSchema, 'InventoryAccountsListFilterDto');
   registerOpenApiComponent(inventoryExportParamsSchema, 'InventoryExportParamsDto');
@@ -129,6 +134,10 @@ export function registerInventoryOpenApiSchemas() {
   registerOpenApiComponent(inventoryAccountIdSchema, 'InventoryAccountsIdDto');
   registerOpenApiComponent(inventoryAccountsExportRequestSchema, 'InventoryAccountsExportRequestDto');
   registerOpenApiComponent(inventoryAccountsExportResponseSchema, 'InventoryAccountsExportResponseDto');
+
+  registerOpenApiComponent(inventoryApprovalListFilterSchema, 'InventoryApprovalListFilterDto');
+  registerOpenApiComponent(getInventoryApprovalListRequestSchema, 'InventoryGetApprovalListRequestDto');
+  registerOpenApiComponent(inventoryApprovalListResponseSchema, 'InventoryApprovalListResponseDto');
 
   registerOpenApiComponent(inventoryStatisticsFilterSchema, 'InventoryStatisticsFilterDto');
   registerOpenApiComponent(inventoryStatisticsExportRequestSchema, 'InventoryStatisticsExportRequestDto');

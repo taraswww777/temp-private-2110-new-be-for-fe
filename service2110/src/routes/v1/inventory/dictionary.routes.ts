@@ -10,6 +10,7 @@ import {
   inventoryProductFilterResponseSchema,
   inventoryResponsibleUnitFilterResponseSchema,
   inventoryResponsibleUnitTypeFilterResponseSchema,
+  inventorySenderNamesFilterResponseSchema,
   inventorySourceBankFilterResponseSchema,
 } from '../../../schemas/inventory/dictionary.schema.ts';
 
@@ -17,7 +18,7 @@ export const inventoryDictionaryRoutes: FastifyPluginAsync = async (fastify) => 
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   const listFilters = [
-    ['orders/:inventoryOrderId/filters/bs2', 'БС-2 (фильтр)', inventoryBs2FilterResponseSchema],
+    ['/orders/:inventoryOrderId/filters/bs2', 'БС-2 (фильтр)', inventoryBs2FilterResponseSchema],
     ['/orders/:inventoryOrderId/filters/account-types', 'Тип счёта (фильтр)', inventoryAccountTypeFilterResponseSchema],
     ['/orders/:inventoryOrderId/filters/responsible-units', 'Ответственное подразделение (фильтр)', inventoryResponsibleUnitFilterResponseSchema],
     ['/static-filters/responsible-unit-types', 'Тип ответственного подразделения (фильтр)', inventoryResponsibleUnitTypeFilterResponseSchema],
@@ -25,6 +26,7 @@ export const inventoryDictionaryRoutes: FastifyPluginAsync = async (fastify) => 
     ['/orders/:inventoryOrderId/filters/source-banks', 'Банк-источник (фильтр)', inventorySourceBankFilterResponseSchema],
     ['/orders/:inventoryOrderId/filters/product-names', 'Продукт (фильтр)', inventoryProductFilterResponseSchema],
     ['/orders/:inventoryOrderId/filters/manual-control-rule-numbers', 'Номер правила ручного контроля (фильтр)', inventoryManualControlFilterResponseSchema],
+    ['/orders/:inventoryOrderId/filters/sender-names', 'От кого (фильтр)', inventorySenderNamesFilterResponseSchema],
   ] as const;
 
   for (const [url, summary, response] of listFilters) {
