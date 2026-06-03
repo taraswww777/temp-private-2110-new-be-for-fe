@@ -11,6 +11,7 @@ import {
   inventoryAccountStatusSingleSchema,
   inventoryAccountIdSchema,
   inventoryAccountHistoryRequestSchema,
+  inventoryAccountStatusSingleRequestSchema,
 } from '../../../schemas/inventory/accounts.schema.ts';
 import z from 'zod';
 import { randomUUID } from 'crypto';
@@ -87,7 +88,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: [OpenApiTag.InventoryAccounts],
       summary: 'Установка статуса и параметров инвентаризации счета',
-      body: inventoryAccountStatusSingleSchema,
+      body: inventoryAccountStatusSingleRequestSchema,
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));

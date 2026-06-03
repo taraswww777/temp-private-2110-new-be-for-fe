@@ -2918,9 +2918,45 @@
       "InventoryAccountStatusSingleDto": {
         "type": "object",
         "properties": {
+          "manualInventoryAccountStatus": {
+            "type": "string"
+          },
+          "originalInventoryAccountStatus": {
+            "type": "string"
+          },
+          "discrepancyDescription": {
+            "type": "string"
+          },
+          "discrepancySum": {
+            "$ref": "#/components/schemas/InventoryDecimalDto"
+          },
+          "discrepancyReason": {
+            "type": "string"
+          },
+          "resolutionActions": {
+            "type": "string"
+          },
+          "resolutionDate": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "version": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
           "accountId": {
             "$ref": "#/components/schemas/UuidSchema"
-          },
+          }
+        },
+        "required": [
+          "manualInventoryAccountStatus",
+          "version",
+          "accountId"
+        ],
+        "additionalProperties": false,
+        "description": "Данные о статусе и параметрах инвентаризации для конкретного счета"
+      },
+      "InventoryAccountStatusSingleRequestDto": {
+        "type": "object",
+        "properties": {
           "manualInventoryAccountStatus": {
             "type": "string"
           },
@@ -2947,11 +2983,11 @@
           }
         },
         "required": [
-          "accountId",
           "manualInventoryAccountStatus",
           "version"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Установка статуса и параметров инвентаризации"
       },
       "InventoryAccountVersionedIdDto": {
         "type": "object",
@@ -3184,9 +3220,6 @@
       "InventoryManualUnitRequestDto": {
         "type": "object",
         "properties": {
-          "accountId": {
-            "$ref": "#/components/schemas/UuidSchema"
-          },
           "manualResponsibleUnit": {
             "type": "string"
           },
@@ -3198,7 +3231,6 @@
           }
         },
         "required": [
-          "accountId",
           "version"
         ],
         "additionalProperties": false
@@ -4860,7 +4892,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InventoryAccountStatusSingleDto"
+                "$ref": "#/components/schemas/InventoryAccountStatusSingleRequestDto"
               }
             }
           }

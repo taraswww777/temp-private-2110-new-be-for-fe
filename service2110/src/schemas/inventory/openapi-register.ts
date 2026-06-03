@@ -40,6 +40,7 @@ import {
   inventoryManualUnitBulkRequestSchema,
   inventoryAccountsExportRequestSchema,
   inventoryAccountsExportResponseSchema,
+  inventoryAccountStatusSingleRequestSchema,
   inventoryAccountStatusSingleSchema,
   inventoryAccountIdsSchema,
   inventoryAccountIdSchema,
@@ -121,6 +122,7 @@ export function registerInventoryOpenApiSchemas() {
   registerOpenApiComponent(inventoryAccountsListResponseSchema, 'InventoryAccountsListResponseDto');
   registerOpenApiComponent(inventoryAccountListItemSchema, 'InventoryAccountListItemDto');
   registerOpenApiComponent(inventoryAccountStatusSingleSchema, 'InventoryAccountStatusSingleDto');
+  registerOpenApiComponent(inventoryAccountStatusSingleRequestSchema, 'InventoryAccountStatusSingleRequestDto');  
   registerOpenApiComponent(accountVersionedIdSchema, 'InventoryAccountVersionedIdDto');
   registerOpenApiComponent(accountVersionedIdsSchema, 'InventoryAccountVersionedIdsDto');
   registerOpenApiComponent(inventoryAccountUpdatedResponseSchema, 'InventoryAccountUpdatedResponseDto');
