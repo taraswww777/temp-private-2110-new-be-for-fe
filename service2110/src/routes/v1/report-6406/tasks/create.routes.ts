@@ -28,4 +28,17 @@ export const createTaskRoute: FastifyPluginAsync = async (fastify) => {
   }, async (_request, reply) => {
     return reply.status(201).send({} as any);
   });
+
+  app.post('/create', {
+    schema: {
+      tags: [OpenApiTag.Report6406Tasks],
+      summary: 'Создать новое задание на построение отчёта',
+      body: createTaskSchema,
+      response: {
+        201: taskDetailSchema,
+      },
+    },
+  }, async (_request, reply) => {
+    return reply.status(201).send({} as any);
+  });
 };

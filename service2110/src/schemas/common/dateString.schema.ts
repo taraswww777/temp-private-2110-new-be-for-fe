@@ -7,7 +7,8 @@ export const dateSchema = z.iso.date().describe('Дата в формате YYYY
 /**
  * Переиспользуемая схема для даты-времени в формате ISO 8601
  */
-export const dateTimeSchema = z.iso.datetime().describe('Дата и время в формате ISO 8601, например 2026-04-30T11:56:16.055Z');
+export const dateTimeSchema = z.iso.datetime().describe('Дата и время в формате ISO 8601, YYYY-MM-DDTHH:mm:ss.ssssssZ');
+export type DateTimeString = z.infer<typeof dateTimeSchema>;
 
 /**
  * Утилитная Zod superRefine-функция для валидации диапазона дат.
