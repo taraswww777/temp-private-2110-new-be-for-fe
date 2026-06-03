@@ -156,10 +156,10 @@ export const inventoryAccountStatusSingleRequestSchema = z.object({
   resolutionActions: z.string().optional(),
   resolutionDate: dateTimeSchema.optional(),
   version: zIdSchema,
-});
+}).describe('Установка статуса и параметров инвентаризации');
 export const inventoryAccountStatusSingleSchema = inventoryAccountStatusSingleRequestSchema.extend({
   accountId: zUuidSchema,
-});
+}).describe('Данные о статусе и параметрах инвентаризации для конкретного счета');
 
 export const accountVersionedIdSchema = z.object({
    accountId: zUuidSchema,

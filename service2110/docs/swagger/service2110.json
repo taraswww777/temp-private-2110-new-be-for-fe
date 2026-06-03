@@ -2951,7 +2951,8 @@
           "version",
           "accountId"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Данные о статусе и параметрах инвентаризации для конкретного счета"
       },
       "InventoryAccountStatusSingleRequestDto": {
         "type": "object",
@@ -2985,7 +2986,8 @@
           "manualInventoryAccountStatus",
           "version"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Установка статуса и параметров инвентаризации"
       },
       "InventoryAccountVersionedIdDto": {
         "type": "object",
