@@ -2,16 +2,12 @@ import { z } from 'zod';
 
 /**
  * Переиспользуемая схема для даты в формате YYYY-MM-DD
- * Используется в query параметрах для фильтрации по датам
  */
-export const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).describe('Дата в формате YYYY-MM-DD');
-export type DateString = z.infer<typeof dateSchema>;
+export const dateSchema = z.iso.date().describe('Дата в формате YYYY-MM-DD');
 /**
  * Переиспользуемая схема для даты-времени в формате ISO 8601
- * Используется в query параметрах для фильтрации по датам создания/обновления
  */
-export const dateTimeSchema = z.iso.datetime().describe('Дата и время в формате ISO 8601');
-export type DateTimeString = z.infer<typeof dateTimeSchema>;
+export const dateTimeSchema = z.iso.datetime().describe('Дата и время в формате ISO 8601, например 2026-04-30T11:56:16.055Z');
 
 /**
  * Утилитная Zod superRefine-функция для валидации диапазона дат.
