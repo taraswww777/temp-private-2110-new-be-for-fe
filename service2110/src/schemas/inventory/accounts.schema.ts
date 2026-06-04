@@ -88,12 +88,12 @@ export const inventoryAccountRowSchema = z.object({
   isCriticalUpdated: z.boolean().optional(),
   version: zIdSchema,
   isExclude: z.boolean().optional(),
-  filialCbrName: z.string().optional(),
-  filialCbrNumber: z.string().optional(),
-  liquidatedFlag: z.boolean().optional(),
-  inventoryUpdatedBy: z.string().optional(),
-  inventoryUpdatedAt: dateTimeSchema.optional(),
-  srcCd: z.string().optional(),
+  filialCbrName: z.string().optional().describe('Наименование филиала'),
+  filialCbrNumber: z.string().optional().describe('Код филиала по ЦБ'),
+  liquidatedFlag: z.boolean().optional().describe('Статус клиента. true  - Ликвидирован, false - Автоматическая сверка'),
+  inventoryUpdatedBy: z.string().optional().describe('ФИО сотрудника, кто последний обновлял параметры инвентаризации, в том числе и статус инвентаризации'),
+  inventoryUpdatedAt: dateTimeSchema.optional().describe('Дата установки конечного статуса инвентаризации во соответствии со статусной моделью: «Без расхождений», «С урегулированием расхождений»'),
+  srcCd: z.string().optional().describe('Система-источник счета'),
 });
 
 export const inventoryAccountListItemSchema = inventoryAccountRowSchema;

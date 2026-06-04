@@ -2914,21 +2914,27 @@
             "type": "boolean"
           },
           "filialCbrName": {
+            "description": "Наименование филиала",
             "type": "string"
           },
           "filialCbrNumber": {
+            "description": "Код филиала по ЦБ",
             "type": "string"
           },
           "liquidatedFlag": {
+            "description": "Статус клиента. true  - Ликвидирован, false - Автоматическая сверка",
             "type": "boolean"
           },
           "inventoryUpdatedBy": {
+            "description": "ФИО сотрудника, кто последний обновлял параметры инвентаризации, в том числе и статус инвентаризации",
             "type": "string"
           },
           "inventoryUpdatedAt": {
+            "description": "Дата установки конечного статуса инвентаризации во соответствии со статусной моделью: «Без расхождений», «С урегулированием расхождений»",
             "$ref": "#/components/schemas/DateTimeSchema"
           },
           "srcCd": {
+            "description": "Система-источник счета",
             "type": "string"
           }
         },
@@ -3158,21 +3164,27 @@
             "type": "boolean"
           },
           "filialCbrName": {
+            "description": "Наименование филиала",
             "type": "string"
           },
           "filialCbrNumber": {
+            "description": "Код филиала по ЦБ",
             "type": "string"
           },
           "liquidatedFlag": {
+            "description": "Статус клиента. true  - Ликвидирован, false - Автоматическая сверка",
             "type": "boolean"
           },
           "inventoryUpdatedBy": {
+            "description": "ФИО сотрудника, кто последний обновлял параметры инвентаризации, в том числе и статус инвентаризации",
             "type": "string"
           },
           "inventoryUpdatedAt": {
+            "description": "Дата установки конечного статуса инвентаризации во соответствии со статусной моделью: «Без расхождений», «С урегулированием расхождений»",
             "$ref": "#/components/schemas/DateTimeSchema"
           },
           "srcCd": {
+            "description": "Система-источник счета",
             "type": "string"
           }
         },
