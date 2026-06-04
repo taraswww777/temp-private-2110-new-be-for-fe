@@ -2912,6 +2912,24 @@
           },
           "isExclude": {
             "type": "boolean"
+          },
+          "filialCbrName": {
+            "type": "string"
+          },
+          "filialCbrNumber": {
+            "type": "string"
+          },
+          "liquidatedFlag": {
+            "type": "boolean"
+          },
+          "inventoryUpdatedBy": {
+            "type": "string"
+          },
+          "inventoryUpdatedAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "srcCd": {
+            "type": "string"
           }
         },
         "required": [
@@ -3138,6 +3156,24 @@
           },
           "isExclude": {
             "type": "boolean"
+          },
+          "filialCbrName": {
+            "type": "string"
+          },
+          "filialCbrNumber": {
+            "type": "string"
+          },
+          "liquidatedFlag": {
+            "type": "boolean"
+          },
+          "inventoryUpdatedBy": {
+            "type": "string"
+          },
+          "inventoryUpdatedAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "srcCd": {
+            "type": "string"
           }
         },
         "required": [

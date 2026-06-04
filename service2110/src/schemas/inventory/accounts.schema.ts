@@ -88,6 +88,12 @@ export const inventoryAccountRowSchema = z.object({
   isCriticalUpdated: z.boolean().optional(),
   version: zIdSchema,
   isExclude: z.boolean().optional(),
+  filialCbrName: z.string().optional(),
+  filialCbrNumber: z.string().optional(),
+  liquidatedFlag: z.boolean().optional(),
+  inventoryUpdatedBy: z.string().optional(),
+  inventoryUpdatedAt: dateTimeSchema.optional(),
+  srcCd: z.string().optional(),
 });
 
 export const inventoryAccountListItemSchema = inventoryAccountRowSchema;
