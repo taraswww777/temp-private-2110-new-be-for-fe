@@ -17,7 +17,7 @@ const CurrencyDescriptions = {
   [Currency.FOREIGN]: { value: Currency.FOREIGN, description: 'Иностранная валюта' },
 } as const;
 
-export const currencySchema = z.enum(Currency).describe('Валюта');
+export const currencySchema = z.enum(Currency).describe(`Валюта, например: (${Currency.RUB},${Currency.FOREIGN})`);
 export const currencyIdSchema = z.number().positive().min(100).max(999).describe('Валюта');
 
 // Создаем расширенную схему с описаниями

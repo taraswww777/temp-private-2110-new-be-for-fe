@@ -213,7 +213,7 @@
           "RUB",
           "FOREIGN"
         ],
-        "description": "Валюта",
+        "description": "Валюта, например: (RUB,FOREIGN)",
         "x-enum-descriptions": [
           "Рубли",
           "Иностранная валюта"
@@ -508,18 +508,17 @@
             "description": "Массив ИД филиалов"
           },
           "periodFrom": {
-            "description": "Дата начала отчётного периода 2023-01-01",
-            "$ref": "#/components/schemas/DateSchema"
+            "description": "Дата начала отчётного периода",
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "periodTo": {
-            "description": "Дата окончания отчётного периода 2023-12-31",
-            "$ref": "#/components/schemas/DateSchema"
+            "description": "Дата окончания отчётного периода",
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "currencyId": {
-            "description": "Ид валюты (например: 810, 999)",
-            "$ref": "#/components/schemas/Report6406CurrencyIdSchema"
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyEnum"
           },
-          "fileFormat": {
+          "fileTypeFormat": {
             "default": "TXT",
             "$ref": "#/components/schemas/FileFormatEnum"
           },
@@ -554,8 +553,8 @@
         },
         "required": [
           "branchList",
-          "currencyId",
-          "fileFormat",
+          "currency",
+          "fileTypeFormat",
           "operationTypeList"
         ],
         "additionalProperties": false
@@ -584,18 +583,17 @@
             "description": "Массив ИД филиалов"
           },
           "periodFrom": {
-            "description": "Дата начала отчётного периода 2023-01-01",
-            "$ref": "#/components/schemas/DateSchema"
+            "description": "Дата начала отчётного периода",
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "periodTo": {
-            "description": "Дата окончания отчётного периода 2023-12-31",
-            "$ref": "#/components/schemas/DateSchema"
+            "description": "Дата окончания отчётного периода",
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "currencyId": {
-            "description": "Ид валюты (например: 810, 999)",
-            "$ref": "#/components/schemas/Report6406CurrencyIdSchema"
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyEnum"
           },
-          "fileFormat": {
+          "fileTypeFormat": {
             "default": "TXT",
             "$ref": "#/components/schemas/FileFormatEnum"
           },
@@ -642,8 +640,8 @@
           "createdAt",
           "createdBy",
           "branchList",
-          "currencyId",
-          "fileFormat",
+          "currency",
+          "fileTypeFormat",
           "taskStatus",
           "totalFilesSize",
           "updatedAt",
@@ -808,18 +806,17 @@
             "description": "Массив ИД филиалов"
           },
           "periodFrom": {
-            "description": "Дата начала отчётного периода 2023-01-01",
-            "$ref": "#/components/schemas/DateSchema"
+            "description": "Дата начала отчётного периода",
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "periodTo": {
-            "description": "Дата окончания отчётного периода 2023-12-31",
-            "$ref": "#/components/schemas/DateSchema"
+            "description": "Дата окончания отчётного периода",
+            "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "currencyId": {
-            "description": "Ид валюты (например: 810, 999)",
-            "$ref": "#/components/schemas/Report6406CurrencyIdSchema"
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyEnum"
           },
-          "fileFormat": {
+          "fileTypeFormat": {
             "default": "TXT",
             "$ref": "#/components/schemas/FileFormatEnum"
           },
@@ -885,8 +882,8 @@
           "createdAt",
           "createdBy",
           "branchList",
-          "currencyId",
-          "fileFormat",
+          "currency",
+          "fileTypeFormat",
           "taskStatus",
           "totalFilesSize",
           "updatedAt",
@@ -1808,6 +1805,51 @@
           "$ref": "#/components/schemas/StorageResponse"
         }
       },
+      "UserRoleResponse": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "description": "Логин пользователя"
+          },
+          "roleAssignments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "description": "Имя роли"
+                },
+                "assignments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Список назначений роли"
+                }
+              },
+              "required": [
+                "role",
+                "assignments"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Список ролей и их назначений"
+          }
+        },
+        "required": [
+          "login",
+          "roleAssignments"
+        ],
+        "additionalProperties": false
+      },
+      "UserRoleListResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UserRoleResponse"
+        }
+      },
       "ExportTasksResponseDto": {
         "type": "object",
         "properties": {
@@ -2016,7 +2058,7 @@
         "type": "string",
         "format": "date-time",
         "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-        "description": "Дата и время в формате ISO 8601, например 2026-04-30T11:56:16.055Z"
+        "description": "Дата и время в формате ISO 8601, YYYY-MM-DDTHH:mm:ss.ssssssZ"
       },
       "SortOrderEnum": {
         "default": "desc",
@@ -3727,6 +3769,35 @@
         }
       }
     },
+    "/api/v1/report-6406/tasks/create": {
+      "post": {
+        "summary": "Создать новое задание на построение отчёта",
+        "tags": [
+          "Report 6406 - Tasks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDetailResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/report-6406/tasks/list": {
       "post": {
         "summary": "Получить список заданий (пагинация, сортировка, фильтрация)",
@@ -4407,6 +4478,27 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StorageVolumeListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/storages/user/roles": {
+      "get": {
+        "summary": "Получение информации о ролях пользователя",
+        "tags": [
+          "Report 6406 - Storage"
+        ],
+        "description": "Возвращает информацию о ролях и назначениях пользователя.",
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRoleListResponseDto"
                 }
               }
             }
