@@ -2651,11 +2651,9 @@
               "type": "string"
             }
           },
-          "responsibleUnitType": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "isUnitChanged": {
+            "description": "Флаг фильтра \"Была смена ОП\"",
+            "type": "boolean"
           },
           "inventoryAccountStatus": {
             "type": "array",
@@ -2862,23 +2860,8 @@
           "inventoryAccountStatus": {
             "type": "string"
           },
-          "reversedDebitSumRub": {
-            "$ref": "#/components/schemas/InventoryDecimalDto"
-          },
-          "reversedDebitSum": {
-            "$ref": "#/components/schemas/InventoryDecimalDto"
-          },
-          "reversedCreditSumRub": {
-            "$ref": "#/components/schemas/InventoryDecimalDto"
-          },
-          "reversedCreditSum": {
-            "$ref": "#/components/schemas/InventoryDecimalDto"
-          },
           "sourceBank": {
             "type": "string"
-          },
-          "dataDate": {
-            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "currencyIsoCode": {
             "type": "string"
@@ -2901,11 +2884,9 @@
           "resolutionDate": {
             "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "manualResponsibleUnit": {
+          "responsibleUnit": {
+            "description": "Подразделение, ответственное по счёту",
             "type": "string"
-          },
-          "isCriticalUpdated": {
-            "type": "boolean"
           },
           "version": {
             "$ref": "#/components/schemas/IntegerIdSchema"
@@ -2950,9 +2931,6 @@
           "manualInventoryAccountStatus": {
             "type": "string"
           },
-          "originalInventoryAccountStatus": {
-            "type": "string"
-          },
           "discrepancyDescription": {
             "type": "string"
           },
@@ -2987,9 +2965,6 @@
         "type": "object",
         "properties": {
           "manualInventoryAccountStatus": {
-            "type": "string"
-          },
-          "originalInventoryAccountStatus": {
             "type": "string"
           },
           "discrepancyDescription": {
@@ -3112,23 +3087,8 @@
           "inventoryAccountStatus": {
             "type": "string"
           },
-          "reversedDebitSumRub": {
-            "$ref": "#/components/schemas/InventoryDecimalDto"
-          },
-          "reversedDebitSum": {
-            "$ref": "#/components/schemas/InventoryDecimalDto"
-          },
-          "reversedCreditSumRub": {
-            "$ref": "#/components/schemas/InventoryDecimalDto"
-          },
-          "reversedCreditSum": {
-            "$ref": "#/components/schemas/InventoryDecimalDto"
-          },
           "sourceBank": {
             "type": "string"
-          },
-          "dataDate": {
-            "$ref": "#/components/schemas/DateTimeSchema"
           },
           "currencyIsoCode": {
             "type": "string"
@@ -3151,11 +3111,9 @@
           "resolutionDate": {
             "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "manualResponsibleUnit": {
+          "responsibleUnit": {
+            "description": "Подразделение, ответственное по счёту",
             "type": "string"
-          },
-          "isCriticalUpdated": {
-            "type": "boolean"
           },
           "version": {
             "$ref": "#/components/schemas/IntegerIdSchema"
@@ -3221,7 +3179,8 @@
           "resolutionDate": {
             "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "manualResponsibleUnit": {
+          "responsibleUnit": {
+            "description": "Подразделение, ответственное по счёту",
             "type": "string"
           },
           "isExclude": {
@@ -3322,18 +3281,6 @@
         ],
         "additionalProperties": false
       },
-      "InventoryAccountsIdDto": {
-        "type": "object",
-        "properties": {
-          "accountId": {
-            "$ref": "#/components/schemas/UuidSchema"
-          }
-        },
-        "required": [
-          "accountId"
-        ],
-        "additionalProperties": false
-      },
       "InventoryAccountsExportRequestDto": {
         "type": "object",
         "properties": {
@@ -3371,7 +3318,8 @@
               "type": "string"
             }
           },
-          "manualResponsibleUnit": {
+          "responsibleUnit": {
+            "description": "Подразделение, ответственное по счёту",
             "type": "array",
             "items": {
               "type": "string"
@@ -5103,49 +5051,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InventoryAccountHistoryResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/inventory/accounts/{accountId}/critical-update": {
-      "patch": {
-        "summary": "Метод для снятия пометки критичного обновления данных о счете",
-        "tags": [
-          "Inventory - Accounts"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InventoryAccountsIdDto"
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "path",
-            "name": "accountId",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "nullable": true,
-                  "enum": [
-                    null
-                  ]
                 }
               }
             }
