@@ -32,7 +32,7 @@ export const inventoryAccountsListFilterSchema = z.object({
   accountNum: z.string().optional().describe('Номер счёта (accountNum в DOC)'),
   accountType: z.array(zIdSchema).optional().describe('Типы счёта (массив)'),
   responsibleUnit: z.array(z.string()).optional(),
-  responsibleUnitType: z.array(z.string()).optional(),
+  isUnitChanged: z.boolean().optional().describe('Флаг фильтра "Была смена ОП"'),
   inventoryAccountStatus: z.array(z.string()).optional(),
   sourceBank: z.array(z.string()).optional(),
   productName: z.array(z.string()).optional(),
@@ -71,12 +71,7 @@ export const inventoryAccountRowSchema = z.object({
   manualControlRuleNumber: zIdSchema.optional(),
   manualControlFlag: z.boolean().optional(),
   inventoryAccountStatus: z.string().optional(),
-  reversedDebitSumRub: inventoryDecimalSchema.optional(),
-  reversedDebitSum: inventoryDecimalSchema.optional(),
-  reversedCreditSumRub: inventoryDecimalSchema.optional(),
-  reversedCreditSum: inventoryDecimalSchema.optional(),
   sourceBank: z.string().optional(),
-  dataDate: dateTimeSchema.optional(),
   currencyIsoCode: z.string().optional(),
   clientInn: z.string().optional(),
   discrepancyDescription: z.string().optional(),
@@ -84,8 +79,7 @@ export const inventoryAccountRowSchema = z.object({
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
   resolutionDate: dateTimeSchema.optional(),
-  manualResponsibleUnit: z.string().optional(),
-  isCriticalUpdated: z.boolean().optional(),
+  responsibleUnit: z.string().optional().describe('Подразделение, ответственное по счёту'),
   version: zIdSchema,
   isExclude: z.boolean().optional(),
   filialCbrName: z.string().optional().describe('Наименование филиала'),
@@ -112,9 +106,9 @@ export const inventoryAccountHistoryItemSchema = z.object({
   discrepancyDescription: z.string().optional(),
   discrepancySum: inventoryDecimalSchema.optional(),
   discrepancyReason: z.string().optional(),
- resolutionActions: z.string().optional(),
+  resolutionActions: z.string().optional(),
   resolutionDate: dateTimeSchema.optional(),
-  manualResponsibleUnit: z.string().optional(),
+  responsibleUnit: z.string().optional().describe('Подразделение, ответственное по счёту'),
   isExclude: z.boolean().optional(),
 });
 
@@ -132,9 +126,6 @@ export const inventoryAccountIdParamSchema = z.object({
   accountId: zUuidSchema,
 });
 
-export const inventoryAccountIdSchema = z.object({
-  accountId: zUuidSchema,
-});
 
 export const inventoryAccountIdsSchema = z.object({
   accountId: z.array(zUuidSchema).min(1),
@@ -155,7 +146,6 @@ export const inventoryAccountsExportResponseSchema =  z.array(inventoryReportExp
 
 export const inventoryAccountStatusSingleRequestSchema = z.object({
   manualInventoryAccountStatus: z.string(),
-  originalInventoryAccountStatus: z.string().optional(),
   discrepancyDescription: z.string().optional(),
   discrepancySum: inventoryDecimalSchema.optional(),
   discrepancyReason: z.string().optional(),

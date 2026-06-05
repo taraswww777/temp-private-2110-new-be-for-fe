@@ -9,7 +9,6 @@ import {
   inventoryAccountIdParamSchema,
   inventoryManualUnitRequestSchema,
   inventoryAccountStatusSingleSchema,
-  inventoryAccountIdSchema,
   inventoryAccountHistoryRequestSchema,
   inventoryAccountStatusSingleRequestSchema,
 } from '../../../schemas/inventory/accounts.schema.ts';
@@ -73,16 +72,6 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
       response: { 200: inventoryAccountHistoryResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send({ itemsList: [], totalItems: 0 }));
-
-  app.patch('/:accountId/critical-update', {
-    schema: {
-      tags: [OpenApiTag.InventoryAccounts],
-      summary: 'Метод для снятия пометки критичного обновления данных о счете',
-      body: inventoryAccountIdSchema ,
-      response: { 200: z.null() },
-    },
-  }, async (_request, reply) => reply.status(200).send(null));
-
 
   app.patch('/:accountId/inventory-status', {
     schema: {
