@@ -30,7 +30,6 @@ export const updateInventoryOrderSchema = z.object({
   orderDate: dateTimeSchema,
   inventoryDateFrom: dateTimeSchema,
   inventoryDateTo: dateTimeSchema,
-  isActive: z.boolean(),
 });
 
 export const inventoryOrderMutationResponseSchema = z.object({

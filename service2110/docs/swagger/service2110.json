@@ -2392,9 +2392,6 @@
           },
           "inventoryDateTo": {
             "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "isActive": {
-            "type": "boolean"
           }
         },
         "required": [
@@ -2402,8 +2399,7 @@
           "orderNumber",
           "orderDate",
           "inventoryDateFrom",
-          "inventoryDateTo",
-          "isActive"
+          "inventoryDateTo"
         ],
         "additionalProperties": false
       },
