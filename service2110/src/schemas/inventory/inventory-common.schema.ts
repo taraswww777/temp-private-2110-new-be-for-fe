@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { inventoryProcessStatusSchema } from './enums/InventoryProcessStatusEnum.ts';
 import { dateTimeSchema } from '../common/dateString.schema.ts';
 import { zUuidSchema } from '../common/uuid.schema.ts';
-import { inventoryAssignmentsSchema, inventoryReportStatusSchema, inventoryUserRolesSchema } from './enums/InventoryReportStatusEnum.ts';
+import { inventoryReportStatusSchema } from './enums/InventoryReportStatusEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { inventoryEntityTypeSchema } from './enums/InventoryEntityTypeEnum.ts';
 
@@ -74,12 +74,3 @@ export const inventoryActiveStateSchema = z.object({
   status: inventoryProcessStatusSchema,
 });
 
-export const inventoryRoleAssignmentSchema = z.object({
-  role: inventoryUserRolesSchema,
-  assignments: z.array(inventoryAssignmentsSchema),
-})
-
-export const inventoryUserRolesResponseSchema = z.object({
-  login: z.string(),
-  roleAssignments: z.array(inventoryRoleAssignmentSchema).optional(),
-});

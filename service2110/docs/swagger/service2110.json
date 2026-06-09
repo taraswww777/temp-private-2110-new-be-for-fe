@@ -1805,51 +1805,6 @@
           "$ref": "#/components/schemas/StorageResponse"
         }
       },
-      "UserRoleResponse": {
-        "type": "object",
-        "properties": {
-          "login": {
-            "type": "string",
-            "description": "Логин пользователя"
-          },
-          "roleAssignments": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "role": {
-                  "type": "string",
-                  "description": "Имя роли"
-                },
-                "assignments": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Список назначений роли"
-                }
-              },
-              "required": [
-                "role",
-                "assignments"
-              ],
-              "additionalProperties": false
-            },
-            "description": "Список ролей и их назначений"
-          }
-        },
-        "required": [
-          "login",
-          "roleAssignments"
-        ],
-        "additionalProperties": false
-      },
-      "UserRoleListResponseDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/UserRoleResponse"
-        }
-      },
       "ExportTasksResponseDto": {
         "type": "object",
         "properties": {
@@ -2141,6 +2096,58 @@
         ],
         "additionalProperties": false
       },
+      "UserRolesEnum": {
+        "type": "string",
+        "enum": [
+          "Inventory",
+          "6406u"
+        ]
+      },
+      "AssignmentsEnum": {
+        "type": "string",
+        "enum": [
+          "ADMIN",
+          "MANAGER",
+          "USER"
+        ]
+      },
+      "RoleAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/UserRolesEnum"
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssignmentsEnum"
+            }
+          }
+        },
+        "required": [
+          "role",
+          "assignments"
+        ],
+        "additionalProperties": false
+      },
+      "UserRolesResponseDto": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "roleAssignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleAssignmentDto"
+            }
+          }
+        },
+        "required": [
+          "login"
+        ],
+        "additionalProperties": false
+      },
       "InventoryProcessStatusEnum": {
         "type": "string",
         "enum": [
@@ -2202,21 +2209,6 @@
           "FAILED"
         ],
         "description": "Статус формирования отчета"
-      },
-      "InventoryUserRolesEnum": {
-        "type": "string",
-        "enum": [
-          "Inventory",
-          "6406u"
-        ]
-      },
-      "InventoryAssignmentsEnum": {
-        "type": "string",
-        "enum": [
-          "ADMIN",
-          "MANAGER",
-          "USER"
-        ]
       },
       "InventoryEntityTypeEnum": {
         "type": "string",
@@ -3536,43 +3528,6 @@
         ],
         "additionalProperties": false
       },
-      "inventoryRoleAssignmentDto": {
-        "type": "object",
-        "properties": {
-          "role": {
-            "$ref": "#/components/schemas/InventoryUserRolesEnum"
-          },
-          "assignments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InventoryAssignmentsEnum"
-            }
-          }
-        },
-        "required": [
-          "role",
-          "assignments"
-        ],
-        "additionalProperties": false
-      },
-      "InventoryUserRolesResponseDto": {
-        "type": "object",
-        "properties": {
-          "login": {
-            "type": "string"
-          },
-          "roleAssignments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/inventoryRoleAssignmentDto"
-            }
-          }
-        },
-        "required": [
-          "login"
-        ],
-        "additionalProperties": false
-      },
       "InventoryFileDto": {
         "type": "object",
         "properties": {
@@ -4490,7 +4445,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserRoleListResponseDto"
+                  "$ref": "#/components/schemas/UserRolesResponseDto"
                 }
               }
             }
@@ -5461,7 +5416,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InventoryUserRolesResponseDto"
+                  "$ref": "#/components/schemas/UserRolesResponseDto"
                 }
               }
             }

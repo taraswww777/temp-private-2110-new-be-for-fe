@@ -8,6 +8,7 @@ import { zUuidSchema, uuidParamSchema } from './uuid.schema.ts';
 import { zAccountSchema, zAccountSecondOrderSchema } from '../common.schema.ts';
 
 import { registerOpenApiComponent } from '../utils/registerOpenApiComponent.ts';
+import { assignmentsSchema, roleAssignmentSchema, userRolesResponseSchema, userRolesSchema } from './userRoles.schema.ts';
 
 export type { OpenApiSchemaRegistry } from '../../types/openapi-schema-registry.ts';
 
@@ -32,4 +33,8 @@ export function registerCommonOpenApiSchemas() {
   registerOpenApiComponent(processRequestSchema, 'ProcessDto');
   registerOpenApiComponent(processResponseSchema, 'ProcessResponseDto');
   registerOpenApiComponent(processResultItemSchema, 'ProcessResultItemDto');
+  registerOpenApiComponent(userRolesSchema, 'UserRolesEnum');
+  registerOpenApiComponent(assignmentsSchema, 'AssignmentsEnum');
+  registerOpenApiComponent(roleAssignmentSchema, 'RoleAssignmentDto');
+  registerOpenApiComponent(userRolesResponseSchema, 'UserRolesResponseDto');
 }
