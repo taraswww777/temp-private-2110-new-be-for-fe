@@ -3,8 +3,8 @@ import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
   storageVolumeListResponseSchema,
-  userRoleListResponseSchema,
 } from '../../../../schemas/report-6406/storage.schema.ts';
+import { userRolesResponseSchema } from '../../../../schemas/common/userRoles.schema.ts';
 
 export const storageRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -36,7 +36,7 @@ export const storageRoutes: FastifyPluginAsync = async (fastify) => {
       summary: 'Получение информации о ролях пользователя',
       description: 'Возвращает информацию о ролях и назначениях пользователя.',
       response: {
-        200: userRoleListResponseSchema,
+        200: userRolesResponseSchema,
       },
     },
   }, async (_request, reply) => {

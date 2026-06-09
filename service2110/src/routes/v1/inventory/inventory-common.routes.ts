@@ -8,12 +8,12 @@ import {
   inventoryInventoryStateQuerySchema,
   inventoryInventoryStateResponseSchema,
   inventoryActiveStateSchema,
-  inventoryUserRolesResponseSchema,
   inventoryFileSchema,
 } from '../../../schemas/inventory/inventory-common.schema.ts';
 import z from 'zod';
 import { accountVersionedIdsSchema, inventoryAccountsExportRequestSchema, inventoryAccountsExportResponseSchema, inventoryAccountsListFilterSchema, inventoryAccountStatusSingleSchema, inventoryAccountUpdatedResponseSchema, inventoryManualUnitBulkRequestSchema } from '../../../schemas/inventory/accounts.schema.ts';
 import { inventoryStatisticsExportRequestSchema, inventoryStatisticsExportResponseSchema } from '../../../schemas/inventory/statistics.schema.ts';
+import { userRolesResponseSchema } from '../../../schemas/common/userRoles.schema.ts';
 
 export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -141,7 +141,7 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: [OpenApiTag.InventoryAccounts],
       summary: 'Просмотр ролей пользователя',
-      response: { 200: inventoryUserRolesResponseSchema },
+      response: { 200: userRolesResponseSchema },
     },
   }, async (_request, reply) => reply.status(200).send({ login: 'vtb1234567', roleAssignments: [] }));
 
