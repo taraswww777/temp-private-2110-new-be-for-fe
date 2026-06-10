@@ -7,7 +7,7 @@ import { inventoryAccountListItemSchema } from './accounts.schema.ts';
 export const inventoryApprovalListFilterSchema = z.object({
   bs2: z.array(zIdSchema).optional().describe('БС-2 (массив int)'),
   originalResponsibleUnit: z.array(z.string()).optional(),
-  responsibleUnit: z.array(z.string()).optional().describe('Подразделение, ответственное по счёту'),
+  manualResponsibleUnit: z.array(z.string()).optional().describe('Подразделение, ответственное по счёту'),
   productName: z.array(z.string()).optional(),
   senderAdLogin: z.array(z.string()).optional(),
 }).describe('Фильтр для списка счетов');
