@@ -3306,7 +3306,7 @@
               "type": "string"
             }
           },
-          "responsibleUnit": {
+          "manualResponsibleUnit": {
             "description": "Подразделение, ответственное по счёту",
             "type": "array",
             "items": {
