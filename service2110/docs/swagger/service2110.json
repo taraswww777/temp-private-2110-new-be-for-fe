@@ -245,18 +245,15 @@
         "type": "string",
         "enum": [
           "TXT",
-          "XLSX",
           "XML"
         ],
         "description": "Формат файла",
         "x-enum-descriptions": [
           "Текстовый формат",
-          "Excel формат",
           "XML формат"
         ],
         "x-enum-varnames": [
           "TXT",
-          "XLSX",
           "XML"
         ],
         "oneOf": [
@@ -264,11 +261,6 @@
             "const": "TXT",
             "description": "Текстовый формат",
             "title": "TXT"
-          },
-          {
-            "const": "XLSX",
-            "description": "Excel формат",
-            "title": "XLSX"
           },
           {
             "const": "XML",

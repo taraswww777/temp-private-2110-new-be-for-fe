@@ -18,7 +18,6 @@ export const reportTypePgEnum = pgEnum('report_type_enum', [
 ]);
 export const fileFormatPgEnum = pgEnum('file_format_enum', [
   FileFormatEnum.TXT,
-  FileFormatEnum.XLSX,
   FileFormatEnum.XML,
 ]);
 export const currencyPgEnum = pgEnum('currency_enum', [

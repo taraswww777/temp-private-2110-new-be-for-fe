@@ -7,8 +7,6 @@ import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers
 export enum FileFormatEnum {
   /** Текстовый формат */
   TXT = 'TXT',
-  /** Excel формат */
-  XLSX = 'XLSX',
   /** XML формат */
   XML = 'XML',
 }
@@ -16,7 +14,6 @@ export enum FileFormatEnum {
 // Мапа описаний для каждого значения enum
 const FileFormatDescriptions = {
   [FileFormatEnum.TXT]: { value: FileFormatEnum.TXT, description: 'Текстовый формат' },
-  [FileFormatEnum.XLSX]: { value: FileFormatEnum.XLSX, description: 'Excel формат' },
   [FileFormatEnum.XML]: { value: FileFormatEnum.XML, description: 'XML формат' },
 } as const;
 
