@@ -31,7 +31,7 @@
             "description": "ИД филиала",
             "$ref": "#/components/schemas/IntegerIdSchema"
           },
-          "codeCb": {
+          "codeCB": {
             "type": "string",
             "description": "Код филиала по ЦБ"
           },
@@ -42,7 +42,7 @@
         },
         "required": [
           "id",
-          "codeCb",
+          "codeCB",
           "name"
         ],
         "additionalProperties": false
