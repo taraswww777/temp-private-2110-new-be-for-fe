@@ -2206,7 +2206,9 @@
           "RECEIVED",
           "IN_PROGRESS",
           "COMPLETED",
-          "FAILED"
+          "FAILED",
+          "CONTINUED",
+          "ROW_LIMIT_EXCEEDED"
         ],
         "description": "Статус формирования отчета"
       },
@@ -2315,16 +2317,16 @@
             "description": "Дата окончания инвентаризации",
             "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "orderFileName": {
-            "description": "Имя файла приказа",
-            "type": "string"
-          },
           "isActive": {
             "description": "Приказ актуален на данный момент",
             "type": "boolean"
           },
           "inventoryOrderStatus": {
             "$ref": "#/components/schemas/InventoryProcessStatusEnum"
+          },
+          "orderFileLink": {
+            "description": "Ссылка на скачивание файла из S3",
+            "type": "string"
           }
         },
         "required": [
@@ -3167,7 +3169,7 @@
           "resolutionDate": {
             "$ref": "#/components/schemas/DateTimeSchema"
           },
-          "responsibleUnit": {
+          "manualResponsibleUnit": {
             "description": "Подразделение, ответственное по счёту",
             "type": "string"
           },

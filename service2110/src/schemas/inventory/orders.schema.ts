@@ -10,9 +10,10 @@ export const inventoryOrderListItemSchema = z.object({
   orderDate: dateTimeSchema.describe('Дата приказа'),
   inventoryDateFrom: dateTimeSchema.describe('Дата начала инвентаризации'),
   inventoryDateTo: dateTimeSchema.describe('Дата окончания инвентаризации'),
-  orderFileName: z.string().optional().describe('Имя файла приказа'),
+
   isActive: z.boolean().optional().describe('Приказ актуален на данный момент'),
   inventoryOrderStatus: inventoryProcessStatusSchema,
+  orderFileLink: z.string().optional().describe('Ссылка на скачивание файла из S3')
 });
 
 export const inventoryOrdersListResponseSchema = z.array(inventoryOrderListItemSchema);

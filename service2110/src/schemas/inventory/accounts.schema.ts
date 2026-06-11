@@ -108,7 +108,7 @@ export const inventoryAccountHistoryItemSchema = z.object({
   discrepancyReason: z.string().optional(),
   resolutionActions: z.string().optional(),
   resolutionDate: dateTimeSchema.optional(),
-  responsibleUnit: z.string().optional().describe('Подразделение, ответственное по счёту'),
+  manualResponsibleUnit: z.string().optional().describe('Подразделение, ответственное по счёту'),
   isExclude: z.boolean().optional(),
 });
 
