@@ -9,7 +9,7 @@ import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
  */
 export const branchSchema = z.object({
   id: zIdSchema.describe('ИД филиала'),
-  codeCb: z.string().describe('Код филиала по ЦБ'),
+  codeCB: z.string().describe('Код филиала по ЦБ'),
   name: z.string().describe('Название филиала'),
 });
 
