@@ -8,16 +8,16 @@ export enum Currency {
   /** Рубли */
   RUB = 'RUB',
   /** Иностранная валюта */
-  FOREIGN = 'FOREIGN',
+  FCY = 'FCY',
 }
 
 // Мапа описаний для каждого значения enum
 const CurrencyDescriptions = {
   [Currency.RUB]: { value: Currency.RUB, description: 'Рубли' },
-  [Currency.FOREIGN]: { value: Currency.FOREIGN, description: 'Иностранная валюта' },
+  [Currency.FCY]: { value: Currency.FCY, description: 'Иностранная валюта' },
 } as const;
 
-export const currencySchema = z.enum(Currency).describe(`Валюта, например: (${Currency.RUB},${Currency.FOREIGN})`);
+export const currencySchema = z.enum(Currency).describe(`Валюта, например: (${Currency.RUB},${Currency.FCY})`);
 export const currencyIdSchema = z.number().positive().min(100).max(999).describe('Валюта');
 
 // Создаем расширенную схему с описаниями

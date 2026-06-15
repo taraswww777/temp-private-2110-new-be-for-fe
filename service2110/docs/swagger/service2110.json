@@ -211,16 +211,16 @@
         "type": "string",
         "enum": [
           "RUB",
-          "FOREIGN"
+          "FCY"
         ],
-        "description": "Валюта, например: (RUB,FOREIGN)",
+        "description": "Валюта, например: (RUB,FCY)",
         "x-enum-descriptions": [
           "Рубли",
           "Иностранная валюта"
         ],
         "x-enum-varnames": [
           "RUB",
-          "FOREIGN"
+          "FCY"
         ],
         "oneOf": [
           {
@@ -229,9 +229,9 @@
             "title": "RUB"
           },
           {
-            "const": "FOREIGN",
+            "const": "FCY",
             "description": "Иностранная валюта",
-            "title": "FOREIGN"
+            "title": "FCY"
           }
         ]
       },

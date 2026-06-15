@@ -5,7 +5,6 @@ import { FileFormatEnum } from '../../schemas/report-6406/enums/FileFormatEnum.t
 import { PackageStatusEnum } from '../../schemas/report-6406/enums/PackageStatusEnum.ts';
 import { TaskStatusEnum } from '../../schemas/report-6406/enums/TaskStatusEnum.ts';
 import { FileStatusEnum } from '../../schemas/report-6406/enums/FileStatusEnum.ts';
-import { SortOrderEnum } from '../../schemas/common/SortOrderEnum.ts';
 
 /**
  * PostgreSQL enum для типа отчёта
@@ -22,7 +21,7 @@ export const fileFormatPgEnum = pgEnum('file_format_enum', [
 ]);
 export const currencyPgEnum = pgEnum('currency_enum', [
   Currency.RUB,
-  Currency.FOREIGN
+  Currency.FCY
 ]);
 
 /**
