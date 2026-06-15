@@ -211,16 +211,16 @@
         "type": "string",
         "enum": [
           "RUB",
-          "FOREIGN"
+          "FCY"
         ],
-        "description": "Валюта, например: (RUB,FOREIGN)",
+        "description": "Валюта, например: (RUB,FCY)",
         "x-enum-descriptions": [
           "Рубли",
           "Иностранная валюта"
         ],
         "x-enum-varnames": [
           "RUB",
-          "FOREIGN"
+          "FCY"
         ],
         "oneOf": [
           {
@@ -229,9 +229,9 @@
             "title": "RUB"
           },
           {
-            "const": "FOREIGN",
+            "const": "FCY",
             "description": "Иностранная валюта",
-            "title": "FOREIGN"
+            "title": "FCY"
           }
         ]
       },
@@ -245,18 +245,15 @@
         "type": "string",
         "enum": [
           "TXT",
-          "XLSX",
           "XML"
         ],
         "description": "Формат файла",
         "x-enum-descriptions": [
           "Текстовый формат",
-          "Excel формат",
           "XML формат"
         ],
         "x-enum-varnames": [
           "TXT",
-          "XLSX",
           "XML"
         ],
         "oneOf": [
@@ -264,11 +261,6 @@
             "const": "TXT",
             "description": "Текстовый формат",
             "title": "TXT"
-          },
-          {
-            "const": "XLSX",
-            "description": "Excel формат",
-            "title": "XLSX"
           },
           {
             "const": "XML",
