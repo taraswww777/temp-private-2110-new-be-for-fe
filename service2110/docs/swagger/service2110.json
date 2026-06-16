@@ -3680,34 +3680,6 @@
             }
           }
         }
-      },
-      "delete": {
-        "summary": "Удалить одно или несколько заданий",
-        "tags": [
-          "Report 6406 - Tasks"
-        ],
-        "description": "Удаляет задания. Возвращает 200 OK с детальной информацией о результате операции для каждого задания.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProcessDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessResponseDto"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/api/v1/report-6406/tasks/create": {
@@ -3791,6 +3763,35 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskDetailResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/delete": {
+      "post": {
+        "summary": "Удалить одно или несколько заданий",
+        "tags": [
+          "Report 6406 - Tasks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessResponseDto"
                 }
               }
             }
@@ -4001,37 +4002,6 @@
         }
       }
     },
-    "/api/v1/report-6406/tasks/export": {
-      "post": {
-        "summary": "Выгрузить реестр отчётов в CSV формате",
-        "tags": [
-          "Report 6406 - Tasks"
-        ],
-        "description": "Создаёт CSV файл со списком заданий согласно фильтрам. Возвращает ссылку на скачивание файла.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetTasksRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v1/report-6406/packages": {
       "post": {
         "summary": "Создать новый пакет",
@@ -4134,7 +4104,7 @@
           }
         }
       },
-      "patch": {
+      "put": {
         "summary": "Обновить название пакета",
         "tags": [
           "Report 6406 - Packages"
@@ -4202,8 +4172,8 @@
         }
       }
     },
-    "/api/v1/report-6406/packages/{packageId}/add-link-with-tasks": {
-      "patch": {
+    "/api/v1/report-6406/packages/{packageId}/tasks": {
+      "post": {
         "summary": "Добавить задания в пакет",
         "tags": [
           "Report 6406 - Packages"
@@ -4241,8 +4211,8 @@
         }
       }
     },
-    "/api/v1/report-6406/packages/{packageId}/delete-link-with-tasks": {
-      "delete": {
+    "/api/v1/report-6406/packages/{packageId}/tasks/delete": {
+      "put": {
         "summary": "Удалить одно или несколько заданий из пакета",
         "tags": [
           "Report 6406 - Packages"
@@ -4440,6 +4410,95 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserRolesResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/file/report-6406/tasks": {
+      "post": {
+        "summary": "Создать новое задание на построение отчёта",
+        "tags": [
+          "Report 6406 - Tasks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDetailResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/file/report-6406/tasks/create": {
+      "post": {
+        "summary": "Создать новое задание на построение отчёта",
+        "tags": [
+          "Report 6406 - Tasks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDetailResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/file/report-6406/tasks/export": {
+      "post": {
+        "summary": "Выгрузить реестр отчётов в CSV формате",
+        "tags": [
+          "Report 6406 - Tasks"
+        ],
+        "description": "Создаёт CSV файл со списком заданий согласно фильтрам. Возвращает ссылку на скачивание файла.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTasksRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }

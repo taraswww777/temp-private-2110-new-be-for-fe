@@ -10,7 +10,7 @@ import {
 import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
 
 /**
- * PATCH /api/v1/report-6406/packages/:id
+ * /api/v1/report-6406/packages/:id
  * Обновить название пакета
  * 
  * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
@@ -18,7 +18,7 @@ import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
 export const updatePackageRoute: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
-  app.patch('/:id', {
+  app.put('/:id', {
     schema: {
       tags: [OpenApiTag.Report6406Packages],
       summary: 'Обновить название пакета',
