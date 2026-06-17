@@ -8,7 +8,7 @@ import { processResponseSchema } from '../../../../schemas/common/process.schema
 import { packageIdPathParamSchema } from '../../../../schemas/report-6406/packages.schema.ts';
 
 /**
- * DELETE /api/v1/report-6406/packages/:packageId/tasks
+ * PUT /api/v1/report-6406/packages/:packageId/tasks
  * Универсальное удаление заданий из пакета (одного или нескольких)
  * 
  * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
@@ -16,7 +16,7 @@ import { packageIdPathParamSchema } from '../../../../schemas/report-6406/packag
 export const removeTasksFromPackageRoute: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
-  app.delete('/:packageId/delete-link-with-tasks', {
+  app.put('/:packageId/tasks/delete', {
     schema: {
       tags: [OpenApiTag.Report6406Packages],
       summary: 'Удалить одно или несколько заданий из пакета',

@@ -15,7 +15,7 @@ import { packageIdPathParamSchema } from '../../../../schemas/report-6406/packag
 export const addTasksToPackageRoute: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
-  app.patch('/:packageId/add-link-with-tasks', {
+  app.post('/:packageId/tasks', {
     schema: {
       tags: [OpenApiTag.Report6406Packages],
       summary: 'Добавить задания в пакет',
