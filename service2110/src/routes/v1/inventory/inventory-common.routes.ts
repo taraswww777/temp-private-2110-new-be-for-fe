@@ -163,13 +163,12 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(200).send(null));
 
-  app.post('/upload', {
+  app.post('/order/:orderId/upload', {
     schema: {
       tags: [OpenApiTag.Inventory],
       summary: 'Загрузить файл',
       consumes: ['multipart/form-data'],
       body: z.object({
-        entityInfo: inventoryFileSchema,
         file: z.any().describe('Файл задачи'),
       }),
       response: { 200: inventoryFileSchema },

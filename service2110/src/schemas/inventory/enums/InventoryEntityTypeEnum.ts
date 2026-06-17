@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
 export enum InventoryEntityTypeEnum {
-  ACCOUNTS = 'ACCOUNTS',
-  STATISTICS = 'STATISTICS',
+  REPORTS = 'REPORTS',
   ORDERS = 'ORDERS',
 }
 

@@ -2207,8 +2207,7 @@
       "InventoryEntityTypeEnum": {
         "type": "string",
         "enum": [
-          "ACCOUNTS",
-          "STATISTICS",
+          "REPORTS",
           "ORDERS"
         ]
       },
@@ -5495,7 +5494,7 @@
         }
       }
     },
-    "/api/v1/inventory/upload": {
+    "/api/v1/inventory/order/{orderId}/upload": {
       "post": {
         "summary": "Загрузить файл",
         "tags": [
@@ -5507,13 +5506,9 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "entityInfo": {
-                    "$ref": "#/components/schemas/InventoryFileDto"
-                  },
                   "file": {}
                 },
                 "required": [
-                  "entityInfo",
                   "file"
                 ]
               }
@@ -5521,6 +5516,16 @@
           },
           "required": true
         },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orderId",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "Default Response",
