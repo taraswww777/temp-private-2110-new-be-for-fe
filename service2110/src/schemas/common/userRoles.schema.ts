@@ -11,6 +11,7 @@ export enum AssignmentsEnum {
   ADMIN = "ADMIN",
   MANAGER = "MANAGER",
   USER = "USER",
+  UAOD_DOPB = "UAOD_DOPB",
 }
 
 export const assignmentsSchema = z.enum(AssignmentsEnum);
