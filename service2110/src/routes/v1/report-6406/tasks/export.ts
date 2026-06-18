@@ -4,24 +4,23 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { getTasksRequestSchema } from '../../../../schemas/report-6406/tasks.schema.ts';
 
-export const exportRoutes: FastifyPluginAsync = async (fastify) => {
+/**
+ * POST /api/v1/file/report-6406/tasks/export
+ * Экспортирует список задач в формате Excel с применением фильтров
+ */
+export const fileExportRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
-  /**
-   * POST /api/v1/report-6406/tasks/export
-   * Выгрузить реестр отчётов в CSV формате
-   */
   app.post('/export', {
     schema: {
       tags: [OpenApiTag.Report6406Tasks],
-      summary: 'Выгрузить реестр отчётов в CSV формате',
-      description: 'Создаёт CSV файл со списком заданий согласно фильтрам. Возвращает ссылку на скачивание файла.',
+      summary: 'Экспортирует список задач в формате Excel с применением фильтров',
       body: getTasksRequestSchema,
       response: {
         200: z.file(),
       },
     },
-  }, async (request, reply) => {
+  }, async (_request, reply) => {
     return reply.status(200).send({} as never);
   });
 };
