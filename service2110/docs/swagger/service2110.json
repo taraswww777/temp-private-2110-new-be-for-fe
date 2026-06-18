@@ -5513,7 +5513,7 @@
         }
       }
     },
-    "/api/v1/inventory/file": {
+    "/api/v1/inventory/order/{orderId}/file": {
       "delete": {
         "summary": "Удалить файл",
         "tags": [
@@ -5522,17 +5522,11 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/components/schemas/UuidSchema"
+              "type": "string"
             },
-            "in": "query",
-            "name": "entityId"
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/InventoryEntityTypeEnum"
-            },
-            "in": "query",
-            "name": "entityType"
+            "in": "path",
+            "name": "orderId",
+            "required": true
           }
         ],
         "responses": {

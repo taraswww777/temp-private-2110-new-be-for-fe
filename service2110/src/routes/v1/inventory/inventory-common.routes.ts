@@ -154,11 +154,10 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
     },
   }, async (_request, reply) => reply.status(200).send({} as never));
 
-  app.delete('/file', {
+  app.delete('order/:orderId/file', {
     schema: {
       tags: [OpenApiTag.Inventory],
       summary: 'Удалить файл',
-      querystring: inventoryFileSchema,
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
