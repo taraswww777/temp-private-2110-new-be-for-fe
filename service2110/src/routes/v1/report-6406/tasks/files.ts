@@ -4,8 +4,6 @@ import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import {
-  retryFileConversionResponseSchema,
-  taskFilePathParamsSchema,
   taskFilesRequestSchema,
   taskFilesResponseSchema,
   taskFileUrlResponseSchema,
@@ -50,26 +48,6 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
       body: z.array(zIdSchema),
       response: {
         200: taskFileUrlResponseSchema,
-      },
-    },
-  }, async (_request, reply) => {
-    return reply.status(200).send({} as any);
-  });
-
-  /**
-   * POST /api/v1/report-6406/tasks/:taskId/files/:fileId/retry
-   * Повторить конвертацию файла с ошибкой (экспериментальный endpoint)
-   *
-   * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
-   */
-  app.post('/:taskId/files/:fileId/retry', {
-    schema: {
-      tags: [OpenApiTag.Report6406Tasks],
-      summary: '⚠️ [Экспериментальный] Повторить конвертацию файла с ошибкой',
-      description: 'Экспериментальная функция для повтора конвертации файлов. В текущей версии возвращает 501 Not Implemented.',
-      params: taskFilePathParamsSchema,
-      response: {
-        200: retryFileConversionResponseSchema,
       },
     },
   }, async (_request, reply) => {
