@@ -2100,7 +2100,8 @@
         "enum": [
           "ADMIN",
           "MANAGER",
-          "USER"
+          "USER",
+          "UAOD_DOPB"
         ]
       },
       "RoleAssignmentDto": {
