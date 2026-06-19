@@ -8,18 +8,16 @@ import {
 } from '../../../../schemas/report-6406/tasks.schema.ts';
 
 /**
- * POST /api/v1/report-6406/tasks
- * Создать новое задание на построение отчёта
- *
- * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
+ * POST /api/v1/report-6406/tasks/create
+ * Создаёт новую задачу
  */
 export const createTaskRoute: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
-  app.post('/', {
+  app.post('/create', {
     schema: {
       tags: [OpenApiTag.Report6406Tasks],
-      summary: 'Создать новое задание на построение отчёта',
+      summary: 'Создаёт новую задачу',
       body: createTaskSchema,
       response: {
         201: taskDetailSchema,
@@ -28,11 +26,19 @@ export const createTaskRoute: FastifyPluginAsync = async (fastify) => {
   }, async (_request, reply) => {
     return reply.status(201).send({} as any);
   });
+};
 
-  app.post('/create', {
+/**
+ * POST /api/v1/file/report-6406/tasks
+ * Создаёт новую задачу с возможностью прикрепления файла
+ */
+export const fileCreateTaskRoute: FastifyPluginAsync = async (fastify) => {
+  const app = fastify.withTypeProvider<ZodTypeProvider>();
+
+  app.post('/', {
     schema: {
       tags: [OpenApiTag.Report6406Tasks],
-      summary: 'Создать новое задание на построение отчёта',
+      summary: 'Создаёт новую задачу с возможностью прикрепления файла',
       body: createTaskSchema,
       response: {
         201: taskDetailSchema,

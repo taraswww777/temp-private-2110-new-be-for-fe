@@ -5,8 +5,6 @@ import {
   accountsResponseSchema,
   branchesResponseSchema,
   currenciesResponseSchema,
-  employeeLoginPathParamSchema,
-  employeeResponseSchema,
   sourcesResponseSchema,
 } from '../../../../schemas/report-6406/dictionary.schema.ts';
 
@@ -66,23 +64,3 @@ export const dictionariesRoutes: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-/**
- * Extension: эндпоинт отсутствует в новом OAS, сохранён для совместимости.
- */
-export const dictionaryEmployeeRoute: FastifyPluginAsync = async (fastify) => {
-  const app = fastify.withTypeProvider<ZodTypeProvider>();
-
-  app.get('/employee/:login', {
-    schema: {
-      tags: [OpenApiTag.Report6406Dictionary],
-      summary: 'Получить данные о сотруднике по AD-логину',
-      description: 'Extension-эндпоинт: отсутствует в целевом OAS microfront.',
-      params: employeeLoginPathParamSchema,
-      response: {
-        200: employeeResponseSchema,
-      },
-    },
-  }, async (_request, reply) => {
-    return reply.status(200).send({} as never);
-  });
-};

@@ -3621,70 +3621,9 @@
         }
       }
     },
-    "/api/v1/report-6406/dictionary/employee/{login}": {
-      "get": {
-        "summary": "Получить данные о сотруднике по AD-логину",
-        "tags": [
-          "Report 6406 - Dictionary"
-        ],
-        "description": "Extension-эндпоинт: отсутствует в целевом OAS microfront.",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "maxLength": 15
-            },
-            "in": "path",
-            "name": "login",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Report6406DictEmployeeResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/report-6406/tasks": {
-      "post": {
-        "summary": "Создать новое задание на построение отчёта",
-        "tags": [
-          "Report 6406 - Tasks"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateTaskDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TaskDetailResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v1/report-6406/tasks/create": {
       "post": {
-        "summary": "Создать новое задание на построение отчёта",
+        "summary": "Создаёт новую задачу",
         "tags": [
           "Report 6406 - Tasks"
         ],
@@ -3956,45 +3895,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskFileUrlResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/report-6406/tasks/{taskId}/files/{fileId}/retry": {
-      "post": {
-        "summary": "⚠️ [Экспериментальный] Повторить конвертацию файла с ошибкой",
-        "tags": [
-          "Report 6406 - Tasks"
-        ],
-        "description": "Экспериментальная функция для повтора конвертации файлов. В текущей версии возвращает 501 Not Implemented.",
-        "parameters": [
-          {
-            "schema": {
-              "$ref": "#/components/schemas/IntegerIdSchema"
-            },
-            "in": "path",
-            "name": "taskId",
-            "required": true
-          },
-          {
-            "schema": {
-              "$ref": "#/components/schemas/IntegerIdSchema"
-            },
-            "in": "path",
-            "name": "fileId",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RetryFileConversionResponseDto"
                 }
               }
             }
@@ -4419,36 +4319,7 @@
     },
     "/api/v1/file/report-6406/tasks": {
       "post": {
-        "summary": "Создать новое задание на построение отчёта",
-        "tags": [
-          "Report 6406 - Tasks"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateTaskDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TaskDetailResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/file/report-6406/tasks/create": {
-      "post": {
-        "summary": "Создать новое задание на построение отчёта",
+        "summary": "Создаёт новую задачу с возможностью прикрепления файла",
         "tags": [
           "Report 6406 - Tasks"
         ],
@@ -4477,11 +4348,10 @@
     },
     "/api/v1/file/report-6406/tasks/export": {
       "post": {
-        "summary": "Выгрузить реестр отчётов в CSV формате",
+        "summary": "Экспортирует список задач в формате Excel с применением фильтров",
         "tags": [
           "Report 6406 - Tasks"
         ],
-        "description": "Создаёт CSV файл со списком заданий согласно фильтрам. Возвращает ссылку на скачивание файла.",
         "requestBody": {
           "content": {
             "application/json": {
