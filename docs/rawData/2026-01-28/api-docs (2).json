@@ -1,0 +1,2102 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "title" : "2110.uaod-sr_6406u_microfront-s-rest-v1",
+    "description" : "API для взаимодействия frontend и backend СУБО 2110 через OIDC",
+    "contact" : {
+      "name" : "Гусак Валерия",
+      "url" : "https://sfera.vtb.ru",
+      "email" : "vgusak@vtb.ru"
+    },
+    "version" : "1.2.0"
+  },
+  "servers" : [ {
+    "url" : "https://uaod-sr-6406u-dk5-uaod01-uaod-devc.apps.dk5-uaod01.corp.dev.vtb/api/v1",
+    "description" : "DSO"
+  }, {
+    "url" : "https://uaod-sr-6406u-pk2-uaod01-uaod-prodc.region.vtb.ru/api/v1",
+    "description" : "PROD"
+  }, {
+    "url" : "https://uaod-sr-6406u-rk5-uaod01-uaod-preprodc.test.vtb.ru/api/v1",
+    "description" : "PREPROD"
+  }, {
+    "url" : "https://uaod-sr-6406u-ik5-uaod01-uaod-uaod-rift.test.vtb.ru/api/v1",
+    "description" : "IFT"
+  } ],
+  "tags" : [ {
+    "name" : "file-controller",
+    "description" : "Загрузка и выгрузка файлов"
+  }, {
+    "name" : "task-file-controller",
+    "description" : "Файлы задач"
+  }, {
+    "name" : "dictionary-controller",
+    "description" : "Справочники"
+  }, {
+    "name" : "package-controller",
+    "description" : "Операции с пакетами задач"
+  }, {
+    "name" : "storage-controller",
+    "description" : "Хранилища"
+  }, {
+    "name" : "task-controller",
+    "description" : "Операции с задачами"
+  } ],
+  "paths" : {
+    "/api/v1/report-6406/packages/{packageId}/tasks/delete" : {
+      "put" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Удаление задач из пакета",
+        "description" : "Удаляет указанные задачи из пакета",
+        "operationId" : "removeTasksFromPackage",
+        "parameters" : [ {
+          "name" : "packageId",
+          "in" : "path",
+          "description" : "ID пакета",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Список идентификаторов задач",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "maximum" : 99999999,
+                  "minimum" : 0
+                },
+                "maxItems" : 999999
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Операция выполнена",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProcessResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/{id}" : {
+      "get" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Получение деталей пакета",
+        "description" : "Возвращает подробную информацию о пакете по идентификатору",
+        "operationId" : "getPackage",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID пакета",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PackageDto"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Пакет не найден",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PackageDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Обновление пакета",
+        "description" : "Обновляет наименование пакета по идентификатору",
+        "operationId" : "updatePackage",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID пакета",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Данные для обновления",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdatePackageDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Пакет успешно обновлён",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PackageDto"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Пакет не найден",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PackageDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/{id}/files" : {
+      "post" : {
+        "tags" : [ "task-controller" ],
+        "summary" : "Получение файлов задачи с пагинацией",
+        "description" : "Возвращает список файлов задачи с поддержкой пагинации",
+        "operationId" : "getTaskFiles",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID задачи",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Параметры пагинации",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PaginationRequestDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskFilesResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/start" : {
+      "post" : {
+        "tags" : [ "task-controller" ],
+        "summary" : "Запуск задач",
+        "description" : "Запускает выполнение задач по списку идентификаторов",
+        "operationId" : "startTasks",
+        "requestBody" : {
+          "description" : "Список идентификаторов задач",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "maximum" : 99999999,
+                  "minimum" : 0
+                },
+                "maxItems" : 999999
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Операция выполнена",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProcessResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/list" : {
+      "post" : {
+        "tags" : [ "task-controller" ],
+        "summary" : "Поиск задач с фильтрацией",
+        "description" : "Возвращает список задач с применением фильтров, сортировки и пагинации",
+        "operationId" : "getTaskList",
+        "requestBody" : {
+          "description" : "Параметры поиска задач",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TaskListRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/files/presigned-urls" : {
+      "post" : {
+        "tags" : [ "task-controller" ],
+        "summary" : "Получение presigned-URL для файлов",
+        "description" : "Возвращает временные URL для доступа к файлам задач",
+        "operationId" : "getFilePresignedUrls",
+        "requestBody" : {
+          "description" : "Список идентификаторов файлов",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "maximum" : 99999999,
+                  "minimum" : 0
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/TaskFileUrlDto"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/delete" : {
+      "post" : {
+        "tags" : [ "task-controller" ],
+        "summary" : "Массовое удаление задач",
+        "description" : "Удаляет задачи по списку идентификаторов",
+        "operationId" : "deleteTasks",
+        "requestBody" : {
+          "description" : "Список идентификаторов задач",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "maximum" : 99999999,
+                  "minimum" : 0
+                },
+                "maxItems" : 999999
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Операция выполнена",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProcessResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/create" : {
+      "post" : {
+        "tags" : [ "task-controller" ],
+        "summary" : "Создание задачи",
+        "description" : "Создаёт новую задачу",
+        "operationId" : "createTask",
+        "requestBody" : {
+          "description" : "Запрос на создание задачи",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTaskRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Задача создана",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "format" : "int64",
+                    "maximum" : 99999999,
+                    "minimum" : 0
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Ошибка валидации",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "integer",
+                    "format" : "int64"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/cancel" : {
+      "post" : {
+        "tags" : [ "task-controller" ],
+        "summary" : "Отмена задач",
+        "description" : "Отменяет выполнение задач по списку идентификаторов",
+        "operationId" : "cancelTasks",
+        "requestBody" : {
+          "description" : "Список идентификаторов задач",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "maximum" : 99999999,
+                  "minimum" : 0
+                },
+                "maxItems" : 999999
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Операция выполнена",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProcessResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages" : {
+      "post" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Создание нового пакета",
+        "description" : "Создаёт новый пакет с указанным наименованием и возвращает его идентификатор",
+        "operationId" : "createPackage",
+        "requestBody" : {
+          "description" : "Данные для создания пакета",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatePackageDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Пакет успешно создан",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "maximum" : 99999999,
+                  "minimum" : 0
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Некорректные входные данные",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "maximum" : 99999999,
+                  "minimum" : 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/{packageId}/tasks" : {
+      "post" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Добавление задач в пакет",
+        "description" : "Добавляет указанные задачи в пакет",
+        "operationId" : "addTasksToPackage",
+        "parameters" : [ {
+          "name" : "packageId",
+          "in" : "path",
+          "description" : "ID пакета",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Список идентификаторов задач",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "maximum" : 99999999,
+                  "minimum" : 0
+                },
+                "maxItems" : 999999
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Операция выполнена",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProcessResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/transfer" : {
+      "post" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Передача пакетов в TFR",
+        "description" : "Передаёт указанные пакеты в систему TFR для дальнейшей обработки",
+        "operationId" : "transferToTfr",
+        "requestBody" : {
+          "description" : "Запрос на передачу пакетов",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PackTransferRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Пакеты успешно переданы",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProcessResponseDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Некорректный запрос",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProcessResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/tfr-delete" : {
+      "post" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Удаление пакетов из TFR",
+        "description" : "Удаляет указанные пакеты из системы TFR",
+        "operationId" : "deleteFromTfr",
+        "requestBody" : {
+          "description" : "Запрос на удаление пакетов",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PackTransferRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Операция удаления пакетов из ТФР выполнена",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProcessResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/list" : {
+      "post" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Поиск пакетов с фильтрацией",
+        "description" : "Возвращает список пакетов с применением фильтров, сортировки и пагинации",
+        "operationId" : "getPacks",
+        "requestBody" : {
+          "description" : "Параметры поиска пакетов",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GetPacksRequestDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PacksListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/delete/packages" : {
+      "post" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Массовое удаление пакетов",
+        "description" : "Удаляет пакеты по списку идентификаторов",
+        "operationId" : "deletePackages",
+        "requestBody" : {
+          "description" : "Список идентификаторов пакетов для удаления",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "maximum" : 99999999,
+                  "minimum" : 0
+                },
+                "maxItems" : 999999
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Операция выполнена",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProcessResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/file/report-6406/tasks/{id}/account-file" : {
+      "post" : {
+        "tags" : [ "file-controller" ],
+        "summary" : "Загрузка файла со счетами",
+        "description" : "Загружает файл со счетами для существующей задачи",
+        "operationId" : "uploadAccountFile",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID задачи",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string",
+                    "format" : "binary",
+                    "description" : "Файл со счетами"
+                  }
+                },
+                "required" : [ "file" ]
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Файл загружен"
+          },
+          "400" : {
+            "description" : "Ошибка валидации"
+          }
+        }
+      }
+    },
+    "/api/v1/file/report-6406/tasks/export" : {
+      "post" : {
+        "tags" : [ "file-controller" ],
+        "summary" : "Экспорт задач в XLSX",
+        "description" : "Экспортирует список задач в формате Excel с применением фильтров",
+        "operationId" : "exportTasks",
+        "requestBody" : {
+          "description" : "Параметры экспорта",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExportTasksRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Файл успешно сгенерирован",
+            "content" : {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "byte",
+                  "maxLength" : 255
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/{id}" : {
+      "get" : {
+        "tags" : [ "task-controller" ],
+        "summary" : "Получение деталей задачи",
+        "description" : "Возвращает подробную информацию о задаче по идентификатору",
+        "operationId" : "getTask",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID задачи",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskDetailResponseDto"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Задача не найдена",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskDetailResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/tasks/{id}/status-history" : {
+      "get" : {
+        "tags" : [ "task-controller" ],
+        "summary" : "Получение истории статусов задачи",
+        "description" : "Возвращает историю изменений статуса задачи",
+        "operationId" : "getStatusHistory",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID задачи",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/TaskStatusHistoryResponseDto"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/storages/volume" : {
+      "get" : {
+        "tags" : [ "storage-controller" ],
+        "summary" : "Получение информации о хранилищах",
+        "description" : "Возвращает информацию об объёме и свободном месте в хранилищах",
+        "operationId" : "getStorageVolume",
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/StorageResponse"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/storages/user/roles" : {
+      "get" : {
+        "tags" : [ "storage-controller" ],
+        "summary" : "Получение списка ролей и назначений пользователя",
+        "description" : "Возвращает список ролей и назначений пользователя",
+        "operationId" : "getUserRoles",
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/UserRolesResponse"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/{id}/status-history" : {
+      "get" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Получение истории статусов пакета",
+        "description" : "Возвращает историю изменений статуса пакета",
+        "operationId" : "getStatusHistory_1",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID пакета",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PackStatusHistoryResponseDto"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/{id}/cancel-copy" : {
+      "get" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Отмена копирования пакета",
+        "description" : "Отменяет операцию копирования пакета в TFR",
+        "operationId" : "cancelCopy",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID пакета",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Операция отменена"
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/packages/info/tfr" : {
+      "get" : {
+        "tags" : [ "package-controller" ],
+        "summary" : "Получение информации о пакетах в TFR",
+        "description" : "Возвращает список пакетов, переданных в систему TFR",
+        "operationId" : "getTfrInfo",
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PackTfrInfoDto"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/dictionaries/sources" : {
+      "get" : {
+        "tags" : [ "dictionary-controller" ],
+        "summary" : "Получение списка источников",
+        "description" : "Возвращает список источников данных",
+        "operationId" : "getSources",
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SourceDto"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/dictionaries/currencies" : {
+      "get" : {
+        "tags" : [ "dictionary-controller" ],
+        "summary" : "Получение списка валют",
+        "description" : "Возвращает список доступных валют",
+        "operationId" : "getCurrencies",
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CurrencyDto"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/dictionaries/branches" : {
+      "get" : {
+        "tags" : [ "dictionary-controller" ],
+        "summary" : "Получение списка филиалов",
+        "description" : "Возвращает список филиалов банка",
+        "operationId" : "getBranches",
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/BranchDto"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report-6406/dictionaries/accounts" : {
+      "get" : {
+        "tags" : [ "dictionary-controller" ],
+        "summary" : "Получение списка счетов",
+        "description" : "Возвращает список счетов",
+        "operationId" : "getAccounts",
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AccountDto"
+                  },
+                  "maxItems" : 999999
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ProcessResultDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "success" : {
+            "type" : "boolean"
+          },
+          "reason" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "ProcessResponseDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "succeeded" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "failed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProcessResultDto"
+            },
+            "maxItems" : 999999,
+            "minItems" : 0
+          }
+        }
+      },
+      "UpdatePackageDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "PackageDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdBy" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "lastCopiedToTfrAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "totalTasksCount" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "totalFilesSize" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "status" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "PaginationRequestDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        }
+      },
+      "TaskFileDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "fileId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "linkResult" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        }
+      },
+      "TaskFilesResponseDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "files" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskFileDto"
+            },
+            "maxItems" : 999999,
+            "minItems" : 0
+          },
+          "totalItems" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        }
+      },
+      "TaskFilterDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "branchIdList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "maximum" : 99999999,
+              "minimum" : 0
+            },
+            "maxItems" : 999999
+          },
+          "taskStatusList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "Статус задачи",
+              "enum" : [ "task_create", "task_storage_full", "task_loading", "task_limit", "task_data", "task_empty_data", "task_fail_data", "task_cancel_data", "task_conversion", "task_done", "task_fail_generation", "task_cancel_generation", "task_delete", "task_cancel_pending" ],
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "operationTypeList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "Тип операции",
+              "enum" : [ "LSOP", "LSOS", "LSOZ" ],
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "fileFormatList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "Формат файла",
+              "enum" : [ "XML", "TXT" ],
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "sourceCodeList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "createdByList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "periodFrom" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "periodTo" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdAtFrom" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdAtTo" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "accountList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "secondOrderAccountList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "taskAccountFileName" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "currencyList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "Код валюты",
+              "enum" : [ "RUB", "FCY" ],
+              "maxLength" : 10
+            },
+            "maxItems" : 999999
+          }
+        }
+      },
+      "TaskListRequest" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "pagination" : {
+            "$ref" : "#/components/schemas/PaginationRequestDto"
+          },
+          "sorting" : {
+            "$ref" : "#/components/schemas/TaskSortingRequestDto"
+          },
+          "filter" : {
+            "$ref" : "#/components/schemas/TaskFilterDto"
+          }
+        }
+      },
+      "TaskSortingRequestDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "sortOrder" : {
+            "type" : "string",
+            "description" : "Критерий сортировки",
+            "enum" : [ "asc", "desc" ],
+            "maxLength" : 255
+          },
+          "sortBy" : {
+            "type" : "string",
+            "description" : "Колонка для сортировки",
+            "enum" : [ "id", "createdAt", "periodFrom", "periodTo", "status", "size", "fileType", "operationType" ],
+            "maxLength" : 255
+          }
+        }
+      },
+      "TaskResponseDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdBy" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "branchList" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "operationType" : {
+            "type" : "string",
+            "description" : "Тип операции",
+            "enum" : [ "LSOP", "LSOS", "LSOZ" ],
+            "maxLength" : 255
+          },
+          "periodFrom" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "periodTo" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "fileFormat" : {
+            "type" : "string",
+            "description" : "Формат файла",
+            "enum" : [ "XML", "TXT" ],
+            "maxLength" : 255
+          },
+          "taskStatus" : {
+            "type" : "string",
+            "description" : "Статус задачи",
+            "enum" : [ "task_create", "task_storage_full", "task_loading", "task_limit", "task_data", "task_empty_data", "task_fail_data", "task_cancel_data", "task_conversion", "task_done", "task_fail_generation", "task_cancel_generation", "task_delete", "task_cancel_pending" ],
+            "maxLength" : 255
+          },
+          "totalFilesSize" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "packageId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        }
+      },
+      "TaskListResponseDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskResponseDto"
+            },
+            "maxItems" : 999999,
+            "minItems" : 0
+          },
+          "totalItems" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        }
+      },
+      "TaskFileUrlDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "fileName" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "url" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "BranchDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "codeCB" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "SourceDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "ris" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "CreateTaskRequest" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "currency" : {
+            "type" : "string",
+            "description" : "Код валюты",
+            "enum" : [ "RUB", "FCY" ],
+            "maxLength" : 255
+          },
+          "fileTypeFormat" : {
+            "type" : "string",
+            "description" : "Формат файла",
+            "enum" : [ "XML", "TXT" ],
+            "maxLength" : 255
+          },
+          "periodFrom" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "periodTo" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "operationTypeList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "Тип операции",
+              "enum" : [ "LSOP", "LSOS", "LSOZ" ],
+              "maxLength" : 255
+            },
+            "maxItems" : 999999,
+            "minItems" : 1
+          },
+          "accountList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255,
+              "minLength" : 1
+            },
+            "maxItems" : 999999
+          },
+          "secondOrderAccountList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255,
+              "minLength" : 1
+            },
+            "maxItems" : 999999
+          },
+          "branchList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BranchDto"
+            },
+            "maxItems" : 999999,
+            "minItems" : 0
+          },
+          "sourceList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SourceDto"
+            },
+            "maxItems" : 999999,
+            "minItems" : 0
+          }
+        },
+        "required" : [ "branchList", "fileTypeFormat", "operationTypeList" ]
+      },
+      "CreatePackageDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "PackTransferRequest" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "packIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64",
+              "maximum" : 99999999,
+              "minimum" : 0
+            },
+            "maxItems" : 999999
+          }
+        }
+      },
+      "GetPacksRequestDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "pagination" : {
+            "$ref" : "#/components/schemas/PaginationRequestDto"
+          },
+          "sorting" : {
+            "$ref" : "#/components/schemas/PackSortingRequestDto"
+          },
+          "filter" : {
+            "$ref" : "#/components/schemas/PackFilterDto"
+          }
+        }
+      },
+      "PackFilterDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "status" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "createdFrom" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdTo" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdBy" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "isEmpty" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "PackSortingRequestDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "sortOrder" : {
+            "type" : "string",
+            "description" : "Критерий сортировки",
+            "enum" : [ "asc", "desc" ],
+            "maxLength" : 255
+          },
+          "sortBy" : {
+            "type" : "string",
+            "description" : "Колонка для сортировки",
+            "enum" : [ "id", "name", "status", "size", "totalTasksCount", "createdAt", "createdBy" ],
+            "maxLength" : 255
+          }
+        }
+      },
+      "PackListItemDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "status" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "totalFilesSize" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "lastCopiedToTfrAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdBy" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "PacksListResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "totalItems" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PackListItemDto"
+            },
+            "maxItems" : 999999,
+            "minItems" : 0
+          }
+        }
+      },
+      "ExportTasksRequest" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "filter" : {
+            "$ref" : "#/components/schemas/TaskFilterDto"
+          },
+          "selectedIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64",
+              "maximum" : 99999999,
+              "minimum" : 0
+            },
+            "maxItems" : 999999
+          }
+        }
+      },
+      "TaskAccountFileDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "fileLink" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "TaskDetailResponseDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "createdBy" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "branchList" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "operationType" : {
+            "type" : "string",
+            "description" : "Тип операции",
+            "enum" : [ "LSOP", "LSOS", "LSOZ" ],
+            "maxLength" : 255
+          },
+          "periodFrom" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "periodTo" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "fileFormat" : {
+            "type" : "string",
+            "description" : "Формат файла",
+            "enum" : [ "XML", "TXT" ],
+            "maxLength" : 255
+          },
+          "taskStatus" : {
+            "type" : "string",
+            "description" : "Статус задачи",
+            "enum" : [ "task_create", "task_storage_full", "task_loading", "task_limit", "task_data", "task_empty_data", "task_fail_data", "task_cancel_data", "task_conversion", "task_done", "task_fail_generation", "task_cancel_generation", "task_delete", "task_cancel_pending" ],
+            "maxLength" : 255
+          },
+          "totalFilesSize" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "packageId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "accountFile" : {
+            "$ref" : "#/components/schemas/TaskAccountFileDto"
+          },
+          "accountList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "accountSecondOrderList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          },
+          "s3Path" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "filesCount" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "sourceList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SourceDto"
+            },
+            "maxItems" : 999999,
+            "minItems" : 0
+          },
+          "currency" : {
+            "type" : "string",
+            "description" : "Код валюты",
+            "enum" : [ "RUB", "FCY" ],
+            "maxLength" : 255
+          }
+        }
+      },
+      "TaskStatusHistoryResponseDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "taskId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "taskStatus" : {
+            "type" : "string",
+            "description" : "Статус задачи",
+            "enum" : [ "task_create", "task_storage_full", "task_loading", "task_limit", "task_data", "task_empty_data", "task_fail_data", "task_cancel_data", "task_conversion", "task_done", "task_fail_generation", "task_cancel_generation", "task_delete", "task_cancel_pending" ],
+            "maxLength" : 255
+          },
+          "changedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "changedBy" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "note" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "StorageResponse" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Код хранилища",
+            "enum" : [ "TFR", "CEPH", "ARCHIVE" ]
+          },
+          "totalSize" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "freeSize" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "usedSize" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "percent" : {
+            "type" : "number",
+            "format" : "double",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        }
+      },
+      "RoleAssignment" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "role" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "assignments" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          }
+        }
+      },
+      "UserRolesResponse" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "login" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "roleAssignments" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RoleAssignment"
+            },
+            "maxItems" : 999999,
+            "minItems" : 0
+          }
+        }
+      },
+      "PackStatusHistoryResponseDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "packageId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "packageStatus" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "changedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "changedBy" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "note" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "PackTfrInfoDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "packId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          },
+          "packName" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "tfrCopyDate" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 99999999,
+            "minimum" : 0
+          }
+        }
+      },
+      "CurrencyDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "maxLength" : 10
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }
+      },
+      "AccountDto" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "firstAccount" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "secondAccounts" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "maxItems" : 999999
+          }
+        }
+      }
+    }
+  }
+}
