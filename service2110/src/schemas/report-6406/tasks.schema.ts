@@ -35,14 +35,13 @@ export const baseTaskSchema = z.object({
   id: zIdSchema.describe('ИД задания'),
   createdAt: dateTimeSchema.describe('Дата и время создания 2026-04-30T07:46:40.449Z'),
   createdBy: z.string().describe('Логин сотрудника, создавшего задание'),
-  branchList: z.array(branchSchema).min(1).describe('Массив ИД филиалов').nonempty(),
+  branchList: z.string().max(255).min(1).describe('Массив ИД филиалов').nonempty(),
   periodFrom: dateTimeSchema.optional().describe('Дата начала отчётного периода'),
   periodTo: dateTimeSchema.optional().describe('Дата окончания отчётного периода'),
   currency: currencySchema,
-  fileTypeFormat: fileFormatSchema.default(FileFormatEnum.TXT),
+  fileFormat: fileFormatSchema.default(FileFormatEnum.TXT),
   taskStatus: taskStatusSchema.describe('Статус задания'),
   totalFilesSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан').default(0),
-  updatedAt: dateTimeSchema.describe('Дата и время последнего обновления 2026-04-30T07:46:40.449Z'),
   sourceList: z.array(sourceSchema).optional().describe('Источники данных'),
   filesCount: z.number().int().min(0).describe('Количество файлов').default(0),
   packageId: zIdSchema.optional().describe('ИД Пакета, в который входит задание'),
@@ -95,7 +94,7 @@ export const taskDetailSchema = baseTaskSchema.extend({
   accountList,
   secondOrderAccountList,
   operationType,
-  s3FolderId: z.string().max(255).optional().describe('ID папки в S3'),
+  s3Path: z.string().max(255).optional().describe('ID папки в S3'),
 }).superRefine(dateRangeRefinement());
 
 export type TaskDetails = z.infer<typeof taskDetailSchema>;
