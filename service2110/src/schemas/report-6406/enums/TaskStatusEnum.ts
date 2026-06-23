@@ -27,11 +27,13 @@ export enum TaskStatusEnum {
   FAIL_GENERATION = 'task_fail_generation',
   /** Генерация отменена */
   CANCEL_GENERATION = 'task_cancel_generation',
+  /**  Ожидается отмена выборки */
+  CANCEL_PENDING = 'task_cancel_pending',
   /** Удалено */
   DELETE = 'task_delete',
 }
 
-const TaskStatusDescriptions = {
+const TaskStatusDescriptions: Record<TaskStatusEnum, { value:TaskStatusEnum, description: string }> = {
   [TaskStatusEnum.CREATE]: { value: TaskStatusEnum.CREATE, description: 'Создано' },
   [TaskStatusEnum.LOADING]: { value: TaskStatusEnum.LOADING, description: 'Готовится к запуску' },
   [TaskStatusEnum.DATA]: { value: TaskStatusEnum.DATA, description: 'Выборка данных' },
@@ -43,6 +45,7 @@ const TaskStatusDescriptions = {
   [TaskStatusEnum.FAIL_GENERATION]: { value: TaskStatusEnum.FAIL_GENERATION, description: 'Генерация не выполнена' },
   [TaskStatusEnum.CANCEL_GENERATION]: { value: TaskStatusEnum.CANCEL_GENERATION, description: 'Генерация отменена' },
   [TaskStatusEnum.DELETE]: { value: TaskStatusEnum.DELETE, description: 'Удалено' },
+  [TaskStatusEnum.CANCEL_PENDING]: { value: TaskStatusEnum.CANCEL_PENDING , description: 'Ожидается отмена выборки' },
 } as const;
 
 export const taskStatusSchema = z.enum(TaskStatusEnum).describe('Статус задания (локальная модель task_*)');
