@@ -282,6 +282,7 @@
           "task_done",
           "task_fail_generation",
           "task_cancel_generation",
+          "task_cancel_pending",
           "task_delete"
         ],
         "description": "Статус задания (локальная модель task_*)",
@@ -296,6 +297,7 @@
           "Выполнено",
           "Генерация не выполнена",
           "Генерация отменена",
+          "Ожидается отмена выборки",
           "Удалено"
         ],
         "x-enum-varnames": [
@@ -309,6 +311,7 @@
           "DONE",
           "FAIL_GENERATION",
           "CANCEL_GENERATION",
+          "CANCEL_PENDING",
           "DELETE"
         ],
         "oneOf": [
@@ -361,6 +364,11 @@
             "const": "task_cancel_generation",
             "description": "Генерация отменена",
             "title": "CANCEL_GENERATION"
+          },
+          {
+            "const": "task_cancel_pending",
+            "description": "Ожидается отмена выборки",
+            "title": "CANCEL_PENDING"
           },
           {
             "const": "task_delete",
