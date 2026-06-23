@@ -2092,7 +2092,8 @@
         "type": "string",
         "enum": [
           "Inventory",
-          "6406u"
+          "6406u",
+          "UAOD_DOPB"
         ]
       },
       "AssignmentsEnum": {
@@ -2100,8 +2101,7 @@
         "enum": [
           "ADMIN",
           "MANAGER",
-          "USER",
-          "UAOD_DOPB"
+          "USER"
         ]
       },
       "RoleAssignmentDto": {

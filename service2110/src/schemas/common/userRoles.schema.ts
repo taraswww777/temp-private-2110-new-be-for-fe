@@ -3,6 +3,7 @@ import { z } from 'zod';
 export enum UserRolesEnum {
   INVENTORY = "Inventory",
   REPORTS = "6406u",
+  UAOD_DOPB = "UAOD_DOPB",
 }
 
 export const userRolesSchema = z.enum(UserRolesEnum);
@@ -11,7 +12,6 @@ export enum AssignmentsEnum {
   ADMIN = "ADMIN",
   MANAGER = "MANAGER",
   USER = "USER",
-  UAOD_DOPB = "UAOD_DOPB",
 }
 
 export const assignmentsSchema = z.enum(AssignmentsEnum);
