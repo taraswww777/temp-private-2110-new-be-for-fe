@@ -4384,6 +4384,56 @@
         }
       }
     },
+    "/api/v1/file/report-6406/tasks/{id}/account-file": {
+      "post": {
+        "summary": "Загрузка файла со счетами",
+        "tags": [
+          "Report 6406 - Tasks"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {}
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/inventory/orders": {
       "get": {
         "summary": "Список приказов инвентаризации",
