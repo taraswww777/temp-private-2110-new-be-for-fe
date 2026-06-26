@@ -28,6 +28,20 @@ const operationTypeList =  z.array(reportTypeSchema).describe('Тип опера
 /** Есть везде кроме create и filter */
 const operationType = reportTypeSchema.describe('Тип операции');
 
+/** Наименования филиалов в list и detail */
+const taskBranchLabelSchema = z
+  .string()
+  .min(1)
+  .describe(
+    'Наименование филиала, например: «97-Филиал № 7701 Банка ВТБ (публичное акционерное общество) в г. Москве»',
+  );
+
+const taskBranchLabelListSchema = z
+  .array(taskBranchLabelSchema)
+  .min(1)
+  .describe('Наименования филиалов')
+  .nonempty();
+
 /**
  * Базовая схема задания — все поля, общие для detail, list и create.
  */
@@ -39,7 +53,7 @@ export const baseTaskSchema = z.object({
   periodFrom: dateTimeSchema.optional().describe('Дата начала отчётного периода'),
   periodTo: dateTimeSchema.optional().describe('Дата окончания отчётного периода'),
   currency: currencySchema,
-  fileTypeFormat: fileFormatSchema.default(FileFormatEnum.TXT),
+  fileFormat: fileFormatSchema.default(FileFormatEnum.TXT),
   taskStatus: taskStatusSchema.describe('Статус задания'),
   totalFilesSize: z.number().int().min(0).describe('Размер файла; 0 — ещё не рассчитан').default(0),
   updatedAt: dateTimeSchema.describe('Дата и время последнего обновления 2026-04-30T07:46:40.449Z'),
@@ -91,12 +105,16 @@ export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
  * Единая схема для детальной информации о задании (POST 201 и GET /{id} 200).
  * Расширяет baseTaskSchema дополнительными полями, специфичными для детального представления.
  */
-export const taskDetailSchema = baseTaskSchema.extend({
-  accountList,
-  secondOrderAccountList,
-  operationType,
-  s3FolderId: z.string().max(255).optional().describe('ID папки в S3'),
-}).superRefine(dateRangeRefinement());
+export const taskDetailSchema = baseTaskSchema
+  .omit({ branchList: true })
+  .extend({
+    branchList: taskBranchLabelListSchema,
+    accountList,
+    secondOrderAccountList,
+    operationType,
+    s3FolderId: z.string().max(255).optional().describe('ID папки в S3'),
+  })
+  .superRefine(dateRangeRefinement());
 
 export type TaskDetails = z.infer<typeof taskDetailSchema>;
 
@@ -104,9 +122,12 @@ export type TaskDetails = z.infer<typeof taskDetailSchema>;
  * Схема для элемента списка заданий (TaskListItemDto).
  * Проекция baseTaskSchema — все поля базы, без дополнительных detail-полей.
  */
-export const taskListItemSchema = baseTaskSchema.extend({
-  operationType
-});
+export const taskListItemSchema = baseTaskSchema
+  .omit({ branchList: true })
+  .extend({
+    branchList: taskBranchLabelListSchema,
+    operationType,
+  });
 
 export type TaskListItem = z.infer<typeof taskListItemSchema>;
 
