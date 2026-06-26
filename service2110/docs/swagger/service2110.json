@@ -518,7 +518,7 @@
           "currency": {
             "$ref": "#/components/schemas/CurrencyEnum"
           },
-          "fileTypeFormat": {
+          "fileFormat": {
             "default": "TXT",
             "$ref": "#/components/schemas/FileFormatEnum"
           },
@@ -554,7 +554,7 @@
         "required": [
           "branchList",
           "currency",
-          "fileTypeFormat",
+          "fileFormat",
           "operationTypeList"
         ],
         "additionalProperties": false
@@ -574,14 +574,6 @@
             "type": "string",
             "description": "Логин сотрудника, создавшего задание"
           },
-          "branchList": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BranchDto"
-            },
-            "description": "Массив ИД филиалов"
-          },
           "periodFrom": {
             "description": "Дата начала отчётного периода",
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -593,7 +585,7 @@
           "currency": {
             "$ref": "#/components/schemas/CurrencyEnum"
           },
-          "fileTypeFormat": {
+          "fileFormat": {
             "default": "TXT",
             "$ref": "#/components/schemas/FileFormatEnum"
           },
@@ -630,6 +622,16 @@
             "description": "ИД Пакета, в который входит задание",
             "$ref": "#/components/schemas/IntegerIdSchema"
           },
+          "branchList": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Наименование филиала, например: «97-Филиал № 7701 Банка ВТБ (публичное акционерное общество) в г. Москве»"
+            },
+            "description": "Наименования филиалов"
+          },
           "operationType": {
             "description": "Тип операции",
             "$ref": "#/components/schemas/ReportTypeEnum"
@@ -639,13 +641,13 @@
           "id",
           "createdAt",
           "createdBy",
-          "branchList",
           "currency",
-          "fileTypeFormat",
+          "fileFormat",
           "taskStatus",
           "totalFilesSize",
           "updatedAt",
           "filesCount",
+          "branchList",
           "operationType"
         ],
         "additionalProperties": false
@@ -797,14 +799,6 @@
             "type": "string",
             "description": "Логин сотрудника, создавшего задание"
           },
-          "branchList": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BranchDto"
-            },
-            "description": "Массив ИД филиалов"
-          },
           "periodFrom": {
             "description": "Дата начала отчётного периода",
             "$ref": "#/components/schemas/DateTimeSchema"
@@ -816,7 +810,7 @@
           "currency": {
             "$ref": "#/components/schemas/CurrencyEnum"
           },
-          "fileTypeFormat": {
+          "fileFormat": {
             "default": "TXT",
             "$ref": "#/components/schemas/FileFormatEnum"
           },
@@ -853,6 +847,16 @@
             "description": "ИД Пакета, в который входит задание",
             "$ref": "#/components/schemas/IntegerIdSchema"
           },
+          "branchList": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Наименование филиала, например: «97-Филиал № 7701 Банка ВТБ (публичное акционерное общество) в г. Москве»"
+            },
+            "description": "Наименования филиалов"
+          },
           "accountList": {
             "description": "Список счетов (20-значные номера)",
             "type": "array",
@@ -881,13 +885,13 @@
           "id",
           "createdAt",
           "createdBy",
-          "branchList",
           "currency",
-          "fileTypeFormat",
+          "fileFormat",
           "taskStatus",
           "totalFilesSize",
           "updatedAt",
           "filesCount",
+          "branchList",
           "operationType"
         ],
         "additionalProperties": false
