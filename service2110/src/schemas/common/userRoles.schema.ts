@@ -4,6 +4,7 @@ export enum UserRolesEnum {
   INVENTORY = "Inventory",
   REPORTS = "6406u",
   UAOD_DOPB = "UAOD_DOPB",
+  UAOD_ADMIN = "UAOD_ADMIN",
 }
 
 export const userRolesSchema = z.enum(UserRolesEnum);
