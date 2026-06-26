@@ -2101,7 +2101,8 @@
         "enum": [
           "Inventory",
           "6406u",
-          "UAOD_DOPB"
+          "UAOD_DOPB",
+          "UAOD_ADMIN"
         ]
       },
       "AssignmentsEnum": {
