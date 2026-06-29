@@ -743,20 +743,18 @@
       "GetTasksRequestDto": {
         "type": "object",
         "properties": {
-          "pagination": {
-            "$ref": "#/components/schemas/PaginationRequestDto"
-          },
-          "sorting": {
-            "description": "Параметры сортировки (колонка — фиксированный набор)",
-            "$ref": "#/components/schemas/TasksListSortingDto"
+          "selectedIds": {
+            "description": "Массив ИД заданий",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
           },
           "filter": {
             "$ref": "#/components/schemas/TasksListFilterDto"
           }
         },
         "required": [
-          "pagination",
-          "sorting",
           "filter"
         ],
         "additionalProperties": false
