@@ -170,8 +170,7 @@ export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
  * Схема тела запроса POST /api/v1/report-6406/tasks/list (пагинация, сортировка, фильтрация)
  */
 export const getTasksRequestSchema = z.object({
-  pagination: paginationQuerySchema.describe('Параметры пагинации'),
-  sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
+  selectedIds: z.array(zIdSchema).optional().describe('Массив ИД заданий'),
   filter: tasksListFilterSchema,
 });
 
