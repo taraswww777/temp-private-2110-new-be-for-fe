@@ -459,26 +459,6 @@
           "$ref": "#/components/schemas/FormatDto"
         }
       },
-      "TaskPackageInfoDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/IntegerIdSchema"
-          },
-          "name": {
-            "type": "string"
-          },
-          "addedAt": {
-            "$ref": "#/components/schemas/DateTimeSchema"
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "addedAt"
-        ],
-        "additionalProperties": false
-      },
       "TasksListSortingDto": {
         "type": "object",
         "properties": {
@@ -745,6 +725,27 @@
         "additionalProperties": false
       },
       "GetTasksRequestDto": {
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationRequestDto"
+          },
+          "sorting": {
+            "description": "Параметры сортировки (колонка — фиксированный набор)",
+            "$ref": "#/components/schemas/TasksListSortingDto"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/TasksListFilterDto"
+          }
+        },
+        "required": [
+          "pagination",
+          "sorting",
+          "filter"
+        ],
+        "additionalProperties": false
+      },
+      "GetExportTasksRequestDto": {
         "type": "object",
         "properties": {
           "selectedIds": {
@@ -4371,7 +4372,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetTasksRequestDto"
+                "$ref": "#/components/schemas/GetExportTasksRequestDto"
               }
             }
           }

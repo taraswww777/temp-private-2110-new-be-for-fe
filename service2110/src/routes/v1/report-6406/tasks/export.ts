@@ -2,7 +2,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { getTasksRequestSchema } from '../../../../schemas/report-6406/tasks.schema.ts';
+import { getExportTasksRequestSchema, getTasksRequestSchema } from '../../../../schemas/report-6406/tasks.schema.ts';
 
 /**
  * POST /api/v1/file/report-6406/tasks/export
@@ -15,7 +15,7 @@ export const fileExportRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       tags: [OpenApiTag.Report6406Tasks],
       summary: 'Экспортирует список задач в формате Excel с применением фильтров',
-      body: getTasksRequestSchema,
+      body: getExportTasksRequestSchema,
       response: {
         200: z.file(),
       },

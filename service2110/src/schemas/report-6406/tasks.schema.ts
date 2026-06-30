@@ -11,12 +11,10 @@ import { zIdSchema } from '../common/id.schema.ts';
 import { branchSchema, sourceSchema } from './references.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
-
-export type CurrencyType = z.infer<typeof currencySchema>;
-export type FileFormatType = z.infer<typeof fileFormatSchema>;
+import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
 
- // TODO Проработать нейминг accountList/ accountPlansList/ accountNumbersList
+// TODO Проработать нейминг accountList/ accountPlansList/ accountNumbersList
 // Будет только в create и detail и в фильтрах, в списке быть не должно
 const accountList = z.array(zAccountSchema).optional().describe('Список счетов (20-значные номера)');
 // Будет только в create и detail и в фильтрах, в списке быть не должно
@@ -85,21 +83,6 @@ export const createTaskSchema = baseTaskSchema
   })
   .superRefine(dateRangeRefinement());
 
-export type CreateTaskInput = z.infer<typeof createTaskSchema>;
-
-/**
- * @deprecated
- * Схема для ответа с информацией о пакете в задании
- */
-export const taskPackageInfoSchema = z.object({
-  id: zIdSchema,
-  name: z.string(),
-  addedAt: dateTimeSchema,
-});
-
-export type TaskPackageInfo = z.infer<typeof taskPackageInfoSchema>;
-
-
 /**
  * Единая схема для детальной информации о задании (POST 201 и GET /{id} 200).
  * Расширяет baseTaskSchema дополнительными полями, специфичными для детального представления.
@@ -115,8 +98,6 @@ export const taskDetailSchema = baseTaskSchema
   })
   .superRefine(dateRangeRefinement());
 
-export type TaskDetails = z.infer<typeof taskDetailSchema>;
-
 /**
  * Схема для элемента списка заданий (TaskListItemDto).
  * Проекция baseTaskSchema — все поля базы, без дополнительных detail-полей.
@@ -127,10 +108,6 @@ export const taskListItemSchema = baseTaskSchema
     branchList: taskBranchLabelListSchema,
     operationType,
   });
-
-export type TaskListItem = z.infer<typeof taskListItemSchema>;
-
-export type TaskListSortColumn = z.infer<typeof taskListSortColumnSchema>;
 
 export { taskListSortColumnSchema };
 
@@ -164,17 +141,22 @@ export const tasksListFilterSchema = z.object({
   withoutPackageId: z.boolean().optional().describe('true = Показывать задания без packageId, false - c packageId, параметр не передан то показываем всё. Если указан packageId, то withoutPackageId игнорируется.'),
 });
 
-export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
-
 /**
  * Схема тела запроса POST /api/v1/report-6406/tasks/list (пагинация, сортировка, фильтрация)
  */
 export const getTasksRequestSchema = z.object({
-  selectedIds: z.array(zIdSchema).optional().describe('Массив ИД заданий'),
+  pagination: paginationQuerySchema.describe('Параметры пагинации'),
+  sorting: tasksListSortingSchema.describe('Параметры сортировки (колонка — фиксированный набор)'),
   filter: tasksListFilterSchema,
 });
 
-export type GetTasksRequest = z.infer<typeof getTasksRequestSchema>;
+/**
+ * Схема тела запроса POST /api/v1/report-6406/tasks/export (пагинация, сортировка, фильтрация)
+ */
+export const getExportTasksRequestSchema = z.object({
+  selectedIds: z.array(zIdSchema).optional().describe('Массив ИД заданий'),
+  filter: tasksListFilterSchema,
+});
 
 /**
  * Схема для ответа POST /api/v1/report-6406/tasks/list (TaskListResponseDto).
@@ -184,22 +166,14 @@ export const taskListResponseSchema = z.object({
   totalItems: z.number().int().min(0).describe('Общее количество заданий'),
 });
 
-export type TaskListResponse = z.infer<typeof taskListResponseSchema>;
-
-/** @deprecated используйте taskListResponseSchema */
-export const tasksListResponseSchema = taskListResponseSchema;
-
-/** @deprecated используйте TaskListResponse */
-export type TasksListResponse = TaskListResponse;
-
 (function registerTasksReport6406OpenApi() {
-  registerReport6406OpenApiSchema(taskPackageInfoSchema, 'TaskPackageInfoDto');
   registerReport6406OpenApiSchema(taskListSortColumnSchema, 'TaskListSortColumnEnum');
   registerReport6406OpenApiSchema(tasksListSortingSchema, 'TasksListSortingDto');
   registerReport6406OpenApiSchema(createTaskSchema, 'CreateTaskDto');
   registerReport6406OpenApiSchema(taskListItemSchema, 'TaskListItemDto');
   registerReport6406OpenApiSchema(tasksListFilterSchema, 'TasksListFilterDto');
   registerReport6406OpenApiSchema(getTasksRequestSchema, 'GetTasksRequestDto');
+  registerReport6406OpenApiSchema(getExportTasksRequestSchema, 'GetExportTasksRequestDto');
   registerReport6406OpenApiSchema(taskListResponseSchema, 'TaskListResponseDto');
   registerReport6406OpenApiSchema(taskDetailSchema, 'TaskDetailResponseDto');
 })();
