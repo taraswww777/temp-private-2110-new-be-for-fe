@@ -24,17 +24,17 @@ export const fileExportRoutes: FastifyPluginAsync = async (fastify) => {
     return reply.status(200).send({} as never);
   });
 
-  app.post('/:id/account-file', {
-    schema: {
-      tags: [OpenApiTag.Report6406Tasks],
-      summary: 'Загрузка файла со счетами',
-      consumes: ['multipart/form-data'],
-      body: z.object({
-        file: z.any().describe('Файл со счетами'),
-      }),
-      response: { 200: z.null() },
-    },
-  }, async (_request, reply) => {
-    return reply.status(200).send({} as never);
-  });
+  // app.post('/:id/account-file', {
+  //   schema: {
+  //     tags: [OpenApiTag.Report6406Tasks],
+  //     summary: 'Загрузка файла со счетами',
+  //     consumes: ['multipart/form-data'],
+  //     body: z.object({
+  //       file: z.any().describe('Файл со счетами'),
+  //     }),
+  //     response: { 200: z.null() },
+  //   },
+  // }, async (_request, reply) => {
+  //   return reply.status(200).send({} as never);
+  // });
 };
