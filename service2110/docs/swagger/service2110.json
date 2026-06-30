@@ -736,6 +736,10 @@
           "createdAtTo": {
             "description": "Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z",
             "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "withoutPackageId": {
+            "description": "true = Показывать задания без packageId, false - c packageId, параметр не передан то показываем всё. Если указан packageId, то withoutPackageId игнорируется.",
+            "type": "boolean"
           }
         },
         "additionalProperties": false

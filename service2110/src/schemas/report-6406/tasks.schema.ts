@@ -8,7 +8,6 @@ import { taskStatusSchema } from './enums/TaskStatusEnum.ts';
 import { taskListSortColumnSchema } from './enums/TaskListSortColumnEnum.ts';
 import { dateRangeRefinement, dateSchema, dateTimeSchema } from '../common/dateString.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
-import { paginationQuerySchema } from '../common/pagination.schema.ts';
 import { branchSchema, sourceSchema } from './references.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
@@ -162,6 +161,7 @@ export const tasksListFilterSchema = z.object({
   periodTo: dateSchema.optional().describe('Дата окончания отчётного периода YYYY-MM-DD'),
   createdAtFrom: dateTimeSchema.optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
   createdAtTo: dateTimeSchema.optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
+  withoutPackageId: z.boolean().optional().describe('true = Показывать задания без packageId, false - c packageId, параметр не передан то показываем всё. Если указан packageId, то withoutPackageId игнорируется.'),
 });
 
 export type TasksListFilter = z.infer<typeof tasksListFilterSchema>;
