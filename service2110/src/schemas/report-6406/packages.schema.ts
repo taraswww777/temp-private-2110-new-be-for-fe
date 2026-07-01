@@ -18,7 +18,6 @@ export const basePackageSchema = z.object({
   createdAt: dateTimeSchema.describe('Дата и время создания пакета, например 2026-04-30T12:20:50.979Z'),
   createdBy: z.string().min(1).max(255).describe('Логин сотрудника, создавшего пакет'),
   lastCopiedToTfrAt: dateTimeSchema.nullable().describe('Дата последнего копирования в ТФР (ISO 8601), например  2026-04-30T12:20:50.979Z'),
-  totalTasksCount: z.number().int().min(0).describe('Количество заданий в пакете').default(0),
   totalFilesSize: z.number().int().min(0).describe('Общий размер пакета в мегабайтах (сумма размеров всех файлов)').default(0),
   updatedAt: dateTimeSchema.describe('Дата и время последнего обновления, например  2026-04-30T12:20:50.979Z'),
   status: packageStatusSchema.describe('Текущий статус пакета'),

@@ -208,12 +208,12 @@
         ]
       },
       "CurrencyEnum": {
+        "description": "Валюта, например: (RUB,FCY)",
         "type": "string",
         "enum": [
           "RUB",
           "FCY"
         ],
-        "description": "Валюта, например: (RUB,FCY)",
         "x-enum-descriptions": [
           "Рубли",
           "Иностранная валюта"
@@ -533,7 +533,6 @@
         },
         "required": [
           "branchList",
-          "currency",
           "fileFormat",
           "operationTypeList"
         ],
@@ -621,7 +620,6 @@
           "id",
           "createdAt",
           "createdBy",
-          "currency",
           "fileFormat",
           "taskStatus",
           "totalFilesSize",
@@ -891,7 +889,6 @@
           "id",
           "createdAt",
           "createdBy",
-          "currency",
           "fileFormat",
           "taskStatus",
           "totalFilesSize",
@@ -1514,13 +1511,6 @@
             ],
             "description": "Дата последнего копирования в ТФР (ISO 8601), например  2026-04-30T12:20:50.979Z"
           },
-          "totalTasksCount": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Количество заданий в пакете"
-          },
           "totalFilesSize": {
             "default": 0,
             "type": "integer",
@@ -1543,7 +1533,6 @@
           "createdAt",
           "createdBy",
           "lastCopiedToTfrAt",
-          "totalTasksCount",
           "totalFilesSize",
           "updatedAt",
           "status"
