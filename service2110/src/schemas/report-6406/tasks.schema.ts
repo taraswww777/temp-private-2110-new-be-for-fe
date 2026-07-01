@@ -83,6 +83,12 @@ export const createTaskSchema = baseTaskSchema
   })
   .superRefine(dateRangeRefinement());
 
+const accountFileSchema = z.object({
+  id: zIdSchema,
+  name: z.string(),
+  fileLink: z.string(),
+})
+
 /**
  * Единая схема для детальной информации о задании (POST 201 и GET /{id} 200).
  * Расширяет baseTaskSchema дополнительными полями, специфичными для детального представления.
@@ -92,9 +98,10 @@ export const taskDetailSchema = baseTaskSchema
   .extend({
     branchList: taskBranchLabelListSchema,
     accountList,
-    secondOrderAccountList,
+    accountSecondOrderList: secondOrderAccountList,
     operationType,
-    s3FolderId: z.string().max(255).optional().describe('ID папки в S3'),
+    s3Path: z.string().max(255).optional().describe('ID папки в S3'),
+    accountFile: accountFileSchema.optional(),
   })
   .superRefine(dateRangeRefinement());
 
@@ -176,5 +183,6 @@ export const taskListResponseSchema = z.object({
   registerReport6406OpenApiSchema(getExportTasksRequestSchema, 'GetExportTasksRequestDto');
   registerReport6406OpenApiSchema(taskListResponseSchema, 'TaskListResponseDto');
   registerReport6406OpenApiSchema(taskDetailSchema, 'TaskDetailResponseDto');
+  registerReport6406OpenApiSchema(accountFileSchema, 'AccountFileDto');
 })();
 

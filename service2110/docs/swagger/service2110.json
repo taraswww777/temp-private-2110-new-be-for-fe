@@ -867,7 +867,7 @@
               "$ref": "#/components/schemas/AccountNumberSchema"
             }
           },
-          "secondOrderAccountList": {
+          "accountSecondOrderList": {
             "description": "Счета второго порядка (5-значные номера)",
             "type": "array",
             "items": {
@@ -878,10 +878,13 @@
             "description": "Тип операции",
             "$ref": "#/components/schemas/ReportTypeEnum"
           },
-          "s3FolderId": {
+          "s3Path": {
             "description": "ID папки в S3",
             "type": "string",
             "maxLength": 255
+          },
+          "accountFile": {
+            "$ref": "#/components/schemas/AccountFileDto"
           }
         },
         "required": [
@@ -896,6 +899,26 @@
           "filesCount",
           "branchList",
           "operationType"
+        ],
+        "additionalProperties": false
+      },
+      "AccountFileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "name": {
+            "type": "string"
+          },
+          "fileLink": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "fileLink"
         ],
         "additionalProperties": false
       },
