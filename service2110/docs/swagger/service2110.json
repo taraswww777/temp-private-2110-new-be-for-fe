@@ -1412,7 +1412,7 @@
         "additionalProperties": false,
         "description": "Параметры сортировки (колонка — фиксированный набор)"
       },
-      "PackFilterDto": {
+      "PackageFilterDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -1509,7 +1509,7 @@
                 "type": "null"
               }
             ],
-            "description": "Дата последнего копирования в ТФР (ISO 8601), например  2026-04-30T12:20:50.979Z"
+            "description": "Дата последнего копирования в ТФР (ISO 8601), например 2026-04-30T12:20:50.979Z"
           },
           "totalFilesSize": {
             "default": 0,
@@ -1519,7 +1519,7 @@
             "description": "Общий размер пакета в мегабайтах (сумма размеров всех файлов)"
           },
           "updatedAt": {
-            "description": "Дата и время последнего обновления, например  2026-04-30T12:20:50.979Z",
+            "description": "Дата и время последнего обновления, например 2026-04-30T12:20:50.979Z",
             "$ref": "#/components/schemas/DateTimeSchema"
           },
           "status": {
@@ -1539,6 +1539,83 @@
         ],
         "additionalProperties": false
       },
+      "PackageDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ИД пакета",
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Название пакета"
+          },
+          "createdAt": {
+            "description": "Дата и время создания пакета, например 2026-04-30T12:20:50.979Z",
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "createdBy": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Логин сотрудника, создавшего пакет"
+          },
+          "lastCopiedToTfrAt": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeSchema"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Дата последнего копирования в ТФР (ISO 8601), например 2026-04-30T12:20:50.979Z"
+          },
+          "totalFilesSize": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общий размер пакета в мегабайтах (сумма размеров всех файлов)"
+          },
+          "updatedAt": {
+            "description": "Дата и время последнего обновления, например 2026-04-30T12:20:50.979Z",
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "status": {
+            "description": "Текущий статус пакета",
+            "$ref": "#/components/schemas/PackageStatusEnum"
+          },
+          "totalTasksCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество задач в пакете"
+          },
+          "taskIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            },
+            "description": "Массив ИД задач, принадлежащих пакету"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "createdAt",
+          "createdBy",
+          "lastCopiedToTfrAt",
+          "totalFilesSize",
+          "updatedAt",
+          "status",
+          "totalTasksCount",
+          "taskIds"
+        ],
+        "additionalProperties": false
+      },
       "GetPacksRequestDto": {
         "type": "object",
         "properties": {
@@ -1549,7 +1626,7 @@
             "$ref": "#/components/schemas/PackageListSortingDto"
           },
           "filter": {
-            "$ref": "#/components/schemas/PackFilterDto"
+            "$ref": "#/components/schemas/PackageFilterDto"
           }
         },
         "required": [
@@ -4025,7 +4102,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PackageDto"
+                  "$ref": "#/components/schemas/PackageDetailDto"
                 }
               }
             }

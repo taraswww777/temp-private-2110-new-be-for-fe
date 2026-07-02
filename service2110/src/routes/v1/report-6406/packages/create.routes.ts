@@ -1,11 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import {
-  basePackageSchema,
-  createPackageSchema, Package,
-  packageSchema,
-} from '../../../../schemas/report-6406/packages.schema';
+import { createPackageSchema } from '../../../../schemas/report-6406/packages.schema';
 import { zErrorDTOSchema } from '../../../../schemas/common/errorDTO.schema.ts';
 import { zIdSchema } from '../../../../schemas/common/id.schema.ts';
 
