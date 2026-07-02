@@ -2,8 +2,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { packageSchema } from '../../../../schemas/report-6406/packages.schema';
-
+import { packageDetailSchema } from '../../../../schemas/report-6406/packages.schema';
 import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
 
 /**
@@ -12,7 +11,7 @@ import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
  * 
  * MOCK: Возвращает пустой объект для генерации Swagger-спецификации
  */
-export const getPackageRoute: FastifyPluginAsync = async (fastify) => {
+export const getPackageByIdRoute: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   app.get('/:id', {
@@ -21,7 +20,7 @@ export const getPackageRoute: FastifyPluginAsync = async (fastify) => {
       summary: 'Получить детальную информацию о пакете',
       params: idParamSchema,
       response: {
-        200: packageSchema,
+        200: packageDetailSchema,
       },
     },
   }, async (_request, reply) => {
