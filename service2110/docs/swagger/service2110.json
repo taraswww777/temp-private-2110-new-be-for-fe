@@ -1296,7 +1296,7 @@
           }
         ]
       },
-      "PackStatusHistoryResponseDto": {
+      "PackageStatusHistoryDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1331,10 +1331,10 @@
         ],
         "additionalProperties": false
       },
-      "PackStatusHistoryListResponseDto": {
+      "PackageStatusHistoryResponseDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/PackStatusHistoryResponseDto"
+          "$ref": "#/components/schemas/PackageStatusHistoryDto"
         }
       },
       "PackageListSortColumnEnum": {
@@ -1616,7 +1616,7 @@
         ],
         "additionalProperties": false
       },
-      "GetPacksRequestDto": {
+      "GetPackageRequestDto": {
         "type": "object",
         "properties": {
           "pagination": {
@@ -1691,7 +1691,7 @@
         ],
         "additionalProperties": false
       },
-      "PacksListResponseDto": {
+      "PackageListResponseDto": {
         "type": "object",
         "properties": {
           "results": {
@@ -4061,7 +4061,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetPacksRequestDto"
+                "$ref": "#/components/schemas/GetPackageRequestDto"
               }
             }
           }
@@ -4072,7 +4072,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PacksListResponseDto"
+                  "$ref": "#/components/schemas/PackageListResponseDto"
                 }
               }
             }
@@ -4372,7 +4372,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PackStatusHistoryListResponseDto"
+                  "$ref": "#/components/schemas/PackageStatusHistoryResponseDto"
                 }
               }
             }
