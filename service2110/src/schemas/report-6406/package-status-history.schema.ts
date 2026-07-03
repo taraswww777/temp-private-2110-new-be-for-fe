@@ -27,6 +27,6 @@ export const packageStatusHistoryResponseSchema = z.array(packageStatusHistoryIt
 export type PackageStatusHistoryResponse = z.infer<typeof packageStatusHistoryResponseSchema>;
 
 (function registerPackageStatusHistoryReport6406OpenApi() {
-  registerReport6406OpenApiSchema(packageStatusHistoryItemSchema, 'PackStatusHistoryResponseDto');
-  registerReport6406OpenApiSchema(packageStatusHistoryResponseSchema, 'PackStatusHistoryListResponseDto');
+  registerReport6406OpenApiSchema(packageStatusHistoryItemSchema, 'PackageStatusHistoryDto');
+  registerReport6406OpenApiSchema(packageStatusHistoryResponseSchema, 'PackageStatusHistoryResponseDto');
 })();

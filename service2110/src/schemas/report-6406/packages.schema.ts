@@ -81,7 +81,7 @@ export const packageFilterSchema = z.object({
 
 
 /**
- * Схема тела POST /api/v1/report-6406/packages/list (GetPacksRequestDto).
+ * Схема тела POST /api/v1/report-6406/packages/list (GetPackageRequestDto).
  */
 export const getPackageListRequestSchema = z.object({
   pagination: paginationQuerySchema,
@@ -170,9 +170,9 @@ export const packTfrInfoSchema = z.object({
   registerReport6406OpenApiSchema(updatePackageSchema, 'UpdatePackageDto');
   registerReport6406OpenApiSchema(packageSchema, 'PackageDto');
   registerReport6406OpenApiSchema(packageDetailSchema, 'PackageDetailDto');
-  registerReport6406OpenApiSchema(getPackageListRequestSchema, 'GetPacksRequestDto');
+  registerReport6406OpenApiSchema(getPackageListRequestSchema, 'GetPackageRequestDto');
   registerReport6406OpenApiSchema(packListItemSchema, 'PackListItemDto');
-  registerReport6406OpenApiSchema(getPackageListResponseSchema, 'PacksListResponseDto');
+  registerReport6406OpenApiSchema(getPackageListResponseSchema, 'PackageListResponseDto');
   registerReport6406OpenApiSchema(updatePackageResponseSchema, 'UpdatePackageResponseDto');
   registerReport6406OpenApiSchema(addTasksToPackageSchema, 'AddTasksToPackageRequestDto');
   registerReport6406OpenApiSchema(packTransferRequestSchema, 'PackTransferRequest');
