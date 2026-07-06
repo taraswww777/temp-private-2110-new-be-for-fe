@@ -1240,6 +1240,7 @@
         "type": "string",
         "enum": [
           "pack_create",
+          "pack_copy_queue",
           "pack_transfer",
           "pack_done",
           "pack_fail",
@@ -1249,6 +1250,7 @@
         "description": "Статус пакета",
         "x-enum-descriptions": [
           "Создано",
+          "В очереди на копирование",
           "Копирование",
           "Выполнено",
           "Не выполнено",
@@ -1257,6 +1259,7 @@
         ],
         "x-enum-varnames": [
           "CREATE",
+          "PACK_COPY_QUEUE",
           "TRANSFER",
           "DONE",
           "FAIL",
@@ -1268,6 +1271,11 @@
             "const": "pack_create",
             "description": "Создано",
             "title": "CREATE"
+          },
+          {
+            "const": "pack_copy_queue",
+            "description": "В очереди на копирование",
+            "title": "PACK_COPY_QUEUE"
           },
           {
             "const": "pack_transfer",
