@@ -2,9 +2,9 @@ import { z } from 'zod';
 import { fileStatusZodSchema } from './enums/FileStatusEnum.ts';
 import { taskFileSortBySchema } from './enums/TaskFileSortByEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
-import { paginationMetadataSchema } from '../common/pagination.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
+import { paginationQuerySchema } from '../common/pagination.schema.ts';
 
 /**
  * Файл задания (TaskFileDto по новому OAS).
@@ -36,7 +36,7 @@ export { taskFileSortBySchema };
 export const taskFilesResponseSchema = z.object({
   files: z.array(taskFileSchema).describe('Список файлов'),
   totalItems: z.number().int().min(0).describe('Общее количество файлов'),
-  pagination: paginationMetadataSchema.describe('Метаданные пагинации'),
+  pagination: paginationQuerySchema,
 });
 
 export type TaskFilesResponse = z.infer<typeof taskFilesResponseSchema>;
