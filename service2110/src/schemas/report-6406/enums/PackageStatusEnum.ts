@@ -19,6 +19,9 @@ export enum PackageStatusEnum {
   CANCEL = 'pack_cancel',
   /** Удалено */
   DELETE = 'pack_delete',
+
+  /** Удалено из ТФР */
+  DELETE_TFR = 'pack_delete_tfr',
 }
 
 // Мапа описаний для каждого значения enum
@@ -30,6 +33,7 @@ const PackageStatusDescriptions = {
   [PackageStatusEnum.FAIL]: { value: PackageStatusEnum.FAIL, description: 'Не выполнено' },
   [PackageStatusEnum.CANCEL]: { value: PackageStatusEnum.CANCEL, description: 'Отменено' },
   [PackageStatusEnum.DELETE]: { value: PackageStatusEnum.DELETE, description: 'Удалено' },
+  [PackageStatusEnum.DELETE_TFR]: { value: PackageStatusEnum.DELETE_TFR, description: 'Удалено из ТФР' },
 } as const;
 
 // Создаем схему через enum (который возвращает ZodEnum)

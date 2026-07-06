@@ -1,4 +1,4 @@
-import { paginatedResponseSchema, paginationMetadataSchema, paginationQuerySchema } from './pagination.schema.ts';
+import { paginationQuerySchema } from './pagination.schema.ts';
 import { dateSchema, dateTimeSchema } from './dateString.schema.ts';
 import { sortOrderSchema } from './SortOrderEnum.ts';
 import { zErrorDTOSchema } from './errorDTO.schema.ts';
@@ -24,8 +24,6 @@ export function registerCommonOpenApiSchemas() {
   registerOpenApiComponent(zAccountSchema, 'AccountNumberSchema');
   registerOpenApiComponent(zAccountSecondOrderSchema, 'AccountSecondOrderSchema');
   registerOpenApiComponent(paginationQuerySchema, 'PaginationRequestDto');
-  registerOpenApiComponent(paginationMetadataSchema, 'PaginationMetadataDto');
-  registerOpenApiComponent(paginatedResponseSchema, 'PaginatedResponseDto');
   registerOpenApiComponent(dateSchema, 'DateSchema');
   registerOpenApiComponent(zErrorDTOSchema, 'ErrorDTO');
   registerOpenApiComponent(dateTimeSchema, 'DateTimeSchema');

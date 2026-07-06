@@ -1062,84 +1062,6 @@
         ],
         "additionalProperties": false
       },
-      "TaskFilesQueryDto": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "default": 1,
-            "description": "Номер страницы (начиная с 1)",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "limit": {
-            "default": 20,
-            "description": "Размер страницы",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          },
-          "sortBy": {
-            "default": "status",
-            "$ref": "#/components/schemas/TaskFileSortByEnum"
-          },
-          "sortOrder": {
-            "$ref": "#/components/schemas/SortOrderEnum"
-          },
-          "status": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileStatusEnum"
-            }
-          }
-        },
-        "required": [
-          "page",
-          "limit",
-          "sortBy",
-          "sortOrder"
-        ],
-        "additionalProperties": false
-      },
-      "TaskFilesRequestDto": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "default": 1,
-            "description": "Номер страницы (начиная с 1)",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "limit": {
-            "default": 20,
-            "description": "Размер страницы",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          },
-          "sortBy": {
-            "default": "status",
-            "$ref": "#/components/schemas/TaskFileSortByEnum"
-          },
-          "sortOrder": {
-            "$ref": "#/components/schemas/SortOrderEnum"
-          },
-          "status": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileStatusEnum"
-            }
-          }
-        },
-        "required": [
-          "page",
-          "limit",
-          "sortBy",
-          "sortOrder"
-        ],
-        "additionalProperties": false
-      },
       "TaskFileDto": {
         "type": "object",
         "properties": {
@@ -1183,8 +1105,7 @@
             "description": "Общее количество файлов"
           },
           "pagination": {
-            "description": "Метаданные пагинации",
-            "$ref": "#/components/schemas/PaginationMetadataDto"
+            "$ref": "#/components/schemas/PaginationRequestDto"
           }
         },
         "required": [
@@ -1245,7 +1166,8 @@
           "pack_done",
           "pack_fail",
           "pack_cancel",
-          "pack_delete"
+          "pack_delete",
+          "pack_delete_tfr"
         ],
         "description": "Статус пакета",
         "x-enum-descriptions": [
@@ -1255,7 +1177,8 @@
           "Выполнено",
           "Не выполнено",
           "Отменено",
-          "Удалено"
+          "Удалено",
+          "Удалено из ТФР"
         ],
         "x-enum-varnames": [
           "CREATE",
@@ -1264,7 +1187,8 @@
           "DONE",
           "FAIL",
           "CANCEL",
-          "DELETE"
+          "DELETE",
+          "DELETE_TFR"
         ],
         "oneOf": [
           {
@@ -1301,6 +1225,11 @@
             "const": "pack_delete",
             "description": "Удалено",
             "title": "DELETE"
+          },
+          {
+            "const": "pack_delete_tfr",
+            "description": "Удалено из ТФР",
+            "title": "DELETE_TFR"
           }
         ]
       },
@@ -2038,56 +1967,6 @@
         ],
         "additionalProperties": false,
         "description": "Параметры пагинации"
-      },
-      "PaginationMetadataDto": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991,
-            "description": "Текущий номер страницы"
-          },
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100,
-            "description": "Размер страницы"
-          },
-          "totalItems": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общее количество элементов"
-          }
-        },
-        "required": [
-          "page",
-          "limit",
-          "totalItems"
-        ],
-        "additionalProperties": false
-      },
-      "PaginatedResponseDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {},
-            "description": "Список элементов"
-          },
-          "totalItems": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общее количество элементов"
-          }
-        },
-        "required": [
-          "items",
-          "totalItems"
-        ],
-        "additionalProperties": false
       },
       "DateSchema": {
         "type": "string",
@@ -3953,7 +3832,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TaskFilesRequestDto"
+                "$ref": "#/components/schemas/PaginationRequestDto"
               }
             }
           }
