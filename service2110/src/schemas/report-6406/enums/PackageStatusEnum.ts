@@ -7,6 +7,8 @@ import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers
 export enum PackageStatusEnum {
   /** Создано */
   CREATE = 'pack_create',
+  /** В очереди на копирование */
+  PACK_COPY_QUEUE = 'pack_copy_queue',
   /** Копирование */
   TRANSFER = 'pack_transfer',
   /** Выполнено */
@@ -22,6 +24,7 @@ export enum PackageStatusEnum {
 // Мапа описаний для каждого значения enum
 const PackageStatusDescriptions = {
   [PackageStatusEnum.CREATE]: { value: PackageStatusEnum.CREATE, description: 'Создано' },
+  [PackageStatusEnum.PACK_COPY_QUEUE]: { value: PackageStatusEnum.PACK_COPY_QUEUE, description: 'В очереди на копирование' },
   [PackageStatusEnum.TRANSFER]: { value: PackageStatusEnum.TRANSFER, description: 'Копирование' },
   [PackageStatusEnum.DONE]: { value: PackageStatusEnum.DONE, description: 'Выполнено' },
   [PackageStatusEnum.FAIL]: { value: PackageStatusEnum.FAIL, description: 'Не выполнено' },
