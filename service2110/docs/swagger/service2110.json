@@ -1166,7 +1166,8 @@
           "pack_done",
           "pack_fail",
           "pack_cancel",
-          "pack_delete"
+          "pack_delete",
+          "pack_delete_tfr"
         ],
         "description": "Статус пакета",
         "x-enum-descriptions": [
@@ -1176,7 +1177,8 @@
           "Выполнено",
           "Не выполнено",
           "Отменено",
-          "Удалено"
+          "Удалено",
+          "Удалено из ТФР"
         ],
         "x-enum-varnames": [
           "CREATE",
@@ -1185,7 +1187,8 @@
           "DONE",
           "FAIL",
           "CANCEL",
-          "DELETE"
+          "DELETE",
+          "DELETE_TFR"
         ],
         "oneOf": [
           {
@@ -1222,6 +1225,11 @@
             "const": "pack_delete",
             "description": "Удалено",
             "title": "DELETE"
+          },
+          {
+            "const": "pack_delete_tfr",
+            "description": "Удалено из ТФР",
+            "title": "DELETE_TFR"
           }
         ]
       },
