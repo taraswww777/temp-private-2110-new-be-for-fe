@@ -1,9 +1,8 @@
 import { z } from 'zod';
-import { SortOrderEnum, sortOrderSchema } from '../common/SortOrderEnum.ts';
 import { fileStatusZodSchema } from './enums/FileStatusEnum.ts';
-import { TaskFileSortByEnum, taskFileSortBySchema } from './enums/TaskFileSortByEnum.ts';
+import { taskFileSortBySchema } from './enums/TaskFileSortByEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
-import { paginationMetadataSchema, paginationQuerySchema } from '../common/pagination.schema.ts';
+import { paginationMetadataSchema } from '../common/pagination.schema.ts';
 
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
 
@@ -30,24 +29,6 @@ export type TaskFileSortBy = z.infer<typeof taskFileSortBySchema>;
 
 export { taskFileSortBySchema };
 
-/**
- * Параметры списка файлов: пагинация, сортировка, фильтр по статусу.
- */
-export const taskFilesQuerySchema = paginationQuerySchema.extend({
-  sortBy: taskFileSortBySchema.default(TaskFileSortByEnum.STATUS),
-  sortOrder: sortOrderSchema.default(SortOrderEnum.DESC),
-  status: z.array(fileStatusZodSchema).optional(),
-});
-
-export type TaskFilesQuery = z.infer<typeof taskFilesQuerySchema>;
-
-/**
- * Тело POST /api/v1/report-6406/tasks/{id}/files.
- * Пагинация (page, limit) + сортировка и фильтр по статусу.
- */
-export const taskFilesRequestSchema = taskFilesQuerySchema;
-
-export type TaskFilesRequest = z.infer<typeof taskFilesRequestSchema>;
 
 /**
  * Ответ POST /api/v1/report-6406/tasks/{id}/files (TaskFilesResponseDto).
@@ -84,8 +65,6 @@ export const taskFileUrlResponseSchema = z.array(taskFileUrlItemSchema);
 (function registerTaskFilesReport6406OpenApi() {
   registerReport6406OpenApiSchema(taskFilePathParamsSchema, 'TaskFilePathParamsDto');
   registerReport6406OpenApiSchema(taskFileSortBySchema, 'TaskFileSortByEnum');
-  registerReport6406OpenApiSchema(taskFilesQuerySchema, 'TaskFilesQueryDto');
-  registerReport6406OpenApiSchema(taskFilesRequestSchema, 'TaskFilesRequestDto');
   registerReport6406OpenApiSchema(taskFileSchema, 'TaskFileDto');
   registerReport6406OpenApiSchema(taskFilesResponseSchema, 'TaskFilesResponseDto');
   registerReport6406OpenApiSchema(taskFileUrlItemSchema, 'TaskFileUrlItemDto');

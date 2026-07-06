@@ -1062,84 +1062,6 @@
         ],
         "additionalProperties": false
       },
-      "TaskFilesQueryDto": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "default": 1,
-            "description": "Номер страницы (начиная с 1)",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "limit": {
-            "default": 20,
-            "description": "Размер страницы",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          },
-          "sortBy": {
-            "default": "status",
-            "$ref": "#/components/schemas/TaskFileSortByEnum"
-          },
-          "sortOrder": {
-            "$ref": "#/components/schemas/SortOrderEnum"
-          },
-          "status": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileStatusEnum"
-            }
-          }
-        },
-        "required": [
-          "page",
-          "limit",
-          "sortBy",
-          "sortOrder"
-        ],
-        "additionalProperties": false
-      },
-      "TaskFilesRequestDto": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "default": 1,
-            "description": "Номер страницы (начиная с 1)",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9007199254740991
-          },
-          "limit": {
-            "default": 20,
-            "description": "Размер страницы",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          },
-          "sortBy": {
-            "default": "status",
-            "$ref": "#/components/schemas/TaskFileSortByEnum"
-          },
-          "sortOrder": {
-            "$ref": "#/components/schemas/SortOrderEnum"
-          },
-          "status": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileStatusEnum"
-            }
-          }
-        },
-        "required": [
-          "page",
-          "limit",
-          "sortBy",
-          "sortOrder"
-        ],
-        "additionalProperties": false
-      },
       "TaskFileDto": {
         "type": "object",
         "properties": {
@@ -3953,7 +3875,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TaskFilesRequestDto"
+                "$ref": "#/components/schemas/PaginationRequestDto"
               }
             }
           }

@@ -4,11 +4,11 @@ import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import {
-  taskFilesRequestSchema,
   taskFilesResponseSchema,
   taskFileUrlResponseSchema,
 } from '../../../../schemas/report-6406/task-files.schema.ts';
 import { idParamSchema, zIdSchema } from '../../../../schemas/common/id.schema.ts';
+import { paginationQuerySchema } from '../../../../schemas/common/pagination.schema.ts';
 
 export const filesRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -25,7 +25,7 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
       summary: 'Получение файлов задачи с пагинацией',
       description: 'Возвращает список файлов задачи с поддержкой пагинации.',
       params: idParamSchema,
-      body: taskFilesRequestSchema,
+      body: paginationQuerySchema,
       response: {
         200: taskFilesResponseSchema,
       },
