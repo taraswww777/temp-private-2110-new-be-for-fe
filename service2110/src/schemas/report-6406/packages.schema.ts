@@ -19,8 +19,8 @@ export const packageSchema = z.object({
   createdBy: z.string().min(1).max(255).describe('Логин сотрудника, создавшего пакет'),
   lastCopiedToTfrAt: dateTimeSchema.nullable().describe('Дата последнего копирования в ТФР (ISO 8601), например 2026-04-30T12:20:50.979Z'),
   totalFilesSize: z.number().int().min(0).describe('Общий размер пакета в мегабайтах (сумма размеров всех файлов)').default(0),
-  updatedAt: dateTimeSchema.describe('Дата и время последнего обновления, например 2026-04-30T12:20:50.979Z'),
   status: packageStatusSchema.describe('Текущий статус пакета'),
+  totalTasksCount: z.number().int().min(0).describe('Общее количество задач в пакете'),
 });
 
 /**
@@ -49,8 +49,6 @@ export const packageDetailSchema = packageSchema.extend({
   totalTasksCount: z.number().int().min(0).describe('Общее количество задач в пакете'),
   taskIds: z.array(zIdSchema).describe('Массив ИД задач, принадлежащих пакету'),
 });
-
-export type Package = z.infer<typeof packageSchema>;
 
 /**
  * Только packageId в path (маршруты add/remove задач в пакете).
@@ -90,23 +88,10 @@ export const getPackageListRequestSchema = z.object({
 });
 
 /**
- * Элемент списка пакетов (PackListItemDto).
- */
-export const packListItemSchema = z.object({
-  id: zIdSchema.describe('ИД пакета'),
-  name: z.string().max(255).describe('Название пакета'),
-  status: packageStatusSchema.describe('Текущий статус пакета'),
-  totalFilesSize: z.number().int().min(0).describe('Общий размер пакета в мегабайтах').default(0),
-  lastCopiedToTfrAt: dateTimeSchema.nullable().describe('Дата последнего копирования в ТФР (ISO 8601), например 2026-04-30T12:20:50.979Z'),
-  createdAt: dateTimeSchema.describe('Дата и время создания пакета, например 2026-04-30T12:20:50.979Z'),
-  createdBy: z.string().max(255).describe('Логин создателя пакета'),
-});
-
-/**
  * Ответ POST /api/v1/report-6406/packages/list (PacksListResponseDto).
  */
 export const getPackageListResponseSchema = z.object({
-  results: z.array(packListItemSchema).describe('Список пакетов'),
+  results: z.array(packageSchema).describe('Список пакетов'),
   totalItems: z.number().int().min(0).describe('Общее количество пакетов'),
 });
 
@@ -118,7 +103,6 @@ export const getPackageListResponseSchema = z.object({
 export const updatePackageResponseSchema = z.object({
   id: zIdSchema.describe('ИД пакета'),
   name: z.string().describe('Обновлённое название пакета'),
-  updatedAt: dateTimeSchema.describe('Дата и время обновления, например 2026-04-30T12:20:50.979Z'),
 });
 
 
@@ -171,7 +155,6 @@ export const packTfrInfoSchema = z.object({
   registerReport6406OpenApiSchema(packageSchema, 'PackageDto');
   registerReport6406OpenApiSchema(packageDetailSchema, 'PackageDetailDto');
   registerReport6406OpenApiSchema(getPackageListRequestSchema, 'GetPackageRequestDto');
-  registerReport6406OpenApiSchema(packListItemSchema, 'PackListItemDto');
   registerReport6406OpenApiSchema(getPackageListResponseSchema, 'PackageListResponseDto');
   registerReport6406OpenApiSchema(updatePackageResponseSchema, 'UpdatePackageResponseDto');
   registerReport6406OpenApiSchema(addTasksToPackageSchema, 'AddTasksToPackageRequestDto');

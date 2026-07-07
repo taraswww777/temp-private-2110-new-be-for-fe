@@ -1455,13 +1455,15 @@
             "maximum": 9007199254740991,
             "description": "Общий размер пакета в мегабайтах (сумма размеров всех файлов)"
           },
-          "updatedAt": {
-            "description": "Дата и время последнего обновления, например 2026-04-30T12:20:50.979Z",
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
           "status": {
             "description": "Текущий статус пакета",
             "$ref": "#/components/schemas/PackageStatusEnum"
+          },
+          "totalTasksCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество задач в пакете"
           }
         },
         "required": [
@@ -1471,8 +1473,8 @@
           "createdBy",
           "lastCopiedToTfrAt",
           "totalFilesSize",
-          "updatedAt",
-          "status"
+          "status",
+          "totalTasksCount"
         ],
         "additionalProperties": false
       },
@@ -1517,10 +1519,6 @@
             "maximum": 9007199254740991,
             "description": "Общий размер пакета в мегабайтах (сумма размеров всех файлов)"
           },
-          "updatedAt": {
-            "description": "Дата и время последнего обновления, например 2026-04-30T12:20:50.979Z",
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
           "status": {
             "description": "Текущий статус пакета",
             "$ref": "#/components/schemas/PackageStatusEnum"
@@ -1546,7 +1544,6 @@
           "createdBy",
           "lastCopiedToTfrAt",
           "totalFilesSize",
-          "updatedAt",
           "status",
           "totalTasksCount",
           "taskIds"
@@ -1573,68 +1570,13 @@
         ],
         "additionalProperties": false
       },
-      "PackListItemDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "ИД пакета",
-            "$ref": "#/components/schemas/IntegerIdSchema"
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 255,
-            "description": "Название пакета"
-          },
-          "status": {
-            "description": "Текущий статус пакета",
-            "$ref": "#/components/schemas/PackageStatusEnum"
-          },
-          "totalFilesSize": {
-            "default": 0,
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Общий размер пакета в мегабайтах"
-          },
-          "lastCopiedToTfrAt": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeSchema"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Дата последнего копирования в ТФР (ISO 8601), например 2026-04-30T12:20:50.979Z"
-          },
-          "createdAt": {
-            "description": "Дата и время создания пакета, например 2026-04-30T12:20:50.979Z",
-            "$ref": "#/components/schemas/DateTimeSchema"
-          },
-          "createdBy": {
-            "type": "string",
-            "maxLength": 255,
-            "description": "Логин создателя пакета"
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "status",
-          "totalFilesSize",
-          "lastCopiedToTfrAt",
-          "createdAt",
-          "createdBy"
-        ],
-        "additionalProperties": false
-      },
       "PackageListResponseDto": {
         "type": "object",
         "properties": {
           "results": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PackListItemDto"
+              "$ref": "#/components/schemas/PackageDto"
             },
             "description": "Список пакетов"
           },
@@ -1661,16 +1603,11 @@
           "name": {
             "type": "string",
             "description": "Обновлённое название пакета"
-          },
-          "updatedAt": {
-            "description": "Дата и время обновления, например 2026-04-30T12:20:50.979Z",
-            "$ref": "#/components/schemas/DateTimeSchema"
           }
         },
         "required": [
           "id",
-          "name",
-          "updatedAt"
+          "name"
         ],
         "additionalProperties": false
       },
