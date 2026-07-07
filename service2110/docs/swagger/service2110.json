@@ -686,10 +686,11 @@
               "$ref": "#/components/schemas/AccountSecondOrderSchema"
             }
           },
-          "currencyIdList": {
+          "currencyList": {
+            "description": "Валюты",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Report6406CurrencyIdSchema"
+              "$ref": "#/components/schemas/CurrencyEnum"
             }
           },
           "createdByList": {

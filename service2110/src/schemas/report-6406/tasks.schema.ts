@@ -138,7 +138,7 @@ export const tasksListFilterSchema = z.object({
   sourceIdList: z.array(zIdSchema).optional().describe('Идентификаторы источников данных'),
   accountList,
   secondOrderAccountList,
-  currencyIdList: z.array(currencyIdSchema).optional(),
+  currencyList: z.array(currencySchema).optional().describe('Валюты'),
   /** без интеграции с карточкой фл этот фильтр createdByList не получится сделать нормально, будет много дефектов */
   createdByList: z.array(z.string()).optional().describe('Логин создателя пакета'),
   periodFrom: dateSchema.optional().describe('Дата начала отчётного периода YYYY-MM-DD'),
