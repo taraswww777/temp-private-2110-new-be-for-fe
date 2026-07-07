@@ -3571,7 +3571,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TaskDetailResponseDto"
+                  "$ref": "#/components/schemas/IdListSchema"
                 }
               }
             }

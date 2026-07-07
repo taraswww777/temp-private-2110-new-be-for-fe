@@ -6,6 +6,7 @@ import {
   createTaskSchema,
   taskDetailSchema,
 } from '../../../../schemas/report-6406/tasks.schema.ts';
+import { idListSchema } from '../../../../schemas/common/id.schema.ts';
 
 /**
  * POST /api/v1/report-6406/tasks/create
@@ -20,7 +21,7 @@ export const createTaskRoute: FastifyPluginAsync = async (fastify) => {
       summary: 'Создаёт новую задачу',
       body: createTaskSchema,
       response: {
-        201: taskDetailSchema,
+        201: idListSchema,
       },
     },
   }, async (_request, reply) => {
