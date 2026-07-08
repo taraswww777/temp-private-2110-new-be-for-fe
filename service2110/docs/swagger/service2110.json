@@ -1070,21 +1070,28 @@
             "description": "ИД файла",
             "$ref": "#/components/schemas/IntegerIdSchema"
           },
-          "linkResult": {
+          "fileNum": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 99999999,
+            "description": "Номер файла"
+          },
+          "name": {
             "type": "string",
             "maxLength": 255,
-            "description": "Ссылка на файл"
+            "description": "Название файла"
           },
           "size": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 9007199254740991,
+            "maximum": 99999999,
             "description": "Размер файла"
           }
         },
         "required": [
           "fileId",
-          "linkResult",
+          "fileNum",
+          "name",
           "size"
         ],
         "additionalProperties": false

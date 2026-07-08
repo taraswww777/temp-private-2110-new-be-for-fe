@@ -11,8 +11,9 @@ import { paginationQuerySchema } from '../common/pagination.schema.ts';
  */
 export const taskFileSchema = z.object({
   fileId: zIdSchema.describe('ИД файла'),
-  linkResult: z.string().max(255).describe('Ссылка на файл'),
-  size: z.number().int().min(0).describe('Размер файла'),
+  fileNum: z.number().int().min(0).max(9999).describe('Номер файла'),
+  name: z.string().max(255).describe('Название файла'),
+  size: z.number().int().min(0).max(99999999).describe('Размер файла'),
 });
 
 export type TaskFile = z.infer<typeof taskFileSchema>;
