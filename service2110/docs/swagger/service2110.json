@@ -151,6 +151,11 @@
       "AccountDto": {
         "type": "object",
         "properties": {
+          "firstAccount": {
+            "type": "string",
+            "maxLength": 3,
+            "description": "Начало счета второго порядка"
+          },
           "secondAccounts": {
             "type": "array",
             "items": {
@@ -161,6 +166,7 @@
           }
         },
         "required": [
+          "firstAccount",
           "secondAccounts"
         ],
         "additionalProperties": false
@@ -1073,7 +1079,7 @@
           "fileNum": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 99999999,
+            "maximum": 9999,
             "description": "Номер файла"
           },
           "name": {

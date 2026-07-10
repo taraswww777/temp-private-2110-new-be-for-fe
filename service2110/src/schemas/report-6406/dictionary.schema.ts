@@ -87,6 +87,7 @@ export const employeeLoginPathParamSchema = z.object({
  * Счёт (AccountDto по новому OAS).
  */
 export const accountSchema = z.object({
+  firstAccount: z.string().max(3).describe('Начало счета второго порядка'),
   secondAccounts: z.array(z.string().max(255)).describe('Счета второго порядка'),
 });
 
