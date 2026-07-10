@@ -144,8 +144,42 @@ export const packTfrInfoSchema = z.object({
   size: z.number().int().min(0).describe('Размер пакета в мегабайтах').default(0),
 });
 
+/** Схема фильтрации для TFR (PackTfrFilterDto) */
+export const packTfrFilterSchema = z.object({
+  name: z.string().max(255).optional(),
+  status: z.array(packageStatusSchema).optional(),
+  copiedFrom: dateTimeSchema.optional(),
+  copiedTo: dateTimeSchema.optional(),
+}).describe('Фильтры для поиска пакетов в TFR');
+
+/** Схема сортировки для TFR (PackSortingRequestDto) */
+export const packTfrSortingSchema = z.object({
+  sortOrder: sortOrderSchema.describe('Критерий сортировки: asc или desc'),
+  sortBy: z.enum(['id', 'name', 'status', 'size', 'totalTasksCount', 'createdAt', 'createdBy', 'tfrCopyDate'])
+    .describe('Колонка для сортировки'),
+}).describe('Параметры сортировки для TFR');
+
+/** Схема запроса на получение информации о пакетах в TFR (GetTfrInfoRequestDto) */
+export const getTfrInfoRequestSchema = z.object({
+  pagination: paginationQuerySchema,
+  sorting: packTfrSortingSchema.optional(),
+  filter: packTfrFilterSchema.optional(),
+}).describe('Запрос на получение списка пакетов в TFR с фильтрацией, сортировкой и пагинацией');
+
+/** Схема ответа (PacksTfrInfoListResponseDto) */
+export const getTfrInfoResponseSchema = z.object({
+  results: z.array(packTfrInfoSchema).describe('Список пакетов в TFR'),
+  totalItems: z.number().int().min(0).describe('Общее количество пакетов'),
+}).describe('Ответ с пагинированным списком пакетов в TFR');
+
+
 
 (function registerPackagesReport6406OpenApi() {
+  registerReport6406OpenApiSchema(packTfrFilterSchema, 'PackTfrFilterDto');
+  registerReport6406OpenApiSchema(packTfrSortingSchema, 'PackSortingRequestDto');
+  registerReport6406OpenApiSchema(getTfrInfoRequestSchema, 'GetTfrInfoRequestDto');
+  registerReport6406OpenApiSchema(getTfrInfoResponseSchema, 'PacksTfrInfoListResponseDto');
+
   registerReport6406OpenApiSchema(packageIdPathParamSchema, 'PackageIdPathParamDto');
   registerReport6406OpenApiSchema(packageListSortColumnSchema, 'PackageListSortColumnEnum');
   registerReport6406OpenApiSchema(packageListSortingSchema, 'PackageListSortingDto');

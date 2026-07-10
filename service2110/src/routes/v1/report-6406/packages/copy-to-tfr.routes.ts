@@ -3,11 +3,11 @@ import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import {
-  packTfrInfoSchema,
+  getTfrInfoRequestSchema,
+  getTfrInfoResponseSchema,
   packTransferRequestSchema,
 } from '../../../../schemas/report-6406/packages.schema.ts';
 import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
-import { z } from 'zod';
 
 /**
  * TFR-операции с пакетами (mock для Swagger).
@@ -37,17 +37,18 @@ export const tfrRoutes: FastifyPluginAsync = async (fastify) => {
     return reply.status(200).send({} as any);
   });
 
-  app.get('/info/tfr', {
+  app.post('/info/tfr', {
     schema: {
       tags: [OpenApiTag.Report6406Packages],
       summary: 'Получение информации о пакетах в TFR',
-      description: 'Возвращает список пакетов, переданных в систему TFR',
+      description: 'Возвращает список пакетов, переданных в систему TFR, с фильтрацией, сортировкой и пагинацией',
+      requestBody: getTfrInfoRequestSchema,
       response: {
-        200: z.array(packTfrInfoSchema),
+        200: getTfrInfoResponseSchema,
       },
     },
   }, async (_request, reply) => {
-    return reply.status(200).send([] as any);
+    return reply.status(200).send({ } as any);
   });
 
   app.get('/{id}/cancel-copy', {

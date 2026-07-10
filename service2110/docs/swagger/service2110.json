@@ -1332,6 +1332,101 @@
           }
         ]
       },
+      "PackTfrFilterDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "status": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageStatusEnum"
+            }
+          },
+          "copiedFrom": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "copiedTo": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Фильтры для поиска пакетов в TFR"
+      },
+      "PackSortingRequestDto": {
+        "type": "object",
+        "properties": {
+          "sortOrder": {
+            "description": "Критерий сортировки: asc или desc",
+            "$ref": "#/components/schemas/SortOrderEnum"
+          },
+          "sortBy": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name",
+              "status",
+              "size",
+              "totalTasksCount",
+              "createdAt",
+              "createdBy",
+              "tfrCopyDate"
+            ],
+            "description": "Колонка для сортировки"
+          }
+        },
+        "required": [
+          "sortOrder",
+          "sortBy"
+        ],
+        "additionalProperties": false,
+        "description": "Параметры сортировки для TFR"
+      },
+      "GetTfrInfoRequestDto": {
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationRequestDto"
+          },
+          "sorting": {
+            "$ref": "#/components/schemas/PackSortingRequestDto"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/PackTfrFilterDto"
+          }
+        },
+        "required": [
+          "pagination"
+        ],
+        "additionalProperties": false,
+        "description": "Запрос на получение списка пакетов в TFR с фильтрацией, сортировкой и пагинацией"
+      },
+      "PacksTfrInfoListResponseDto": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackTfrInfoDto"
+            },
+            "description": "Список пакетов в TFR"
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Общее количество пакетов"
+          }
+        },
+        "required": [
+          "results",
+          "totalItems"
+        ],
+        "additionalProperties": false,
+        "description": "Ответ с пагинированным списком пакетов в TFR"
+      },
       "PackageIdPathParamDto": {
         "type": "object",
         "properties": {
@@ -4141,22 +4236,19 @@
       }
     },
     "/api/v1/report-6406/packages/info/tfr": {
-      "get": {
+      "post": {
         "summary": "Получение информации о пакетах в TFR",
         "tags": [
           "Report 6406 - Packages"
         ],
-        "description": "Возвращает список пакетов, переданных в систему TFR",
+        "description": "Возвращает список пакетов, переданных в систему TFR, с фильтрацией, сортировкой и пагинацией",
         "responses": {
           "200": {
             "description": "Default Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PackTfrInfoDto"
-                  }
+                  "$ref": "#/components/schemas/PacksTfrInfoListResponseDto"
                 }
               }
             }
