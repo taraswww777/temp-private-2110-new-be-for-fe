@@ -1928,18 +1928,18 @@
       "ErrorDTO": {
         "type": "object",
         "properties": {
-          "code": {
+          "status": {
             "type": "string",
-            "description": "Код ошибки из справочника"
+            "description": "Текстовый код статуса"
           },
-          "message": {
+          "error": {
             "type": "string",
             "description": "Текст сообщения об ошибке"
           }
         },
         "required": [
-          "code",
-          "message"
+          "status",
+          "error"
         ],
         "additionalProperties": false
       },
