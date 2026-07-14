@@ -4,7 +4,6 @@ import { packageStatusSchema } from './enums/PackageStatusEnum.ts';
 import { packageListSortColumnSchema } from './enums/PackageListSortColumnEnum.ts';
 import { zIdSchema } from '../common/id.schema.ts';
 import { paginationQuerySchema } from '../common/pagination.schema.ts';
-
 import { registerReport6406OpenApiSchema } from './openapi-register-helpers.ts';
 import { dateTimeSchema } from '../common/dateString.schema.ts';
 
@@ -123,26 +122,6 @@ export const packTransferRequestSchema = z.object({
 
 export type PackTransferRequest = z.infer<typeof packTransferRequestSchema>;
 
-/**
- * Схема для ответа при копировании пакета в ТФР (POST /api/v1/report-6406/packages/{id}/copy-to-tfr).
- * Возвращает информацию об успешном копировании.
- */
-export const copyToTfrResponseSchema = z.object({
-  id: zIdSchema.describe('ИД пакета'),
-  lastCopiedToTfrAt: dateTimeSchema.describe('Дата и время последнего копирования в ТФР, например 2026-04-30T12:20:50.979Z'),
-  message: z.string().describe('Сообщение о результате операции'),
-});
-
-
-/**
- * Информация о пакете в TFR (PackTfrInfoDto).
- */
-export const packTfrInfoSchema = z.object({
-  packId: zIdSchema.describe('ИД пакета'),
-  packName: z.string().max(255).describe('Имя пакета'),
-  tfrCopyDate: z.string().max(255).describe('Дата копирования в TFR, например 2026-04-30T12:20:50.979Z'),
-  size: z.number().int().min(0).describe('Размер пакета в мегабайтах').default(0),
-});
 
 
 (function registerPackagesReport6406OpenApi() {
@@ -159,6 +138,4 @@ export const packTfrInfoSchema = z.object({
   registerReport6406OpenApiSchema(updatePackageResponseSchema, 'UpdatePackageResponseDto');
   registerReport6406OpenApiSchema(addTasksToPackageSchema, 'AddTasksToPackageRequestDto');
   registerReport6406OpenApiSchema(packTransferRequestSchema, 'PackTransferRequest');
-  registerReport6406OpenApiSchema(copyToTfrResponseSchema, 'CopyToTfrResponseDto');
-  registerReport6406OpenApiSchema(packTfrInfoSchema, 'PackTfrInfoDto');
 })();

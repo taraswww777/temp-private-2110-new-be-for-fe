@@ -12,3 +12,4 @@ import './TaskFileSortByEnum.ts';
 import './TaskListSortColumnEnum.ts';
 import './TaskStatusEnum.ts';
 import './StorageCodeEnum.ts';
+import './TfrListSortColumnEnum.ts';
