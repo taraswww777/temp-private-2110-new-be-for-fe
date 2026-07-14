@@ -8,6 +8,7 @@ import './tasks.schema.ts';
 import './task-status-history.schema.ts';
 import './task-files.schema.ts';
 import './packages.schema.ts';
+import './tfr.schema.ts';
 import './package-status-history.schema.ts';
 import './export.schema.ts';
 import './storage.schema.ts';

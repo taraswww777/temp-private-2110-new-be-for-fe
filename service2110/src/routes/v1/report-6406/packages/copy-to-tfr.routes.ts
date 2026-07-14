@@ -2,12 +2,9 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { OpenApiTag } from '../../../../schemas/openapi-tags.ts';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import {
-  getTfrInfoRequestSchema,
-  getTfrInfoResponseSchema,
-  packTransferRequestSchema,
-} from '../../../../schemas/report-6406/packages.schema.ts';
+import { packTransferRequestSchema } from '../../../../schemas/report-6406/packages.schema.ts';
 import { idParamSchema } from '../../../../schemas/common/id.schema.ts';
+import { getTfrInfoRequestSchema, getTfrInfoResponseSchema } from '../../../../schemas/report-6406/tfr.schema.ts';
 
 /**
  * TFR-операции с пакетами (mock для Swagger).
