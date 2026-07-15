@@ -74,6 +74,7 @@ export const packageFilterSchema = z.object({
   createdTo: dateTimeSchema.optional(),
   createdBy: z.array(z.string()).optional().describe('Логины создателей пакета'),
   isEmpty: z.boolean().optional().describe('Показать пустые пакеты'),
+  selectedIds: z.array(z.number()).optional().describe('Выбранные ИД пакетов. Остальные фильтры будут игнорироваться'),
 });
 
 

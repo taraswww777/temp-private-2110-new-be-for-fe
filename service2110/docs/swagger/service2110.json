@@ -1394,6 +1394,13 @@
           "isEmpty": {
             "description": "Показать пустые пакеты",
             "type": "boolean"
+          },
+          "selectedIds": {
+            "description": "Выбранные ИД пакетов. Остальные фильтры будут игнорироваться",
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
           }
         },
         "additionalProperties": false
