@@ -39,7 +39,7 @@ export const tfrRoutes: FastifyPluginAsync = async (fastify) => {
       tags: [OpenApiTag.Report6406Packages],
       summary: 'Получение информации о пакетах в TFR',
       description: 'Возвращает список пакетов, переданных в систему TFR, с фильтрацией, сортировкой и пагинацией',
-      requestBody: getTfrInfoRequestSchema,
+      body: getTfrInfoRequestSchema,
       response: {
         200: getTfrInfoResponseSchema,
       },

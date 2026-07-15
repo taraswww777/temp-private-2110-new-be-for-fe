@@ -4252,6 +4252,15 @@
           "Report 6406 - Packages"
         ],
         "description": "Возвращает список пакетов, переданных в систему TFR, с фильтрацией, сортировкой и пагинацией",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTfrInfoRequestDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Default Response",
