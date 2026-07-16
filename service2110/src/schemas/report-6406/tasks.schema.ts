@@ -135,7 +135,7 @@ export const tasksListFilterSchema = z.object({
   branchIdList: z.array(zIdSchema).optional().describe('Массив ИД филиалов'),
   taskStatusList: z.array(taskStatusSchema).optional().describe('Статусы заданий'),
   fileFormatList: z.array(fileFormatSchema).optional().describe('Форматы файла'),
-  sourceIdList: z.array(zIdSchema).optional().describe('Идентификаторы источников данных'),
+  sourceCodeList: z.array(z.string()).optional().describe('коды источников данных'),
   accountList,
   secondOrderAccountList,
   currencyList: z.array(currencySchema).optional().describe('Валюты'),
@@ -146,6 +146,7 @@ export const tasksListFilterSchema = z.object({
   createdAtFrom: dateTimeSchema.optional().describe('Дата создания от (ISO 8601) 2026-04-30T11:56:16.055Z'),
   createdAtTo: dateTimeSchema.optional().describe('Дата создания до (ISO 8601) 2026-04-30T11:56:16.055Z'),
   withoutPackageId: z.boolean().optional().describe('true = Показывать задания без packageId, false - c packageId, параметр не передан то показываем всё. Если указан packageId, то withoutPackageId игнорируется.'),
+  taskAccountFileName: z.string().optional().describe('Имя файла со счетами'),
 });
 
 /**

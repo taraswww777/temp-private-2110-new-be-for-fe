@@ -671,11 +671,11 @@
               "$ref": "#/components/schemas/FileFormatEnum"
             }
           },
-          "sourceIdList": {
-            "description": "Идентификаторы источников данных",
+          "sourceCodeList": {
+            "description": "коды источников данных",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IntegerIdSchema"
+              "type": "string"
             }
           },
           "accountList": {
@@ -725,6 +725,10 @@
           "withoutPackageId": {
             "description": "true = Показывать задания без packageId, false - c packageId, параметр не передан то показываем всё. Если указан packageId, то withoutPackageId игнорируется.",
             "type": "boolean"
+          },
+          "taskAccountFileName": {
+            "description": "Имя файла со счетами",
+            "type": "string"
           }
         },
         "additionalProperties": false
