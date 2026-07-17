@@ -2550,7 +2550,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/UuidSchema"
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "inventoryAccountStatusName": {
             "type": "string"
@@ -2689,10 +2689,11 @@
             "description": "Флаг фильтра \"Была смена ОП\"",
             "type": "boolean"
           },
-          "inventoryAccountStatus": {
+          "inventoryAccountStatusId": {
+            "description": "ID статусов инвентаризации",
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/IntegerIdSchema"
             }
           },
           "sourceBank": {
@@ -2891,7 +2892,7 @@
           "manualControlFlag": {
             "type": "boolean"
           },
-          "inventoryAccountStatus": {
+          "inventoryAccountStatusName": {
             "type": "string"
           },
           "sourceBank": {
@@ -2951,6 +2952,10 @@
           "srcCd": {
             "description": "Система-источник счета",
             "type": "string"
+          },
+          "accountState": {
+            "description": "Состояние счета",
+            "type": "string"
           }
         },
         "required": [
@@ -2962,8 +2967,8 @@
       "InventoryAccountStatusSingleDto": {
         "type": "object",
         "properties": {
-          "manualInventoryAccountStatus": {
-            "type": "string"
+          "inventoryAccountStatusId": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "discrepancyDescription": {
             "type": "string"
@@ -2985,10 +2990,13 @@
           },
           "accountId": {
             "$ref": "#/components/schemas/UuidSchema"
+          },
+          "inventoryAccountStatusName": {
+            "type": "string"
           }
         },
         "required": [
-          "manualInventoryAccountStatus",
+          "inventoryAccountStatusId",
           "version",
           "accountId"
         ],
@@ -2998,8 +3006,8 @@
       "InventoryAccountStatusSingleRequestDto": {
         "type": "object",
         "properties": {
-          "manualInventoryAccountStatus": {
-            "type": "string"
+          "inventoryAccountStatusId": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
           },
           "discrepancyDescription": {
             "type": "string"
@@ -3021,7 +3029,7 @@
           }
         },
         "required": [
-          "manualInventoryAccountStatus",
+          "inventoryAccountStatusId",
           "version"
         ],
         "additionalProperties": false,
@@ -3118,7 +3126,7 @@
           "manualControlFlag": {
             "type": "boolean"
           },
-          "inventoryAccountStatus": {
+          "inventoryAccountStatusName": {
             "type": "string"
           },
           "sourceBank": {
@@ -3178,6 +3186,10 @@
           "srcCd": {
             "description": "Система-источник счета",
             "type": "string"
+          },
+          "accountState": {
+            "description": "Состояние счета",
+            "type": "string"
           }
         },
         "required": [
@@ -3195,7 +3207,7 @@
           "changedBy": {
             "type": "string"
           },
-          "manualInventoryAccountStatus": {
+          "inventoryAccountStatusName": {
             "type": "string"
           },
           "discrepancyDescription": {
@@ -3430,10 +3442,10 @@
               "type": "string"
             }
           },
-          "inventoryAccountStatus": {
+          "inventoryAccountStatusId": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/IntegerIdSchema"
             }
           },
           "productName": {

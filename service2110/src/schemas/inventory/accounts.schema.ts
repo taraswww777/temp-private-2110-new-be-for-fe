@@ -33,7 +33,7 @@ export const inventoryAccountsListFilterSchema = z.object({
   accountType: z.array(zIdSchema).optional().describe('Типы счёта (массив)'),
   responsibleUnit: z.array(z.string()).optional(),
   isUnitChanged: z.boolean().optional().describe('Флаг фильтра "Была смена ОП"'),
-  inventoryAccountStatus: z.array(z.string()).optional(),
+  inventoryAccountStatusId: z.array(zIdSchema).optional().describe('ID статусов инвентаризации'),
   sourceBank: z.array(z.string()).optional(),
   productName: z.array(z.string()).optional(),
   manualControlRuleNumber: z.array(zIdSchema).optional(),
@@ -70,7 +70,7 @@ export const inventoryAccountRowSchema = z.object({
   productName: z.string().optional(),
   manualControlRuleNumber: zIdSchema.optional(),
   manualControlFlag: z.boolean().optional(),
-  inventoryAccountStatus: z.string().optional(),
+  inventoryAccountStatusName: z.string().optional(),
   sourceBank: z.string().optional(),
   currencyIsoCode: z.string().optional(),
   clientInn: z.string().optional(),
@@ -88,6 +88,7 @@ export const inventoryAccountRowSchema = z.object({
   inventoryUpdatedBy: z.string().optional().describe('ФИО сотрудника, кто последний обновлял параметры инвентаризации, в том числе и статус инвентаризации'),
   inventoryUpdatedAt: dateTimeSchema.optional().describe('Дата установки конечного статуса инвентаризации во соответствии со статусной моделью: «Без расхождений», «С урегулированием расхождений»'),
   srcCd: z.string().optional().describe('Система-источник счета'),
+  accountState: z.string().optional().describe('Состояние счета'),
 });
 
 export const inventoryAccountListItemSchema = inventoryAccountRowSchema;
@@ -102,7 +103,7 @@ export const inventoryAccountDetailSchema = inventoryAccountRowSchema;
 export const inventoryAccountHistoryItemSchema = z.object({
   changeDate:dateTimeSchema,
   changedBy: z.string(),
-  manualInventoryAccountStatus: z.string().optional(),
+  inventoryAccountStatusName: z.string().optional(),
   discrepancyDescription: z.string().optional(),
   discrepancySum: inventoryDecimalSchema.optional(),
   discrepancyReason: z.string().optional(),
@@ -145,7 +146,7 @@ export const inventoryAccountsExportRequestSchema = z.object({
 export const inventoryAccountsExportResponseSchema =  z.array(inventoryReportExportItemSchema);
 
 export const inventoryAccountStatusSingleRequestSchema = z.object({
-  manualInventoryAccountStatus: z.string(),
+  inventoryAccountStatusId: zIdSchema,
   discrepancyDescription: z.string().optional(),
   discrepancySum: inventoryDecimalSchema.optional(),
   discrepancyReason: z.string().optional(),
@@ -155,6 +156,7 @@ export const inventoryAccountStatusSingleRequestSchema = z.object({
 }).describe('Установка статуса и параметров инвентаризации');
 export const inventoryAccountStatusSingleSchema = inventoryAccountStatusSingleRequestSchema.extend({
   accountId: zUuidSchema,
+  inventoryAccountStatusName: z.string().optional(),
 }).describe('Данные о статусе и параметрах инвентаризации для конкретного счета');
 
 export const accountVersionedIdSchema = z.object({
