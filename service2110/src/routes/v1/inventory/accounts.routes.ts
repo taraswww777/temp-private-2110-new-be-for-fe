@@ -49,7 +49,7 @@ export const inventoryAccountsRoutes: FastifyPluginAsync = async (fastify) => {
   }, async (_request, reply) =>
       reply.status(200).send({
         accountId: "1",
-        manualInventoryAccountStatus: "1",
+        inventoryAccountStatusId: 1,
         version: 1
       }),
   );

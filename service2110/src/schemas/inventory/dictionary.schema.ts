@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { zUuidSchema } from '../common/uuid.schema.ts';
+import { zIdSchema } from '../common/id.schema.ts';
 
 export const inventoryInventoryOrderIdParamSchema = z.object({
   inventoryOrderId: zUuidSchema,
@@ -32,7 +33,7 @@ export const inventoryResponsibleUnitTypeFilterItemSchema = z.object({
 export const inventoryResponsibleUnitTypeFilterResponseSchema = z.array(inventoryResponsibleUnitTypeFilterItemSchema);
 
 export const inventoryAccountStatusFilterItemSchema = z.object({
-  id: zUuidSchema,
+  id: zIdSchema,
   inventoryAccountStatusName: z.string(),
 });
 export const inventoryAccountStatusFilterResponseSchema = z.array(inventoryAccountStatusFilterItemSchema);
