@@ -386,45 +386,46 @@
       "TaskListSortColumnEnum": {
         "type": "string",
         "enum": [
+          "id",
           "createdAt",
-          "taskStatus",
-          "reportType",
           "periodFrom",
           "periodTo",
-          "createdBy"
+          "status",
+          "size",
+          "fileType",
+          "operationType"
         ],
         "description": "Колонка для сортировки списка заданий",
         "x-enum-descriptions": [
+          "ИД Задания",
           "Дата создания",
-          "Статус задания",
-          "Тип отчёта",
           "Начало отчётного периода",
           "Конец отчётного периода",
+          "Статус задания",
+          "Размер",
+          "Тип отчёта",
           "Автор задания"
         ],
         "x-enum-varnames": [
+          "ID",
           "CREATED_AT",
-          "TASK_STATUS",
-          "REPORT_TYPE",
           "PERIOD_FROM",
           "PERIOD_TO",
-          "CREATED_BY"
+          "STATUS",
+          "SIZE",
+          "FILE_TYPE",
+          "OPERATION_TYPE"
         ],
         "oneOf": [
+          {
+            "const": "id",
+            "description": "ИД Задания",
+            "title": "ID"
+          },
           {
             "const": "createdAt",
             "description": "Дата создания",
             "title": "CREATED_AT"
-          },
-          {
-            "const": "taskStatus",
-            "description": "Статус задания",
-            "title": "TASK_STATUS"
-          },
-          {
-            "const": "reportType",
-            "description": "Тип отчёта",
-            "title": "REPORT_TYPE"
           },
           {
             "const": "periodFrom",
@@ -437,9 +438,24 @@
             "title": "PERIOD_TO"
           },
           {
-            "const": "createdBy",
+            "const": "status",
+            "description": "Статус задания",
+            "title": "STATUS"
+          },
+          {
+            "const": "size",
+            "description": "Размер",
+            "title": "SIZE"
+          },
+          {
+            "const": "fileType",
+            "description": "Тип отчёта",
+            "title": "FILE_TYPE"
+          },
+          {
+            "const": "operationType",
             "description": "Автор задания",
-            "title": "CREATED_BY"
+            "title": "OPERATION_TYPE"
           }
         ]
       },

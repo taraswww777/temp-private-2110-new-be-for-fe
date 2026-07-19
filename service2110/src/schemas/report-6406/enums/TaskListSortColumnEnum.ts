@@ -1,25 +1,32 @@
 import { z } from 'zod';
 
-import { createEnumSchemaWithDescriptions } from '../../utils/createEnumSchemaWithDescriptions.ts';
+import {
+  createEnumSchemaWithDescriptions,
+  EnumDescriptionValue,
+} from '../../utils/createEnumSchemaWithDescriptions.ts';
 import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers.ts';
 
 /** Колонки сортировки списка заданий. */
 export enum TaskListSortColumnEnum {
+  ID = 'id',
   CREATED_AT = 'createdAt',
-  TASK_STATUS = 'taskStatus',
-  REPORT_TYPE = 'reportType',
   PERIOD_FROM = 'periodFrom',
   PERIOD_TO = 'periodTo',
-  CREATED_BY = 'createdBy',
+  STATUS = 'status',
+  SIZE = 'size',
+  FILE_TYPE = 'fileType',
+  OPERATION_TYPE = 'operationType',
 }
 
-const TaskListSortColumnDescriptions = {
+const TaskListSortColumnDescriptions: Record<TaskListSortColumnEnum, EnumDescriptionValue> = {
+  [TaskListSortColumnEnum.ID]: { value: TaskListSortColumnEnum.ID, description: 'ИД Задания' },
+  [TaskListSortColumnEnum.SIZE]: { value: TaskListSortColumnEnum.ID, description: 'Размер' },
   [TaskListSortColumnEnum.CREATED_AT]: { value: TaskListSortColumnEnum.CREATED_AT, description: 'Дата создания' },
-  [TaskListSortColumnEnum.TASK_STATUS]: { value: TaskListSortColumnEnum.TASK_STATUS, description: 'Статус задания' },
-  [TaskListSortColumnEnum.REPORT_TYPE]: { value: TaskListSortColumnEnum.REPORT_TYPE, description: 'Тип отчёта' },
+  [TaskListSortColumnEnum.STATUS]: { value: TaskListSortColumnEnum.STATUS, description: 'Статус задания' },
+  [TaskListSortColumnEnum.FILE_TYPE]: { value: TaskListSortColumnEnum.FILE_TYPE, description: 'Тип отчёта' },
   [TaskListSortColumnEnum.PERIOD_FROM]: { value: TaskListSortColumnEnum.PERIOD_FROM, description: 'Начало отчётного периода' },
   [TaskListSortColumnEnum.PERIOD_TO]: { value: TaskListSortColumnEnum.PERIOD_TO, description: 'Конец отчётного периода' },
-  [TaskListSortColumnEnum.CREATED_BY]: { value: TaskListSortColumnEnum.CREATED_BY, description: 'Автор задания' },
+  [TaskListSortColumnEnum.OPERATION_TYPE]: { value: TaskListSortColumnEnum.OPERATION_TYPE, description: 'Автор задания', },
 } as const;
 
 export const taskListSortColumnSchema = z
