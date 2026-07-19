@@ -1,6 +1,8 @@
+export type  EnumDescriptionValue = { value: string; description: string };
+
 export function createEnumSchemaWithDescriptions(
   enumObj: Record<string, string>,
-  descriptions: Record<string, { value: string; description: string }>,
+  descriptions: Record<string, EnumDescriptionValue>,
   name: string,
   description: string
 ) {
