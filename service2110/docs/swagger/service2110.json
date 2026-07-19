@@ -404,7 +404,7 @@
           "Статус задания",
           "Размер",
           "Тип отчёта",
-          "Автор задания"
+          "Тип операции"
         ],
         "x-enum-varnames": [
           "ID",
@@ -454,7 +454,7 @@
           },
           {
             "const": "operationType",
-            "description": "Автор задания",
+            "description": "Тип операции",
             "title": "OPERATION_TYPE"
           }
         ]
@@ -1311,29 +1311,41 @@
       "PackageListSortColumnEnum": {
         "type": "string",
         "enum": [
-          "createdAt",
+          "id",
           "name",
-          "tasksCount",
-          "totalSize"
+          "status",
+          "size",
+          "totalTasksCount",
+          "createdAt",
+          "createdBy",
+          "tfrCopyDate"
         ],
         "description": "Колонка для сортировки списка пакетов",
         "x-enum-descriptions": [
-          "Дата создания",
+          "ИД пакета",
           "Название пакета",
+          "Статус пакета",
+          "Размер",
           "Количество заданий",
-          "Общий размер"
+          "Дата создания",
+          "Создатель",
+          "Дата копирования TFR"
         ],
         "x-enum-varnames": [
-          "CREATED_AT",
+          "ID",
           "NAME",
-          "TASKS_COUNT",
-          "TOTAL_SIZE"
+          "STATUS",
+          "SIZE",
+          "TOTAL_TASKS_COUNT",
+          "CREATED_AT",
+          "CREATED_BY",
+          "TFR_COPY_DATE"
         ],
         "oneOf": [
           {
-            "const": "createdAt",
-            "description": "Дата создания",
-            "title": "CREATED_AT"
+            "const": "id",
+            "description": "ИД пакета",
+            "title": "ID"
           },
           {
             "const": "name",
@@ -1341,14 +1353,34 @@
             "title": "NAME"
           },
           {
-            "const": "tasksCount",
-            "description": "Количество заданий",
-            "title": "TASKS_COUNT"
+            "const": "status",
+            "description": "Статус пакета",
+            "title": "STATUS"
           },
           {
-            "const": "totalSize",
-            "description": "Общий размер",
-            "title": "TOTAL_SIZE"
+            "const": "size",
+            "description": "Размер",
+            "title": "SIZE"
+          },
+          {
+            "const": "totalTasksCount",
+            "description": "Количество заданий",
+            "title": "TOTAL_TASKS_COUNT"
+          },
+          {
+            "const": "createdAt",
+            "description": "Дата создания",
+            "title": "CREATED_AT"
+          },
+          {
+            "const": "createdBy",
+            "description": "Создатель",
+            "title": "CREATED_BY"
+          },
+          {
+            "const": "tfrCopyDate",
+            "description": "Дата копирования TFR",
+            "title": "TFR_COPY_DATE"
           }
         ]
       },

@@ -26,7 +26,7 @@ const TaskListSortColumnDescriptions: Record<TaskListSortColumnEnum, EnumDescrip
   [TaskListSortColumnEnum.FILE_TYPE]: { value: TaskListSortColumnEnum.FILE_TYPE, description: 'Тип отчёта' },
   [TaskListSortColumnEnum.PERIOD_FROM]: { value: TaskListSortColumnEnum.PERIOD_FROM, description: 'Начало отчётного периода' },
   [TaskListSortColumnEnum.PERIOD_TO]: { value: TaskListSortColumnEnum.PERIOD_TO, description: 'Конец отчётного периода' },
-  [TaskListSortColumnEnum.OPERATION_TYPE]: { value: TaskListSortColumnEnum.OPERATION_TYPE, description: 'Автор задания', },
+  [TaskListSortColumnEnum.OPERATION_TYPE]: { value: TaskListSortColumnEnum.OPERATION_TYPE, description: 'Тип операции' },
 } as const;
 
 export const taskListSortColumnSchema = z
