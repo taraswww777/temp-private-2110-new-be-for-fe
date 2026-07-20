@@ -9,6 +9,10 @@ import { registerReport6406EnumOpenApiSchema } from '../openapi-register-helpers
 export enum TaskStatusEnum {
   /** Создано */
   CREATE = 'task_create',
+  /** Превышен лимит заданий */
+  LIMIT = 'task_limit',
+  /** Не хватило места */
+  STORAGE_FULL = 'task_storage_full',
   /** Готовится к запуску */
   LOADING = 'task_loading',
   /** Выборка данных */
@@ -35,6 +39,8 @@ export enum TaskStatusEnum {
 
 const TaskStatusDescriptions: Record<TaskStatusEnum, { value:TaskStatusEnum, description: string }> = {
   [TaskStatusEnum.CREATE]: { value: TaskStatusEnum.CREATE, description: 'Создано' },
+  [TaskStatusEnum.LIMIT]: { value: TaskStatusEnum.LIMIT , description: 'Превышен лимит заданий' },
+  [TaskStatusEnum.STORAGE_FULL]: { value: TaskStatusEnum.STORAGE_FULL , description: 'Не хватило места' },
   [TaskStatusEnum.LOADING]: { value: TaskStatusEnum.LOADING, description: 'Готовится к запуску' },
   [TaskStatusEnum.DATA]: { value: TaskStatusEnum.DATA, description: 'Выборка данных' },
   [TaskStatusEnum.EMPTY_DATA]: { value: TaskStatusEnum.EMPTY_DATA, description: 'Нет данных по заданным параметрам' },

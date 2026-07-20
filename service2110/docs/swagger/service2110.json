@@ -279,6 +279,8 @@
         "type": "string",
         "enum": [
           "task_create",
+          "task_limit",
+          "task_storage_full",
           "task_loading",
           "task_data",
           "task_empty_data",
@@ -294,6 +296,8 @@
         "description": "Статус задания (локальная модель task_*)",
         "x-enum-descriptions": [
           "Создано",
+          "Превышен лимит заданий",
+          "Не хватило места",
           "Готовится к запуску",
           "Выборка данных",
           "Нет данных по заданным параметрам",
@@ -308,6 +312,8 @@
         ],
         "x-enum-varnames": [
           "CREATE",
+          "LIMIT",
+          "STORAGE_FULL",
           "LOADING",
           "DATA",
           "EMPTY_DATA",
@@ -325,6 +331,16 @@
             "const": "task_create",
             "description": "Создано",
             "title": "CREATE"
+          },
+          {
+            "const": "task_limit",
+            "description": "Превышен лимит заданий",
+            "title": "LIMIT"
+          },
+          {
+            "const": "task_storage_full",
+            "description": "Не хватило места",
+            "title": "STORAGE_FULL"
           },
           {
             "const": "task_loading",
