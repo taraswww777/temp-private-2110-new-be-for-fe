@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { zUuidSchema } from '../common/uuid.schema.ts';
 import { zIdSchema } from '../common/id.schema.ts';
+import { inventoryControlTypeSchema } from './enums/InventoryControlTypeEnum.ts';
 
 export const inventoryInventoryOrderIdParamSchema = z.object({
   inventoryOrderId: zUuidSchema,
@@ -37,6 +38,27 @@ export const inventoryAccountStatusFilterItemSchema = z.object({
   inventoryAccountStatusName: z.string(),
 });
 export const inventoryAccountStatusFilterResponseSchema = z.array(inventoryAccountStatusFilterItemSchema);
+
+export const inventoryAccountStatusGroupFilterItemSchema = z.object({
+  inventoryAccountGroupId: zIdSchema,
+  inventoryAccountGroupName: z.string(),
+});
+
+export const inventoryAccountStatusGroupFilterResponseSchema = z.array(inventoryAccountStatusGroupFilterItemSchema);
+
+export const inventoryControlTypeFilterItemSchema = z.object({
+  controlType: inventoryControlTypeSchema,
+  controlTypeName: z.string(),
+});
+
+export const inventoryControlTypeFilterResponseSchema = z.array(inventoryControlTypeFilterItemSchema);
+
+export const inventoryOrderFilterItemSchema = z.object({
+  inventoryOrderId: zUuidSchema,
+  orderName: z.string(),
+  isActive: z.boolean(),
+});
+export const inventoryOrderFilterResponseSchema = z.array(inventoryOrderFilterItemSchema);
 
 export const inventorySourceBankFilterItemSchema = z.object({
   id: zUuidSchema,

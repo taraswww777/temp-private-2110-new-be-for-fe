@@ -65,7 +65,7 @@ export const inventoryReportExportItemSchema = z.object({
   id: zUuidSchema,
   fullName: z.string(),
   exportParams: inventoryExportParamsSchema,
-  filePath: z.string(),
+  fileName: z.string(),
   status: inventoryReportStatusSchema.optional(),
   createdAt: dateTimeSchema.optional(),
 });

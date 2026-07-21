@@ -2328,6 +2328,13 @@
           "ORDERS"
         ]
       },
+      "InventoryControlTypeEnum": {
+        "type": "string",
+        "enum": [
+          "AUTOMATIC",
+          "MANUAL"
+        ]
+      },
       "InventoryInventoryOrderIdParamDto": {
         "type": "object",
         "properties": {
@@ -2626,10 +2633,80 @@
         ],
         "additionalProperties": false
       },
+      "InventoryAccountStatusGroupFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "inventoryAccountGroupId": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "inventoryAccountGroupName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "inventoryAccountGroupId",
+          "inventoryAccountGroupName"
+        ],
+        "additionalProperties": false
+      },
       "InventoryAccountStatusFilterResponseDto": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/InventoryAccountStatusFilterItemDto"
+        }
+      },
+      "InventoryAccountStatusGroupFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryAccountStatusGroupFilterItemDto"
+        }
+      },
+      "InventoryOrderFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "inventoryOrderId": {
+            "$ref": "#/components/schemas/UuidSchema"
+          },
+          "orderName": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "inventoryOrderId",
+          "orderName",
+          "isActive"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryControlTypeFilterItemDto": {
+        "type": "object",
+        "properties": {
+          "controlType": {
+            "$ref": "#/components/schemas/InventoryControlTypeEnum"
+          },
+          "controlTypeName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "controlType",
+          "controlTypeName"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryOrderFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryOrderFilterItemDto"
+        }
+      },
+      "InventoryControlTypeFilterResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryControlTypeFilterItemDto"
         }
       },
       "InventorySourceBankFilterItemDto": {
@@ -3412,6 +3489,254 @@
           "$ref": "#/components/schemas/InventoryReportExportItemDto"
         }
       },
+      "InventoryStatementListFilterDto": {
+        "type": "object",
+        "properties": {
+          "inventoryOrderId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "bs2": {
+            "description": "БС-2 (массив int)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "accountNum": {
+            "description": "Номер счёта (accountNum в DOC)",
+            "type": "string"
+          },
+          "accountType": {
+            "description": "Типы счёта (массив)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "responsibleUnit": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "responsibleEmployeeAdLogin": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inventoryAccountGroupId": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "controlType": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "manualControlRuleNumber": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "additionalFields": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InventoryStatementListExportFilterDto": {
+        "type": "object",
+        "properties": {
+          "inventoryOrderId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "bs2": {
+            "description": "БС-2 (массив int)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "accountNum": {
+            "description": "Номер счёта (accountNum в DOC)",
+            "type": "string"
+          },
+          "accountType": {
+            "description": "Типы счёта (массив)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "responsibleUnit": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "responsibleEmployeeAdLogin": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inventoryAccountGroupId": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "controlType": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "manualControlRuleNumber": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegerIdSchema"
+            }
+          },
+          "additionalFields": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InventoryGetStatementListRequestDto": {
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationRequestDto"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/InventoryStatementListFilterDto"
+          }
+        },
+        "required": [
+          "pagination",
+          "filters"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryStatementListItemDto": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "$ref": "#/components/schemas/UuidSchema"
+          },
+          "bs2": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "accountNum": {
+            "type": "string"
+          },
+          "accountName": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "accountOpenDate": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "accountType": {
+            "$ref": "#/components/schemas/IntegerIdSchema"
+          },
+          "responsibleUnit": {
+            "type": "string"
+          },
+          "accountOutRubSum": {
+            "$ref": "#/components/schemas/InventoryDecimalDto"
+          },
+          "accountOutSum": {
+            "$ref": "#/components/schemas/InventoryDecimalDto"
+          },
+          "manualControlFlag": {
+            "type": "boolean"
+          },
+          "inventoryAccountStatusName": {
+            "type": "string"
+          },
+          "inventoryUpdatedBy": {
+            "type": "string"
+          },
+          "inventoryUpdatedAt": {
+            "$ref": "#/components/schemas/DateTimeSchema"
+          },
+          "discrepancyDescription": {
+            "type": "string"
+          },
+          "discrepancySum": {
+            "$ref": "#/components/schemas/InventoryDecimalDto"
+          },
+          "discrepancyReason": {
+            "type": "string"
+          },
+          "resolutionActions": {
+            "type": "string"
+          },
+          "accountState": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountId"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryStatementListResponseDto": {
+        "type": "object",
+        "properties": {
+          "itemsList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventoryStatementListItemDto"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "itemsList",
+          "totalItems"
+        ],
+        "additionalProperties": false
+      },
+      "InventoryStatementsExportRequestDto": {
+        "type": "object",
+        "properties": {
+          "accountIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UuidSchema"
+            }
+          },
+          "filters": {
+            "$ref": "#/components/schemas/InventoryStatementListExportFilterDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InventoryStatementsExportResponseDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/InventoryReportExportItemDto"
+        }
+      },
       "InventoryApprovalListFilterDto": {
         "type": "object",
         "properties": {
@@ -3620,7 +3945,7 @@
           "exportParams": {
             "$ref": "#/components/schemas/InventoryExportParamsDto"
           },
-          "filePath": {
+          "fileName": {
             "type": "string"
           },
           "status": {
@@ -3634,7 +3959,7 @@
           "id",
           "fullName",
           "exportParams",
-          "filePath"
+          "fileName"
         ],
         "additionalProperties": false
       },
@@ -4734,6 +5059,96 @@
         }
       }
     },
+    "/api/v1/inventory/static-filters/orders": {
+      "get": {
+        "summary": "Список инвентаризаций (фильтр)",
+        "tags": [
+          "Inventory - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/UuidSchema"
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryOrderFilterResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/static-filters/inventory-account-status-groups": {
+      "get": {
+        "summary": "Статус инвентаризации (фильтр)",
+        "tags": [
+          "Inventory - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/UuidSchema"
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAccountStatusGroupFilterResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/static-filters/control-type": {
+      "get": {
+        "summary": "Тип сверки (фильтр)",
+        "tags": [
+          "Inventory - Dictionary"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/UuidSchema"
+            },
+            "in": "path",
+            "name": "inventoryOrderId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryControlTypeFilterResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/inventory/orders/{inventoryOrderId}/filters/source-banks": {
       "get": {
         "summary": "Банк-источник (фильтр)",
@@ -5381,6 +5796,57 @@
         }
       }
     },
+    "/api/v1/inventory/inventory-statements-export": {
+      "post": {
+        "summary": "Экспорт реестра счетов",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryStatementsExportRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true,
+                  "enum": [
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Запрос списка счетов",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryStatementsExportResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/inventory/statistics-export": {
       "get": {
         "summary": "Запрос списка сформированных статистик",
@@ -5620,6 +6086,35 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InventoryAccountUpdatedResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/inventory-statements/accounts ": {
+      "post": {
+        "summary": "Список счетов инвентаризации (пагинация, сортировка, фильтры)",
+        "tags": [
+          "Inventory - Accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryGetStatementListRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryStatementListResponseDto"
                 }
               }
             }

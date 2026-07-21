@@ -11,9 +11,10 @@ import {
   inventoryFileSchema,
 } from '../../../schemas/inventory/inventory-common.schema.ts';
 import z from 'zod';
-import { accountVersionedIdsSchema, inventoryAccountsExportRequestSchema, inventoryAccountsExportResponseSchema, inventoryAccountsListFilterSchema, inventoryAccountStatusSingleSchema, inventoryAccountUpdatedResponseSchema, inventoryManualUnitBulkRequestSchema } from '../../../schemas/inventory/accounts.schema.ts';
+import { accountVersionedIdsSchema, inventoryAccountsExportRequestSchema, inventoryAccountsExportResponseSchema, inventoryAccountsListFilterSchema, inventoryAccountUpdatedResponseSchema, inventoryManualUnitBulkRequestSchema } from '../../../schemas/inventory/accounts.schema.ts';
 import { inventoryStatisticsExportRequestSchema, inventoryStatisticsExportResponseSchema } from '../../../schemas/inventory/statistics.schema.ts';
 import { userRolesResponseSchema } from '../../../schemas/common/userRoles.schema.ts';
+import { inventoryStatementsExportRequestSchema, inventoryStatementsExportResponseSchema } from '../../../schemas/inventory/statement.schema.ts';
 
 export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
@@ -100,6 +101,24 @@ export const inventoryCommonRoutes: FastifyPluginAsync = async (fastify) => {
       response: { 200: z.null() },
     },
   }, async (_request, reply) => reply.status(200).send(null));
+
+  app.post('/inventory-statements-export', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Экспорт реестра счетов',
+      body: inventoryStatementsExportRequestSchema,
+      response: { 200: z.null() },
+    },
+  }, async (_request, reply) => reply.status(200).send(null));
+
+    app.get('/inventory-statements-export', {
+    schema: {
+      tags: [OpenApiTag.InventoryAccounts],
+      summary: 'Запрос списка счетов',
+      response: { 200: inventoryStatementsExportResponseSchema },
+    },
+  }, async (_request, reply) =>
+    reply.status(200).send([]));
 
   app.get('/statistics-export', {
     schema: {
