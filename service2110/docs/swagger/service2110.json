@@ -3544,9 +3544,6 @@
             "items": {
               "$ref": "#/components/schemas/IntegerIdSchema"
             }
-          },
-          "additionalFields": {
-            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3607,7 +3604,7 @@
               "$ref": "#/components/schemas/IntegerIdSchema"
             }
           },
-          "additionalFields": {
+          "addAdditionalFields": {
             "type": "boolean"
           }
         },

@@ -17,7 +17,6 @@ export const inventoryStatementListFilterSchema = z.object({
   inventoryAccountGroupId: z.array(zIdSchema).optional(),
   controlType: z.array(z.string()).optional(),
   manualControlRuleNumber: z.array(zIdSchema).optional(),
-  additionalFields: z.boolean().optional(),
 });
 
 export const getInventoryStatementListRequestSchema = z.object({
@@ -53,7 +52,7 @@ export const inventoryStatementListResponseSchema = z.object({
 });
 
 export const inventoryStatementListExportFilterSchema = inventoryStatementListFilterSchema.extend({
-  additionalFields: z.boolean().optional(),
+  addAdditionalFields: z.boolean().optional(),
 });
 export const inventoryStatementsExportRequestSchema = z.object({
   accountIds: z.array(zUuidSchema).optional(),
