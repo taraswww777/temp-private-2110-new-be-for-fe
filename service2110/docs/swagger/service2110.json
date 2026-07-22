@@ -3544,9 +3544,6 @@
             }
           }
         },
-        "required": [
-          "inventoryOrderId"
-        ],
         "additionalProperties": false
       },
       "InventoryStatementListExportFilterDto": {
@@ -3607,9 +3604,6 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "inventoryOrderId"
-        ],
         "additionalProperties": false
       },
       "InventoryGetStatementListRequestDto": {
