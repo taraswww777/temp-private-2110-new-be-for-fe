@@ -4,6 +4,7 @@ import { inventoryDictionaryRoutes } from './dictionary.routes.ts';
 import { inventoryAccountsRoutes } from './accounts.routes.ts';
 import { inventoryCommonRoutes } from './inventory-common.routes.ts';
 import { inventoryApprovalRoutes } from './approval.routes.ts';
+import { inventoryStatementRoutes } from './statement.routes.ts';
 
 export const inventoryRoutes: FastifyPluginAsync = async (fastify) => {
   await fastify.register(inventoryOrdersRoutes, { prefix: '/orders' });
@@ -11,4 +12,5 @@ export const inventoryRoutes: FastifyPluginAsync = async (fastify) => {
   await fastify.register(inventoryAccountsRoutes, { prefix: '/accounts' });
   await fastify.register(inventoryApprovalRoutes, { prefix: '/approval' });
   await fastify.register(inventoryCommonRoutes, { prefix: '/' });
+    await fastify.register(inventoryStatementRoutes, { prefix: '/inventory-statements/accounts ' });
 };
