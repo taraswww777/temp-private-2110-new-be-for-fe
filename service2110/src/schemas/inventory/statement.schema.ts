@@ -8,7 +8,7 @@ import { zUuidSchema } from '../common/uuid.schema.ts';
 import { inventoryReportExportItemSchema } from './inventory-common.schema.ts';
 
 export const inventoryStatementListFilterSchema = z.object({
-  inventoryOrderId: z.uuid().optional(),
+  inventoryOrderId: zUuidSchema,
   bs2: z.array(zIdSchema).optional().describe('БС-2 (массив int)'),
   accountNum: z.string().optional().describe('Номер счёта (accountNum в DOC)'),
   accountType: z.array(zIdSchema).optional().describe('Типы счёта (массив)'),
